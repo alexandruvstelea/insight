@@ -1,7 +1,5 @@
-/* background */
 @import url("https://fonts.googleapis.com/css?family=Montserrat:700");
-
-.hero {
+.container {
   background-color: #0040C1;
   position: relative;
   height: 100vh;
@@ -9,20 +7,20 @@
   font-family: "Montserrat", sans-serif;
 }
 
-
-
-.hero_title {
-  color: #fff;
-  position: absolute;
-  top: 45%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex; 
+.title-container{
+  display: flex;
+  flex-direction: column; 
+  justify-content: center;
+  align-items: center; 
+  height: 100vh; 
+}
+.title{
+  display: flex;
+  justify-content: center;
   align-items: center;
   font-size: 70px;
-  z-index: 1;
+  color: #fff;
 }
-
 
 .logo {
   margin-right: 20px; 
@@ -30,6 +28,7 @@
   height: 90px;
 }
 
+/*#region cube*/
 
 .cube {
   position: absolute;
@@ -40,8 +39,8 @@
   border: solid 1px #003298;
   transform-origin: top left;
   transform: scale(0) rotate(0deg) translate(-50%, -50%);
-  -webkit-animation: cube 10s ease-in forwards infinite;
-          animation: cube 10s ease-in forwards infinite;
+  -webkit-animation: cube 12s ease-in forwards infinite;
+          animation: cube 12s ease-in forwards infinite;
 }
 .cube:nth-child(2n) {
   border-color: #0051f4;
@@ -99,29 +98,19 @@
   }
 }
 
-.hero_button {
-  color: #fff;
-  position: absolute;
-  top: 55%; 
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  align-items: center;
-  z-index: 1;
-}
+/*#endregion*/
 
+/*#region fancy-button*/
 
-.fancy {
+.fancy-button {
   background-color: transparent;
   border: 3px solid #000;
-  border-radius: 0;
   box-sizing: border-box;
   color: #fff;
   cursor: pointer;
   display: inline-block;
-  font-weight: 700;
   letter-spacing: 0.05em;
-  margin: 0;
+  margin-top: 24px;
   outline: none;
   overflow: visible;
   padding: 1.25em 2em;
@@ -134,7 +123,7 @@
   font-size: 17px;
  }
  
- .fancy::before {
+ .fancy-button::before {
   content: " ";
   width: 1.5625rem;
   height: 2px;
@@ -147,70 +136,72 @@
   transition: background 0.3s linear, width 0.3s linear;
  }
  
- .fancy .text {
-  font-size: 1.125em;
+ .fancy-button .text {
+  font-size: 1.25em;
   line-height: 1.33333em;
   padding-left: 2em;
   display: block;
   text-align: left;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.5s ease-in-out;
   text-transform: uppercase;
   text-decoration: none;
   color: black;
  }
  
- .fancy .top-key {
+ .fancy-button .top-key {
   height: 2px;
   width: 1.5625rem;
   top: -2px;
   left: 0.625rem;
   position: absolute;
-  background: #e8e8e8;
+  background: #fff;
   transition: width 0.5s ease-out, left 0.3s ease-out;
  }
  
- .fancy .bottom-key-1 {
+ .fancy-button .bottom-key-1 {
   height: 2px;
   width: 1.5625rem;
   right: 1.875rem;
   bottom: -2px;
   position: absolute;
-  background: #e8e8e8;
+  background: #fff;
   transition: width 0.5s ease-out, right 0.3s ease-out;
  }
  
- .fancy .bottom-key-2 {
+ .fancy-button .bottom-key-2 {
   height: 2px;
   width: 0.625rem;
   right: 0.625rem;
   bottom: -2px;
   position: absolute;
-  background: #e8e8e8;
+  background: #fff;
   transition: width 0.5s ease-out, right 0.3s ease-out;
  }
  
- .fancy:hover {
-  color: white;
+ .fancy-button:hover {
+  color: #fff;
   background: black;
  }
  
- .fancy:hover::before {
+ .fancy-button:hover::before {
   width: 0.9375rem;
-  background: white;
+  background: #fff;
  }
  
- .fancy:hover .text {
-  color: white;
+ .fancy-button:hover .text {
+  color: #fff;
   padding-left: 1.5em;
  }
  
- .fancy:hover .top-key {
+ .fancy-button:hover .top-key {
   left: -2px;
   width: 0px;
  }
  
- .fancy:hover .bottom-key-1,
-  .fancy:hover .bottom-key-2 {
+ .fancy-button:hover .bottom-key-1,
+  .fancy-button:hover .bottom-key-2 {
   right: 0;
   width: 0;
  }
+
+ /*#endregion*/
