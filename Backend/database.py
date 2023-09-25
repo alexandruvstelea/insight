@@ -14,5 +14,6 @@ Base = declarative_base()
 
 engine = create_engine(f"postgresql+psycopg2://{USER}:{PASSWORD}@{HOST}/{DB_NAME}")
 
+
 Session = sessionmaker(bind=engine)
 session = Session()

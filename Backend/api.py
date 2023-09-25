@@ -7,9 +7,10 @@ from professors import Professor
 from programmes_subjects import ProgrammesSubjects
 from programmes import Programme
 from subjects import Subject
+from ratings import Rating
 from database import session, Base, engine
 from sqlalchemy import exc, and_, select, func
-from ratings import Rating
+
 
 app = Flask(__name__)
 
@@ -428,18 +429,19 @@ def delete_course(course_id):
 @app.route("/rating", methods=["POST"])
 def insert_rating():
     data = request.get_json()
-    date_time = datetime.strptime(data["date"], "%d/%m/%Y %H:%M:%S")
+    date_time = datetime.strptime(data["date"], "%Y-%m-%d %H:%M:%S.%f")
     rating = int(data["rating"])
-    room_id = data["room"]
-    subject_id = get_current_subject(date_time, room_id)
-    try:
-        new_rating = Rating(rating, subject_id, room_id, date_time)
-        session.add(new_rating)
-        session.commit()
-        return {"response": "New rating added to database"}
-    except:
-        session.rollback()
-        return {"response": "An error has occured"}, 404
+    room_id = int(data["room"])
+    #subject_id = get_current_subject(date_time, room_id)
+    subject_id = 2
+    #try:
+    new_rating = Rating(rating, subject_id, room_id, date_time)
+    session.add(new_rating)
+    session.commit()
+    return {"response": "New rating added to database"}
+    #except Exception:
+    #    session.rollback()
+    #    return {"response": "An error has occured"}, 404
 
 
 @app.route("/rating/<int:subject_id>", methods=["GET"])
@@ -448,7 +450,10 @@ def get_average_rating(subject_id):
     result = session.execute(average_rating).scalar()
     return {"response": result}
 
+@app.route("/current",methods=["GET"])
+def get_current_course():
+    return {"id":2,"name":"Inteligenta Artificiala","abbreviation":"IA"}
 
 if __name__ == "__main__":
     CORS(app)
-    app.run(debug=True)
+    app.run(host='0.0.0.0',debug=True)
