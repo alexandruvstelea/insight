@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="./css/style.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
   
+  
 </head>
 
 <body id="infoCurs">
@@ -38,8 +39,52 @@
     <div class="div1">
       <canvas id="myChart" width="800" height="600"></canvas>
     </div>
-    <div class="div2"> </div>
-    <div class="div3"> </div>
+
+    <div class="div2"> 
+        
+    </div>
+    <div class="div3">
+      <div class="progress-container">
+        <span>Nota 1:</span>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress1"></div>
+        </div>
+        <span id="nota1">0%</span>
+      </div>
+      <div class="progress-container">
+        <span>Nota 2:</span>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress2"></div>
+        </div>
+        <span id="nota2">0%</span>
+      </div>
+      <div class="progress-container">
+        <span>Nota 3:</span>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress3"></div>
+        </div>
+        <span id="nota3">0%</span>
+      </div>
+      <div class="progress-container">
+        <span>Nota 4:</span>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress4"></div>
+        </div>
+        <span id="nota4">0%</span>
+      </div>
+      <div class="progress-container">
+        <span>Nota 5:</span>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress5"></div>
+        </div>
+        <span id="nota5">0%</span>
+      </div>
+      <div>
+        <span id="media-title">Media:</span>
+        <span class="stars" id="media">★★☆☆☆</span><span id="nota-medie"></span>
+      </div>
+
+    </div>
     </div>
 
 
@@ -52,6 +97,7 @@
   </footer>
 
   <script src="./js/char.js"></script>
+  <script src="./js/fillStars.js"></script>
 </body>
 
 </html>

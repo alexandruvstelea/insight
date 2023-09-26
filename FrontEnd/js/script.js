@@ -14,6 +14,7 @@ var swiper = new Swiper(".slide-content", {
     nextEl: ".swiper-button-next",
     prevEl: ".swiper-button-prev",
   },
+  allowTouchMove: false,
   breakpoints: {
     0: {
       slidesPerView: 1,
@@ -49,24 +50,44 @@ for (let elem = 0; elem < 20; elem++) {
 function addProfs(elem) {
   document.getElementById("card-wrapper").innerHTML +=
     `
-    <div class="card swiper-slide">
+    <div class="card swiper-slide ">
+    <div class="card-inner"> 
+    <div class="card-front"> 
+      <div class="image-content">
+        <span class="overlay"></span>
 
-            <div class="image-content">
-                <span class="overlay"></span>
+        <div class="card-image">
+          <img src="./img/avatar.jpg" alt="" class="card-img">
+        </div>
+      </div>
 
-                <div class="card-image">
-                    <img src="./img/avatar.jpg" alt="" class="card-img">
-                </div>
-            </div>
+      <div class="card-content">
+        <h2 class="name">Nume profesor</h2>
+        <p class="description">${elem}</p>
+        <button class="button" onclick="flipCard(this)">Vezi Cursuri</button>
+        
+      </div>
+    </div>
+    <div class="card-back">
+    
+      <h1  class="title-curs">Cursuri:</h1>
+      <ul class="courses-list">
+        <li><a href="./infoCurs.html"<button class="button-30" role="button">AOC</button></a></li>
+        <li><a href="./infoCurs.html"<button class="button-30" role="button">IA</button></a></li>
+        <li><a href="./infoCurs.html"<button class="button-30" role="button">Econ</button></a></li>
+        <li><a href="./infoCurs.html"<button class="button-30" role="button">MS</button></a></li>
 
-            <div class="card-content">
-                <h2 class="name">Nume profesor</h2>
-                <p class="description">${elem}</p>
-
-                <button class="button" id="card-button" >Vezi Cursuri</button>
-            </div>
+      </ul>
+      <button class="button back-button" onclick="flipCard(this)">Înapoi</button>
+    </div>
+  </div>
         </div>
     
 `
 }
 
+
+  function flipCard(button) {
+    var card = button.closest('.card');
+    card.classList.toggle('flipped');
+}
