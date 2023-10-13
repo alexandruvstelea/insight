@@ -1,8 +1,7 @@
-import sqlalchemy as db
-from database import Base
+from __init__ import db
 
 
-class Room(Base):
+class Room(db.Model):
     __tablename__ = "Rooms"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.Text)

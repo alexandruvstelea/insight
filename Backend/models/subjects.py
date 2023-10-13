@@ -1,8 +1,7 @@
-import sqlalchemy as db
-from database import Base
+from __init__ import db
 
 
-class Subject(Base):
+class Subject(db.Model):
     __tablename__ = "Subjects"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.Text)

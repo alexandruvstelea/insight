@@ -1,11 +1,10 @@
-import sqlalchemy as db
-from database import Base
+from __init__ import db
 from sqlalchemy.types import Time
 from sqlalchemy.dialects.postgresql import ARRAY
 from datetime import datetime
 
 
-class Course(Base):
+class Course(db.Model):
     __tablename__ = "Courses"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     subject_id = db.Column(db.Integer, db.ForeignKey("Subjects.id"))

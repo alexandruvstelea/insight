@@ -1,10 +1,10 @@
 from sqlalchemy import exc, and_
-from rooms import Room
-from professors import Professor
-from programmes import Programme
-from subjects import Subject
-from courses import Course
-from programmes_subjects import ProgrammesSubjects
+from models.rooms import Room
+from models.professors import Professor
+from models.programmes import Programme
+from models.subjects import Subject
+from models.courses import Course
+from models.programmes_subjects import ProgrammesSubjects
 from database import session, Base, engine
 
 Base.metadata.create_all(engine)

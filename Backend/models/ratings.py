@@ -1,9 +1,9 @@
-import sqlalchemy as db
-from database import Base
+from __init__ import db
 
 
-class Rating(Base):
+class Rating(db.Model):
     __tablename__ = "Ratings"
+
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     rating = db.Column(db.Integer)
     subject_id = db.Column(db.Integer, db.ForeignKey("Subjects.id"))

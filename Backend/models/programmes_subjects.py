@@ -1,8 +1,7 @@
-import sqlalchemy as db
-from database import Base
+from __init__ import db
 
 
-class ProgrammesSubjects(Base):
+class ProgrammesSubjects(db.Model):
     __tablename__ = "Programmes_Subjects"
 
     programme_id = db.Column(

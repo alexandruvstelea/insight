@@ -1,9 +1,7 @@
-import sqlalchemy as db
-from sqlalchemy.ext.declarative import declarative_base
-from database import Base
+from __init__ import db
 
 
-class Programme(Base):
+class Programme(db.Model):
     __tablename__ = "Programmes"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.Text)
