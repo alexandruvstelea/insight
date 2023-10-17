@@ -7,16 +7,18 @@
   <title>Document</title>
   <link rel="stylesheet" href="./css/reset.css">
   <link rel="stylesheet" href="./css/style.css">
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-  
-  
+  <script src="./js/char.js" defer></script>
+  <script src="./js/fillStars.js" defer></script>
+
 </head>
 
 <body id="infoCurs">
 
   <div class="header">
     <div class="inner-header flex">
-      <h1 class="header-title">FeedBack IESC</h1>
+      <h1 class="header-title"><a href="./profesorSelection.html">FeedBack IESC</a></h1>
     </div>
     <div>
       <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -35,69 +37,62 @@
   </div>
 
 
-  <div class="parent">
-    <div class="div1">
-      <canvas id="myChart" width="800" height="600"></canvas>
+  <div class="flex-container">
+    <div class="item1">
+      <canvas id="myChart" ></canvas>
     </div>
-
-    <div class="div2"> 
-        
-    </div>
-    <div class="div3">
+    
+    <div class="item2">
       <div class="progress-container">
-        <span>Nota 1:</span>
+        <span class="text-m">Nota 1:</span>
         <div class="progress-bar">
           <div class="progress-fill" id="progress1"></div>
         </div>
-        <span id="nota1">0%</span>
+        <span class="text-m" id="nota1">0%</span>
       </div>
       <div class="progress-container">
-        <span>Nota 2:</span>
+        <span class="text-m">Nota 2:</span>
         <div class="progress-bar">
           <div class="progress-fill" id="progress2"></div>
         </div>
-        <span id="nota2">0%</span>
+        <span class="text-m" id="nota2">0%</span>
       </div>
       <div class="progress-container">
-        <span>Nota 3:</span>
+        <span class="text-m">Nota 3:</span>
         <div class="progress-bar">
           <div class="progress-fill" id="progress3"></div>
         </div>
-        <span id="nota3">0%</span>
+        <span class="text-m" id="nota3">0%</span>
       </div>
       <div class="progress-container">
-        <span>Nota 4:</span>
+        <span class="text-m">Nota 4:</span>
         <div class="progress-bar">
           <div class="progress-fill" id="progress4"></div>
         </div>
-        <span id="nota4">0%</span>
+        <span class="text-m" id="nota4">0%</span>
       </div>
       <div class="progress-container">
-        <span>Nota 5:</span>
+        <span class="text-m">Nota 5:</span>
         <div class="progress-bar">
           <div class="progress-fill" id="progress5"></div>
         </div>
-        <span id="nota5">0%</span>
+        <span class="text-m" id="nota5">0%</span>
       </div>
       <div>
         <span id="media-title">Media:</span>
         <span class="stars" id="media">★★☆☆☆</span><span id="nota-medie"></span>
       </div>
-
     </div>
-    </div>
-
+  </div>
 
   <footer id="copy-right">
     <div class="copy-right"><i class="fa-solid fa-copyright"></i>
-      © Developed by <a href="https://www.linkedin.com/in/cristianandreisava">Sava Cristian-Andrei</a> and <a
+      © Developed by <a href="https://www.linkedin.com/in/cristianandreisava">Sava Andrei</a> and <a
         href="https://www.linkedin.com/in/alexandrustelea">Stelea Alexandru</a>
     </div>
 
   </footer>
 
-  <script src="./js/char.js"></script>
-  <script src="./js/fillStars.js"></script>
 </body>
 
 </html>

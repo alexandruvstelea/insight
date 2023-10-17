@@ -28,4 +28,4 @@ function coloreazaStelutele(media) {
 }
 
 
-seteazaProcentaje([30, 10, 30, 20, 10]); 
+seteazaProcentaje([10, 10, 30, 20, 10]); 

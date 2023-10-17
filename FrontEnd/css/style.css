@@ -104,7 +104,7 @@
 }
 
 
-.fancy-button {
+.button-landing-page {
   background-color: transparent;
   border: 3px solid #000;
   box-sizing: border-box;
@@ -125,7 +125,7 @@
   font-size: 17px;
  }
  
- .fancy-button::before {
+ .button-landing-page::before {
   content: " ";
   width: 1.5625rem;
   height: 2px;
@@ -138,7 +138,7 @@
   transition: background 0.3s linear, width 0.3s linear;
  }
  
- .fancy-button .text {
+ .button-landing-page .text {
   font-size: 1.25em;
   line-height: 1.33333em;
   padding-left: 2em;
@@ -150,7 +150,7 @@
   color: black;
  }
  
- .fancy-button .top-key {
+ .button-landing-page .top-key {
   height: 2px;
   width: 1.5625rem;
   top: -2px;
@@ -160,7 +160,7 @@
   transition: width 0.5s ease-out, left 0.3s ease-out;
  }
  
- .fancy-button .bottom-key-1 {
+ .button-landing-page .bottom-key-1 {
   height: 2px;
   width: 1.5625rem;
   right: 1.875rem;
@@ -170,7 +170,7 @@
   transition: width 0.5s ease-out, right 0.3s ease-out;
  }
  
- .fancy-button .bottom-key-2 {
+ .button-landing-page .bottom-key-2 {
   height: 2px;
   width: 0.625rem;
   right: 0.625rem;
@@ -180,28 +180,28 @@
   transition: width 0.5s ease-out, right 0.3s ease-out;
  }
  
- .fancy-button:hover {
+ .button-landing-page:hover {
   color: #fff;
   background: black;
  }
  
- .fancy-button:hover::before {
+ .button-landing-page:hover::before {
   width: 0.9375rem;
   background: #fff;
  }
  
- .fancy-button:hover .text {
+ .button-landing-page:hover .text {
   color: #fff;
   padding-left: 1.5em;
  }
  
- .fancy-button:hover .top-key {
+ .button-landing-page:hover .top-key {
   left: -2px;
   width: 0px;
  }
  
- .fancy-button:hover .bottom-key-1,
-  .fancy-button:hover .bottom-key-2 {
+ .button-landing-page:hover .bottom-key-1,
+  .button-landing-page:hover .bottom-key-2 {
   right: 0;
   width: 0;
  }
@@ -214,73 +214,96 @@
   min-height: 100vh;
   background-color: #EFEFEF;
 } 
-.slide-container{
+
+.container {
   max-width: 1600px;
   width: 100%;
   padding: 40px 0;
-  margin-top: 60px;
+  
 }
-.slide-content{
-  margin: 0 40px;
+
+.slide-container {
+  margin: -60px 40px -40px 40px;
   overflow: hidden;
   border-radius: 25px;
+  padding: 60px 0 ;
 }
-.card{
+
+.card {
   border-radius: 25px;
-  background-color: #FFF;
-  perspective: 1000px;
-
+  perspective: 500px;
+  width: 267px;
+  height: 430px;
+  
 }
 
-
-.card-inner {
+.content {
+  background-color: #FFF;
+  border-radius: 25px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
   transform-style: preserve-3d;
   transition: transform 1s;
-  min-width: 267px;
-  height: 466px;
-  position: relative;
 }
-.card.flipped .card-inner {
-  transform: rotateY(180deg);
-}
-.card-back{
 
+.card.flipped .content {
+  transform: rotateX(180deg);
+  
+}
+
+.front,
+.back {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  backface-visibility: hidden;
+}
+
+.back {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  height: 100%;
+  transform: rotateX( 180deg );
 }
-
-
-
-.card-front,
-.card-back {
-  backface-visibility: hidden;
+.flip-button {
   position: absolute;
-  height: 100%;
-  width: 100%;
+  bottom: 10px;
+  left: 50%;
+  /* transform: translateX(-50%); */
+  background-color: #03446A;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
-.card-back {
-  transform: rotateY(180deg);
 
-}
 .courses-list {
   align-self: center;
   text-align: center;
   margin-top: 20px; 
-  
-}
-.courses-list li {
-  line-height: 2; /* Ajustează acest număr pentru spațiere mai mare */
-}
-.back-button {
-  align-self: center !important;
-  margin-top: auto !important; /* Plasează butonul în partea de jos a cardului */
-  margin-bottom: 30px !important;
+  height: 225px; 
+  overflow-y:auto;
 }
 
-.button-30 {
+.courses-list li {
+  line-height: 2; 
+}
+
+.courses-list::-webkit-scrollbar {
+  width: 12px; 
+}
+
+.courses-list::-webkit-scrollbar-thumb {
+  background-color: #6E93f7;   
+  border: 4px solid white;
+  background-clip: padding-box;
+  border-radius: 9999px;  
+}
+
+.button-courses {
   width: 200px;
   align-items: center;
   appearance: none;
@@ -313,16 +336,16 @@
   margin-bottom: 5px;
 }
 
-.button-30:focus {
+.button-courses:focus {
   box-shadow: #D6D6E7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
 }
 
-.button-30:hover {
+.button-courses:hover {
   box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
   transform: translateY(-2px);
 }
 
-.button-30:active {
+.button-courses:active {
   box-shadow: #D6D6E7 0 3px 7px inset;
   transform: translateY(2px);
 }
@@ -384,6 +407,7 @@
   padding: 10px;
 }
 .title-curs{
+
   font-size: 24px;
   font-weight: 500;
   color: #333;
@@ -391,16 +415,10 @@
   margin-top: 20px;
   margin-bottom: 20px;
   text-align: center;
-
   border-bottom: #c3c3c3 1px solid;
+  
 }
-
-.description{
-  font-size: 14px;
-  color: #707070;
-  text-align: center;
-}
-.button{
+.button-card{
   border: none;
   font-size: 16px;
   color: #FFF;
@@ -408,11 +426,16 @@
   background-color: #4070F4;
   border-radius: 6px;
   margin: 14px;
+  margin-top: 40px;
   cursor: pointer;
   transition: all 0.3s ease;
+  
 }
-.button:hover{
+.button-card:hover{
   background: #265DF2;
+}
+.back-button {
+  align-self: center ;
 }
 
 .swiper-navBtn{
@@ -440,14 +463,7 @@
   background-color: #4070F4;
 }
 
-@media screen and (max-width: 768px) {
-  .slide-content{
-    margin: 0 10px;
-  }
-  .swiper-navBtn{
-    display: none;
-  }
-}
+
 
 /*#endregion*/
 
@@ -455,7 +471,7 @@
   padding: 20px;
   font-size: 40px;
   color: #fff;
-}
+}  
 
 .header {
   position:relative;
@@ -476,7 +492,7 @@
   position:relative;
   width: 100%;
   height:15vh;
-  margin-bottom:-7px; /*Fix for safari gap*/
+  margin-bottom:-7px;
   min-height:100px;
   max-height:150px;
 }
@@ -512,19 +528,7 @@
     transform: translate3d(85px,0,0);
   }
 }
-/*Shrinking for mobile*/
-@media (max-width: 768px) {
-  .waves {
-    height:60px;
-    min-height:40px;
-  }
-  .content {
-    height:30vh;
-  }
-  h1 {
-    font-size:24px;
-  }
-}
+
 
 
 
@@ -544,53 +548,36 @@
   
 }
 
-
-
-
 #infoCurs{
   background-color:#EFEFEF ;
 }
 
-.parent {
-  display: grid;
-  grid-template-columns: 1fr 0.5fr;
-  grid-template-rows: repeat(2, 1fr);
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
-  position: fixed; 
-    left: 20px; 
-  bottom: 60px; 
+  .flex-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: row; 
+    flex-wrap: nowrap; 
+    height: 100%;
+    padding: 15px;
   }
-  
-  .div1 { 
-    grid-area: 1 / 1 / 3 / 2; 
-    padding: 20px;
-    height:600px;
-    width: 800px;
-  }
-  .div2 { 
-    grid-area: 1 / 2 / 2 / 3; 
 
-
-  }
-  .div3 { 
-    grid-area: 2 / 2 / 3 / 3; 
-    margin-top: auto;
-
+  .item1{
+    width: 800px; 
+    height: 600px;
+    margin-right: 60px;
     margin-bottom: 20px;
-    padding: 20px;
   }
 
 
   .stars {
-    font-size: 24px;
+    font-size: 33px;
     color: gold;
   }
   #nota-medie{
-    font-size: 20px;
+    font-size: 30px;
   }
   #media-title{
-    font-size: 20px;
+    font-size: 30px;
   }
   .progress-container {
     display: flex;
@@ -603,8 +590,75 @@
     height: 8px;
     background-color: #ccc;
     margin: 0 5px;
+    max-width: 250px;
   }
   .progress-fill {
     height: 100%;
     background-color: green;
+    
+  }
+  .text-m{
+    font-size: 20px;
+  } 
+
+
+  @media screen and (max-width: 768px) {
+    .waves {
+      height:60px;
+      min-height:40px;
+    }
+    .text-title-landing-page {
+      font-size:24px;
+    } 
+  }
+  
+
+
+  @media screen and (max-height: 780px) {
+    .card{
+      height: 400px;
+    }
+  
+  }
+  @media screen and (max-height: 700px) {
+  .swiper-pagination{
+    display: none;
+  }
+  }
+  @media screen and (max-width: 850px) {
+    .swiper-navBtn {
+      display: none;
+    }
+    .slide-container{
+      margin: 0 ;
+      padding-left:20px;
+      padding-right:20px;
+    }
+  }
+
+
+  
+  @media screen and (max-width: 1191px) {
+    .flex-container {
+      flex-direction: column;  
+    }
+    .item1{
+      width: 100%;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .item1{
+      padding: 0;
+      margin: 0;
+      height: 450px;
+    }
+  }
+
+  @media screen and (max-width: 450px) {
+    .item1{
+      padding: 0;
+      margin: 0;
+      height: 300px;
+    }
   }

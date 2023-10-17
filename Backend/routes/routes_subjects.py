@@ -72,3 +72,19 @@ def delete_subjects(subject_id):
         return {"response": f"Subject with ID={subject_id} deleted"}
     else:
         return {"response": f"No subject with ID={subject_id} to delete"}
+
+
+@subject_bp.route("/subjects/<int:professor_id>", methods=["GET"])
+def get_professor_subjects(professor_id):
+    subjects = db.session.query(Subject).filter_by(professor_id=professor_id)
+    subjects_list = []
+    for subject in subjects:
+        subjects_list.append(
+            {
+                "id": subject.id,
+                "name": subject.name,
+                "abbreviation": subject.abbreviation,
+                "professor_id": subject.professor_id,
+            }
+        )
+    return jsonify(subjects_list)

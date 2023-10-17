@@ -7,19 +7,19 @@
   <title>Document</title>
 
   <link rel="stylesheet" href="./css/reset.css">
-  <!-- Swiper CSS -->
   <link rel="stylesheet" href="./css/swiper-bundle.min.css">
-
-  <!-- CSS -->
   <link rel="stylesheet" href="./css/style.css">
+
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="js/swiper-bundle.min.js" defer></script>
+  <script src="js/script.js" defer></script>
 </head>
 
-<body id="profesor-selection">
+<body id="profesor-selection" onload="fetchProfessor()" >
 
   <div class="header">
     <div class="inner-header flex">
-      <h1 class="header-title">FeedBack IESC</h1>
+      <h1 class="header-title"><a href="./profesorSelection.html">FeedBack IESC</a></h1>
     </div>
     <div>
       <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -35,43 +35,33 @@
         </g>
       </svg>
     </div>
-
   </div>
 
 
-
-  <div class="slide-container swiper">
-    <div class="slide-content">
+  <div class="container swiper">
+    <div class="slide-container">
       <div class="card-wrapper swiper-wrapper" id="card-wrapper">
-
+        
       </div>
-      <div class="swiper-button-next swiper-navBtn"></div>
-      <div class="swiper-button-prev swiper-navBtn"></div>
-      <div class="swiper-pagination"></div>
+    </div>
+    <div class="swiper-button-next swiper-navBtn"></div>
+    <div class="swiper-button-prev swiper-navBtn"></div>
+    <div class="swiper-pagination"></div>
+  </div>
+
+
+  <footer id="copy-right">
+    <div class="copy-right"><i class="fa-solid fa-copyright"></i>
+      © Developed by <a href="https://www.linkedin.com/in/cristianandreisava">Sava Andrei</a> and <a
+        href="https://www.linkedin.com/in/alexandrustelea">Stelea Alexandru</a>
     </div>
 
-    <footer id="copy-right">
-      <div class="copy-right"><i class="fa-solid fa-copyright"></i>
-        © Developed by <a href="https://www.linkedin.com/in/cristianandreisava">Sava Cristian-Andrei</a> and <a
-          href="https://www.linkedin.com/in/alexandrustelea">Stelea Alexandru</a>
-      </div>
-
-    </footer>
+  </footer>
 
 
 </body>
 
 
-<!-- Swiper JS -->
-<script src="js/swiper-bundle.min.js"></script>
 
-<!-- JavaScript -->
-<script src="js/script.js"></script>
 
 </html>
-
-
-
-<!-- HTML !-->
-
-
