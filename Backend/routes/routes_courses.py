@@ -1,8 +1,8 @@
 from flask import Blueprint, jsonify, request
 from models.courses import Course
+from models.subjects import Subject
 from __init__ import db
 from sqlalchemy import exc
-
 course_bp = Blueprint("courses", __name__)
 
 
@@ -16,8 +16,14 @@ def create_course():
     start = request.form["start"]
     end = request.form["end"]
     start_end = [start, end]
+    subject = db.query(Subject).filter(Subject.id == subject_id).first()
+    semester = 0
+    if subject: 
+        semester = subject.semester
+    else:
+        return {"response":"An error has occured"}, 404
     try:
-        new_course = Course(subject_id, type, room_id, day, week_type, start_end)
+        new_course = Course(subject_id, type, room_id, day, week_type, start_end , semester)
         db.session.add(new_course)
         db.session.commit()
         return {"response": "New course added to database"}
@@ -41,6 +47,7 @@ def get_courses():
                 "week_type": course.week_type,
                 "start": course.start_end[0].strftime("%H:%M"),
                 "end": course.start_end[1].strftime("%H:%M"),
+                "semester" : course.semester,
             }
         )
     return jsonify(courses_list)
@@ -56,6 +63,12 @@ def update_course(course_id):
     new_start = request.form["new_start"]
     new_end = request.form["new_end"]
     new_start_end = [new_start, new_end]
+    subject = db.query(Subject).filter(Subject.id == new_subject_id).first()
+    new_semester = 0
+    if subject: 
+        new_semester = subject.semester
+    else:
+        return {"response":"An error has occured"}, 404
     try:
         affected_rows = (
             db.session.query(Course)
@@ -68,6 +81,7 @@ def update_course(course_id):
                     "day": new_day,
                     "week_type": new_week_type,
                     "start_end": new_start_end,
+                    "new_semester" : new_semester,
                 }
             )
         )
