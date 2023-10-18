@@ -89,4 +89,3 @@ def delete_course(course_id):
         return {"response": f"Course with ID={course_id} deleted."}
     else:
         return {"response": f"No course with ID={course_id} to delete."}
-

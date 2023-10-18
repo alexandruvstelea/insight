@@ -8,10 +8,10 @@ professor_bp = Blueprint("professors", __name__)
 
 @professor_bp.route("/professors", methods=["POST"])
 def create_professor():
-    name = request.form["name"]
-    surname = request.form["surname"]
+    first_name = request.form["first_name"]
+    last_name = request.form["last_name"]
     title = request.form["title"]
-    new_professor = Professor(name, surname, title)
+    new_professor = Professor(first_name, last_name, title)
     try:
         db.session.add(new_professor)
         db.session.commit()
@@ -29,8 +29,8 @@ def get_professors():
         professors_list.append(
             {
                 "id": professor.id,
-                "name": professor.name,
-                "surname": professor.surname,
+                "first_name": professor.first_name,
+                "last_name": professor.last_name,
                 "title": professor.title,
             }
         )
@@ -39,8 +39,8 @@ def get_professors():
 
 @professor_bp.route("/professors/<int:professor_id>", methods=["PUT"])
 def update_professor(professor_id):
-    new_name = request.form["new_name"]
-    new_surname = request.form["new_surname"]
+    new_first_name = request.form["new_first_name"]
+    new_last_name = request.form["new_last_name"]
     new_title = request.form["new_title"]
     try:
         affected_rows = (
@@ -48,8 +48,8 @@ def update_professor(professor_id):
             .filter_by(id=professor_id)
             .update(
                 {
-                    "name": new_name,
-                    "surname": new_surname,
+                    "first_name": new_first_name,
+                    "last_name": new_last_name,
                     "title": new_title,
                 }
             )

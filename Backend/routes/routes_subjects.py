@@ -11,7 +11,8 @@ def create_subject():
     name = request.form["name"]
     abbreviation = request.form["abbreviation"]
     professor_id = request.form["professor_id"]
-    new_subject = Subject(name, abbreviation, professor_id)
+    semester = request.form["semester"]
+    new_subject = Subject(name, abbreviation, professor_id, semester)
     try:
         db.session.add(new_subject)
         db.session.commit()
@@ -32,6 +33,7 @@ def get_subject():
                 "name": subject.name,
                 "abbreviation": subject.abbreviation,
                 "professor_id": subject.professor_id,
+                "semester": subject.semester,
             }
         )
     return jsonify(subjects_list)
@@ -42,6 +44,7 @@ def update_subject(subject_id):
     new_name = request.form["new_name"]
     new_abbreviation = request.form["new_abbreviation"]
     new_professor_id = request.form["new_professor_id"]
+    new_semester = request.form["new_semester"]
     try:
         affected_rows = (
             db.session.query(Subject)
@@ -51,6 +54,7 @@ def update_subject(subject_id):
                     "name": new_name,
                     "abbreviation": new_abbreviation,
                     "professor_id": new_professor_id,
+                    "semester": new_semester,
                 }
             )
         )
@@ -85,6 +89,7 @@ def get_professor_subjects(professor_id):
                 "name": subject.name,
                 "abbreviation": subject.abbreviation,
                 "professor_id": subject.professor_id,
+                "semester": subject.semester,
             }
         )
     return jsonify(subjects_list)

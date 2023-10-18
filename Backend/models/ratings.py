@@ -16,11 +16,5 @@ class Rating(db.Model):
         self.room_id = room_id
         self.datetime = datetime
 
-    def get_rating(self):
-        return self.rating
-
-    def set_rating(self, new_rating: str):
-        self.rating = new_rating
-
     def __str__(self):
         return f"ID:{self.id}->Rating: {self.rating}"
