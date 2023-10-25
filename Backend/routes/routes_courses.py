@@ -3,6 +3,8 @@ from models.courses import Course
 from models.subjects import Subject
 from __init__ import db
 from sqlalchemy import exc
+from datetime import datetime
+
 course_bp = Blueprint("courses", __name__)
 
 @course_bp.route("/courses", methods=["POST"])
@@ -15,14 +17,16 @@ def create_course():
     start = request.form["start"]
     end = request.form["end"]
     start_end = [start, end]
-    subject = db.query(Subject).filter(Subject.id == subject_id).first()
+    subject = db.session.query(Subject).filter(Subject.id == subject_id).first()
     semester = 0
-    if subject: 
+    if subject:
         semester = subject.semester
     else:
-        return {"response":"An error has occured"}, 404
+        return {"response": "An error has occured"}, 404
     try:
-        new_course = Course(subject_id, type, room_id, day, week_type, start_end , semester)
+        new_course = Course(
+            subject_id, type, room_id, day, week_type, start_end, semester
+        )
         db.session.add(new_course)
         db.session.commit()
         return {"response": "New course added to database"}
@@ -46,7 +50,7 @@ def get_courses():
                 "week_type": course.week_type,
                 "start": course.start_end[0].strftime("%H:%M"),
                 "end": course.start_end[1].strftime("%H:%M"),
-                "semester" : course.semester,
+                "semester": course.semester,
             }
         )
     return jsonify(courses_list)
@@ -62,12 +66,12 @@ def update_course(course_id):
     new_start = request.form["new_start"]
     new_end = request.form["new_end"]
     new_start_end = [new_start, new_end]
-    subject = db.query(Subject).filter(Subject.id == new_subject_id).first()
+    subject = db.session.query(Subject).filter(Subject.id == new_subject_id).first()
     new_semester = 0
-    if subject: 
+    if subject:
         new_semester = subject.semester
     else:
-        return {"response":"An error has occured"}, 404
+        return {"response": "An error has occured"}, 404
     try:
         affected_rows = (
             db.session.query(Course)
@@ -80,7 +84,7 @@ def update_course(course_id):
                     "day": new_day,
                     "week_type": new_week_type,
                     "start_end": new_start_end,
-                    "new_semester" : new_semester,
+                    "new_semester": new_semester,
                 }
             )
         )
@@ -102,3 +106,22 @@ def delete_course(course_id):
         return {"response": f"Course with ID={course_id} deleted."}
     else:
         return {"response": f"No course with ID={course_id} to delete."}
+
+
+@course_bp.route("/current", methods=["GET"])
+def get_current_subject():
+    data = request.get_json()
+    date_time = datetime.strptime(data["date"], "%Y-%m-%d %H:%M:%S.%f")
+    room_id = int(data["room"])
+    subject = (
+        db.session.query(Subject.name)
+        .join(Course, Course.subject_id == Subject.id)
+        .filter(
+            Course.room_id == room_id,
+            Course.start_end[0] <= date_time.time(),
+            Course.start_end[1] >= date_time.time(),
+            Course.day == date_time.weekday(),
+        )
+        .first()
+    )
+    return {"response": subject}

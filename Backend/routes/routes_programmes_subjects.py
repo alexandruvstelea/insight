@@ -42,7 +42,7 @@ def update_programmes_subjects(programme_id, subject_id):
     new_subject_id = request.form["new_subject_id"]
     try:
         affected_rows = (
-            db.session.querry(ProgrammesSubjects)
+            db.session.query(ProgrammesSubjects)
             .filter(
                 db.and_(
                     ProgrammesSubjects.programme_id == programme_id,

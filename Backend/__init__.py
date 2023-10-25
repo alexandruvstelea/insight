@@ -19,6 +19,7 @@ def init_app():
         from models.programmes import Programme
         from models.rooms import Room
         from models.subjects import Subject
+        from models.weeks import Week
 
         db.create_all()
 
@@ -30,6 +31,7 @@ def init_app():
         from routes.routes_subjects import subject_bp
         from routes.routes_programmes_subjects import programme_subjects_bp
         from routes.routes_graph import graph_bp
+        from routes.routes_weeks import weeks_bp
 
         app.register_blueprint(course_bp)
         app.register_blueprint(professor_bp)
@@ -39,5 +41,6 @@ def init_app():
         app.register_blueprint(subject_bp)
         app.register_blueprint(programme_subjects_bp)
         app.register_blueprint(graph_bp)
+        app.register_blueprint(weeks_bp)
 
         return app
