@@ -5,7 +5,6 @@ from __init__ import db
 from sqlalchemy import exc
 course_bp = Blueprint("courses", __name__)
 
-
 @course_bp.route("/courses", methods=["POST"])
 def create_course():
     subject_id = request.form["subject_id"]
