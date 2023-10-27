@@ -35,6 +35,19 @@ def get_programmes():
     return jsonify(programmes_list)
 
 
+@programme_bp.route("/programmes/<int:programme_id>", methods=["GET"])
+def get_programme_by_id(programme_id):
+    programme = db.session.query(Programme).filter_by(id=programme_id).first()
+    if programme:
+        return {
+            "id": programme.id,
+            "name": programme.name,
+            "abbreviation": programme.abbreviation,
+        }
+    else:
+        return {"response": f"No programme with ID={programme_id} found."}
+
+
 @programme_bp.route("/programmes/<int:programme_id>", methods=["PUT"])
 def update_programme(programme_id):
     new_name = request.form["new_name"]

@@ -37,6 +37,20 @@ def get_professors():
     return jsonify(professors_list)
 
 
+@professor_bp.route("/professors/<int:professor_id>", methods=["GET"])
+def get_professor_by_id(professor_id):
+    professor = db.session.query(Professor).filter_by(id=professor_id).first()
+    if professor:
+        return {
+            "id": professor.id,
+            "first_name": professor.first_name,
+            "last_name": professor.last_name,
+            "title": professor.title,
+        }
+    else:
+        return {"response": f"No professor with ID={professor_id} found."}
+
+
 @professor_bp.route("/professors/<int:professor_id>", methods=["PUT"])
 def update_professor(professor_id):
     new_first_name = request.form["new_first_name"]

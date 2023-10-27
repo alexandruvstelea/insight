@@ -7,6 +7,7 @@ from datetime import datetime
 
 course_bp = Blueprint("courses", __name__)
 
+
 @course_bp.route("/courses", methods=["POST"])
 def create_course():
     subject_id = request.form["subject_id"]
@@ -54,6 +55,25 @@ def get_courses():
             }
         )
     return jsonify(courses_list)
+
+
+@course_bp.route("/courses/<int:course_id>", methods=["GET"])
+def get_course_by_id(course_id):
+    course = db.session.query(Course).filter(Course.id == course_id).first()
+    if course:
+        return {
+            "id": course.id,
+            "subject_id": course.subject_id,
+            "type": course.type,
+            "room_id": course.room_id,
+            "day": course.day,
+            "week_type": course.week_type,
+            "start": course.start_end[0].strftime("%H:%M"),
+            "end": course.start_end[1].strftime("%H:%M"),
+            "semester": course.semester,
+        }
+    else:
+        return {"response": f"No course with ID={course_id} found."}
 
 
 @course_bp.route("/courses/<int:course_id>", methods=["PUT"])

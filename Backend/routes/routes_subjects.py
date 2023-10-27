@@ -39,6 +39,21 @@ def get_subject():
     return jsonify(subjects_list)
 
 
+@subject_bp.route("/subjects/<int:subject_id>", methods=["GET"])
+def get_subject_by_id(subject_id):
+    subject = db.session.query(Subject).filter_by(id=subject_id).first()
+    if subject:
+        return {
+            "id": subject.id,
+            "name": subject.name,
+            "abbreviation": subject.abbreviation,
+            "professor_id": subject.professor_id,
+            "semester": subject.semester,
+        }
+    else:
+        return {"response": f"No subject with ID={subject_id} found."}
+
+
 @subject_bp.route("/subjects/<int:subject_id>", methods=["PUT"])
 def update_subject(subject_id):
     new_name = request.form["new_name"]

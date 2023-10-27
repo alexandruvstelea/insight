@@ -29,6 +29,15 @@ def get_rooms():
     return jsonify(rooms_list)
 
 
+@room_bp.route("/rooms/<int:room_id>", methods=["GET"])
+def get_room_by_id(room_id):
+    room = db.session.query(Room).filter_by(id=room_id).first()
+    if room:
+        return {"id": room.id, "name": room.name}
+    else:
+        return {"response": f"No room with ID={room_id} found."}
+
+
 @room_bp.route("/rooms/<int:room_id>", methods=["PUT"])
 def update_room(room_id):
     new_room = request.form["new_room"]
