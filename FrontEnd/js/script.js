@@ -31,7 +31,7 @@ function addProfessor(professorArray) {
           </div>
         </div>
         <div class="card-content">
-          <h2 class="name">${professor.name} ${professor.surname}</h2>
+          <h2 class="name">${professor.first_name} ${professor.last_name}</h2>
           <button class="button-card" onclick="flipCard(this),fetchSubject(${professor.id})">Vezi Cursuri</button>
         </div>
       </div>

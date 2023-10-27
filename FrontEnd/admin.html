@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #addProfessorForm label,
+    #addProfessorForm input,
+    #updateProfessorForm label,
+    #updateProfessorForm input {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    table {
+      border: 1px solid #000;
+      width: 100%;
+    }
+
+    td,
+    tr {
+      padding: 10px;
+    }
+
+
+    #professorsTable {
+      height: 500px;
+      overflow-x: auto;
+    }
+
+
+    .col-2-cont {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+    }
+
+    .hide {
+      display: none;
+    }
+  </style>
+</head>
+
+<body onload="getAndDisplayProfessors()">
+
+  <div class="col-2-cont">
+    <div>
+      <h1>Adaugare Profesor</h1>
+      <form id="addProfessorForm">
+        <label for="first_name">Nume:</label>
+        <input type="text" id="first_name" name="first_name" required>
+        <label for="last_name">Prenume:</label>
+        <input type="text" id="last_name" name="last_name" required>
+        <label for="title">Titlu:</label>
+        <input type="text" id="title" name="title" required>
+        <button type="button" onclick="addProfessor()">Adaugă Profesor</button>
+      </form>
+
+      <form id="updateProfessorForm" class="hide">
+        <label for="new_first_name">Editare Nume:</label>
+        <input type="text" id="new_first_name" name="new_first_name" required>
+        <label for="new_last_name">Editare Prenume:</label>
+        <input type="text" id="new-last_name" name="new-last_name" required>
+        <label for="new_title">Editare Titlu:</label>
+        <input type="text" id="new_title" name="new_title" required>
+        <button type="button" onclick="editProfessor()">Editeaza Profesor</button>
+      </form>
+    </div>
+
+    <div id="professorsTable">
+      <h1>Tabel Profesori</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Nume</th>
+            <th>Prenume</th>
+            <th>Titlu</th>
+          </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+  <h1>Adăugare Curs</h1>
+  <form id="addSubjectForm">
+    <label for="name">Nume Subiect:</label>
+    <input type="text" id="name" name="name" required>
+    <label for="abbreviation">Abreviere:</label>
+    <input type="text" id="abbreviation" name="abbreviation" required>
+    <label for="professor_id">ID Profesor:</label>
+    <input type="number" id="professor_id" name="professor_id" required>
+    <label for="semester">Semestru:</label>
+    <input type="number" id="semester" name="semester" required>
+    <button type="button" onclick="addSubject()">Adaugă Subiect</button>
+  </form>
+
+  <script>
+    const URL = 'http://127.0.0.1:5000'
+
+    function addSubject() {
+      const form = document.getElementById("addSubjectForm");
+      const formData = new FormData(form);
+      const url = `${URL}/subjects`;
+
+      fetch(url, { method: "POST", body: formData })
+        .then(response => response.json())
+        .then(newSubject => { console.log(newSubject); form.reset(); })
+        .catch(err => console.log(err))
+    }
+
+    function getAndDisplayProfessors() {
+      fetch(`${URL}/professors`, { method: "GET" })
+        .then(response => response.json())
+        .then(professors => {
+          const tableBody = document.querySelector("#professorsTable tbody");
+          tableBody.innerHTML = '';
+
+          professors.forEach(professor => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+            <tr>
+    <td>${professor.first_name}</td>
+    <td>${professor.last_name}</td>
+    <td>${professor.title}</td>
+    <td><button onclick="deleteProfessor(${professor.id})">Șterge</button></td>
+    <td><button onclick="displayEditProfessor(${professor.id})">Editează</button></td>
+</tr>
+                    `;
+            tableBody.appendChild(row);
+          });
+        })
+        .catch(err => console.log(err));
+    }
+
+    function addProfessor() {
+      const form = document.getElementById("addProfessorForm");
+      const formData = new FormData(form);
+      const url = `${URL}/professors`;
+
+      fetch(url, { method: "POST", body: formData })
+        .then(response => response.json())
+        .then(newProfessor => {
+          console.log(newProfessor);
+          form.reset();
+          getAndDisplayProfessors();
+        })
+        .catch(err => console.log(err));
+    }
+
+    function deleteProfessor(id) {
+      const url = `${URL}/professors/${id}`;
+
+      fetch(url, { method: "DELETE" })
+        .then(response => { getAndDisplayProfessors() })
+        .catch(err => console.log(err));
+    }
+
+    function displayEditProfessor(id) {
+  // Obțineți profesorul pe baza ID-ului și completați valorile în formularul de editare
+  fetch(`${URL}/professors/${id}`, { method: "GET" })
+    .then(response => response.json())
+    .then(professor => {
+      const updateForm = document.getElementById("updateProfessorForm");
+      updateForm.classList.remove("hide");
+
+      const editFields = updateForm.querySelectorAll("input");
+      editFields[0].value = professor.first_name;
+      editFields[1].value = professor.last_name;
+      editFields[2].value = professor.title;
+
+      // Păstrați ID-ul profesorului într-un câmp ascuns
+      const professorIdField = document.getElementById("professor_id_edit");
+      professorIdField.value = id;
+
+      // Ascundeți formularul de adăugare
+      document.getElementById("addProfessorForm").classList.add("hide");
+    })
+    .catch(err => console.log(err));
+}
+
+function editProfessor() {
+  const form = document.getElementById("updateProfessorForm");
+  const formData = new FormData(form);
+  const id = formData.get("professor_id_edit");
+  const url = `${URL}/professors/${id}`;
+
+  fetch(url, { method: "PUT", body: formData })
+    .then(response => response.json())
+    .then(updatedProfessor => {
+      console.log(updatedProfessor);
+      form.reset();
+      getAndDisplayProfessors();
+    })
+    .catch(err => console.log(err));
+}
+  </script>
+</body>
+
+</html>
