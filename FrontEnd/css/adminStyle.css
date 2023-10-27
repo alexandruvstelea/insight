@@ -1,0 +1,59 @@
+#addProfessorForm label,
+#addProfessorForm input,
+#updateProfessorForm label,
+#updateProfessorForm input,
+#addSubjectForm label,
+#addSubjectForm input,
+#editSubjectForm label,
+#editSubjectForm input {
+  display: block;
+  margin-bottom: 10px;
+}
+
+table {
+  border: 1px solid #000;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 10px; 
+}
+
+
+
+td,
+tr {
+  padding: 10px;
+}
+
+
+#professorsTable,
+#subjectsTable {
+  height: 400px;
+  overflow-y: hidden;
+}
+
+
+.col-2-cont {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  border: 1px solid red;
+}
+
+div.col-2-cont > div:first-child h1 {
+text-align: center;
+}
+div.col-2-cont > div:last-child h1 {
+text-align: center;
+}
+
+
+.hide {
+  display: none;
+}
+
+.tables {
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 300px;
+  padding: 5px;
+}

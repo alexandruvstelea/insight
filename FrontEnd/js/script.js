@@ -16,6 +16,7 @@ function fetchSubject(professor_id) {
     .catch((err) => { console.log(err) })
 }
 
+
 function addProfessor(professorArray) {
 
   professorArray.forEach(professor => {
