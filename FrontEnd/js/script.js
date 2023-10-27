@@ -8,7 +8,7 @@ function fetchProfessor() {
 
 
 function fetchSubject(professor_id) {
-  const url = `http://127.0.0.1:5000/subjects/${professor_id}`
+  const url = `http://127.0.0.1:5000/subjects/professor/${professor_id}`
 
   fetch(url, { method: "GET" })
     .then((response) => response.json())
