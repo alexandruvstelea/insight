@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from models.weeks import Week
 from __init__ import db
-from sqlalchemy import exc
+from sqlalchemy import text
 from datetime import timedelta, datetime
 
 weeks_bp = Blueprint("weeks", __name__)
@@ -37,3 +37,29 @@ def generate_weeks():
     interval_start, counter = add_weeks(intervals[7], interval_start, counter)
 
     return {"response": "Weeks generated"}
+
+
+@weeks_bp.route("/weeks", methods=["GET"])
+def get_weeks():
+    weeks = db.session.query(Week).all()
+    weeks_list = []
+    for week in weeks:
+        weeks_list.append(
+            {
+                "id": week.id,
+                "start": week.start,
+                "end": week.end,
+                "semester": week.semester,
+            }
+        )
+    return jsonify(weeks_list)
+
+
+@weeks_bp.route("/weeks", methods=["DELETE"])
+def reset_weeks():
+    # try:
+    db.session.execute(text('TRUNCATE TABLE "Weeks" RESTART IDENTITY;'))
+    db.session.commit()
+    # except:
+    # return {"response": "An error has occured."}
+    return {"response": "Weeks deleted from database."}
