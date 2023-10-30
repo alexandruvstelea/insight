@@ -37,6 +37,6 @@ def get_graph_data():
 
             return jsonify(week_ratings)
         else:
-            return {"response": "An error has occured."}
+            return {"response": "An error has occured. 1"}
     else:
-        return {"response": "An error has occured."}
+        return {"response": "An error has occured. 2"}

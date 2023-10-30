@@ -1,16 +1,5 @@
 const URL = 'http://127.0.0.1:5000'
 
-function addProfessor() {
-  const form = document.getElementById("addProfessorForm");
-  const formData = new FormData(form);
-  const url = `${URL}/professor`;
-
-  fetch(url, { method: "POST", body: formData })
-    .then(response => response.json())
-    .then(newProfessor => { console.log(newProfessor); form.reset(); })
-    .catch(err => console.log(err))
-}
-
 function getAndDisplayProfessors() {
   fetch(`${URL}/professors`, { method: "GET" })
     .then(response => response.json())
@@ -39,6 +28,7 @@ function getAndDisplayProfessors() {
 }
 
 function addProfessor() {
+  event.preventDefault();
   const form = document.getElementById("addProfessorForm");
   const formData = new FormData(form);
   const url = `${URL}/professors`;
@@ -54,6 +44,7 @@ function addProfessor() {
 }
 
 function deleteProfessor(id) {
+  event.preventDefault();
   const url = `${URL}/professors/${id}`;
 
   fetch(url, { method: "DELETE" })
@@ -61,13 +52,13 @@ function deleteProfessor(id) {
     .catch(err => console.log(err));
 }
 
-    function displayEditProfessor(id) {
-      document.getElementById("addEditTitleProfessor").innerText = "Editare"
+function displayEditProfessor(id) {
+  document.getElementById("addEditTitleProfessor").innerText = "Editare"
   fetch(`${URL}/professors/${id}`, { method: "GET" })
     .then(response => response.json())
     .then(professor => {
-      const updateForm = document.getElementById("updateProfessorForm");
-      document.getElementById("updateProfessorForm").classList.remove("hide");
+      const updateForm = document.getElementById("editProfessorForm");
+      updateForm.classList.remove("hide");
 
       const editFields = updateForm.querySelectorAll("input");
       editFields[0].value = professor.first_name;
@@ -81,8 +72,9 @@ function deleteProfessor(id) {
 }
 
 function editProfessor() {
+  event.preventDefault();
   document.getElementById("addEditTitleProfessor").innerText = "Adaugare"
-  const form = document.getElementById("updateProfessorForm");
+  const form = document.getElementById("editProfessorForm");
   const formData = new FormData(form);
   const id = document.getElementById("professorId").value
   const url = `${URL}/professors/${id}`;
@@ -95,7 +87,7 @@ function editProfessor() {
       console.log(updatedProfessor);
       form.reset();
       getAndDisplayProfessors();
-      document.getElementById("updateProfessorForm").classList.toggle("hide");
+      document.getElementById("editProfessorForm").classList.toggle("hide");
       document.getElementById("addProfessorForm").classList.toggle("hide");
     })
     .catch(err => console.log(err));
