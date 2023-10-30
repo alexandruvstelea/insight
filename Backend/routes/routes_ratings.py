@@ -15,29 +15,32 @@ def insert_rating():
     date_time = datetime.strptime(data["date"], "%Y-%m-%d %H:%M:%S.%f")
     rating = int(data["rating"])
     room_id = int(data["room"])
-    subject_id = (
+
+    courses = (
         db.session.query(Course)
-        .join(Subject)
-        .filter(
-            db.and_(
-                Course.room_id == room_id,
-                Course.start_end[0] <= date_time.time(),
-                Course.start_end[1] >= date_time.time(),
-                Course.day == date_time.weekday(),
-            )
-        )
-        .with_entities(Course.subject_id)
-        .first()
+        .filter(Course.day == date_time.weekday(), Course.room_id == room_id)
+        .all()
     )
 
-    try:
-        new_rating = Rating(rating, subject_id, room_id, date_time)
-        db.session.add(new_rating)
-        db.session.commit()
-        return {"response": "New rating added to database"}
-    except Exception:
-        db.session.rollback()
-        return {"response": "An error has occured"}, 404
+    desired_time = date_time.time()
+    filtered_courses = []
+    for course in courses:
+        if course.start_end[0] <= desired_time and course.start_end[1] >= desired_time:
+            filtered_courses.append(course)
+
+    if len(filtered_courses) == 1:
+        try:
+            new_rating = Rating(
+                rating, filtered_courses[0].subject_id, room_id, date_time
+            )
+            db.session.add(new_rating)
+            db.session.commit()
+            return {"response": "New rating added to database."}
+        except Exception:
+            db.session.rollback()
+            return {"response": f"An error has occured."}, 404
+    else:
+        return {"response": "An error has occured: no matching course found."}, 404
 
 
 @rating_bp.route("/rating/<int:subject_id>", methods=["GET"])
