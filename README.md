@@ -27,7 +27,7 @@ The development of this project involved the utilization of the following techno
 
 The project was conceptualized and developed by the following individuals:
 
-- [Alexandru-Vasile Stelea](www.linkedin.com/in/alexandrustelea)
-- [Andrei-Cristian Sava](www.linkedin.com/in/cristianandreisava)
+- [Alexandru-Vasile Stelea](https://www.linkedin.com/in/alexandrustelea)
+- [Andrei-Cristian Sava](https://www.linkedin.com/in/cristianandreisava)
 
 Feel free to reach out to the authors or contributors for any inquiries or further information about the project.
