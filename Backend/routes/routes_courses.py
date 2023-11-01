@@ -23,7 +23,9 @@ def create_course():
     if subject:
         semester = subject.semester
     else:
-        return {"response": "An error has occured"}, 404
+        return {
+            "response": "An error has occured: couldn't determine subject for course."
+        }, 404
     try:
         new_course = Course(
             subject_id, type, room_id, day, week_type, start_end, semester
@@ -31,18 +33,45 @@ def create_course():
         db.session.add(new_course)
         db.session.commit()
         return {"response": "New course added to database"}
-    except:
+    except Exception as e:
         db.session.rollback()
-        return {"response": "An error has occured"}, 404
+        return {
+            "response": f"An error has occured while adding object to database: {str(e)}"
+        }, 404
 
 
 @course_bp.route("/courses", methods=["GET"])
 def get_courses():
-    courses = db.session.query(Course).all()
-    courses_list = []
-    for course in courses:
-        courses_list.append(
-            {
+    try:
+        courses = db.session.query(Course).all()
+        courses_list = []
+        for course in courses:
+            courses_list.append(
+                {
+                    "id": course.id,
+                    "subject_id": course.subject_id,
+                    "type": course.type,
+                    "room_id": course.room_id,
+                    "day": course.day,
+                    "week_type": course.week_type,
+                    "start": course.start_end[0].strftime("%H:%M"),
+                    "end": course.start_end[1].strftime("%H:%M"),
+                    "semester": course.semester,
+                }
+            )
+        return jsonify(courses_list)
+    except Exception as e:
+        return {
+            "response": f"An error has occured while retrieving objects: {str(e)}"
+        }, 404
+
+
+@course_bp.route("/courses/<int:course_id>", methods=["GET"])
+def get_course_by_id(course_id):
+    try:
+        course = db.session.query(Course).filter(Course.id == course_id).first()
+        if course:
+            return {
                 "id": course.id,
                 "subject_id": course.subject_id,
                 "type": course.type,
@@ -53,27 +82,12 @@ def get_courses():
                 "end": course.start_end[1].strftime("%H:%M"),
                 "semester": course.semester,
             }
-        )
-    return jsonify(courses_list)
-
-
-@course_bp.route("/courses/<int:course_id>", methods=["GET"])
-def get_course_by_id(course_id):
-    course = db.session.query(Course).filter(Course.id == course_id).first()
-    if course:
+        else:
+            return {"response": f"No course with ID={course_id} found."}
+    except Exception as e:
         return {
-            "id": course.id,
-            "subject_id": course.subject_id,
-            "type": course.type,
-            "room_id": course.room_id,
-            "day": course.day,
-            "week_type": course.week_type,
-            "start": course.start_end[0].strftime("%H:%M"),
-            "end": course.start_end[1].strftime("%H:%M"),
-            "semester": course.semester,
-        }
-    else:
-        return {"response": f"No course with ID={course_id} found."}
+            "response": f"An error has occured while retrieving the object: {str(e)}"
+        }, 404
 
 
 @course_bp.route("/courses/<int:course_id>", methods=["PUT"])
@@ -108,9 +122,11 @@ def update_course(course_id):
                 }
             )
         )
-    except exc.IntegrityError:
+    except Exception as e:
         db.session.rollback()
-        return {"response": "An error has occured"}, 404
+        return {
+            "response": f"An error has occured while updating the object: {str(e)}"
+        }, 404
     if affected_rows > 0:
         db.session.commit()
         return {"response": f"Course with ID={course_id} updated."}
