@@ -30,8 +30,9 @@ async function getAndDisplaySubjects() {
 }
 
 async function handleDeleteSubjectButtonClick(subjectId) {
-  await deleteSubject(subjectId)
+  await deleteSubject(subjectId);
   await getAndDisplaySubjects();
+  await getAndDisplaySubjectInCourses();
 }
 async function handleEditSubjectButtonClick(subjectId) {
   await displayEditSubject(subjectId)
@@ -103,6 +104,30 @@ async function editSubject() {
     form.reset();
     document.getElementById("editSubjectForm").classList.toggle("hide");
     document.getElementById("addSubjectForm").classList.toggle("hide");
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function getAndDisplaySubjectInCourses() {
+  try {
+    const response = await fetch(`${URL}/subjects`, { method: "GET" });
+    const subjects = await response.json();
+
+    const select = document.getElementById("subject_id");
+    const select2 = document.getElementById("new_subject_id");
+
+    select.innerHTML = '<option value="">-- Selectați Materia --</option>';
+    select2.innerHTML = '<option value="">-- Selectați Materia --</option>';
+
+    subjects.forEach(subject => {
+      const option = document.createElement("option");
+      option.text = subject.name;
+      option.value = subject.id;
+      select.appendChild(option.cloneNode(true));
+
+      select2.appendChild(option.cloneNode(true));
+    });
   } catch (err) {
     console.log(err);
   }

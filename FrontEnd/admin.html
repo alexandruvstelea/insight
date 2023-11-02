@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <link rel="stylesheet" href="./css/adminStyle.css">
-  
+
   <script src="./js/admin/popup.js" defer></script>
   <script src="./js/admin/professor.js" defer></script>
   <script src="./js/admin/subject.js" defer></script>
@@ -41,9 +41,9 @@
           <input type="number" id="intervals" name="intervals" required>
           <label for="intervals">Activitate didactica:</label>
           <input type="number" id="intervals" name="intervals" required>
-          <button type="submit">Genereaza saptamanile</button> 
+          <button type="submit">Genereaza saptamanile</button>
         </form>
-        
+
       </div>
       <div id="weeksTable">
         <h1>Tabel Saptamani</h1>
@@ -66,7 +66,7 @@
           </div>
         </div>
 
-        <div class="tables big-table">
+        <div class="tables">
           <table>
             <thead>
               <tr>
@@ -87,17 +87,19 @@
     <div class="col-2-cont">
       <div>
         <h1><span id="addEditTitleProfessor">Adaugare</span> Profesor</h1>
-        <form id="addProfessorForm" onsubmit="submitForm(event,addProfessor,getAndDisplayProfessors,getAndDisplayProfessorInSubjects);return false">
+        <form id="addProfessorForm"
+          onsubmit="submitForm(event,addProfessor,getAndDisplayProfessors,getAndDisplayProfessorInSubjects);return false">
           <label for="first_name">Nume:</label>
           <input type="text" id="first_name" name="first_name" maxlength="30" required>
           <label for="last_name">Prenume:</label>
           <input type="text" id="last_name" name="last_name" maxlength="30" required>
           <label for="title">Titlu:</label>
           <input type="text" id="title" name="title" maxlength="30" required>
-          <button type="submit" >Adaugă Profesor</button>
+          <button type="submit">Adaugă Profesor</button>
         </form>
 
-        <form id="editProfessorForm" class="hide" onsubmit="submitForm(event,editProfessor,getAndDisplayProfessors,getAndDisplayProfessorInSubjects);return false">
+        <form id="editProfessorForm" class="hide"
+          onsubmit="submitForm(event,editProfessor,getAndDisplayProfessors,getAndDisplayProfessorInSubjects);return false">
           <label for="new_first_name">Editare Nume:</label>
           <input type="text" id="new_first_name" name="new_first_name" maxlength="30" required>
           <label for="new_last_name">Editare Prenume:</label>
@@ -105,7 +107,7 @@
           <label for="new_title">Editare Titlu:</label>
           <input type="text" id="new_title" name="new_title" maxlength="30" required>
           <label class="hide" for="professorId">Id-ul profesorului</label>
-          <input class="hide" type="number" id="professorId" name="professorId"  readonly>
+          <input class="hide" type="number" id="professorId" name="professorId" readonly>
           <button type="submit">Editeaza Profesor</button>
         </form>
       </div>
@@ -133,7 +135,7 @@
     <div class="col-2-cont">
       <div>
         <h1><span id="addEditTitleSubject">Adaugare</span> Materie</h1>
-        <form id="addSubjectForm" onsubmit="submitForm(event,addSubject,getAndDisplaySubjects);return false">
+        <form id="addSubjectForm" onsubmit="submitForm(event,addSubject,getAndDisplaySubjects,getAndDisplaySubjectInCourses);return false">
           <label for="name">Nume Materie:</label>
           <input type="text" id="name" name="name" maxlength="50" required>
           <label for="abbreviation">Abreviere:</label>
@@ -152,7 +154,8 @@
           <button type="submit">Adauga Materie</button>
         </form>
 
-        <form id="editSubjectForm" class="hide"  onsubmit="submitForm(event,editSubject,getAndDisplaySubjects);return false">
+        <form id="editSubjectForm" class="hide"
+          onsubmit="submitForm(event,editSubject,getAndDisplaySubjects,getAndDisplaySubjectInCourses);return false">
           <label for="new_name">Nume Materie:</label>
           <input type="text" id="new_name" name="new_name" maxlength="50" required>
           <label for="new_abbreviation">Abreviere:</label>
@@ -162,7 +165,7 @@
           <select id="new_professor_id" name="new_professor_id" required>
             <!-- inserare profesori -->
           </select>
-          
+
           <label for="new_semester">Semestru:</label>
           <select id="new_semester" name="new_semester" required>
             <option value="">-- Selectați o opțiune --</option>
@@ -170,9 +173,9 @@
             <option value="2">2</option>
           </select>
 
-            <label class="hide" for="subjectId">Id-ul Materiei</label>
-            <input class="hide" type="number" id="subjectId" name="subjectId" readonly>
-          
+          <label class="hide" for="subjectId">Id-ul Materiei</label>
+          <input class="hide" type="number" id="subjectId" name="subjectId" readonly>
+
           <button type="submit">Editeaza Materie</button>
         </form>
       </div>
@@ -202,13 +205,13 @@
     <div class="col-2-cont">
       <div>
         <h1><span id="addEditTitleRoom">Adaugare</span> Sala de Curs</h1>
-        <form id="addRoomForm" onsubmit="submitForm(event,addRoom,getAndDisplayRooms);return false">
+        <form id="addRoomForm" onsubmit="submitForm(event,addRoom,getAndDisplayRooms,getAndDisplayRoomInCourses);return false">
           <label for="name">Nume:</label>
           <input type="text" id="name" name="name" maxlength="20" required>
           <button type="submit">Adaugă Sala</button>
         </form>
 
-        <form id="editRoomForm" class="hide" onsubmit="submitForm(event,editRoom,getAndDisplayRooms);return false">
+        <form id="editRoomForm" class="hide" onsubmit="submitForm(event,editRoom,getAndDisplayRooms,getAndDisplayRoomInCourses);return false">
           <label for="new_room">Editare Sala:</label>
           <input type="text" id="new_room" name="new_room" maxlength="20" required>
           <label class="hide" for="roomID">Id-ul Salii</label>
@@ -238,9 +241,12 @@
     <div class="col-2-cont">
       <div>
         <h1><span id="addEditTitleCourse">Adaugare</span> Curs</h1>
-        <form id="addCourseForm" onsubmit="submitForm(event,addCourse,getAndDisplayCourses);return false">
-          <label for="subject_id">ID materie:</label>
-          <input type="number" id="subject_id" name="subject_id" required>
+        <form id="addCourseForm"
+          onsubmit="submitForm(event,addCourse,getAndDisplayCourses);return false">
+          <label for="subject_id">Materie</label>
+          <select id="subject_id" name="subject_id" required>
+            <!-- JS insert -->
+          </select>
           <label for="type">Tipul Cursului</label>
           <select id="type" name="type" required>
             <option value="">-- Selectați o opțiune --</option>
@@ -248,9 +254,11 @@
             <option value="1">Laborator</option>
             <option value="2">Seminar</option>
           </select>
-          <label for="room_id">Id-ul Salii de Curs</label>
-          <input type="number" id="room_id" name="room_id" required>
-          <label for="day">Ziua</label>
+          <label for="room_id">Sala de curs</label>
+          <select id="room_id" name="room_id" required>
+            <!-- inserare profesori -->
+          </select>
+          <label for="day">Ziua saptamanii</label>
           <select id="day" name="day" required>
             <option value="">-- Selectați o opțiune --</option>
             <option value="0">Luni</option>
@@ -280,9 +288,12 @@
           <button type="submit">Adaugă Curs</button>
         </form>
 
-        <form id="editCourseForm" class="hide" onsubmit="submitForm(event,editCourse,getAndDisplayCourses);return false"> 
-          <label for="new_subject_id">ID materie:</label>
-          <input type="number" id="new_subject_id" name="new_subject_id" required>
+        <form id="editCourseForm" class="hide"
+          onsubmit="submitForm(event,editCourse,getAndDisplayCourses);return false">
+          <label for="new_subject_id">Materie</label>
+          <select id="new_subject_id" name="new_subject_id" required>
+            <!-- JS insert -->
+          </select>
           <label for="new_type">Tipul Cursului</label>
           <select id="new_type" name="new_type" required>
             <option value="">-- Selectați o opțiune --</option>
@@ -290,9 +301,11 @@
             <option value="1">Laborator</option>
             <option value="2">Seminar</option>
           </select>
-          <label for="new_room_id">Id-ul Salii de Curs</label>
-          <input type="number" id="new_room_id" name="new_room_id" required>
-          <label for="new_day">Ziua</label>
+          <label for="new_room_id">Sala de curs</label>
+          <select id="new_room_id" name="new_room_id" required>
+            <!-- JS insert -->
+          </select>
+          <label for="new_day">Ziua saptamanii</label>
           <select id="new_day" name="new_day" required>
             <option value="">-- Selectați o opțiune --</option>
             <option value="0">Luni</option>
@@ -331,11 +344,11 @@
             <thead>
               <tr>
                 <th>ID Curs</th>
-                <th>ID materie</th>
+                <th>Materie</th>
                 <th>Tipul</th>
-                <th>ID-ul salii de curs</th>
+                <th>Sala de curs</th>
                 <th>Ziua saptamanii</th>
-                <th>par/impar</th>
+                <th>Par/Impar</th>
                 <th>Ora de incepere</th>
                 <th>Ora de sfarsit</th>
               </tr>
@@ -348,8 +361,9 @@
       </div>
     </div>
 
+
+
   </div>
 
 </body>
-
 </html>

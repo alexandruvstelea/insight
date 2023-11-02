@@ -12,14 +12,19 @@ async function getAndDisplayCourses() {
       const subjectResponse = await fetch(`${URL}/subjects/${course.subject_id}`, { method: "GET" });
       const subject = await subjectResponse.json();
 
+      const roomResponse = await fetch(`${URL}/rooms/${course.room_id}`, { method: "GET" });
+      const room = await roomResponse.json();
+
+
+
       const row = document.createElement("tr");
       row.innerHTML = `
         <td>${course.id}</td>
         <td>${subject.name}</td>
-        <td>${course.type}</td>
-        <td>${course.room_id}</td>
-        <td>${course.day}</td>
-        <td>${course.week_type}</td>
+        <td>${getTypeName(course.type)}</td>
+        <td>${room.name}</td>
+        <td>${getDayName(course.day)}</td>
+        <td>${getWeekTypeName(course.week_type)}</td>
         <td>${course.start}</td>
         <td>${course.end}</td>
         <td><button onclick="handleDeleteCourseButtonClick(${course.id})">Șterge</button></td>
@@ -31,6 +36,19 @@ async function getAndDisplayCourses() {
     console.log(err);
   }
 }
+function getDayName(dayIndex) {
+  const days = ['Luni', 'Marți', 'Miercuri', 'Joi', 'Vineri'];
+  return days[dayIndex] || 'Zi necunoscută';
+}
+function getWeekTypeName(weekTypeIndex) {
+  const weekTypes = ['Ambele', 'Impar', 'Par'];
+  return weekTypes[weekTypeIndex] || 'Necunoscut';
+}
+function getTypeName(typeIndex) {
+  const types = ['Curs', 'Laborator', 'Seminar'];
+  return types[typeIndex] || 'Necunoscut';
+}
+
 
 async function handleDeleteCourseButtonClick(professorId) {
   await deleteCourse(professorId)
@@ -73,16 +91,17 @@ async function displayEditCourse(id) {
 
     const editFields = updateForm.querySelectorAll("input");
     const selectFields = updateForm.querySelectorAll("select");
+    
+    editFields[0].value = course.id;
 
-    editFields[0].value = course.subject_id;
-    editFields[1].value = course.room_id;
-    editFields[2].value = course.id;
+    selectFields[0].querySelector(`option[value="${course.subject_id}"]`).selected = true;
+    selectFields[1].querySelector(`option[value="${course.type}"]`).selected = true;
+    selectFields[2].querySelector(`option[value="${course.room_id}"]`).selected = true;
+    selectFields[3].querySelector(`option[value="${course.day}"]`).selected = true;
+    selectFields[4].querySelector(`option[value="${course.week_type}"]`).selected = true;
+    selectFields[5].querySelector(`option[value="${course.start}"]`).selected = true;
+    selectFields[6].querySelector(`option[value="${course.end}"]`).selected = true;
 
-    selectFields[0].querySelector(`option[value="${course.type}"]`).selected = true;
-    selectFields[1].querySelector(`option[value="${course.day}"]`).selected = true;
-    selectFields[2].querySelector(`option[value="${course.week_type}"]`).selected = true;
-    selectFields[3].querySelector(`option[value="${course.start}"]`).selected = true;
-    selectFields[4].querySelector(`option[value="${course.end}"]`).selected = true;
 
     document.getElementById("addCourseForm").classList.add("hide");
   } catch (err) {

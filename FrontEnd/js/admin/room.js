@@ -23,6 +23,7 @@ async function getAndDisplayRooms() {
 async function handleDeleteRoomButtonClick(professorId) {
   await deleteRoom(professorId)
   await getAndDisplayRooms();
+  await getAndDisplayRoomInCourses()
 }
 async function handleEditRoomButtonClick(professorId) {
   await displayEditRoom(professorId)
@@ -85,3 +86,26 @@ async function editRoom() {
   }
 }
 
+async function getAndDisplayRoomInCourses() {
+  try {
+    const response = await fetch(`${URL}/rooms`, { method: "GET" });
+    const rooms = await response.json();
+
+    const select = document.getElementById("room_id");
+    const select2 = document.getElementById("new_room_id");
+
+    select.innerHTML = '<option value="">-- Selectați sala --</option>';
+    select2.innerHTML = '<option value="">-- Selectați sala --</option>';
+
+    rooms.forEach(room => {
+      const option = document.createElement("option");
+      option.text = room.name;
+      option.value = room.id;
+      select.appendChild(option.cloneNode(true));
+
+      select2.appendChild(option.cloneNode(true));
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}

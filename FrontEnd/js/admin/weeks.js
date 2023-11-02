@@ -1,5 +1,3 @@
-
-
 function getAndDisplayWeeks(){
   fetch(`${URL}/weeks`, { method: "GET" })
     .then(response => response.json())
