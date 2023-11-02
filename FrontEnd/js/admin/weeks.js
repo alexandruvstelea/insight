@@ -1,3 +1,5 @@
+
+
 function getAndDisplayWeeks(){
   fetch(`${URL}/weeks`, { method: "GET" })
     .then(response => response.json())
@@ -41,7 +43,6 @@ function generateWeeks() {
 }
 
 function deleteWeeks() {
-  event.preventDefault();
   const url = `${URL}/weeks`;
 
   fetch(url, { method: "DELETE" })
