@@ -15,8 +15,6 @@ def init_app():
         from models.ratings import Rating
         from models.courses import Course
         from models.professors import Professor
-        from models.programmes_subjects import ProgrammesSubjects
-        from models.programmes import Programme
         from models.rooms import Room
         from models.subjects import Subject
         from models.weeks import Week
@@ -25,22 +23,16 @@ def init_app():
 
         from routes.routes_courses import course_bp
         from routes.routes_professors import professor_bp
-        from routes.routes_programmes import programme_bp
         from routes.routes_ratings import rating_bp
         from routes.routes_rooms import room_bp
         from routes.routes_subjects import subject_bp
-        from routes.routes_programmes_subjects import programme_subjects_bp
-        from routes.routes_graph import graph_bp
         from routes.routes_weeks import weeks_bp
 
         app.register_blueprint(course_bp)
         app.register_blueprint(professor_bp)
-        app.register_blueprint(programme_bp)
         app.register_blueprint(rating_bp)
         app.register_blueprint(room_bp)
         app.register_blueprint(subject_bp)
-        app.register_blueprint(programme_subjects_bp)
-        app.register_blueprint(graph_bp)
         app.register_blueprint(weeks_bp)
 
         return app

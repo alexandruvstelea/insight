@@ -1,7 +1,10 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, abort
 from models.subjects import Subject
 from __init__ import db
 from sqlalchemy import exc
+from datetime import datetime
+from models.courses import Course
+from models.weeks import Week
 
 subject_bp = Blueprint("subjects", __name__)
 
@@ -108,3 +111,62 @@ def get_professor_subjects(professor_id):
             }
         )
     return jsonify(subjects_list)
+
+
+@subject_bp.route("/subjects/current", methods=["GET"])
+def get_current_subject():
+    try:
+        data = request.get_json()
+        if not data:
+            abort(400, "Invalid JSON data provided.")
+        date_time = datetime.strptime(data["date"], "%Y-%m-%d %H:%M:%S.%f")
+        room_id = int(data["room"])
+    except (KeyError, ValueError, TypeError) as e:
+        abort(400, f"Error retrieving query parameters: {str(e)}")
+
+    try:
+        week_type = find_week_type(date_time)
+        courses = (
+            db.session.query(Course)
+            .filter(
+                Course.room_id == room_id,
+                Course.day == date_time.weekday(),
+                db.or_(Course.week_type == week_type, Course.week_type == 0),
+            )
+            .all()
+        )
+
+        filtered_courses = []
+        if courses:
+            for course in courses:
+                if course.start_end[0] <= date_time.time() <= course.start_end[1]:
+                    filtered_courses.append(course)
+
+            if len(filtered_courses) == 1:
+                subject_id = filtered_courses[0].id
+                subject = db.session.query(Subject).filter_by(id=subject_id).first()
+                if subject:
+                    return {
+                        "name": subject.name,
+                        "abbreviation": subject.abbreviation,
+                    }, 200
+                else:
+                    abort(500, f"Subject with ID={subject_id} not found.")
+            else:
+                abort(404, "Current course not found.")
+        else:
+            abort(404, "No courses found.")
+    except exc.SQLAlchemyError as e:
+        abort(500, f"Error retrieving data: {str(e)}")
+
+
+def find_week_type(date_time):
+    current_week = (
+        db.session.query(Week)
+        .filter(Week.start <= date_time, Week.end >= date_time)
+        .first()
+    )
+    if current_week:
+        return 2 if current_week.id % 2 == 0 else 1
+    else:
+        abort(404, "Current week couldn't be determined.")

@@ -5,6 +5,7 @@ from datetime import datetime
 from sqlalchemy import func
 from models.courses import Course
 from models.subjects import Subject
+from models.weeks import Week
 
 rating_bp = Blueprint("ratings", __name__)
 
@@ -69,3 +70,36 @@ def get_ratings(subject_id):
     ratings_dict = {f"{key}_rating": value for key, value in ratings.items()}
 
     return jsonify(ratings_dict)
+
+
+@rating_bp.route("/graph", methods=["GET"])
+def get_graph_data():
+    subject_id = request.args.get("subject_id")
+    if subject_id:
+        subject = db.session.query(Subject).filter(Subject.id == subject_id).first()
+        ratings = db.session.query(Rating).filter_by(subject_id=subject_id).all()
+        if subject:
+            weeks = db.session.query(Week).filter_by(semester=subject.semester).all()
+
+        if ratings and weeks:
+            week_ratings = {}
+            for week in weeks:
+                week_ratings[f"week_{week.id}"] = []
+                for rating in ratings:
+                    if week.start <= rating.datetime.date() <= week.end:
+                        week_ratings[f"week_{week.id}"].append(rating.rating)
+
+                if week_ratings[f"week_{week.id}"]:
+                    week_ratings[f"week_{week.id}"] = round(
+                        sum(week_ratings[f"week_{week.id}"])
+                        / len(week_ratings[f"week_{week.id}"]),
+                        2,
+                    )
+                else:
+                    week_ratings[f"week_{week.id}"] = 0
+
+            return jsonify(week_ratings)
+        else:
+            return {"response": "An error has occured. 1"}
+    else:
+        return {"response": "An error has occured. 2"}
