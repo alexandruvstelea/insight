@@ -1,35 +1,31 @@
-#addProfessorForm label,
-#addProfessorForm input,
-#editProfessorForm label,
-#editProfessorForm input,
-#addSubjectForm label,
-#addSubjectForm input,
-#editSubjectForm label,
-#editSubjectForm input,
-#generateWeeks label,
-#generateWeeks input,
-#addRoomForm label,
-#addRoomForm input,
-#editRoomForm label,
-#editRoomForm input,
-#addCourseForm label,
-#addCourseForm input,
-#editCourseForm label,
-#editCourseForm input {
+form label,
+form input {
   display: block;
   margin-bottom: 10px;
+  width: 242px;
 }
-label[for="semester1"], 
-label[for="semester2"] {
+input[type="radio"] ~ label {
 display: inline !important;
+margin-bottom: 20px;
 }
-input#semester1,
-input#semester2{
+input[type="radio"]{
   display: inline !important;
+  margin-bottom: 20px;
 }
-
+p{
+  padding: 0;
+  margin: 0;
+  margin-bottom: 5px;
+}
 button{
   display: block;
+}
+button[type="submit"] {
+  padding: 3px;
+  margin-top: 10px;
+}
+label{
+  margin-top: 10px;
 }
 table {
   border: 1px solid #000;
@@ -38,17 +34,22 @@ table {
   border-spacing: 10px; 
 }
 
-
+select {
+  width: 250px;
+  margin: 0;    
+  padding: 0;   
+}
 
 td,
 tr {
   padding: 10px;
+  text-align: center;
 }
 
 
 #professorsTable,
 #subjectsTable {
-  height: 400px;
+  height: 100%;
   overflow-y: hidden;
 }
 #weeksTable{
@@ -59,8 +60,9 @@ tr {
 .tables {
   overflow-x: hidden;
   overflow-y: auto;
-  height: 300px;
+  height: 400px;
   padding: 5px;
+  width: 90%;
 }
 
 .big-table{
@@ -78,8 +80,16 @@ tr {
 
 .col-2-cont {
   display: flex;
-  justify-content: center;
-  gap: 40px;
+  flex-direction: row; 
+  justify-content: center; 
+}
+
+.col-2-cont > :first-child {
+  flex: 0 0 25%;
+}
+
+.col-2-cont > :last-child {
+  flex: 0 0 60%;
 }
 
 div.col-2-cont > div:first-child h1 {
@@ -91,13 +101,13 @@ text-align: center;
 
 
 .hide {
-  display: none;
+  display: none !important;
 }
 
 .deleteTableButton{
   font-size: 15px;
-  width: 96%;
-  margin-bottom: 5px;
+  width: 89%;
+  margin-bottom: 10px;
 }
 .deleteTableButton:hover{
   cursor: pointer;
@@ -146,3 +156,4 @@ text-align: center;
 .popupButtons{
   text-align: center;
 }
+

@@ -41,7 +41,6 @@ function generateWeeks() {
 }
 
 function deleteWeeks() {
-  event.preventDefault();
   const url = `${URL}/weeks`;
 
   fetch(url, { method: "DELETE" })
