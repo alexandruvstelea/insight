@@ -58,7 +58,7 @@ function addSubjects(subjectsArray, id) {
       const a = document.createElement('a');
       const button = document.createElement('button');
 
-      a.href = './infoCurs.html';
+      a.href = `./infoCurs.html?subjectId=${subject.id}`;
       button.className = 'button-courses';
       button.role = 'button';
       button.textContent = subject.abbreviation;
@@ -75,3 +75,4 @@ function addSubjects(subjectsArray, id) {
 document.addEventListener("DOMContentLoaded", function () {
   fetchProfessor();
 });
+

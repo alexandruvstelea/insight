@@ -1,31 +1,28 @@
-function seteazaProcentaje(procente) {
-  for (var i = 1; i <= 5; i++) {
-    var notaElement = document.getElementById("nota" + i);
-    var progressFillElement = document.getElementById("progress" + i);
-    notaElement.textContent = procente[i - 1] + "%";
-    progressFillElement.style.width = procente[i - 1] + "%";
+function setPercentages(percentages) {
+  for (let i = 1; i <= percentages.length; i++) {
+    let notaElement = document.getElementById("nota" + i);
+    let progressFillElement = document.getElementById("progress" + i);
+    notaElement.textContent = percentages[i - 1].toFixed(0) + "%";
+    progressFillElement.style.width = percentages[i - 1].toFixed(0) + "%";
   }
   
-  // Calculeaza media si coloreaza stelutele in functie de medie
-  var media = procente.reduce((a, b) => a + b, 0) / 5;
-  coloreazaStelutele(media);
 }
 
 function coloreazaStelutele(media) {
-  var starsElement = document.getElementById("media");
-  if (media >= 90) {
-    starsElement.textContent = "★★★★★";
-  } else if (media >= 70) {
-    starsElement.textContent = "★★★★☆";
-  } else if (media >= 50) {
-    starsElement.textContent = "★★★☆☆";
-  } else if (media >= 30) {
-    starsElement.textContent = "★★☆☆☆";
-  } else {
-    starsElement.textContent = "★☆☆☆☆";
+  let starsElement = document.getElementById("media");
+ if (media >= 4.5 && media <= 5) {
+    starsElement.innerHTML = "&#9733;&#9733;&#9733;&#9733;&#9734;";
+  } else if (media >= 2.5 && media < 3.5) {
+    starsElement.innerHTML = `&#9733;&#9733;&#9733;&#9734;&#9734;`;
+  } else if (media >= 1.5 && media < 2.5) {
+    starsElement.innerHTML = "&#9733;&#9733;&#9734;&#9734;&#9734;";
+  } else if (media > 0 && media < 1.5){
+    starsElement.innerHTML = "&#9733;&#9734;&#9734;&#9734;&#9734;";
+  }else if (media == 0){
+    starsElement.innerHTML = "&#9733;&#9734;&#9734;&#9734;&#9734;";
   }
-  document.getElementById("nota-medie").innerHTML += " " +media
+  document.getElementById("nota-medie").innerHTML =  ` ${media}`;
 }
 
 
-seteazaProcentaje([10, 10, 30, 20, 10]); 
+
