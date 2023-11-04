@@ -1,0 +1,45 @@
+version: '1'
+services:
+  postgres:
+    restart: always
+    image: postgres:latest
+    container_name: postgres_container
+    env_file:
+      - .env
+    volumes:
+      - volume_postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - feedback_network
+  backend:
+    container_name: backend_container
+    restart: always
+    image: backend_image:1.0
+    build: 
+      context: ../Backend
+      dockerfile: ../Backend/Dockerfile
+    networks:
+      - feedback_network
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres
+  frontend:
+    container_name: frontend_container
+    restart: always
+    build:
+      context: ../FrontEnd
+      dockerfile: ../FrontEnd/Dockerfile
+    image: frontend_image:1.0
+    networks:
+      - feedback_network
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+volumes:
+  volume_postgres:
+
+networks:
+  feedback_network:
