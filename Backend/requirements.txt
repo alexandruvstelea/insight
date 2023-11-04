@@ -5,3 +5,4 @@ python-dotenv>=1.0.0
 SQLAlchemy>=2.0.22
 bleach
 psycopg2-binary
+flask-jwt-extended

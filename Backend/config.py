@@ -13,3 +13,4 @@ class Config:
     SECRET_KEY = "PSjf6fjKbz9LqDuj"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = f"postgresql://{USER}:{PASSWORD}@{HOST}/{DB_NAME}"
+    JWT_SECRET_KEY = "sdadadwasd1231"

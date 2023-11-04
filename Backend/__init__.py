@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import sessionmaker
+from flask_jwt_extended import JWTManager
 
 db = SQLAlchemy()
 
@@ -8,6 +9,7 @@ db = SQLAlchemy()
 def init_app():
     app = Flask(__name__, instance_relative_config=False)
     app.config.from_object("config.Config")
+    jwt = JWTManager(app)
 
     db.init_app(app)
 
@@ -27,6 +29,7 @@ def init_app():
         from routes.routes_rooms import room_bp
         from routes.routes_subjects import subject_bp
         from routes.routes_weeks import weeks_bp
+        from routes.routes_admin import admin_bp
 
         app.register_blueprint(course_bp)
         app.register_blueprint(professor_bp)
@@ -34,5 +37,6 @@ def init_app():
         app.register_blueprint(room_bp)
         app.register_blueprint(subject_bp)
         app.register_blueprint(weeks_bp)
+        app.register_blueprint(admin_bp)
 
         return app

@@ -3,11 +3,13 @@ from models.professors import Professor
 from __init__ import db
 from sqlalchemy import exc
 from bleach import clean
+from flask_jwt_extended import jwt_required
 
 professor_bp = Blueprint("professors", __name__)
 
 
 @professor_bp.route("/professors", methods=["POST"])
+@jwt_required()
 def create_professor():
     try:
         first_name = clean(request.form["first_name"])
@@ -65,6 +67,7 @@ def get_professor_by_id(professor_id):
 
 
 @professor_bp.route("/professors/<int:professor_id>", methods=["PUT"])
+@jwt_required()
 def update_professor(professor_id):
     try:
         new_first_name = clean(request.form["new_first_name"])
@@ -95,6 +98,7 @@ def update_professor(professor_id):
 
 
 @professor_bp.route("/professors/<int:professor_id>", methods=["DELETE"])
+@jwt_required()
 def delete_professor(professor_id):
     try:
         with db.session.begin():
