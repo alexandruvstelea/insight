@@ -14,4 +14,4 @@ class Professor(db.Model):
         self.title = title
 
     def __str__(self):
-        return f"ID: {self.id}->First Name: {self.first_name.upper()} Last Name: {self.last_name.upper()} Title: {self.title.upper()}"
+        return f"ID: {self.id}->First Name={self.first_name.upper()}, Last Name={self.last_name.upper()}, Title={self.title.upper()}"

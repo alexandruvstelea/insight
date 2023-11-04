@@ -36,4 +36,4 @@ class Course(db.Model):
         self.semester = semester
 
     def __str__(self):
-        return f"ID {self.id}->Subject_ID: {self.subject_id} Type: {self.type} Room_ID: {self.room_id} Day: {self.day} Week_Type: {self.week_type} Start: {self.start_end[0]} End: {self.start_end[1]} Semester: {self.semester}"
+        return f"ID {self.id}->Subject_ID={self.subject_id}, Type={self.type}, Room_ID={self.room_id}, Day={self.day}, Week_Type={self.week_type}, Start={self.start_end[0]}, End={self.start_end[1]}, Semester={self.semester}"
