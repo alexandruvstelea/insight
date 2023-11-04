@@ -6,5 +6,3 @@ Backend/routes/__pycache__
 crud_functions_deprecated.py
 feedback_venv
 DockerPostgres/.env
-DockerPostgres/pgdata/
-

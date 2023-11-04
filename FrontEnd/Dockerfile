@@ -1,0 +1,10 @@
+FROM nginx:alpine
+
+# Copiați fișierele statice în directorul de lucru implicit al Nginx
+COPY . /usr/share/nginx/html
+
+# Expuneți portul 80
+EXPOSE 80
+
+# Când containerul pornește, Nginx va rula automat
+CMD ["nginx", "-g", "daemon off;"]
