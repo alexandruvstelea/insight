@@ -44,21 +44,24 @@ def get_courses():
     try:
         courses = db.session.query(Course).all()
         courses_list = []
-        for course in courses:
-            courses_list.append(
-                {
-                    "id": course.id,
-                    "subject_id": course.subject_id,
-                    "type": course.type,
-                    "room_id": course.room_id,
-                    "day": course.day,
-                    "week_type": course.week_type,
-                    "start": course.start_end[0].strftime("%H:%M"),
-                    "end": course.start_end[1].strftime("%H:%M"),
-                    "semester": course.semester,
-                }
-            ), 200
-        return jsonify(courses_list), 200
+        if courses:
+            for course in courses:
+                courses_list.append(
+                    {
+                        "id": course.id,
+                        "subject_id": course.subject_id,
+                        "type": course.type,
+                        "room_id": course.room_id,
+                        "day": course.day,
+                        "week_type": course.week_type,
+                        "start": course.start_end[0].strftime("%H:%M"),
+                        "end": course.start_end[1].strftime("%H:%M"),
+                        "semester": course.semester,
+                    }
+                ), 200
+            return jsonify(courses_list), 200
+        else:
+            abort(404, f"No courses found.")
     except exc.SQLAlchemyError as e:
         abort(500, f"An error has occured while retrieving objects.\n {str(e)}")
 
