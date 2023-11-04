@@ -1,6 +1,11 @@
 async function getAndDisplayRooms() {
   try {
     const response = await fetch(`${URL}/rooms`, { method: "GET" });
+    if (response.status === 404) {
+      const tableBody = document.querySelector("#roomsTable tbody");
+      tableBody.innerHTML = '<tr><td colspan="2">No rooms found</td></tr>';
+      return;
+    }
     const rooms = await response.json();
     rooms.sort((a, b) => a.id - b.id);
     const tableBody = document.querySelector("#roomsTable tbody");
@@ -89,6 +94,14 @@ async function editRoom() {
 async function getAndDisplayRoomInCourses() {
   try {
     const response = await fetch(`${URL}/rooms`, { method: "GET" });
+    if (response.status === 404) {
+      const select = document.getElementById("room_id");
+      const select2 = document.getElementById("new_room_id");
+  
+      select.innerHTML = '<option value="">-- Selectați sala --</option>';
+      select2.innerHTML = '<option value="">-- Selectați sala --</option>';
+      return;
+    }
     const rooms = await response.json();
 
     const select = document.getElementById("room_id");

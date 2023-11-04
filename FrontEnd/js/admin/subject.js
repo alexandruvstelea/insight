@@ -1,6 +1,11 @@
 async function getAndDisplaySubjects() {
   try {
     const response = await fetch(`${URL}/subjects`, { method: "GET" });
+    if (response.status === 404) {
+      const tableBody = document.querySelector("#subjectsTable tbody");
+      tableBody.innerHTML = '<tr><td colspan="5">No subjects found</td></tr>';
+      return;
+    }
     const subjects = await response.json();
     
     subjects.sort((a, b) => a.professor_id - b.professor_id);
@@ -112,6 +117,14 @@ async function editSubject() {
 async function getAndDisplaySubjectInCourses() {
   try {
     const response = await fetch(`${URL}/subjects`, { method: "GET" });
+    if (response.status === 404) {
+      const select = document.getElementById("subject_id");
+      const select2 = document.getElementById("new_subject_id");
+  
+      select.innerHTML = '<option value="">-- Selectați Materia --</option>';
+      select2.innerHTML = '<option value="">-- Selectați Materia --</option>';
+      return;
+    }
     const subjects = await response.json();
 
     const select = document.getElementById("subject_id");

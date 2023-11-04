@@ -1,6 +1,11 @@
 async function getAndDisplayCourses() {
   try {
     const response = await fetch(`${URL}/courses`, { method: "GET" });
+    if (response.status === 404) {
+      const tableBody = document.querySelector("#coursesTable tbody");
+      tableBody.innerHTML = '<tr><td colspan="8">No courses found</td></tr>';
+      return;
+    }
     const courses = await response.json();
 
     courses.sort((a, b) => a.id - b.id);

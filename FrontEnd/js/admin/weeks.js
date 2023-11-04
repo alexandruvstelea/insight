@@ -1,7 +1,20 @@
 function getAndDisplayWeeks(){
   fetch(`${URL}/weeks`, { method: "GET" })
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        if (response.status === 404) {
+          const tableBody = document.querySelector("#weeksTable tbody");
+          tableBody.innerHTML = '<tr><td colspan="4">No weeks found</td></tr>';
+        } else {
+          throw new Error(`Server error: ${response.status}`);
+        }
+        return null;
+      }
+      return response.json();
+    })
     .then(weeks => {
+      if (!weeks) return;
+
       const tableBody = document.querySelector("#weeksTable tbody");
       tableBody.innerHTML = '';
 
@@ -12,19 +25,20 @@ function getAndDisplayWeeks(){
         const formattedEndDate = `${endDate.getDate()} ${endDate.toLocaleString('default', { month: 'short' })} ${endDate.getFullYear()}`;
         const row = document.createElement("tr");
         row.innerHTML = `
-        <tr>
-<td>${week.id}</td>
-<td>${formattedStartDate}</td>
-<td>${formattedEndDate}</td>
-<td>${week.semester}</td>
-</tr>
-                `;
+          <tr>
+            <td>${week.id}</td>
+            <td>${formattedStartDate}</td>
+            <td>${formattedEndDate}</td>
+            <td>${week.semester}</td>
+          </tr>
+        `;
         tableBody.appendChild(row);
       });
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      console.error('An error occurred:', err);
+    });
 }
-
 function generateWeeks() {
   const form = document.getElementById("generateWeeks");
   const formData = new FormData(form);

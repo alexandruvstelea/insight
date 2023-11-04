@@ -1,28 +1,56 @@
- function fetchRatingData(subjectId) {
+function fetchRatingData(subjectId) {
   const url = `http://127.0.0.1:5000/ratingsnumber/${subjectId}`;
 
   fetch(url, { method: "GET" })
-    .then((response) => response.json())
-    .then((data) => {
-      setPercentages(calculateRatingsPercentages(data)) 
+    .then((response) => {    
+      if (response.status === 404) {
+        alert("Data not found for the given subject ID");
+        // Aruncați o eroare pentru a opri executarea lanțului de promisiuni
+        throw new Error('404 Not Found');
+      }
+      return response.json();
     })
-    .catch((err) => { console.log(err) });
+    .then((data) => {
+      setPercentages(calculateRatingsPercentages(data));
+    })
+    .catch((err) => {
+      // Tratați orice eroare care apare în lanțul de promisiuni
+      console.error(err);
+    });
 }
- function fetchRatingAverage(subjectId) {
+function fetchRatingAverage(subjectId) {
   const url = `http://127.0.0.1:5000/rating/${subjectId}`;
 
   fetch(url, { method: "GET" })
-    .then((response) => response.json())
-    .then((data) => {
-      coloreazaStelutele(data.response)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
     })
-    .catch((err) => { console.log(err) });
+    .then((data) => {
+      coloreazaStelutele(data.response);
+    })
+    .catch((err) => {
+      console.error('There has been a problem with your fetch operation:', err);
+    });
 }
- function fetchGraphData(subjectId) {
+function fetchGraphData(subjectId) {
   const url = `http://127.0.0.1:5000/graph?subject_id=${subjectId}`;
 
   fetch(url, { method: "GET" })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        if (response.status === 404) {
+          alert("No data available for the requested graph");
+          // Aruncați o eroare pentru a opri executarea ulterioară
+          throw new Error('404 Not Found');
+        } else {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+      }
+      return response.json();
+    })
     .then(data => {
       let array = new Array(Object.keys(data).length).fill(0);
       Object.keys(data).forEach(key => {
@@ -30,12 +58,13 @@
         array[weekNumber] = data[key];
       });
       
-      myChartData(array)
+      myChartData(array);
     })
     .catch(error => {
       console.error('There has been a problem with your fetch operation:', error);
     });
 }
+
 
 
 document.addEventListener("DOMContentLoaded", function () {

@@ -88,22 +88,22 @@
       <div>
         <h1><span id="addEditTitleProfessor">Adaugare</span> Profesor</h1>
         <form id="addProfessorForm"
-          onsubmit="submitForm(event,addProfessor,getAndDisplayProfessors,getAndDisplayProfessorInSubjects);return false">
+          onsubmit="submitForm(event,addProfessor,getAndDisplayProfessors,getAndDisplayProfessorInSubjects,getAndDisplaySubjects);return false">
           <label for="first_name">Nume:</label>
-          <input type="text" id="first_name" name="first_name" maxlength="30" required>
+          <input type="text" id="first_name" name="first_name" maxlength="18" required>
           <label for="last_name">Prenume:</label>
-          <input type="text" id="last_name" name="last_name" maxlength="30" required>
+          <input type="text" id="last_name" name="last_name" maxlength="36" required>
           <label for="title">Titlu:</label>
           <input type="text" id="title" name="title" maxlength="30" required>
           <button type="submit">Adaugă Profesor</button>
         </form>
 
         <form id="editProfessorForm" class="hide"
-          onsubmit="submitForm(event,editProfessor,getAndDisplayProfessors,getAndDisplayProfessorInSubjects);return false">
+          onsubmit="submitForm(event,editProfessor,getAndDisplayProfessors,getAndDisplayProfessorInSubjects,getAndDisplaySubjects);return false">
           <label for="new_first_name">Editare Nume:</label>
-          <input type="text" id="new_first_name" name="new_first_name" maxlength="30" required>
+          <input type="text" id="new_first_name" name="new_first_name" maxlength="18" required>
           <label for="new_last_name">Editare Prenume:</label>
-          <input type="text" id="new_last_name" name="new_last_name" maxlength="30" required>
+          <input type="text" id="new_last_name" name="new_last_name" maxlength="36" required>
           <label for="new_title">Editare Titlu:</label>
           <input type="text" id="new_title" name="new_title" maxlength="30" required>
           <label class="hide" for="professorId">Id-ul profesorului</label>
@@ -135,7 +135,7 @@
     <div class="col-2-cont">
       <div>
         <h1><span id="addEditTitleSubject">Adaugare</span> Materie</h1>
-        <form id="addSubjectForm" onsubmit="submitForm(event,addSubject,getAndDisplaySubjects,getAndDisplaySubjectInCourses);return false">
+        <form id="addSubjectForm" onsubmit="submitForm(event,addSubject,getAndDisplaySubjects,getAndDisplaySubjectInCourses,getAndDisplayCourses);return false">
           <label for="name">Nume Materie:</label>
           <input type="text" id="name" name="name" maxlength="50" required>
           <label for="abbreviation">Abreviere:</label>
@@ -155,7 +155,7 @@
         </form>
 
         <form id="editSubjectForm" class="hide"
-          onsubmit="submitForm(event,editSubject,getAndDisplaySubjects,getAndDisplaySubjectInCourses);return false">
+          onsubmit="submitForm(event,editSubject,getAndDisplaySubjects,getAndDisplaySubjectInCourses,getAndDisplayCourses);return false">
           <label for="new_name">Nume Materie:</label>
           <input type="text" id="new_name" name="new_name" maxlength="50" required>
           <label for="new_abbreviation">Abreviere:</label>
@@ -205,13 +205,13 @@
     <div class="col-2-cont">
       <div>
         <h1><span id="addEditTitleRoom">Adaugare</span> Sala de Curs</h1>
-        <form id="addRoomForm" onsubmit="submitForm(event,addRoom,getAndDisplayRooms,getAndDisplayRoomInCourses);return false">
+        <form id="addRoomForm" onsubmit="submitForm(event,addRoom,getAndDisplayRooms,getAndDisplayRoomInCourses,getAndDisplayCourses);return false">
           <label for="name">Nume:</label>
           <input type="text" id="name" name="name" maxlength="20" required>
           <button type="submit">Adaugă Sala</button>
         </form>
 
-        <form id="editRoomForm" class="hide" onsubmit="submitForm(event,editRoom,getAndDisplayRooms,getAndDisplayRoomInCourses);return false">
+        <form id="editRoomForm" class="hide" onsubmit="submitForm(event,editRoom,getAndDisplayRooms,getAndDisplayRoomInCourses,getAndDisplayCourses);return false">
           <label for="new_room">Editare Sala:</label>
           <input type="text" id="new_room" name="new_room" maxlength="20" required>
           <label class="hide" for="roomID">Id-ul Salii</label>

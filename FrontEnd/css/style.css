@@ -405,6 +405,10 @@
   font-weight: 500;
   color: #333;
   padding: 10px;
+  text-align: center;
+  height: 40px;
+  margin-right: 14px;
+  margin-left: 14px;
 }
 .title-curs{
 
@@ -530,19 +534,29 @@
 }
 
 
+#page-container {
+  position: relative;
+  min-height: 100vh;
+}
 
 
-.copy-right{
-  padding: 1rem;
-    background: #000;
-    color: #fff;
-    text-align: center;
-    position: fixed; 
-    left: 0; 
-  bottom: 0; 
+#content-wrap {
+  padding-bottom: 40px;   
+}
+
+#copy-right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #000;
+  color: #fff;
+  position: absolute;
+  bottom: 0;
   width: 100%;
+  height: 40px;    
   font-size: 12px;
 }
+
 .copy-right a{
   color: #0c929c;
   
@@ -571,7 +585,7 @@
 
   .stars {
     font-size: 33px;
-    color: gold;
+    color: #4070F4;
   }
   #nota-medie{
     font-size: 30px;
@@ -594,12 +608,15 @@
   }
   .progress-fill {
     height: 100%;
-    background-color: green;
+    background-color: #4070F4;
     
   }
   .text-m{
     font-size: 20px;
   } 
+
+
+
 
 
   @media screen and (max-width: 768px) {

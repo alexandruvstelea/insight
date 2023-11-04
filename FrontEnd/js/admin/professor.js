@@ -3,7 +3,15 @@ const URL = 'http://127.0.0.1:5000';
 async function getAndDisplayProfessors() {
   try {
     const response = await fetch(`${URL}/professors`, { method: "GET" });
+    if (response.status === 404) {
+      const tableBody = document.querySelector("#professorsTable tbody");
+      tableBody.innerHTML = '<tr><td colspan="4">No professors found</td></tr>';
+      return;
+    }
     const professors = await response.json();
+
+
+  
 
     professors.sort((a, b) => a.id - b.id);
 
@@ -13,20 +21,18 @@ async function getAndDisplayProfessors() {
     professors.forEach(professor => {
       const row = document.createElement("tr");
       row.innerHTML = `
-        <tr>
           <td>${professor.id}</td>
           <td>${professor.first_name}</td>
           <td>${professor.last_name}</td>
           <td>${professor.title}</td>
           <td><button onclick="handleDeleteProfessorButtonClick(${professor.id})">Șterge</button></td>
           <td><button onclick="handleEditProfessorButtonClick(${professor.id})">Editează</button></td>
-        </tr>
       `;
       tableBody.appendChild(row);
     });
   } catch (err) {
     console.log(err);
-  }
+}
 }
 
 async function handleDeleteProfessorButtonClick(professorId) {
@@ -54,14 +60,15 @@ async function addProfessor() {
   }
 }
 
-async function deleteProfessor(id) {
+  async function deleteProfessor(id) {
 
-  try {
-    const response = await fetch(`${URL}/professors/${id}`, { method: "DELETE" });
-  } catch (err) {
-    console.log(err);
+    try {
+      const response = await fetch(`${URL}/professors/${id}`, { method: "DELETE" });
+
+    } catch (err) {
+      console.log(err);
+    }
   }
-}
 
 async function displayEditProfessor(id) {
   document.getElementById("addEditTitleProfessor").innerText = "Editare";
@@ -109,6 +116,16 @@ async function editProfessor() {
 async function getAndDisplayProfessorInSubjects() {
   try {
     const response = await fetch(`${URL}/professors`, { method: "GET" });
+
+    if (response.status === 404) {
+      const select = document.getElementById("professor_id");
+      const select2 = document.getElementById("new_professor_id");
+  
+      select.innerHTML = '<option value="">-- Selectați un profesor --</option>';
+      select2.innerHTML = '<option value="">-- Selectați un profesor --</option>';
+      return;
+    }
+
     const professors = await response.json();
 
     const select = document.getElementById("professor_id");
