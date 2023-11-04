@@ -14,10 +14,10 @@ rating_bp = Blueprint("ratings", __name__)
 @rating_bp.route("/rating", methods=["POST"])
 def insert_rating():
     try:
-        data = clean(request.get_json())
-        date_time = clean(datetime.strptime(data["date"], "%Y-%m-%d %H:%M:%S.%f"))
-        rating = clean(int(data["rating"]))
-        room_id = clean(int(data["room"]))
+        data = request.get_json()
+        date_time = datetime.strptime(clean(data["date"]), "%Y-%m-%d %H:%M:%S.%f")
+        rating = int(data["rating"])
+        room_id = int(data["room"])
     except KeyError as e:
         abort(400, f"An error has occured: missing key in request parameters.\n {e}")
 
