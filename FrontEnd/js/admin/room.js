@@ -37,7 +37,7 @@ async function handleEditRoomButtonClick(professorId) {
 async function addRoom() {
   const form = document.getElementById("addRoomForm");
   const formData = new FormData(form);
-  
+
   try {
     const response = await fetch(`${URL}/rooms`, { method: "POST", body: formData });
     const newRoom = await response.json();
@@ -97,7 +97,7 @@ async function getAndDisplayRoomInCourses() {
     if (response.status === 404) {
       const select = document.getElementById("room_id");
       const select2 = document.getElementById("new_room_id");
-  
+
       select.innerHTML = '<option value="">-- Selectați sala --</option>';
       select2.innerHTML = '<option value="">-- Selectați sala --</option>';
       return;

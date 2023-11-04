@@ -96,7 +96,7 @@ async function displayEditCourse(id) {
 
     const editFields = updateForm.querySelectorAll("input");
     const selectFields = updateForm.querySelectorAll("select");
-    
+
     editFields[0].value = course.id;
 
     selectFields[0].querySelector(`option[value="${course.subject_id}"]`).selected = true;

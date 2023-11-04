@@ -2,7 +2,7 @@ function fetchRatingData(subjectId) {
   const url = `http://127.0.0.1:5000/ratingsnumber/${subjectId}`;
 
   fetch(url, { method: "GET" })
-    .then((response) => {    
+    .then((response) => {
       if (response.status === 404) {
         alert("Data not found for the given subject ID");
         // Aruncați o eroare pentru a opri executarea lanțului de promisiuni
@@ -57,7 +57,7 @@ function fetchGraphData(subjectId) {
         const weekNumber = parseInt(key.split('_')[1], 10) - 1;
         array[weekNumber] = data[key];
       });
-      
+
       myChartData(array);
     })
     .catch(error => {
@@ -70,10 +70,10 @@ function fetchGraphData(subjectId) {
 document.addEventListener("DOMContentLoaded", function () {
   const urlParams = new URLSearchParams(window.location.search);
   const subjectId = urlParams.get('subjectId');
-    fetchRatingData(subjectId);
-    fetchRatingAverage(subjectId);
-    fetchGraphData(subjectId);
-    console.log(subjectId)
+  fetchRatingData(subjectId);
+  fetchRatingAverage(subjectId);
+  fetchGraphData(subjectId);
+  console.log(subjectId)
 });
 
 function calculateRatingsPercentages(ratings) {

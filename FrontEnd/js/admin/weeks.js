@@ -1,4 +1,4 @@
-function getAndDisplayWeeks(){
+function getAndDisplayWeeks() {
   fetch(`${URL}/weeks`, { method: "GET" })
     .then(response => {
       if (!response.ok) {
@@ -43,12 +43,12 @@ function generateWeeks() {
   const form = document.getElementById("generateWeeks");
   const formData = new FormData(form);
   const url = `${URL}/weeks`;
-  
+
   fetch(url, { method: "POST", body: formData })
     .then(response => response.json())
-    .then(newSubject => { 
-      console.log(newSubject); 
-      form.reset(); 
+    .then(newSubject => {
+      console.log(newSubject);
+      form.reset();
       getAndDisplayWeeks()
     })
     .catch(err => console.log(err))
@@ -58,16 +58,16 @@ function deleteWeeks() {
   const url = `${URL}/weeks`;
 
   fetch(url, { method: "DELETE" })
-    .then(response => { 
-      getAndDisplayWeeks() 
+    .then(response => {
+      getAndDisplayWeeks()
     })
     .catch(err => console.log(err));
 }
 
-document.getElementById("yesButton").addEventListener('click', function() {
+document.getElementById("yesButton").addEventListener('click', function () {
   deleteWeeks()
   modal.style.display = "none";
 });
-document.getElementById("noButton").addEventListener('click', function() {
+document.getElementById("noButton").addEventListener('click', function () {
   modal.style.display = "none";
 });

@@ -1,6 +1,6 @@
 const swiper = new Swiper(".slide-container", {
-  slidesPerView: 5, 
-  slidesPerGroup: 5, 
+  slidesPerView: 5,
+  slidesPerGroup: 5,
   spaceBetween: 25,
   loop: false,
   fade: true,
@@ -14,7 +14,7 @@ const swiper = new Swiper(".slide-container", {
     nextEl: ".swiper-button-next",
     prevEl: ".swiper-button-prev",
   },
-  allowTouchMove: window.innerWidth <= 850, 
+  allowTouchMove: window.innerWidth <= 850,
   breakpoints: {
     0: {
       slidesPerView: 1,

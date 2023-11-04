@@ -3,19 +3,19 @@ async function login() {
   const formData = new FormData(form);
 
   const response = await fetch(`http://localhost:5000/login`, {
-      method: 'POST',
-      body: formData
+    method: 'POST',
+    body: formData
   });
 
   if (response.ok) {
-      const data = await response.json();
-      sessionStorage.setItem('access_token', data.access_token);
-      window.location.href = "./admin.html";
+    const data = await response.json();
+    sessionStorage.setItem('access_token', data.access_token);
+    window.location.href = "./admin.html";
   } else {
-      throw new Error('Failed to login');
+    throw new Error('Failed to login');
   }
 }
 
-async function submitLogin(){
+async function submitLogin() {
   await login()
 }

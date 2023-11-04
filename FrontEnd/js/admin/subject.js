@@ -7,16 +7,16 @@ async function getAndDisplaySubjects() {
       return;
     }
     const subjects = await response.json();
-    
+
     subjects.sort((a, b) => a.professor_id - b.professor_id);
-    
+
     const tableBody = document.querySelector("#subjectsTable tbody");
     tableBody.innerHTML = '';
-    
+
     for (const subject of subjects) {
       const professorResponse = await fetch(`${URL}/professors/${subject.professor_id}`, { method: "GET" });
       const professor = await professorResponse.json();
-      
+
       const row = document.createElement("tr");
       row.innerHTML = `
         <td>${subject.id}</td>
@@ -50,7 +50,7 @@ async function addSubject() {
   try {
     const response = await fetch(`${URL}/subjects`, { method: "POST", body: formData });
     const newSubject = await response.json();
-    
+
     console.log(newSubject);
     form.reset();
   } catch (err) {
@@ -70,7 +70,7 @@ async function deleteSubject(id) {
 
 async function displayEditSubject(id) {
   document.getElementById("addEditTitleSubject").innerText = "Editare";
-  
+
   try {
     const response = await fetch(`${URL}/subjects/${id}`, { method: "GET" });
     const subject = await response.json();
@@ -104,7 +104,7 @@ async function editSubject() {
   try {
     const response = await fetch(`${URL}/subjects/${id}`, { method: "PUT", body: formData });
     const updatedSubject = await response.json();
-    
+
     console.log(updatedSubject);
     form.reset();
     document.getElementById("editSubjectForm").classList.toggle("hide");
@@ -120,7 +120,7 @@ async function getAndDisplaySubjectInCourses() {
     if (response.status === 404) {
       const select = document.getElementById("subject_id");
       const select2 = document.getElementById("new_subject_id");
-  
+
       select.innerHTML = '<option value="">-- Selectați Materia --</option>';
       select2.innerHTML = '<option value="">-- Selectați Materia --</option>';
       return;

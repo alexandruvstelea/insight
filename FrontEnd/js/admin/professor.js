@@ -11,7 +11,7 @@ async function getAndDisplayProfessors() {
     const professors = await response.json();
 
 
-  
+
 
     professors.sort((a, b) => a.id - b.id);
 
@@ -32,7 +32,7 @@ async function getAndDisplayProfessors() {
     });
   } catch (err) {
     console.log(err);
-}
+  }
 }
 
 async function handleDeleteProfessorButtonClick(professorId) {
@@ -51,13 +51,13 @@ async function addProfessor() {
   const formData = new FormData(form);
 
   try {
-    const response = await fetch(`${URL}/professors`, { 
-      method: "POST", 
+    const response = await fetch(`${URL}/professors`, {
+      method: "POST",
       body: formData,
       headers: {
         'Authorization': `Bearer ${token}`,
-     }
-     });
+      }
+    });
     const newProfessor = await response.json();
 
     console.log(newProfessor);
@@ -67,20 +67,20 @@ async function addProfessor() {
   }
 }
 
-  async function deleteProfessor(id) {
-    const token = sessionStorage.getItem('access_token');
-    try {
-      const response = await fetch(`${URL}/professors/${id}`, { 
-        method: "DELETE",
-        headers: {
-          'Authorization': `Bearer ${token}`,
-       }
-      });
+async function deleteProfessor(id) {
+  const token = sessionStorage.getItem('access_token');
+  try {
+    const response = await fetch(`${URL}/professors/${id}`, {
+      method: "DELETE",
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      }
+    });
 
-    } catch (err) {
-      console.log(err);
-    }
+  } catch (err) {
+    console.log(err);
   }
+}
 
 async function displayEditProfessor(id) {
   document.getElementById("addEditTitleProfessor").innerText = "Editare";
@@ -114,13 +114,13 @@ async function editProfessor() {
   formData.delete("professorId");
 
   try {
-    const response = await fetch(`${URL}/professors/${id}`, { 
-      method: "PUT", 
+    const response = await fetch(`${URL}/professors/${id}`, {
+      method: "PUT",
       body: formData,
       headers: {
         'Authorization': `Bearer ${token}`,
-     }
-     });
+      }
+    });
     const updatedProfessor = await response.json();
 
     console.log(updatedProfessor);
@@ -139,7 +139,7 @@ async function getAndDisplayProfessorInSubjects() {
     if (response.status === 404) {
       const select = document.getElementById("professor_id");
       const select2 = document.getElementById("new_professor_id");
-  
+
       select.innerHTML = '<option value="">-- Selectați un profesor --</option>';
       select2.innerHTML = '<option value="">-- Selectați un profesor --</option>';
       return;
