@@ -3,7 +3,7 @@ import os
 
 load_dotenv("postgresql.env")
 
-USER = os.getenv("USER")
+USER = os.getenv("PG_USER")
 PASSWORD = os.getenv("PASSWORD")
 HOST = os.getenv("HOST")
 DB_NAME = os.getenv("DB_NAME")
