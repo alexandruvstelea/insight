@@ -64,11 +64,18 @@ async function handleEditCourseButtonClick(professorId) {
 }
 
 async function addCourse() {
+  const token = sessionStorage.getItem('access_token');
   try {
     const form = document.getElementById("addCourseForm");
     const formData = new FormData(form);
 
-    const response = await fetch(`${URL}/courses`, { method: "POST", body: formData });
+    const response = await fetch(`${URL}/courses`, {
+      method: "POST",
+      body: formData,
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      }
+    });
     const newCourse = await response.json();
 
     console.log(newCourse);
@@ -79,8 +86,14 @@ async function addCourse() {
 }
 
 async function deleteCourse(id) {
+  const token = sessionStorage.getItem('access_token');
   try {
-    const response = await fetch(`${URL}/courses/${id}`, { method: "DELETE" });
+    const response = await fetch(`${URL}/courses/${id}`, {
+      method: "DELETE",
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      }
+    });
   } catch (err) {
     console.log(err);
   }
@@ -115,13 +128,20 @@ async function displayEditCourse(id) {
 }
 
 async function editCourse() {
+  const token = sessionStorage.getItem('access_token');
   try {
     document.getElementById("addEditTitleCourse").innerText = "Adaugare";
     const form = document.getElementById("editCourseForm");
     const formData = new FormData(form);
     const id = document.getElementById("courseID").value;
     formData.delete("courseID");
-    const response = await fetch(`${URL}/courses/${id}`, { method: "PUT", body: formData });
+    const response = await fetch(`${URL}/courses/${id}`, {
+      method: "PUT",
+      body: formData,
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      }
+    });
     const updatedCourse = await response.json();
 
     console.log(updatedCourse);

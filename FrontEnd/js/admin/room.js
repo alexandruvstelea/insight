@@ -35,11 +35,18 @@ async function handleEditRoomButtonClick(professorId) {
 }
 
 async function addRoom() {
+  const token = sessionStorage.getItem('access_token');
   const form = document.getElementById("addRoomForm");
   const formData = new FormData(form);
 
   try {
-    const response = await fetch(`${URL}/rooms`, { method: "POST", body: formData });
+    const response = await fetch(`${URL}/rooms`, {
+      method: "POST",
+      body: formData,
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      }
+    });
     const newRoom = await response.json();
     console.log(newRoom);
     form.reset();
@@ -50,8 +57,14 @@ async function addRoom() {
 
 
 async function deleteRoom(id) {
+  const token = sessionStorage.getItem('access_token');
   try {
-    const response = await fetch(`${URL}/rooms/${id}`, { method: "DELETE" });
+    const response = await fetch(`${URL}/rooms/${id}`, {
+      method: "DELETE",
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      }
+    });
   } catch (err) {
     console.log(err);
   }
@@ -74,13 +87,20 @@ async function displayEditRoom(id) {
 }
 
 async function editRoom() {
+  const token = sessionStorage.getItem('access_token');
   document.getElementById("addEditTitleRoom").innerText = "Adaugare";
   const form = document.getElementById("editRoomForm");
   const formData = new FormData(form);
   const id = document.getElementById("roomID").value;
   formData.delete("RoomID");
   try {
-    const response = await fetch(`${URL}/rooms/${id}`, { method: "PUT", body: formData });
+    const response = await fetch(`${URL}/rooms/${id}`, {
+      method: "PUT",
+      body: formData,
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      }
+    });
     const updatedRoom = await response.json();
     console.log(updatedRoom);
     form.reset();

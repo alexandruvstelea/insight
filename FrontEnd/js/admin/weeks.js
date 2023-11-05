@@ -40,11 +40,18 @@ function getAndDisplayWeeks() {
     });
 }
 function generateWeeks() {
+  const token = sessionStorage.getItem('access_token');
   const form = document.getElementById("generateWeeks");
   const formData = new FormData(form);
   const url = `${URL}/weeks`;
 
-  fetch(url, { method: "POST", body: formData })
+  fetch(url, {
+    method: "POST",
+    body: formData,
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    }
+  })
     .then(response => response.json())
     .then(newSubject => {
       console.log(newSubject);
@@ -55,9 +62,15 @@ function generateWeeks() {
 }
 
 function deleteWeeks() {
+  const token = sessionStorage.getItem('access_token');
   const url = `${URL}/weeks`;
 
-  fetch(url, { method: "DELETE" })
+  fetch(url, {
+    method: "DELETE",
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    }
+  })
     .then(response => {
       getAndDisplayWeeks()
     })

@@ -44,11 +44,18 @@ async function handleEditSubjectButtonClick(subjectId) {
 }
 
 async function addSubject() {
+  const token = sessionStorage.getItem('access_token');
   const form = document.getElementById("addSubjectForm");
   const formData = new FormData(form);
 
   try {
-    const response = await fetch(`${URL}/subjects`, { method: "POST", body: formData });
+    const response = await fetch(`${URL}/subjects`, {
+      method: "POST",
+      body: formData,
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      }
+    });
     const newSubject = await response.json();
 
     console.log(newSubject);
@@ -59,9 +66,15 @@ async function addSubject() {
 }
 
 async function deleteSubject(id) {
+  const token = sessionStorage.getItem('access_token');
 
   try {
-    const response = await fetch(`${URL}/subjects/${id}`, { method: "DELETE" });
+    const response = await fetch(`${URL}/subjects/${id}`, {
+      method: "DELETE",
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      }
+    });
 
   } catch (err) {
     console.log(err);
@@ -94,6 +107,7 @@ async function displayEditSubject(id) {
 }
 
 async function editSubject() {
+  const token = sessionStorage.getItem('access_token');
   document.getElementById("addEditTitleSubject").innerText = "Adaugare";
   const form = document.getElementById("editSubjectForm");
   const formData = new FormData(form);
@@ -102,7 +116,13 @@ async function editSubject() {
   formData.delete("subjectId");
 
   try {
-    const response = await fetch(`${URL}/subjects/${id}`, { method: "PUT", body: formData });
+    const response = await fetch(`${URL}/subjects/${id}`, {
+      method: "PUT",
+      body: formData,
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      }
+    });
     const updatedSubject = await response.json();
 
     console.log(updatedSubject);
