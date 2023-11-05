@@ -22,7 +22,7 @@ The development of this project involved the utilization of the following techno
 - **RaspberryPI:** Integrated into the 3D printed device to facilitate the seamless collection and transmission of feedback data.
 - **3D Printer:** Utilized for the construction of the physical feedback collection box.
 - **Grafana:** Utilized for comprehensive data analysis and visualization, enabling the extraction of valuable insights from the collected feedback.
-
+- **Docker**: Used for containerizing the database, backend, and frontend, enabling easy deployment and management of the application.
 ## Authors
 
 The project was conceptualized and developed by the following individuals:
