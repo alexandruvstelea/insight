@@ -16,9 +16,9 @@ services:
     container_name: backend_container
     restart: always
     image: backend_image:1.0
-    build: 
+    build:
       context: ../Backend
-      dockerfile: ../Backend/Dockerfile
+      dockerfile: Dockerfile.backend
     networks:
       - feedback_network
     ports:
@@ -30,7 +30,7 @@ services:
     restart: always
     build:
       context: ../FrontEnd
-      dockerfile: ../FrontEnd/Dockerfile
+      dockerfile: Dockerfile.frontend
     image: frontend_image:1.0
     networks:
       - feedback_network
@@ -40,6 +40,7 @@ services:
       - "80:80"
 volumes:
   volume_postgres:
+
 
 networks:
   feedback_network:
