@@ -18,7 +18,7 @@ services:
     image: backend_image:1.0
     build:
       context: ../Backend
-      dockerfile: Dockerfile.backend
+      dockerfile: ../Docker/Dockerfile.backend
     networks:
       - feedback_network
     ports:
@@ -30,7 +30,7 @@ services:
     restart: always
     build:
       context: ../FrontEnd
-      dockerfile: Dockerfile.frontend
+      dockerfile: ../Docker/Dockerfile.frontend
     image: frontend_image:1.0
     networks:
       - feedback_network
