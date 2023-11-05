@@ -5,4 +5,4 @@ Backend/models/__pycache__
 Backend/routes/__pycache__
 crud_functions_deprecated.py
 feedback_venv
-Docker/.env
+DockerCompose/.env
