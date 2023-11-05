@@ -1,8 +1,8 @@
 .vscode
 Backend/__pycache__
-Backend/postgresql.env
+Backend/.env
 Backend/models/__pycache__
 Backend/routes/__pycache__
 crud_functions_deprecated.py
 feedback_venv
-DockerPostgres/.env
+Docker/.env
