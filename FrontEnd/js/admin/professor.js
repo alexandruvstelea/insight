@@ -10,10 +10,7 @@ async function getAndDisplayProfessors() {
     }
     const professors = await response.json();
 
-
-
-
-    professors.sort((a, b) => a.id - b.id);
+    professors.sort((a, b) => a.first_name.localeCompare(b.first_name));
 
     const tableBody = document.querySelector("#professorsTable tbody");
     tableBody.innerHTML = '';
@@ -76,7 +73,6 @@ async function deleteProfessor(id) {
         'Authorization': `Bearer ${token}`,
       }
     });
-
   } catch (err) {
     console.log(err);
   }
@@ -155,7 +151,7 @@ async function getAndDisplayProfessorInSubjects() {
 
     professors.forEach(professor => {
       const option = document.createElement("option");
-      option.text = professor.first_name;
+      option.text = `${professor.first_name} ${professor.last_name}`;
       option.value = professor.id;
       select.appendChild(option.cloneNode(true));
 
@@ -172,3 +168,4 @@ async function submitForm(event, ...functions) {
     await func();
   }
 }
+

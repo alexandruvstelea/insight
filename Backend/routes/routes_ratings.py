@@ -23,9 +23,22 @@ def insert_rating():
 
     try:
         with db.session.begin():
+            current_week = (
+                db.session.query(Week)
+                .filter(Week.start <= date_time, Week.end >= date_time)
+                .first()
+            )
+            if current_week:
+                current_semester = current_week.semester
+            else:
+                abort(404, "Could't determine current week.")
             courses = (
                 db.session.query(Course)
-                .filter(Course.day == date_time.weekday(), Course.room_id == room_id)
+                .filter(
+                    Course.day == date_time.weekday(),
+                    Course.room_id == room_id,
+                    Course.semester == current_semester,
+                )
                 .all()
             )
             desired_time = date_time.time()

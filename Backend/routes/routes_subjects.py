@@ -6,6 +6,7 @@ from datetime import datetime
 from models.courses import Course
 from models.weeks import Week
 from bleach import clean
+from models.ratings import Rating
 
 subject_bp = Blueprint("subjects", __name__)
 
@@ -83,6 +84,12 @@ def update_subject(subject_id):
         abort(400, f"An error has occured: missing key in request parameters.\n {e}")
     try:
         with db.session.begin():
+            subject = db.session.query(Subject).filter_by(id=subject_id).first()
+            if subject.semester != new_semester:
+                db.session.query(Course).filter(Course.subject_id == subject_id).update(
+                    {"semester": new_semester}
+                )
+                db.session.query(Rating).filter_by(subject_id=subject_id).delete()
             affected_rows = (
                 db.session.query(Subject)
                 .filter_by(id=subject_id)
@@ -95,6 +102,7 @@ def update_subject(subject_id):
                     }
                 )
             )
+
             if affected_rows > 0:
                 db.session.commit()
                 return {"response": f"Subject with ID={subject_id} updated"}, 200

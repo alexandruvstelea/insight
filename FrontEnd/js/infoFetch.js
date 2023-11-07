@@ -5,7 +5,6 @@ function fetchRatingData(subjectId) {
     .then((response) => {
       if (response.status === 404) {
         alert("Data not found for the given subject ID");
-        // Aruncați o eroare pentru a opri executarea lanțului de promisiuni
         throw new Error('404 Not Found');
       }
       return response.json();
@@ -14,7 +13,6 @@ function fetchRatingData(subjectId) {
       setPercentages(calculateRatingsPercentages(data));
     })
     .catch((err) => {
-      // Tratați orice eroare care apare în lanțul de promisiuni
       console.error(err);
     });
 }
@@ -43,7 +41,6 @@ function fetchGraphData(subjectId) {
       if (!response.ok) {
         if (response.status === 404) {
           alert("No data available for the requested graph");
-          // Aruncați o eroare pentru a opri executarea ulterioară
           throw new Error('404 Not Found');
         } else {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -52,12 +49,20 @@ function fetchGraphData(subjectId) {
       return response.json();
     })
     .then(data => {
-      let array = new Array(Object.keys(data).length).fill(0);
-      Object.keys(data).forEach(key => {
-        const weekNumber = parseInt(key.split('_')[1], 10) - 1;
-        array[weekNumber] = data[key];
-      });
+      console.log(data)
+      const weeks = Object.keys(data).map(key => parseInt(key.split('_')[1], 10));
+      const minWeek = Math.min(...weeks);
+      const maxWeek = Math.max(...weeks);
+      const arrayLength = maxWeek - minWeek + 1;
 
+      let array = new Array(arrayLength).fill(0);
+
+      Object.keys(data).forEach(key => {
+        const weekNumber = parseInt(key.split('_')[1], 10);
+        const index = weekNumber - minWeek;
+        array[index] = data[key];
+      });
+      console.log(array)
       myChartData(array);
     })
     .catch(error => {
