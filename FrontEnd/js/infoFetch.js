@@ -1,5 +1,6 @@
+
 function fetchRatingData(subjectId) {
-  const url = `http://127.0.0.1:5000/ratingsnumber/${subjectId}`;
+  const url = `${URL}/ratingsnumber/${subjectId}`;
 
   fetch(url, { method: "GET" })
     .then((response) => {
@@ -17,7 +18,7 @@ function fetchRatingData(subjectId) {
     });
 }
 function fetchRatingAverage(subjectId) {
-  const url = `http://127.0.0.1:5000/rating/${subjectId}`;
+  const url = `${URL}/rating/${subjectId}`;
 
   fetch(url, { method: "GET" })
     .then((response) => {
@@ -34,7 +35,7 @@ function fetchRatingAverage(subjectId) {
     });
 }
 function fetchGraphData(subjectId) {
-  const url = `http://127.0.0.1:5000/graph?subject_id=${subjectId}`;
+  const url = `${URL}/graph?subject_id=${subjectId}`;
 
   fetch(url, { method: "GET" })
     .then((response) => {
