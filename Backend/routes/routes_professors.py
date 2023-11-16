@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request, abort
 from models.professors import Professor
-from __init__ import db
+from __init__ import db, limiter
 from sqlalchemy import exc
 from bleach import clean
 from flask_jwt_extended import jwt_required
@@ -28,6 +28,7 @@ def create_professor():
 
 
 @professor_bp.route("/professors", methods=["GET"])
+@limiter.limit("2 per minute")
 def get_professors():
     try:
         professors = db.session.query(Professor).all()

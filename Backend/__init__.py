@@ -2,8 +2,14 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import sessionmaker
 from flask_jwt_extended import JWTManager
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 db = SQLAlchemy()
+limiter = Limiter(
+    key_func=get_remote_address,
+    default_limits=["200 per day", "50 per hour"],
+)
 
 
 def init_app():
@@ -12,6 +18,7 @@ def init_app():
     jwt = JWTManager(app)
 
     db.init_app(app)
+    limiter.init_app(app)
 
     with app.app_context():
         from models.ratings import Rating
