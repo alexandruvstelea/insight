@@ -3,11 +3,13 @@ from models.rooms import Room
 from __init__ import db, limiter
 from sqlalchemy import exc
 from bleach import clean
+from flask_jwt_extended import jwt_required
 
 room_bp = Blueprint("rooms", __name__)
 
 
 @room_bp.route("/rooms", methods=["POST"])
+@jwt_required()
 @limiter.limit("50 per minute")
 def create_room():
     try:
@@ -56,6 +58,7 @@ def get_room_by_id(room_id):
 
 
 @room_bp.route("/rooms/<int:room_id>", methods=["PUT"])
+@jwt_required()
 @limiter.limit("50 per minute")
 def update_room(room_id):
     try:
@@ -77,6 +80,7 @@ def update_room(room_id):
 
 
 @room_bp.route("/rooms/<int:room_id>", methods=["DELETE"])
+@jwt_required()
 @limiter.limit("50 per minute")
 def delete_room(room_id):
     try:

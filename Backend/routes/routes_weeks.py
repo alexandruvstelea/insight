@@ -4,11 +4,13 @@ from __init__ import db, limiter
 from sqlalchemy import text, exc
 from datetime import timedelta, datetime
 from bleach import clean
+from flask_jwt_extended import jwt_required
 
 weeks_bp = Blueprint("weeks", __name__)
 
 
 @weeks_bp.route("/weeks", methods=["POST"])
+@jwt_required()
 @limiter.limit("50 per minute")
 def generate_weeks():
     try:
@@ -75,6 +77,7 @@ def get_weeks():
 
 
 @weeks_bp.route("/weeks", methods=["DELETE"])
+@jwt_required()
 @limiter.limit("50 per minute")
 def reset_weeks():
     try:

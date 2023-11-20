@@ -4,11 +4,13 @@ from models.subjects import Subject
 from __init__ import db ,limiter
 from sqlalchemy import exc
 from bleach import clean
+from flask_jwt_extended import jwt_required
 
 course_bp = Blueprint("courses", __name__)
 
 
 @course_bp.route("/courses", methods=["POST"])
+@jwt_required()
 @limiter.limit("50 per minute")
 def create_course():
     try:
@@ -92,6 +94,7 @@ def get_course_by_id(course_id):
 
 
 @course_bp.route("/courses/<int:course_id>", methods=["PUT"])
+@jwt_required()
 @limiter.limit("50 per minute")
 def update_course(course_id):
     try:
@@ -138,6 +141,7 @@ def update_course(course_id):
 
 
 @course_bp.route("/courses/<int:course_id>", methods=["DELETE"])
+@jwt_required()
 @limiter.limit("50 per minute")
 def delete_course(course_id):
     try:

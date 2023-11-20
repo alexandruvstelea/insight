@@ -7,11 +7,13 @@ from models.courses import Course
 from models.weeks import Week
 from bleach import clean
 from models.ratings import Rating
+from flask_jwt_extended import jwt_required
 
 subject_bp = Blueprint("subjects", __name__)
 
 
 @subject_bp.route("/subjects", methods=["POST"])
+@jwt_required()
 @limiter.limit("50 per minute")
 def create_subject():
     try:
@@ -77,6 +79,7 @@ def get_subject_by_id(subject_id):
 
 
 @subject_bp.route("/subjects/<int:subject_id>", methods=["PUT"])
+@jwt_required()
 @limiter.limit("50 per minute")
 def update_subject(subject_id):
     try:
@@ -117,6 +120,7 @@ def update_subject(subject_id):
 
 
 @subject_bp.route("/subjects/<int:subject_id>", methods=["DELETE"])
+@jwt_required()
 @limiter.limit("50 per minute")
 def delete_subjects(subject_id):
     try:
