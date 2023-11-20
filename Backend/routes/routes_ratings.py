@@ -12,6 +12,7 @@ rating_bp = Blueprint("ratings", __name__)
 
 
 @rating_bp.route("/rating", methods=["POST"])
+@limiter.limit("50 per minute")
 def insert_rating():
     try:
         data = request.get_json()
@@ -73,6 +74,7 @@ def insert_rating():
 
 
 @rating_bp.route("/rating/<int:subject_id>", methods=["GET"])
+@limiter.limit("50 per minute")
 def get_average_rating(subject_id):
     try:
         average_rating = (
@@ -87,6 +89,7 @@ def get_average_rating(subject_id):
 
 
 @rating_bp.route("/ratingsnumber/<int:subject_id>", methods=["GET"])
+@limiter.limit("50 per minute")
 def get_ratings(subject_id):
     ratings = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
     try:
@@ -111,6 +114,7 @@ def get_ratings(subject_id):
 
 
 @rating_bp.route("/graph", methods=["GET"])
+@limiter.limit("50 per minute")
 def get_graph_data():
     try:
         subject_id = clean(request.args.get("subject_id"))

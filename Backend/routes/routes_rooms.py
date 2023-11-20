@@ -8,6 +8,7 @@ room_bp = Blueprint("rooms", __name__)
 
 
 @room_bp.route("/rooms", methods=["POST"])
+@limiter.limit("50 per minute")
 def create_room():
     try:
         name = clean(request.form["name"])
@@ -26,6 +27,7 @@ def create_room():
 
 
 @room_bp.route("/rooms", methods=["GET"])
+@limiter.limit("50 per minute")
 def get_rooms():
     try:
         rooms = db.session.query(Room).all()
@@ -41,6 +43,7 @@ def get_rooms():
 
 
 @room_bp.route("/rooms/<int:room_id>", methods=["GET"])
+@limiter.limit("50 per minute")
 def get_room_by_id(room_id):
     try:
         room = db.session.query(Room).filter_by(id=room_id).first()
@@ -53,6 +56,7 @@ def get_room_by_id(room_id):
 
 
 @room_bp.route("/rooms/<int:room_id>", methods=["PUT"])
+@limiter.limit("50 per minute")
 def update_room(room_id):
     try:
         new_room = clean(request.form["new_room"])
@@ -73,6 +77,7 @@ def update_room(room_id):
 
 
 @room_bp.route("/rooms/<int:room_id>", methods=["DELETE"])
+@limiter.limit("50 per minute")
 def delete_room(room_id):
     try:
         affected_rows = db.session.query(Room).filter_by(id=room_id).delete()

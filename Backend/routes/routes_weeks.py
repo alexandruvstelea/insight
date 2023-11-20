@@ -9,6 +9,7 @@ weeks_bp = Blueprint("weeks", __name__)
 
 
 @weeks_bp.route("/weeks", methods=["POST"])
+@limiter.limit("50 per minute")
 def generate_weeks():
     try:
         year_start = datetime.strptime(clean(request.form["year_start"]), "%Y-%m-%d")
@@ -51,6 +52,7 @@ def generate_weeks():
 
 
 @weeks_bp.route("/weeks", methods=["GET"])
+@limiter.limit("50 per minute")
 def get_weeks():
     try:
         weeks = db.session.query(Week).all()
@@ -73,6 +75,7 @@ def get_weeks():
 
 
 @weeks_bp.route("/weeks", methods=["DELETE"])
+@limiter.limit("50 per minute")
 def reset_weeks():
     try:
         with db.session.begin():

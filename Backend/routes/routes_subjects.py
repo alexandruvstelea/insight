@@ -12,6 +12,7 @@ subject_bp = Blueprint("subjects", __name__)
 
 
 @subject_bp.route("/subjects", methods=["POST"])
+@limiter.limit("50 per minute")
 def create_subject():
     try:
         name = clean(request.form["name"])
@@ -33,6 +34,7 @@ def create_subject():
 
 
 @subject_bp.route("/subjects", methods=["GET"])
+@limiter.limit("50 per minute")
 def get_subject():
     try:
         subjects = db.session.query(Subject).all()
@@ -56,6 +58,7 @@ def get_subject():
 
 
 @subject_bp.route("/subjects/<int:subject_id>", methods=["GET"])
+@limiter.limit("50 per minute")
 def get_subject_by_id(subject_id):
     try:
         subject = db.session.query(Subject).filter_by(id=subject_id).first()
@@ -74,6 +77,7 @@ def get_subject_by_id(subject_id):
 
 
 @subject_bp.route("/subjects/<int:subject_id>", methods=["PUT"])
+@limiter.limit("50 per minute")
 def update_subject(subject_id):
     try:
         new_name = clean(request.form["new_name"])
@@ -113,6 +117,7 @@ def update_subject(subject_id):
 
 
 @subject_bp.route("/subjects/<int:subject_id>", methods=["DELETE"])
+@limiter.limit("50 per minute")
 def delete_subjects(subject_id):
     try:
         with db.session.begin():
@@ -127,6 +132,7 @@ def delete_subjects(subject_id):
 
 
 @subject_bp.route("/subjects/professor/<int:professor_id>", methods=["GET"])
+@limiter.limit("50 per minute")
 def get_professor_subjects(professor_id):
     try:
         subjects = db.session.query(Subject).filter_by(professor_id=professor_id)
@@ -150,6 +156,7 @@ def get_professor_subjects(professor_id):
 
 
 @subject_bp.route("/subjects/current", methods=["GET"])
+@limiter.limit("50 per minute")
 def get_current_subject():
     try:
         data = request.get_json()

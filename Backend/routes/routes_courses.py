@@ -9,6 +9,7 @@ course_bp = Blueprint("courses", __name__)
 
 
 @course_bp.route("/courses", methods=["POST"])
+@limiter.limit("50 per minute")
 def create_course():
     try:
         subject_id = clean(request.form["subject_id"])
@@ -40,6 +41,7 @@ def create_course():
 
 
 @course_bp.route("/courses", methods=["GET"])
+@limiter.limit("50 per minute")
 def get_courses():
     try:
         courses = db.session.query(Course).all()
@@ -67,6 +69,7 @@ def get_courses():
 
 
 @course_bp.route("/courses/<int:course_id>", methods=["GET"])
+@limiter.limit("50 per minute")
 def get_course_by_id(course_id):
     try:
         course = db.session.query(Course).filter(Course.id == course_id).first()
@@ -89,6 +92,7 @@ def get_course_by_id(course_id):
 
 
 @course_bp.route("/courses/<int:course_id>", methods=["PUT"])
+@limiter.limit("50 per minute")
 def update_course(course_id):
     try:
         new_subject_id = clean(request.form["new_subject_id"])
@@ -134,6 +138,7 @@ def update_course(course_id):
 
 
 @course_bp.route("/courses/<int:course_id>", methods=["DELETE"])
+@limiter.limit("50 per minute")
 def delete_course(course_id):
     try:
         with db.session.begin():

@@ -10,6 +10,7 @@ professor_bp = Blueprint("professors", __name__)
 
 @professor_bp.route("/professors", methods=["POST"])
 @jwt_required()
+@limiter.limit("50 per minute")
 def create_professor():
     try:
         first_name = clean(request.form["first_name"])
@@ -28,7 +29,7 @@ def create_professor():
 
 
 @professor_bp.route("/professors", methods=["GET"])
-@limiter.limit("2 per minute")
+@limiter.limit("50 per minute")
 def get_professors():
     try:
         professors = db.session.query(Professor).all()
@@ -51,6 +52,7 @@ def get_professors():
 
 
 @professor_bp.route("/professors/<int:professor_id>", methods=["GET"])
+@limiter.limit("50 per minute")
 def get_professor_by_id(professor_id):
     try:
         professor = db.session.query(Professor).filter_by(id=professor_id).first()
@@ -69,6 +71,7 @@ def get_professor_by_id(professor_id):
 
 @professor_bp.route("/professors/<int:professor_id>", methods=["PUT"])
 @jwt_required()
+@limiter.limit("50 per minute")
 def update_professor(professor_id):
     try:
         new_first_name = clean(request.form["new_first_name"])
@@ -100,6 +103,7 @@ def update_professor(professor_id):
 
 @professor_bp.route("/professors/<int:professor_id>", methods=["DELETE"])
 @jwt_required()
+@limiter.limit("50 per minute")
 def delete_professor(professor_id):
     try:
         with db.session.begin():

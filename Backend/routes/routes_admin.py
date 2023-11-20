@@ -8,6 +8,7 @@ admin_bp = Blueprint("admin", __name__)
 
 
 @admin_bp.route("/login", methods=["POST"])
+@limiter.limit("50 per minute")
 def login():
     try:
         username = clean(request.form["username"])
