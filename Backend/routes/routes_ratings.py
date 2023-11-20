@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request, abort
 from models.ratings import Rating
-from __init__ import db
+from __init__ import db, limiter
 from datetime import datetime
 from sqlalchemy import func, exc
 from models.courses import Course

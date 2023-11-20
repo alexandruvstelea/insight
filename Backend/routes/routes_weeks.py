@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request, abort
 from models.weeks import Week
-from __init__ import db
+from __init__ import db, limiter
 from sqlalchemy import text, exc
 from datetime import timedelta, datetime
 from bleach import clean

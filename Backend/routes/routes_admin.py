@@ -3,6 +3,7 @@ from flask_jwt_extended import create_access_token
 from bleach import clean
 from dotenv import load_dotenv
 from os import getenv
+from __init__ import limiter
 
 admin_bp = Blueprint("admin", __name__)
 

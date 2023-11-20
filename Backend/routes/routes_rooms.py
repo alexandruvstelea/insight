@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request, abort
 from models.rooms import Room
-from __init__ import db
+from __init__ import db, limiter
 from sqlalchemy import exc
 from bleach import clean
 
