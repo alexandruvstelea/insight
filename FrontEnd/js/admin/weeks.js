@@ -1,5 +1,5 @@
 function getAndDisplayWeeks() {
-  fetch(`${URL}/weeks`, { method: "GET" })
+  fetch(`/api/weeks`, { method: "GET" })
     .then(response => {
       if (!response.ok) {
         if (response.status === 404) {
@@ -40,10 +40,11 @@ function getAndDisplayWeeks() {
     });
 }
 function generateWeeks() {
+  event.preventDefault();
   const token = sessionStorage.getItem('access_token');
   const form = document.getElementById("generateWeeks");
   const formData = new FormData(form);
-  const url = `${URL}/weeks`;
+  const url = `/api/weeks`;
 
   fetch(url, {
     method: "POST",
@@ -63,7 +64,7 @@ function generateWeeks() {
 
 function deleteWeeks() {
   const token = sessionStorage.getItem('access_token');
-  const url = `${URL}/weeks`;
+  const url = `/api/weeks`;
 
   fetch(url, {
     method: "DELETE",

@@ -1,6 +1,6 @@
 async function getAndDisplayRooms() {
   try {
-    const response = await fetch(`${URL}/rooms`, { method: "GET" });
+    const response = await fetch(`/api/rooms`, { method: "GET" });
     if (response.status === 404) {
       const tableBody = document.querySelector("#roomsTable tbody");
       tableBody.innerHTML = '<tr><td colspan="2">No rooms found</td></tr>';
@@ -40,7 +40,7 @@ async function addRoom() {
   const formData = new FormData(form);
 
   try {
-    const response = await fetch(`${URL}/rooms`, {
+    const response = await fetch(`/api/rooms`, {
       method: "POST",
       body: formData,
       headers: {
@@ -59,7 +59,7 @@ async function addRoom() {
 async function deleteRoom(id) {
   const token = sessionStorage.getItem('access_token');
   try {
-    const response = await fetch(`${URL}/rooms/${id}`, {
+    const response = await fetch(`/api/rooms/${id}`, {
       method: "DELETE",
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -73,7 +73,7 @@ async function deleteRoom(id) {
 async function displayEditRoom(id) {
   document.getElementById("addEditTitleRoom").innerText = "Editare";
   try {
-    const response = await fetch(`${URL}/rooms/${id}`, { method: "GET" });
+    const response = await fetch(`/api/rooms/${id}`, { method: "GET" });
     const room = await response.json();
     const updateForm = document.getElementById("editRoomForm");
     updateForm.classList.remove("hide");
@@ -94,7 +94,7 @@ async function editRoom() {
   const id = document.getElementById("roomID").value;
   formData.delete("RoomID");
   try {
-    const response = await fetch(`${URL}/rooms/${id}`, {
+    const response = await fetch(`/api/rooms/${id}`, {
       method: "PUT",
       body: formData,
       headers: {
@@ -113,7 +113,7 @@ async function editRoom() {
 
 async function getAndDisplayRoomInCourses() {
   try {
-    const response = await fetch(`${URL}/rooms`, { method: "GET" });
+    const response = await fetch(`/api/rooms`, { method: "GET" });
     if (response.status === 404) {
       const select = document.getElementById("room_id");
       const select2 = document.getElementById("new_room_id");

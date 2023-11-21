@@ -1,5 +1,5 @@
 function fetchProfessor() {
-  const url = `${URL}/professors`
+  const url = `/api/professors`
   fetch(url, { method: "GET" })
     .then((response) => response.json())
     .then((complete_response) => addProfessor(complete_response))
@@ -8,7 +8,7 @@ function fetchProfessor() {
 
 
 function fetchSubject(professor_id) {
-  const url = `${URL}/subjects/professor/${professor_id}`
+  const url = `/api/subjects/professor/${professor_id}`
 
   fetch(url, { method: "GET" })
     .then((response) => response.json())

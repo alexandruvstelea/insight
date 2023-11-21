@@ -1,7 +1,7 @@
 
 async function getAndDisplayProfessors() {
   try {
-    const response = await fetch(`${URL}/professors`, { method: "GET" });
+    const response = await fetch(`/api/professors`, { method: "GET" });
     if (response.status === 404) {
       const tableBody = document.querySelector("#professorsTable tbody");
       tableBody.innerHTML = '<tr><td colspan="4">No professors found</td></tr>';
@@ -47,7 +47,7 @@ async function addProfessor() {
   const formData = new FormData(form);
 
   try {
-    const response = await fetch(`${URL}/professors`, {
+    const response = await fetch(`/api/professors`, {
       method: "POST",
       body: formData,
       headers: {
@@ -66,7 +66,7 @@ async function addProfessor() {
 async function deleteProfessor(id) {
   const token = sessionStorage.getItem('access_token');
   try {
-    const response = await fetch(`${URL}/professors/${id}`, {
+    const response = await fetch(`/api/professors/${id}`, {
       method: "DELETE",
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -81,7 +81,7 @@ async function displayEditProfessor(id) {
   document.getElementById("addEditTitleProfessor").innerText = "Editare";
 
   try {
-    const response = await fetch(`${URL}/professors/${id}`, { method: "GET" });
+    const response = await fetch(`/api/professors/${id}`, { method: "GET" });
     const professor = await response.json();
 
     const updateForm = document.getElementById("editProfessorForm");
@@ -109,7 +109,7 @@ async function editProfessor() {
   formData.delete("professorId");
 
   try {
-    const response = await fetch(`${URL}/professors/${id}`, {
+    const response = await fetch(`/api/professors/${id}`, {
       method: "PUT",
       body: formData,
       headers: {
@@ -129,7 +129,7 @@ async function editProfessor() {
 
 async function getAndDisplayProfessorInSubjects() {
   try {
-    const response = await fetch(`${URL}/professors`, { method: "GET" });
+    const response = await fetch(`/api/professors`, { method: "GET" });
 
     if (response.status === 404) {
       const select = document.getElementById("professor_id");

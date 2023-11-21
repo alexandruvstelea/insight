@@ -1,6 +1,6 @@
 async function getAndDisplaySubjects() {
   try {
-    const response = await fetch(`${URL}/subjects`, { method: "GET" });
+    const response = await fetch(`/api/subjects`, { method: "GET" });
     if (response.status === 404) {
       const tableBody = document.querySelector("#subjectsTable tbody");
       tableBody.innerHTML = '<tr><td colspan="5">No subjects found</td></tr>';
@@ -14,7 +14,7 @@ async function getAndDisplaySubjects() {
     tableBody.innerHTML = '';
 
     for (const subject of subjects) {
-      const professorResponse = await fetch(`${URL}/professors/${subject.professor_id}`, { method: "GET" });
+      const professorResponse = await fetch(`/api/professors/${subject.professor_id}`, { method: "GET" });
       const professor = await professorResponse.json();
 
       const row = document.createElement("tr");
@@ -49,7 +49,7 @@ async function addSubject() {
   const formData = new FormData(form);
 
   try {
-    const response = await fetch(`${URL}/subjects`, {
+    const response = await fetch(`/api/subjects`, {
       method: "POST",
       body: formData,
       headers: {
@@ -69,7 +69,7 @@ async function deleteSubject(id) {
   const token = sessionStorage.getItem('access_token');
 
   try {
-    const response = await fetch(`${URL}/subjects/${id}`, {
+    const response = await fetch(`/api/subjects/${id}`, {
       method: "DELETE",
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -85,7 +85,7 @@ async function displayEditSubject(id) {
   document.getElementById("addEditTitleSubject").innerText = "Editare";
 
   try {
-    const response = await fetch(`${URL}/subjects/${id}`, { method: "GET" });
+    const response = await fetch(`/api/subjects/${id}`, { method: "GET" });
     const subject = await response.json();
 
     const updateForm = document.getElementById("editSubjectForm");
@@ -116,7 +116,7 @@ async function editSubject() {
   formData.delete("subjectId");
 
   try {
-    const response = await fetch(`${URL}/subjects/${id}`, {
+    const response = await fetch(`/api/subjects/${id}`, {
       method: "PUT",
       body: formData,
       headers: {
@@ -136,7 +136,7 @@ async function editSubject() {
 
 async function getAndDisplaySubjectInCourses() {
   try {
-    const response = await fetch(`${URL}/subjects`, { method: "GET" });
+    const response = await fetch(`/api/subjects`, { method: "GET" });
     if (response.status === 404) {
       const select = document.getElementById("subject_id");
       const select2 = document.getElementById("new_subject_id");

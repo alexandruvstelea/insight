@@ -1,6 +1,6 @@
 async function getAndDisplayCourses() {
   try {
-    const response = await fetch(`${URL}/courses`, { method: "GET" });
+    const response = await fetch(`/api/courses`, { method: "GET" });
     if (response.status === 404) {
       const tableBody = document.querySelector("#coursesTable tbody");
       tableBody.innerHTML = '<tr><td colspan="8">No courses found</td></tr>';
@@ -14,10 +14,10 @@ async function getAndDisplayCourses() {
     tableBody.innerHTML = '';
 
     for (const course of courses) {
-      const subjectResponse = await fetch(`${URL}/subjects/${course.subject_id}`, { method: "GET" });
+      const subjectResponse = await fetch(`/api/subjects/${course.subject_id}`, { method: "GET" });
       const subject = await subjectResponse.json();
 
-      const roomResponse = await fetch(`${URL}/rooms/${course.room_id}`, { method: "GET" });
+      const roomResponse = await fetch(`/api/rooms/${course.room_id}`, { method: "GET" });
       const room = await roomResponse.json();
 
 
@@ -69,7 +69,7 @@ async function addCourse() {
     const form = document.getElementById("addCourseForm");
     const formData = new FormData(form);
 
-    const response = await fetch(`${URL}/courses`, {
+    const response = await fetch(`/api/courses`, {
       method: "POST",
       body: formData,
       headers: {
@@ -88,7 +88,7 @@ async function addCourse() {
 async function deleteCourse(id) {
   const token = sessionStorage.getItem('access_token');
   try {
-    const response = await fetch(`${URL}/courses/${id}`, {
+    const response = await fetch(`/api/courses/${id}`, {
       method: "DELETE",
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -102,7 +102,7 @@ async function deleteCourse(id) {
 async function displayEditCourse(id) {
   try {
     document.getElementById("addEditTitleCourse").innerText = "Editare";
-    const response = await fetch(`${URL}/courses/${id}`, { method: "GET" });
+    const response = await fetch(`/api/courses/${id}`, { method: "GET" });
     const course = await response.json();
     const updateForm = document.getElementById("editCourseForm");
     updateForm.classList.remove("hide");
@@ -135,7 +135,7 @@ async function editCourse() {
     const formData = new FormData(form);
     const id = document.getElementById("courseID").value;
     formData.delete("courseID");
-    const response = await fetch(`${URL}/courses/${id}`, {
+    const response = await fetch(`/api/courses/${id}`, {
       method: "PUT",
       body: formData,
       headers: {

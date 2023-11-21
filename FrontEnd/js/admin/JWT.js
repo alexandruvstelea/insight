@@ -2,7 +2,7 @@ async function login() {
   const form = document.getElementById("loginAdmin");
   const formData = new FormData(form);
 
-  const response = await fetch(`${URL}/login`, {
+  const response = await fetch(`/api/login`, {
     method: 'POST',
     body: formData
   });
