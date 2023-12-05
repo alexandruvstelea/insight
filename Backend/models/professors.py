@@ -7,11 +7,13 @@ class Professor(db.Model):
     first_name = db.Column(db.Text)
     last_name = db.Column(db.Text)
     title = db.Column(db.Text)
+    gender = db.Column(db.Text)
 
-    def __init__(self, first_name: str, last_name: str, title: str):
+    def __init__(self, first_name: str, last_name: str, title: str, gender: str):
         self.first_name = first_name
         self.last_name = last_name
         self.title = title
+        self.gender = gender
 
     def __str__(self):
-        return f"ID: {self.id}->First Name={self.first_name.upper()}, Last Name={self.last_name.upper()}, Title={self.title.upper()}"
+        return f"ID: {self.id}->First Name={self.first_name.upper()}, Last Name={self.last_name.upper()}, Title={self.title.upper()}, Gender={self.gender}"

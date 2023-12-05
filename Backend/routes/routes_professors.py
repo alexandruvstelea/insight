@@ -16,9 +16,14 @@ def create_professor():
         first_name = clean(request.form["first_name"])
         last_name = clean(request.form["last_name"])
         title = clean(request.form["title"])
+        gender = clean(request.form["gender"])
+        if gender not in ["male", "female"]:
+            raise KeyError(
+                "Invalid gender provided. Gender must be 'male' or 'female'."
+            )
     except KeyError as e:
         abort(400, f"An error has occured: missing key in request parameters.\n {e}")
-    new_professor = Professor(first_name, last_name, title)
+    new_professor = Professor(first_name, last_name, title, gender)
     try:
         with db.session.begin():
             db.session.add(new_professor)
@@ -42,6 +47,7 @@ def get_professors():
                         "first_name": professor.first_name,
                         "last_name": professor.last_name,
                         "title": professor.title,
+                        "gender": professor.gender,
                     }
                 )
             return jsonify(professors_list), 200
@@ -62,6 +68,7 @@ def get_professor_by_id(professor_id):
                 "first_name": professor.first_name,
                 "last_name": professor.last_name,
                 "title": professor.title,
+                "gender": professor.gender,
             }, 200
         else:
             return abort(404, f"No professor with ID={professor_id} found.")
@@ -77,6 +84,11 @@ def update_professor(professor_id):
         new_first_name = clean(request.form["new_first_name"])
         new_last_name = clean(request.form["new_last_name"])
         new_title = clean(request.form["new_title"])
+        new_gender = clean(request.form["new_gender"])
+        if new_gender not in ["male", "female"]:
+            raise KeyError(
+                "Invalid gender provided. Gender must be 'male' or 'female'."
+            )
     except KeyError as e:
         abort(400, f"An error has occured: missing key in request parameters.\n {e}")
     try:
@@ -89,6 +101,7 @@ def update_professor(professor_id):
                         "first_name": new_first_name,
                         "last_name": new_last_name,
                         "title": new_title,
+                        "gender": new_gender,
                     }
                 )
             )
