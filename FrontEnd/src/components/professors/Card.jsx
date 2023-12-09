@@ -1,8 +1,8 @@
 'use client'
 import Image from 'next/image'
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Subject from './Subject';
-
+import styles from './card.module.css'
 export default function Card({ professor }) {
 
   const [isFlipped, setIsFlipped] = useState(false);
@@ -34,37 +34,37 @@ export default function Card({ professor }) {
 
   return (
     <>
-      <div className={`card ${isFlipped ? 'flipped' : ''}`}>
-        <div className="content">
-          <div className="front">
-            <div className="image-content">
-              <span className="overlay"></span>
-              <div className="card-image">
+      <div className={`${styles.card} ${isFlipped ? styles.flipped : ''}`}>
+        <div className={styles.content}>
+          <div className={styles.front}>
+            <div className={styles.imageContent}>
+              <span className={styles.overlay}></span>
+              <div className={styles.cardImage}>
                 <Image
                   width={158}
                   height={158}
-                  src={professor.gender === 'male' ? "/images/maleAvatar.jpg" : "/images/femaleAvatar.jpg"}
+                  src={professor.gender === 'male' ? "/images/maleAvatar4.png" : "/images/femaleAvatar4.png"}
                   alt="Avatar"
-                  className="card-img" />
+                  className={styles.cardImg} />
               </div>
             </div>
-            <div className="card-content">
+            <div className={styles.cardContent}>
               <h2 className="name">{professor.first_name} {professor.last_name}</h2>
-              <button className="button-card" onClick={flipCard}>Vezi Cursuri</button>
+              <button className={styles.buttonCard} onClick={flipCard}>Vezi Cursuri</button>
             </div>
           </div>
-          <div className="back">
+          <div className={styles.back}>
 
-            <h1 className="title-curs">Cursuri:</h1>
-            <ul className="courses-list" >
+            <h1 className={styles.titleCurs}>Cursuri:</h1>
+            <ul className={styles.coursesList} >
               {isLoaded && subjects.map(subject => (
                 <Subject key={subject.id} subject={subject} />
               ))}
             </ul>
-            <button className="button-card back-button" onClick={flipCard}>Înapoi</button>
+            <button className={`${styles.buttonCard} ${styles.backButton}`} onClick={flipCard}>Înapoi</button>
           </div>
         </div>
-      </div>
+      </div >
     </>
   )
 }

@@ -1,8 +1,10 @@
 import ProgressContainer from "./ProgressContainer";
 import StarRating from "./StarRating";
 import React, { useState, useEffect } from 'react';
+import styles from './ratingOverview.module.css'
 
 export default function RatingOverview({ subjectId }) {
+
   const [data, setData] = useState({});
   async function fetchRatingData(subjectId, setData) {
     const url = `${process.env.REACT_APP_API_URL}/ratingsnumber/${subjectId}`;
@@ -30,7 +32,7 @@ export default function RatingOverview({ subjectId }) {
   }, [subjectId]);
   return (
     <>
-      <div className="rating-overview">
+      <div className={styles.ratingOverview}>
         <ProgressContainer name="Nota 1" percentage={data['1_rating']} />
         <ProgressContainer name="Nota 2" percentage={data['2_rating']} />
         <ProgressContainer name="Nota 3" percentage={data['3_rating']} />

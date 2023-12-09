@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Rating from '@mui/material/Rating';
+import styles from './starRatings.module.css'
 
 export default function StarRating({ subjectId }) {
   const [averageRating, setAverageRating] = useState(0);
@@ -28,8 +29,8 @@ export default function StarRating({ subjectId }) {
 
   return (
     <>
-      <div className='star-content'>
-        <span className="average-rating">{averageRating}</span>
+      <div className={styles.starContent}>
+        <span className={styles.averageRating}>{averageRating}</span>
         <Rating size='large' name="half-rating-read" value={parseFloat(averageRating)} precision={0.1} readOnly />
       </div>
     </>

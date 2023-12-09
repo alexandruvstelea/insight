@@ -2,11 +2,11 @@
 import { useState, useEffect } from 'react'
 import { Navigation, Pagination, A11y } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import styles from './customSlider.module.css'
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import Card from './Card';
-import { Scale } from 'chart.js';
 
 export default function CustomSlider() {
   const [professors, setProfessors] = useState([]);
@@ -28,7 +28,7 @@ export default function CustomSlider() {
   }
 
   return (
-    <div className='swiper-container'>
+    <div className={styles.swiperContainer}>
       <Swiper
 
         modules={[Navigation, Pagination, A11y]}
@@ -63,16 +63,13 @@ export default function CustomSlider() {
           },
         }}
       >
-        <div className='swiper-container'>
-          {professors.map((professor, index) => (
-
-            < SwiperSlide key={index} >
-              <div className="card-container">
-                <Card professor={professor} />
-              </div>
-            </SwiperSlide>
-          ))}
-        </div>
+        {professors.map((professor, index) => (
+          < SwiperSlide key={index} >
+            <div className={styles.cardContainer}>
+              <Card professor={professor} />
+            </div>
+          </SwiperSlide>
+        ))}
       </Swiper >
     </div >
   )

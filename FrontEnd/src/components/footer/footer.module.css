@@ -1,0 +1,30 @@
+.copyRight {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #000;
+  color: #fff;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 2.5rem;
+  font-size: 0.8rem;
+
+}
+
+.copyRightAdminLogo {
+  position: absolute;
+  right: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.copyRightContent a {
+  text-decoration: none;
+  color: #0c929c;
+  margin: 0 4px;
+}
+
+.copyRightContent a:hover {
+  color: #0da5af;
+}

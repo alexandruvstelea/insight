@@ -1,4 +1,4 @@
-import CustomSlider from "@/components/CustomSlider";
+import CustomSlider from "@/components/professors/CustomSlider";
 
 export default function Professors() {
   return (

@@ -6,8 +6,7 @@ export default function DeleteWeeksButton({ onDelete }) {
     <>
       <button
         type="button"
-        className="deleteTableButton"
-        onClick={onDelete} // Apelarea funcției onDelete
+        onClick={onDelete}
       >
         <h3>Sterge Saptamanile</h3>
       </button>

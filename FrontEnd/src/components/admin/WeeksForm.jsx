@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { FormLabel } from '@mui/material';
@@ -10,7 +10,6 @@ export default function WeeksForm({ updateWeeks }) {
     event.preventDefault();
 
     const formData = new FormData(event.target);
-    console.log(formData.getAll('intervals'))
 
     const url = `${process.env.REACT_APP_API_URL}/weeks`;
     try {
@@ -36,7 +35,7 @@ export default function WeeksForm({ updateWeeks }) {
   return (
     <>
 
-      <div className="form-container">
+      <div className='form-container'>
         <h1>Generare Saptamani</h1>
         <form autoComplete="off" onSubmit={handleSubmit}>
 
@@ -48,6 +47,7 @@ export default function WeeksForm({ updateWeeks }) {
             fullWidth
             variant='outlined'
             size='small'
+            sx={{ my: 1 }}
           />
 
           <FormLabel>Activitate didactica:</FormLabel>
@@ -59,6 +59,7 @@ export default function WeeksForm({ updateWeeks }) {
             variant='outlined'
             defaultValue="12"
             size='small'
+            sx={{ my: 1 }}
           />
           <FormLabel>Vacanta:</FormLabel>
           <TextField
@@ -69,6 +70,7 @@ export default function WeeksForm({ updateWeeks }) {
             variant='outlined'
             defaultValue="2"
             size='small'
+            sx={{ my: 1 }}
           />
           <FormLabel>Activitate didactica:</FormLabel>
           <TextField
@@ -79,6 +81,7 @@ export default function WeeksForm({ updateWeeks }) {
             variant='outlined'
             defaultValue="2"
             size='small'
+            sx={{ my: 1 }}
           />
           <FormLabel>Sesiune:</FormLabel>
           <TextField
@@ -89,6 +92,7 @@ export default function WeeksForm({ updateWeeks }) {
             variant='outlined'
             defaultValue="3"
             size='small'
+            sx={{ my: 1 }}
           />
           <FormLabel>Vacanta:</FormLabel>
           <TextField
@@ -99,6 +103,7 @@ export default function WeeksForm({ updateWeeks }) {
             variant='outlined'
             defaultValue="1"
             size='small'
+            sx={{ my: 1 }}
           />
           <FormLabel>Activitate didactica:</FormLabel>
           <TextField
@@ -109,6 +114,7 @@ export default function WeeksForm({ updateWeeks }) {
             variant='outlined'
             defaultValue="10"
             size='small'
+            sx={{ my: 1 }}
           />
           <FormLabel>Vacanta:</FormLabel>
           <TextField
@@ -119,6 +125,7 @@ export default function WeeksForm({ updateWeeks }) {
             variant='outlined'
             defaultValue="1"
             size='small'
+            sx={{ my: 1 }}
           />
           <FormLabel>Activitate didactica:</FormLabel>
           <TextField
@@ -129,6 +136,7 @@ export default function WeeksForm({ updateWeeks }) {
             variant='outlined'
             defaultValue="4"
             size='small'
+            sx={{ my: 1 }}
           />
           <Button variant="outlined" type="submit">Generare</Button>
         </form>

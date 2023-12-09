@@ -4,7 +4,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-
+import styles from './page.module.css';
 export default function AdminLogin() {
 
   const [username, setUsername] = useState('');
@@ -51,11 +51,11 @@ export default function AdminLogin() {
         pauseOnHover
         theme="colored"
       />
-      <div className="middle-container">
+      <div className={styles.middleContainer}>
 
-        <form id="loginAdmin" onSubmit={handleSubmit}>
-          <div className="admin-title">Admin Page</div>
-          <div className="inputs">
+        <form id={styles.loginAdmin} onSubmit={handleSubmit}>
+          <div className={styles.adminTitle}>Admin Page</div>
+          <div className={styles.inputs}>
             <label htmlFor="username">USERNAME</label>
             <input
               type="text"

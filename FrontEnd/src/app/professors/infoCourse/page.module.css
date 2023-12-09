@@ -1,0 +1,28 @@
+.infoCourseContainer {
+  height: calc(100vh - 300px);
+  display: flex;
+  margin: 0 30px;
+}
+
+.cont {
+  display: flex;
+  margin: auto;
+  flex-direction: column;
+}
+
+.fakeContainer {
+  width: 400px;
+  height: 500px;
+}
+
+@media screen and (max-width: 1191px) {
+  .infoCourseContainer {
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .infoCourseContainer {
+    margin: 0;
+  }
+}

@@ -7,6 +7,8 @@ import WeeksForm from './WeeksForm'
 
 export default function Weeks() {
 
+  const [weeks, setWeeks] = useState();
+
   const fetchWeeks = async () => {
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/weeks`);
@@ -42,7 +44,7 @@ export default function Weeks() {
   };
 
 
-  const [weeks, setWeeks] = useState();
+
 
   useEffect(() => {
 
@@ -90,20 +92,19 @@ export default function Weeks() {
     enableRowVirtualization: true,
     muiTableContainerProps: { sx: { maxHeight: '700px' } },
     initialState: { density: 'compact' },
-
   });
 
 
   return (
     <>
-      <div className="col-2-cont" >
+      <div className='table'>
 
-        <WeeksForm updateWeeks={fetchWeeks} />
+        {/* <WeeksForm updateWeeks={fetchWeeks} /> */}
 
-        <div id="weeksTable">
-          <h1>Tabel Saptamani</h1>
+        <div>
+          <h1 className='tableTitle'>Tabel Saptamani</h1>
           <DeleteWeeksButton onDelete={deleteWeeks} />
-          <MaterialReactTable table={table} />;
+          <MaterialReactTable table={table} />
 
         </div>
       </div>
