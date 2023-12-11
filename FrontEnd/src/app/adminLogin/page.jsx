@@ -5,6 +5,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './page.module.css';
+import TextField from '@mui/material/TextField';
+import { Box, Button, DialogContent, DialogActions } from '@mui/material';
+
 export default function AdminLogin() {
 
   const [username, setUsername] = useState('');
@@ -52,34 +55,44 @@ export default function AdminLogin() {
         theme="colored"
       />
       <div className={styles.middleContainer}>
-
-        <form id={styles.loginAdmin} onSubmit={handleSubmit}>
+        <div className={styles.loginAdmin}>
           <div className={styles.adminTitle}>Admin Page</div>
-          <div className={styles.inputs}>
-            <label htmlFor="username">USERNAME</label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              maxLength="20"
-              required
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <label htmlFor="password">PASSWORD</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              maxLength="20"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <button type="submit">LOGIN</button>
-          </div>
-        </form>
-      </div>
+          <Box>
+            <form onSubmit={handleSubmit}>
+              <DialogContent
+                sx={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
+              >
+                <TextField
+                  type="text"
+                  label="NAME"
+                  name="username"
+                  maxLength="20"
+                  required
+                  fullWidth
+                  variant='standard'
+                  autoComplete="on"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+                <TextField
+                  type="password"
+                  label="PASSWORD"
+                  name='password'
+                  maxLength="20"
+                  required
+                  fullWidth
+                  variant='standard'
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </DialogContent>
+              <DialogActions >
+                <Button type='submit' variant='contained' color='primary' sx={{ fontSize: '1.2rem' }}>LOGIN</Button>
+              </DialogActions>
+            </form>
+          </Box>
+        </div>
+      </div >
     </>
-  );
-};
+  )
+}

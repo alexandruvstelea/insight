@@ -92,10 +92,14 @@ def get_average_rating(subject_id):
             .filter(Rating.subject_id == subject_id)
             .scalar()
         )
-        logger.info(
-            f"Calculated and returned average rating for subject with ID={subject_id}"
-        )
-        return jsonify({"response": round(average_rating, 2)})
+        if average_rating:
+            logger.info(
+                f"Calculated and returned average rating for subject with ID={subject_id}"
+            )
+            return jsonify({"response": round(average_rating, 2)})
+        else:
+            logger.warning("No average rating found.")
+            abort(404, "No average rating found.")
     except exc.SQLAlchemyError as e:
         logger.error(f"An error has occured while retrieving data.\n {e}")
         abort(500, f"An error has occured while retrieving data.")

@@ -8,8 +8,13 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import Card from './Card';
 
-export default function CustomSlider() {
+export default function CustomSlider({ searchTerm }) {
   const [professors, setProfessors] = useState([]);
+
+  const filteredProfessors = professors.filter(professor =>
+    `${professor.first_name} ${professor.last_name}`.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
 
   useEffect(() => {
     fetchProfessors();
@@ -27,44 +32,48 @@ export default function CustomSlider() {
     }
   }
 
-  return (
-    <div className={styles.swiperContainer}>
-      <Swiper
+  const swiperSettings = {
+    modules: [Navigation, Pagination, A11y],
+    speed: 500,
+    slidesPerView: 5,
+    pagination: {
+      dynamicBullets: true,
+      clickable: true,
+    },
+    navigation: {
+      navigation: true,
+    },
 
-        modules={[Navigation, Pagination, A11y]}
-        speed={500}
-        pagination={{
-          dynamicBullets: true,
-          clickable: true,
-        }}
-        navigation={{
-          navigation: true,
-        }}
-        breakpoints={{
-          0: {
-            slidesPerView: 1,
-            slidesPerGroup: 1,
-          },
-          580: {
-            slidesPerView: 2,
-            slidesPerGroup: 2,
-          },
-          990: {
-            slidesPerView: 3,
-            slidesPerGroup: 3,
-          },
-          1300: {
-            slidesPerView: 4,
-            slidesPerGroup: 4,
-          },
-          1600: {
-            slidesPerView: 5,
-            slidesPerGroup: 5,
-          },
-        }}
-      >
-        {professors.map((professor, index) => (
-          < SwiperSlide key={index} >
+    breakpoints: {
+      0: {
+        slidesPerView: 1,
+        slidesPerGroup: 1,
+      },
+      677: {
+        slidesPerView: 2,
+        slidesPerGroup: 2,
+      },
+      1030: {
+        slidesPerView: 3,
+        slidesPerGroup: 3,
+      },
+      1350: {
+        slidesPerView: 4,
+        slidesPerGroup: 4,
+      },
+      1700: {
+        slidesPerView: 5,
+        slidesPerGroup: 5,
+      },
+    }
+  }
+
+  return (
+    <div>
+
+      <Swiper {...swiperSettings}>
+        {filteredProfessors.map((professor, index) => (
+          < SwiperSlide key={professor.id} >
             <div className={styles.cardContainer}>
               <Card professor={professor} />
             </div>

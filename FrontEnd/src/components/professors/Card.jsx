@@ -49,7 +49,7 @@ export default function Card({ professor }) {
               </div>
             </div>
             <div className={styles.cardContent}>
-              <h2 className="name">{professor.first_name} {professor.last_name}</h2>
+              <h2 className={styles.name}>{professor.first_name} {professor.last_name}</h2>
               <button className={styles.buttonCard} onClick={flipCard}>Vezi Cursuri</button>
             </div>
           </div>

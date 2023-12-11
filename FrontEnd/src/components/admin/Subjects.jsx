@@ -1,13 +1,8 @@
 'use client'
-
+import { tableConfig, columnOption, defSelectColumnOption } from './getTableConfig'
 import React, { useMemo } from 'react';
-import { MaterialReactTable, useMaterialReactTable, MRT_EditActionButtons } from 'material-react-table';
-import {
-  Edit as EditIcon,
-  Delete as DeleteIcon,
-} from '@mui/icons-material';
-import { Box, Button, IconButton, Tooltip, DialogTitle, DialogContent, DialogActions } from '@mui/material';
-
+import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
+import { DialogTitle } from '@mui/material';
 
 export default function Subjects({ professors, subjects, fetchSubjects }) {
 
@@ -64,23 +59,7 @@ export default function Subjects({ professors, subjects, fetchSubjects }) {
     }
   };
 
-  const deleteSubject = async (id) => {
-    const token = sessionStorage.getItem('access_token');
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/subjects/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error('Failed to delete subject');
-      }
-      fetchSubjects();
-    } catch (err) {
-      console.error('Error deleting subject:', err);
-    }
-  };
+
 
   const handleSaveSubject = async ({ values, table }) => {
     await updateSubject(values);
@@ -90,7 +69,6 @@ export default function Subjects({ professors, subjects, fetchSubjects }) {
     await addSubject(values);
     table.setCreatingRow(null);
   };
-
 
   const semesterOptions = [
     { value: '1', label: '1' },
@@ -104,133 +82,31 @@ export default function Subjects({ professors, subjects, fetchSubjects }) {
 
   const columns = useMemo(
     () => [
-      {
-        accessorKey: 'id',
-        header: 'ID Materie',
-        size: 100,
-        minSize: 30,
-        enableEditing: false,
-      },
-      {
-        accessorKey: 'name',
-        header: 'Nume materie',
-        size: 120,
-        minSize: 80,
-        enableEditing: true,
-      },
-      {
-        accessorKey: 'abbreviation',
-        header: 'Abreviere',
-        size: 120,
-        minSize: 80,
-        enableEditing: true,
-      },
-      {
-        accessorKey: 'professor_id',
-        header: 'Profesor',
-        Cell: ({ cell }) => {
-          const professor = professors.find(p => p.id === cell.getValue());
-          return professor ? `${professor.first_name} ${professor.last_name}` : 'N/A';
-        },
-        editVariant: 'select',
-        editSelectOptions: professorOptions,
-        muiEditTextFieldProps: {
-          select: true,
-        },
-        size: 120,
-        minSize: 80,
-        enableEditing: true,
-      },
-      {
-        accessorKey: 'semester',
-        header: 'Semestru',
-        editVariant: 'select',
-        editSelectOptions: semesterOptions,
-        muiEditTextFieldProps: {
-          select: true,
-        },
-        size: 120,
-        minSize: 80,
-        enableEditing: true,
-      },
+      columnOption('id', 'ID', 80, 40, false),
+      columnOption('name', 'Nume materie', 120, 80, true),
+      columnOption('abbreviation', 'Abreviere', 120, 80, true),
+      columnOption('professor_id', 'Profesor', 120, 80, true,
+        {
+          ...defSelectColumnOption(professorOptions),
+          Cell: ({ cell }) => {
+            const professor = professors.find(p => p.id === cell.getValue());
+            return professor ? `${professor.first_name} ${professor.last_name}` : 'N/A';
+          },
+        }),
+      columnOption('semester', 'Semestru', 120, 80, true,
+        {
+          ...defSelectColumnOption(semesterOptions),
+        }),
     ],
     [professors],
   );
 
-  const table = useMaterialReactTable({
-    columns,
-    data: subjects || [],
-    createDisplayMode: 'modal',
-    editDisplayMode: 'row',
-    enableEditing: true,
-    enablePagination: false,
-    enableRowVirtualization: true,
-    positionActionsColumn: 'last',
-
-    displayColumnDefOptions: {
-      'mrt-row-actions': {
-        header: 'Edit/Delete',
-        size: 100,
-        minSize: 80,
-      },
-    },
-    muiTableContainerProps: { sx: { maxHeight: '700px' } },
-    initialState: {
-      density: 'compact',
-      sorting: [{
-        id: 'id',
-        desc: false
-      }],
-    },
-
-    renderCreateRowDialogContent: ({ table, row, internalEditComponents }) => (
-      <>
-        <DialogTitle variant="h3">Adauga Materie</DialogTitle>
-        <DialogContent
-          sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
-        >
-          {internalEditComponents.filter(component => component.key !== 'mrt-row-create_id')}
-
-        </DialogContent>
-        <DialogActions>
-          <MRT_EditActionButtons variant="text" table={table} row={row} />
-        </DialogActions>
-      </>
-    ),
-    onEditingRowSave: handleSaveSubject,
-    onCreatingRowSave: handleCreateSubject,
-    renderTopToolbarCustomActions: ({ table }) => (
-      <>
-        <Button
-          variant="contained"
-          onClick={() => {
-            table.setCreatingRow(true);
-          }}
-        >
-          Adauga Materie
-        </Button>
-      </>
-    ),
-    renderRowActions: ({ row, table }) => (
-      <Box sx={{ display: 'flex', gap: '1rem' }}>
-        <Tooltip title="Edit">
-          <IconButton onClick={() => table.setEditingRow(row)}>
-            <EditIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Delete">
-          <IconButton color="error" onClick={() => deleteSubject(row.original.id)}>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      </Box >
-    ),
-  });
+  const table = useMaterialReactTable(tableConfig(columns, subjects, 'materie', handleCreateSubject, handleSaveSubject, 'subjects', fetchSubjects));
 
   return (
     <>
       <div className="table">
-        <h1 className='tableTitle' >Tabel Materii</h1>
+        <DialogTitle sx={{ textAlign: 'center' }} variant="h3">Tabel Materii</DialogTitle>
         <MaterialReactTable table={table} />
       </div>
     </>

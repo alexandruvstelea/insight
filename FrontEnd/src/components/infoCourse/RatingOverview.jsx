@@ -3,18 +3,20 @@ import StarRating from "./StarRating";
 import React, { useState, useEffect } from 'react';
 import styles from './ratingOverview.module.css'
 
-export default function RatingOverview({ subjectId }) {
-
+export default function RatingOverview({ subjectId, onError }) {
+  const [error404, setError404] = useState(false);
   const [data, setData] = useState({});
+
   async function fetchRatingData(subjectId, setData) {
-    const url = `${process.env.REACT_APP_API_URL}/ratingsnumber/${subjectId}`;
 
     try {
-      const response = await fetch(url, { method: "GET" });
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/ratingsnumber/${subjectId}`, { method: "GET" });
 
-      if (response.status === 404) {
-        alert("Data not found for the given subject ID");
-        throw new Error('404 Not Found');
+      if (!response.ok) {
+        if (response.status === 404) {
+          setError404(true);
+        }
+        throw new Error(`HTTP error: ${response.status}`);
       }
 
       const data = await response.json();
@@ -30,6 +32,15 @@ export default function RatingOverview({ subjectId }) {
   useEffect(() => {
     fetchRatingData(subjectId, setData);
   }, [subjectId]);
+
+  useEffect(() => {
+    if (error404) {
+      onError(true);
+    }
+  }, [error404]);
+
+
+
   return (
     <>
       <div className={styles.ratingOverview}>

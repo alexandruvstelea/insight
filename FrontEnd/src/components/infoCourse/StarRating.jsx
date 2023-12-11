@@ -6,15 +6,12 @@ export default function StarRating({ subjectId }) {
   const [averageRating, setAverageRating] = useState(0);
 
   async function fetchRatingAverage(subjectId) {
-    const url = `${process.env.REACT_APP_API_URL}/rating/${subjectId}`;
-
     try {
-      const response = await fetch(url, { method: "GET" });
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/rating/${subjectId}`, { method: "GET" });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP error: ${response.status}`);
       }
-
       const data = await response.json();
       setAverageRating((data.response * 1).toFixed(2));
 
@@ -31,7 +28,17 @@ export default function StarRating({ subjectId }) {
     <>
       <div className={styles.starContent}>
         <span className={styles.averageRating}>{averageRating}</span>
-        <Rating size='large' name="half-rating-read" value={parseFloat(averageRating)} precision={0.1} readOnly />
+        <Rating
+          size='large'
+          name="half-rating-read"
+          value={parseFloat(averageRating)}
+          precision={0.1}
+          sx={{
+            '& .MuiRating-iconFilled': {
+              color: '#1976D2',
+            }
+          }}
+          readOnly />
       </div>
     </>
   );

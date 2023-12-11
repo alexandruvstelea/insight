@@ -34,11 +34,10 @@ function getOptions(chartOrientation) {
   };
 }
 
-export default function Chart({ subjectId }) {
-
+export default function Chart({ subjectId, onError }) {
+  const [error404, setError404] = useState(false);
   const isWindowAvailable = typeof window !== 'undefined';
   const [viewportWidth, setViewportWidth] = useState(isWindowAvailable ? window.innerWidth : null);
-  const chartOrientation = viewportWidth < 500 ? 'horizontalBar' : 'bar';
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [{
@@ -48,6 +47,9 @@ export default function Chart({ subjectId }) {
       borderWidth: 1,
     }],
   });
+  const chartOrientation = viewportWidth < 500 ? 'horizontalBar' : 'bar';
+
+
 
   useEffect(() => {
     if (isWindowAvailable) {
@@ -60,18 +62,21 @@ export default function Chart({ subjectId }) {
     }
   }, [isWindowAvailable]);
 
-  useEffect(() => {
-    if (subjectId) {
-      fetchSubjectGraphData(subjectId);
-    }
-  }, [subjectId]);
+
 
 
 
   async function fetchSubjectGraphData(subjectId) {
-    const url = `${process.env.REACT_APP_API_URL}/graph?subject_id=${subjectId}`;
     try {
-      const response = await fetch(url, { method: "GET" });
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/graph?subject_id=${subjectId}`, { method: "GET" });
+
+      if (!response.ok) {
+        if (response.status === 404) {
+          setError404(true);
+        }
+        throw new Error(`HTTP error: ${response.status}`);
+      }
+
       const data = await response.json();
 
       const sortedWeeks = Object.keys(data).sort((a, b) => {
@@ -92,6 +97,17 @@ export default function Chart({ subjectId }) {
       console.error('Error fetching graph data:', error);
     }
   }
+  useEffect(() => {
+    if (subjectId) {
+      fetchSubjectGraphData(subjectId);
+    }
+  }, [subjectId]);
+
+  useEffect(() => {
+    if (error404) {
+      onError(true);
+    }
+  }, [error404]);
 
   return (
     <div className={styles.chartContainer}>

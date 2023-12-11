@@ -150,36 +150,12 @@ body {
 
 /*#region Swiper*/
 
-.swiper {
-  margin-top: 3.75rem;
-}
 
 .swiper-wrapper {
   padding-bottom: 2.5rem;
 }
 
-@media screen and (max-width: 768px) {
-  .swiper {
-    margin-top: 7.5rem;
-  }
-}
-
-@media screen and (max-height: 750px) {
-  .swiper {
-    margin-top: 4.5rem;
-  }
-}
-
-@media screen and (max-height: 690px) {
-  .swiper {
-    margin-top: 3rem;
-  }
-}
-
 /*#endregion*/
-
-
-
 
 
 .table {
@@ -189,6 +165,7 @@ body {
 
 .tableTitle {
   text-align: center;
-  font-size: 2rem;
+  font-size: 2.5rem;
   margin-bottom: 0.5rem;
+  font-weight: 700;
 }

@@ -15,12 +15,12 @@ export default function useTokenCheck() {
 
       if (isExpired) {
         toast.error('Tokenul a expirat. Vei fi redirecționat către pagina de login.');
-        setTimeout(() => router.push('/adminLogin'), 10000);
+        setTimeout(() => router.push('/adminLogin'), 5000);
         return false;
       }
     } else {
       toast.error('Token-ul nu a fost gasit. Vei fi redirecționat către pagina de login.');
-      setTimeout(() => router.push('/adminLogin'), 10000);
+      setTimeout(() => router.push('/adminLogin'), 5000);
       return false;
     }
     return true;
@@ -35,7 +35,7 @@ export default function useTokenCheck() {
       if (!checkToken()) {
         clearInterval(interval);
       }
-    }, 60000);
+    }, 2000);
 
     return () => clearInterval(interval);
   }, [router]);

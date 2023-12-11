@@ -1,32 +1,42 @@
 'use client'
-
-import React, { useMemo, useState, useEffect } from 'react';
+import { tableConfigDef, columnOption } from './getTableConfig'
+import React, { useMemo, useState } from 'react';
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
-import DeleteWeeksButton from './DeleteWeeksButton';
-import WeeksForm from './WeeksForm'
+import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import TextField from '@mui/material/TextField';
 
-export default function Weeks() {
+export default function Weeks({ weeks, fetchWeeks }) {
+  const [open, setOpen] = useState(false);
 
-  const [weeks, setWeeks] = useState();
+  const addWeeks = async (weeks) => {
+    weeks.preventDefault()
+    const token = sessionStorage.getItem('access_token');
+    const formData = new FormData(weeks.target);
 
-  const fetchWeeks = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/weeks`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/weeks`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error('Failed to add weeks');
       }
-      const data = await response.json();
-      setWeeks(data)
+      fetchWeeks();
+      handleClose();
     } catch (err) {
-      console.error('Fetch error:', err);
+      console.error('Error adding weeks:', err);
     }
   };
 
   const deleteWeeks = async () => {
     const token = sessionStorage.getItem('access_token');
-    const url = `${process.env.REACT_APP_API_URL}/weeks`;
+
     try {
-      const response = await fetch(url, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/weeks`, {
         method: "DELETE",
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -34,78 +44,172 @@ export default function Weeks() {
       });
 
       if (!response.ok) {
-        throw new Error('Error deleting weeks');
+        throw new Error('Failed to delete weeks');
       }
-      setWeeks([]);
+      fetchWeeks();
     }
     catch (err) {
       console.error('Fetch error:', err);
     }
   };
 
-
-
-
-  useEffect(() => {
-
-    fetchWeeks();
-  }, []);
-
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const openDeleteConfirmModal = () => {
+    if (window.confirm('Ești sigur ca vrei sa stergi săptămânile?')) {
+      deleteWeeks();
+    }
+  };
+
   const columns = useMemo(
     () => [
-      {
-        accessorKey: 'id',
-        header: 'ID',
-        size: 30,
-      },
-      {
-        accessorKey: 'start',
-        header: 'Start Date',
-        size: 200,
+      columnOption('id', 'ID', 80, 40, false),
+      columnOption('start', 'Început', 220, 100, false, {
         Cell: ({ cell }) => formatDate(cell.getValue()),
-      },
-      {
-        accessorKey: 'end',
-        header: 'End Date',
-        size: 200,
+      }),
+      columnOption('end', 'Sfarșit', 220, 100, false, {
         Cell: ({ cell }) => formatDate(cell.getValue()),
-      },
-      {
-        accessorKey: 'semester',
-        header: 'Semester',
-        size: 100,
-      },
+      }),
+      columnOption('semester', 'Semestru', 170, 100, false),
     ],
     [],
   );
 
 
   const table = useMaterialReactTable({
-    columns,
-    data: weeks || [],
-    enablePagination: false,
-    enableRowVirtualization: true,
-    muiTableContainerProps: { sx: { maxHeight: '700px' } },
-    initialState: { density: 'compact' },
+    ...tableConfigDef(columns, weeks),
+    renderTopToolbarCustomActions: () => (
+      <>
+        <Box sx={{ display: 'flex', gap: '1rem' }}>
+          <Button
+            variant="contained"
+            onClick={handleClickOpen}
+          >
+            Adaugă Săptămânile
+          </Button>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => openDeleteConfirmModal()}
+          >
+
+            Sterge Săptămânile
+          </Button>
+        </Box>
+      </>
+    ),
   });
 
 
   return (
     <>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        sx={{
+          '& .MuiDialog-paper': { width: '444px' }
+        }}
+      >
+        <form onSubmit={addWeeks} >
+          <DialogTitle variant="h4">Adaugă Săptămâni</DialogTitle>
+          <DialogContent
+            sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+          >
+            <TextField
+              type='date'
+              label="Prima zi din anul universitar"
+              name="year_start"
+              variant='standard'
+              required
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+            <TextField
+              type="number"
+              label='Activitate didactică'
+              name='intervals'
+              variant='standard'
+              required
+            />
+            <TextField
+              type="number"
+              label='Vacanță'
+              name='intervals'
+              variant='standard'
+              required
+
+            />
+            <TextField
+              type="number"
+              label='Activitate didactică'
+              name='intervals'
+              variant='standard'
+              required
+
+            />
+            <TextField
+              type="number"
+              label='Sesiune'
+              name='intervals'
+              variant='standard'
+              required
+
+            />
+            <TextField
+              type="number"
+              label='Vacantă'
+              name='intervals'
+              variant='standard'
+              required
+
+            />
+            <TextField
+              type="number"
+              label='Activitate didactică'
+              name='intervals'
+              variant='standard'
+              required
+
+            />
+            <TextField
+              type="number"
+              label='Vacanță'
+              name='intervals'
+              variant='standard'
+              required
+
+            />
+            <TextField
+              type="number"
+              label='Activitate didactică'
+              name='intervals'
+              variant='standard'
+              required
+
+            />
+          </DialogContent>
+          <DialogActions >
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button type='submit' variant='contained' color='primary'>Save</Button>
+          </DialogActions>
+        </form>
+      </Dialog>
       <div className='table'>
-
-        {/* <WeeksForm updateWeeks={fetchWeeks} /> */}
-
         <div>
-          <h1 className='tableTitle'>Tabel Saptamani</h1>
-          <DeleteWeeksButton onDelete={deleteWeeks} />
+          <DialogTitle sx={{ textAlign: 'center' }} variant="h3">Tabel Săptămâni</DialogTitle>
           <MaterialReactTable table={table} />
-
         </div>
       </div>
     </>

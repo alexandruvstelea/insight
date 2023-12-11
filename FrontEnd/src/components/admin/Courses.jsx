@@ -1,14 +1,8 @@
 'use client'
-
+import { tableConfig, columnOption, defSelectColumnOption } from './getTableConfig'
 import React, { useMemo } from 'react';
-import { MaterialReactTable, useMaterialReactTable, MRT_EditActionButtons } from 'material-react-table';
-import {
-  Edit as EditIcon,
-  Delete as DeleteIcon,
-} from '@mui/icons-material';
-import { Box, Button, IconButton, Tooltip, DialogTitle, DialogContent, DialogActions } from '@mui/material';
-
-
+import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
+import { DialogTitle } from '@mui/material';
 export default function Courses({ courses, subjects, rooms, fetchCourses }) {
 
   const addCourse = async (course) => {
@@ -21,9 +15,6 @@ export default function Courses({ courses, subjects, rooms, fetchCourses }) {
     formData.append('week_type', course.week_type);
     formData.append('start', course.start);
     formData.append('end', course.end);
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/courses`, {
         method: 'POST',
@@ -69,24 +60,6 @@ export default function Courses({ courses, subjects, rooms, fetchCourses }) {
       fetchCourses();
     } catch (err) {
       console.error('Error updating course:', err);
-    }
-  };
-
-  const deleteCourse = async (id) => {
-    const token = sessionStorage.getItem('access_token');
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/courses/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error('Failed to delete course');
-      }
-      fetchCourses();
-    } catch (err) {
-      console.error('Error deleting course:', err);
     }
   };
 
@@ -152,187 +125,55 @@ export default function Courses({ courses, subjects, rooms, fetchCourses }) {
 
   const columns = useMemo(
     () => [
-      {
-        accessorKey: 'id',
-        header: 'ID Curs',
-        size: 100,
-        minSize: 30,
-        enableEditing: false,
-      },
-      {
-        accessorKey: 'subject_id',
-        header: 'Materie',
-        Cell: ({ cell }) => {
-          const subject = subjects.find(p => p.id === cell.getValue());
-          return subject ? `${subject.name}` : 'N/A';
-        },
-        editVariant: 'select',
-        editSelectOptions: subjectOptions,
-        muiEditTextFieldProps: {
-          select: true,
-        },
-        size: 120,
-        minSize: 80,
-        enableEditing: true,
-      },
-      {
-        accessorKey: 'type',
-        header: 'Tipul',
-        editVariant: 'select',
-        editSelectOptions: typeOptions,
-        Cell: ({ cell }) => typeMap[cell.getValue()] || 'N/A',
-        muiEditTextFieldProps: {
-          select: true,
-        },
-        size: 120,
-        minSize: 80,
-        enableEditing: true,
-      },
-      {
-        accessorKey: 'room_id',
-        header: 'Sala de curs',
-        Cell: ({ cell }) => {
-          const room = rooms.find(p => p.id === cell.getValue());
-          return room ? `${room.name}` : 'N/A';
-        },
-        editVariant: 'select',
-        editSelectOptions: roomOptions,
-        muiEditTextFieldProps: {
-          select: true,
-        },
-        size: 120,
-        minSize: 80,
-        enableEditing: true,
-      },
-      {
-        accessorKey: 'day',
-        header: 'Ziua saptamanii',
-        editVariant: 'select',
-        editSelectOptions: dayOptions,
-        Cell: ({ cell }) => dayMap[cell.getValue()] || 'N/A',
-        muiEditTextFieldProps: {
-          select: true,
-        },
-        size: 120,
-        minSize: 80,
-        enableEditing: true,
-      },
-      {
-        accessorKey: 'week_type',
-        header: 'Par/Impar',
-        editVariant: 'select',
-        editSelectOptions: weekTypeOptions,
-        Cell: ({ cell }) => weekTypeMap[cell.getValue()] || 'N/A',
-        muiEditTextFieldProps: {
-          select: true,
-        },
-        size: 120,
-        minSize: 80,
-        enableEditing: true,
-      },
-      {
-        accessorKey: 'start',
-        header: 'Ora de incepere',
-        editVariant: 'select',
-        editSelectOptions: startEndOptions,
-        muiEditTextFieldProps: {
-          select: true,
-        },
-        size: 120,
-        minSize: 80,
-        enableEditing: true,
-      },
-      {
-        accessorKey: 'end',
-        header: 'Ora de sfarsit',
-        editVariant: 'select',
-        editSelectOptions: startEndOptions,
-        muiEditTextFieldProps: {
-          select: true,
-        },
-        size: 120,
-        minSize: 80,
-        enableEditing: true,
-      },
-
+      columnOption('id', 'ID', 80, 40, false),
+      columnOption('subject_id', 'Materie', 120, 80, true,
+        {
+          ...defSelectColumnOption(subjectOptions),
+          Cell: ({ cell }) => {
+            const subject = subjects.find(p => p.id === cell.getValue());
+            return subject ? `${subject.name}` : 'N/A';
+          },
+        }),
+      columnOption('type', 'Tipul', 120, 80, true,
+        {
+          ...defSelectColumnOption(typeOptions),
+          Cell: ({ cell }) => typeMap[cell.getValue()] || 'N/A',
+        }),
+      columnOption('room_id', 'Sală de curs', 120, 80, true,
+        {
+          ...defSelectColumnOption(roomOptions),
+          Cell: ({ cell }) => {
+            const room = rooms.find(p => p.id === cell.getValue());
+            return room ? `${room.name}` : 'N/A';
+          },
+        }),
+      columnOption('day', 'Ziua săptămânii', 120, 80, true,
+        {
+          ...defSelectColumnOption(dayOptions),
+          Cell: ({ cell }) => dayMap[cell.getValue()] || 'N/A',
+        }),
+      columnOption('week_type', 'Par/Impar', 120, 80, true,
+        {
+          ...defSelectColumnOption(weekTypeOptions),
+          Cell: ({ cell }) => weekTypeMap[cell.getValue()] || 'N/A',
+        }),
+      columnOption('start', 'Ora de incepere', 120, 80, true,
+        {
+          ...defSelectColumnOption(startEndOptions),
+        }),
+      columnOption('end', 'Ora de sfarșit', 120, 80, true,
+        {
+          ...defSelectColumnOption(startEndOptions),
+        }),
     ],
     [subjects, rooms],
   );
-
-  const table = useMaterialReactTable({
-    columns,
-    data: courses || [],
-    createDisplayMode: 'modal',
-    editDisplayMode: 'row',
-    enableEditing: true,
-    enablePagination: false,
-    enableRowVirtualization: true,
-    positionActionsColumn: 'last',
-
-    displayColumnDefOptions: {
-      'mrt-row-actions': {
-        header: 'Edit/Delete',
-        size: 100,
-        minSize: 80,
-      },
-    },
-    muiTableContainerProps: { sx: { maxHeight: '700px' } },
-    initialState: {
-      density: 'compact',
-      sorting: [{
-        id: 'id',
-        desc: false
-      }],
-    },
-
-    renderCreateRowDialogContent: ({ table, row, internalEditComponents }) => (
-      <>
-        <DialogTitle variant="h3">Adauga Curs</DialogTitle>
-        <DialogContent
-          sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
-        >
-          {internalEditComponents.filter(component => component.key !== 'mrt-row-create_id')}
-
-        </DialogContent>
-        <DialogActions>
-          <MRT_EditActionButtons variant="text" table={table} row={row} />
-        </DialogActions>
-      </>
-    ),
-    onEditingRowSave: handleSaveCourse,
-    onCreatingRowSave: handleCreateCourse,
-    renderTopToolbarCustomActions: ({ table }) => (
-      <>
-        <Button
-          variant="contained"
-          onClick={() => {
-            table.setCreatingRow(true);
-          }}
-        >
-          Adauga Curs
-        </Button>
-      </>
-    ),
-    renderRowActions: ({ row, table }) => (
-      <Box sx={{ display: 'flex', gap: '1rem' }}>
-        <Tooltip title="Edit">
-          <IconButton onClick={() => table.setEditingRow(row)}>
-            <EditIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Delete">
-          <IconButton color="error" onClick={() => deleteCourse(row.original.id)}>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      </Box >
-    ),
-  });
+  const table = useMaterialReactTable(tableConfig(columns, courses, 'curs', handleCreateCourse, handleSaveCourse, 'courses', fetchCourses));
 
   return (
     <>
       <div className="table">
-        <h1 className='tableTitle' >Tabel Cursuri</h1>
+        <DialogTitle sx={{ textAlign: 'center' }} variant="h3">Tabel Cursuri</DialogTitle>
         <MaterialReactTable table={table} />
       </div>
     </>
