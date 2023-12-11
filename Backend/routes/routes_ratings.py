@@ -7,7 +7,9 @@ from models.courses import Course
 from models.subjects import Subject
 from models.weeks import Week
 from bleach import clean
+import logging
 
+logger = logging.getLogger(__name__)
 rating_bp = Blueprint("ratings", __name__)
 
 
@@ -20,7 +22,8 @@ def insert_rating():
         rating = int(data["rating"])
         room_id = int(data["room"])
     except KeyError as e:
-        abort(400, f"An error has occured: missing key in request parameters.\n {e}")
+        logger.error(f"An error has occured: missing key in request parameters.\n {e}")
+        abort(400, f"An error has occured: missing key in request parameters.")
 
     try:
         with db.session.begin():
@@ -32,6 +35,7 @@ def insert_rating():
             if current_week:
                 current_semester = current_week.semester
             else:
+                logger.error("Could't determine current week.")
                 abort(404, "Could't determine current week.")
             courses = (
                 db.session.query(Course)
@@ -59,18 +63,25 @@ def insert_rating():
                         )
                         db.session.add(new_rating)
                         db.session.commit()
+                        logger.info(f"New rating added to database. {new_rating}")
                         return {"response": "New rating added to database."}
                     except exc.SQLAlchemyError as e:
+                        logger.error(
+                            f"An error has occured while adding object to database.\n {e}"
+                        )
                         abort(
                             500,
-                            f"An error has occured while adding object to database.\n {str(e)}",
+                            f"An error has occured while adding object to database.",
                         )
                 else:
+                    logger.warning("No matching course found.")
                     abort(404, "No matching course found.")
             else:
+                logger.warning("No courses found.")
                 abort(404, "No courses found.")
     except exc.SQLAlchemyError as e:
-        abort(500, f"An error has occured while adding object to database.\n {str(e)}")
+        logger.error(f"An error has occured while adding object to database.\n {e}")
+        abort(500, f"An error has occured while adding object to database.")
 
 
 @rating_bp.route("/rating/<int:subject_id>", methods=["GET"])
@@ -82,10 +93,13 @@ def get_average_rating(subject_id):
             .filter(Rating.subject_id == subject_id)
             .scalar()
         )
-
+        logger.info(
+            f"Calculated and returned average rating for subject with ID={subject_id}"
+        )
         return jsonify({"response": round(average_rating, 2)})
     except exc.SQLAlchemyError as e:
-        abort(500, f"An error has occured while retrieving data.\n {str(e)}")
+        logger.error(f"An error has occured while retrieving data.\n {e}")
+        abort(500, f"An error has occured while retrieving data.")
 
 
 @rating_bp.route("/ratingsnumber/<int:subject_id>", methods=["GET"])
@@ -105,12 +119,16 @@ def get_ratings(subject_id):
                 ratings[rating] = count
 
             ratings_dict = {f"{key}_rating": value for key, value in ratings.items()}
-
+            logger.info(
+                f"Retrieved ratings dictionary for subject with ID={subject_id}"
+            )
             return jsonify(ratings_dict), 200
         else:
+            logger.warning("No ratings found.")
             abort(404, "No ratings found.")
     except exc.SQLAlchemyError as e:
-        abort(500, f"An error has occured while retrieving data.\n {str(e)}")
+        logger.error(f"An error has occured while retrieving data.\n {e}")
+        abort(500, f"An error has occured while retrieving data.")
 
 
 @rating_bp.route("/graph", methods=["GET"])
@@ -119,7 +137,8 @@ def get_graph_data():
     try:
         subject_id = clean(request.args.get("subject_id"))
     except KeyError as e:
-        abort(400, f"An error has occured: missing key in request parameters.\n {e}")
+        logger.error(f"An error has occured: missing key in request parameters.\n {e}")
+        abort(400, f"An error has occured: missing key in request parameters.")
     try:
         subject = db.session.query(Subject).filter(Subject.id == subject_id).first()
         ratings = db.session.query(Rating).filter_by(subject_id=subject_id).all()
@@ -142,9 +161,11 @@ def get_graph_data():
                     )
                 else:
                     week_ratings[f"week_{week.id}"] = 0
-
+            logger.info(f"Retrieved week ratings for subject with ID={subject_id}")
             return jsonify(week_ratings), 200
         else:
+            logger.warning("Couln't find ratings.")
             return abort(404, "Couln't find ratings.")
     except exc.SQLAlchemyError as e:
-        abort(500, f"An error has occured while retrieving data.\n {str(e)}")
+        logger.error(f"An error has occured while retrieving data.\n {e}")
+        abort(500, f"An error has occured while retrieving data.")

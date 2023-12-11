@@ -1,11 +1,13 @@
 from flask import Blueprint, jsonify, request, abort
 from models.courses import Course
 from models.subjects import Subject
-from __init__ import db ,limiter
+from __init__ import db, limiter
 from sqlalchemy import exc
 from bleach import clean
 from flask_jwt_extended import jwt_required
+import logging
 
+logger = logging.getLogger(__name__)
 course_bp = Blueprint("courses", __name__)
 
 
@@ -23,7 +25,8 @@ def create_course():
         end = clean(request.form["end"])
         start_end = [start, end]
     except KeyError as e:
-        abort(400, f"An error has occured: missing key in request parameters.\n {e}")
+        logger.error(f"An error has occured: missing key in request parameters.")
+        abort(400, f"An error has occured: missing key in request parameters.")
     try:
         with db.session.begin():
             subject = db.session.query(Subject).filter(Subject.id == subject_id).first()
@@ -31,15 +34,18 @@ def create_course():
             if subject:
                 semester = subject.semester
             else:
+                logger.warning("Couldn't determine subject for course.")
                 abort(404, "Couldn't determine subject for course.")
             new_course = Course(
                 subject_id, type, room_id, day, week_type, start_end, semester
             )
             db.session.add(new_course)
             db.session.commit()
+            logger.info(f"New course added to database.{new_course}")
             return {"response": "New course added to database"}, 200
     except exc.SQLAlchemyError as e:
-        abort(500, f"An error has occured while adding object to database.\n {str(e)}")
+        logger.error(f"An error has occured while adding object to database.\n {e}")
+        abort(500, f"An error has occured while adding object to database.")
 
 
 @course_bp.route("/courses", methods=["GET"])
@@ -63,11 +69,14 @@ def get_courses():
                         "semester": course.semester,
                     }
                 ), 200
+            logger.info(f"Courses retrieved from database.{courses_list}")
             return jsonify(courses_list), 200
         else:
+            logger.warning(f"No courses found.")
             abort(404, f"No courses found.")
     except exc.SQLAlchemyError as e:
-        abort(500, f"An error has occured while retrieving objects.\n {str(e)}")
+        logger.error(f"An error has occured while retrieving objects.\n {e}")
+        abort(500, f"An error has occured while retrieving objects.")
 
 
 @course_bp.route("/courses/<int:course_id>", methods=["GET"])
@@ -76,6 +85,7 @@ def get_course_by_id(course_id):
     try:
         course = db.session.query(Course).filter(Course.id == course_id).first()
         if course:
+            logger.info(f"Course retrieved from database. {course}")
             return {
                 "id": course.id,
                 "subject_id": course.subject_id,
@@ -88,9 +98,11 @@ def get_course_by_id(course_id):
                 "semester": course.semester,
             }, 200
         else:
+            logger.warning(f"No course with ID={course_id} found.")
             abort(404, f"No course with ID={course_id} found.")
     except exc.SQLAlchemyError as e:
-        abort(500, f"An error has occured while retrieving the object.\n {str(e)}")
+        logger.error(f"An error has occured while retrieving the object.\n {e}")
+        abort(500, f"An error has occured while retrieving the object.")
 
 
 @course_bp.route("/courses/<int:course_id>", methods=["PUT"])
@@ -107,7 +119,8 @@ def update_course(course_id):
         new_end = clean(request.form["new_end"])
         new_start_end = [new_start, new_end]
     except KeyError as e:
-        abort(400, f"An error has occured: missing key in request parameters.\n {e}")
+        logger.error(f"An error has occured: missing key in request parameters.\n {e}")
+        abort(400, f"An error has occured: missing key in request parameters.")
     try:
         with db.session.begin():
             subject = (
@@ -115,6 +128,7 @@ def update_course(course_id):
             )
             new_semester = subject.semester if subject else 0
             if new_semester == 0:
+                logger.error("Couldn't determine subject for course.")
                 abort(404, "Couldn't determine subject for course.")
             affected_rows = (
                 db.session.query(Course)
@@ -133,11 +147,14 @@ def update_course(course_id):
             )
             if affected_rows > 0:
                 db.session.commit()
+                logger.info(f"Course with ID={course_id} updated.")
                 return {"response": f"Course with ID={course_id} updated."}, 200
             else:
+                logger.warning(f"No course with ID={course_id} to update.")
                 abort(404, f"No course with ID={course_id} to update.")
     except exc.SQLAlchemyError as e:
-        abort(500, f"An error has occured while updating the object.\n {str(e)}")
+        logger.error(f"An error has occured while updating the object.\n {e}")
+        abort(500, f"An error has occured while updating the object.")
 
 
 @course_bp.route("/courses/<int:course_id>", methods=["DELETE"])
@@ -149,8 +166,11 @@ def delete_course(course_id):
             affected_rows = db.session.query(Course).filter_by(id=course_id).delete()
             if affected_rows > 0:
                 db.session.commit()
+                logger.info(f"Course with ID={course_id} deleted.")
                 return {"response": f"Course with ID={course_id} deleted."}, 200
             else:
+                logger.warning(f"No course with ID={course_id} to delete.")
                 abort(404, f"No course with ID={course_id} to delete.")
     except exc.SQLAlchemyError as e:
-        abort(500, f"An error has occured while deleting the object.\n {str(e)}")
+        logger.error(f"An error has occured while deleting the object.\n {e}")
+        abort(500, f"An error has occured while deleting the object.")

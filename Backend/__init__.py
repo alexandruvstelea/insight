@@ -4,6 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from flask_jwt_extended import JWTManager
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+import logging
 
 db = SQLAlchemy()
 limiter = Limiter(
@@ -45,5 +46,13 @@ def init_app():
         app.register_blueprint(subject_bp)
         app.register_blueprint(weeks_bp)
         app.register_blueprint(admin_bp)
+
+        logging.basicConfig(
+            filename="app.log",
+            level=logging.INFO,
+            format="%(asctime)s - %(name)s - %(levelname)s - %(message)s\n",
+        )
+        logger = logging.getLogger(__name__)
+        logger.addHandler(logging.StreamHandler())
 
         return app
