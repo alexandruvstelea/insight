@@ -24,7 +24,6 @@ def insert_rating():
     except KeyError as e:
         logger.error(f"An error has occured: missing key in request parameters.\n {e}")
         abort(400, f"An error has occured: missing key in request parameters.")
-
     try:
         with db.session.begin():
             current_week = (
