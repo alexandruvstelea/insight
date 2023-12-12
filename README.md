@@ -1,33 +1,32 @@
-# Feedback UnitBv-IESC
+# About the Project
 
-## About the Project
+Initiated by students at Transilvania University of Brașov, this project aims to streamline the collection and analysis of course feedback. It integrates a 3D printed device with a Raspberry Pi 3A, allowing students to rate their courses on a scale of 1 to 5. The system is complemented by a web application, an administrative tool, and a Grafana dashboard, providing a holistic approach to feedback visualization and management.
 
-This project, initiated by students at Transilvania University of Brașov, is designed to facilitate the seamless collection and visualization of feedback for various courses. Leveraging a 3D printed device integrated with a RaspberryPi 3A, the system enables students to submit ratings from 1 to 5 for the courses they attend. Alongside the hardware component, the project encompasses a web application, an admin tool, and a Grafana dashboard for comprehensive data analysis.
+## Key Features
 
-### Key Features
-
-- **3D Printed Box with RaspberryPi:** Equipped with buttons, the 3D printed box enables students to effortlessly provide course feedback by selecting ratings ranging from 1 to 5.
-- **Web Application:** The user-friendly web interface allows users to access and visualize the feedback for each course, enabling a comprehensive understanding of the students' perspectives.
-- **Admin Tool:** A robust administrative tool facilitates the management of the database, allowing for smooth handling of Create, Read, Update, and Delete (CRUD) operations.
-- **Grafana Dashboard:** Leveraging Grafana, the project provides a comprehensive dashboard for in-depth analysis of the collected feedback data, enabling the identification of key trends and insights.
+- **3D Printed Box with RaspberryPi:** This device, equipped with rating buttons, offers a straightforward method for students to submit their course feedback.
+- **Web Application:** Featuring a user-centric design, the web interface allows for easy access and visualization of course feedback, offering a view of student sentiments.
+- **Admin Tool:** The admin tool streamlines database management with efficient Create, Read, Update, and Delete (CRUD) functionalities.
+- **Grafana Dashboard:** Integrating Grafana, the project offers an insightful dashboard for detailed feedback analysis, highlighting trends and providing valuable insights.
 
 ## Technologies Used
 
-The development of this project involved the utilization of the following technologies:
+This project utilizes a range of technologies:
 
-- **Python:** Leveraging the Flask framework to enable seamless backend development and integration.
-- **HTML/CSS:** Utilized for creating an intuitive and user-friendly web interface.
-- **JavaScript:** Implemented to add interactivity and dynamic elements to the web application.
-- **PostgreSQL:** Employed as the primary database management system for efficient data storage and retrieval.
-- **RaspberryPI:** Integrated into the 3D printed device to facilitate the seamless collection and transmission of feedback data.
-- **3D Printer:** Utilized for the construction of the physical feedback collection box.
-- **Grafana:** Utilized for comprehensive data analysis and visualization, enabling the extraction of valuable insights from the collected feedback.
-- **Docker**: Used for containerizing the database, backend, and frontend, enabling easy deployment and management of the application.
+- **Python:** Backed by the Flask framework, it ensures smooth backend operations and integration.
+- **Next.js/React:** The front end is crafted using Next.js and React, creating an engaging and responsive user experience.
+- **JavaScript:** Adds interactive and dynamic features to the web application.
+- **PostgreSQL:** Serves as the robust database management system.
+- **RaspberryPi:** Integral to the feedback collection device, facilitating data capture and transmission.
+- **3D Printer:** Used to construct the tactile feedback box.
+- **Grafana:** For in-depth data visualization and analysis.
+- **Docker:** Streamlines deployment and management through containerization of the database, backend, and frontend.
+
 ## Authors
 
-The project was conceptualized and developed by the following individuals:
+The project was envisioned and developed by:
 
 - [Alexandru-Vasile Stelea](https://www.linkedin.com/in/alexandrustelea)
 - [Andrei-Cristian Sava](https://www.linkedin.com/in/cristianandreisava)
 
-Feel free to reach out to the authors or contributors for any inquiries or further information about the project.
+For inquiries or more information about the project, feel free to contact the authors or contributors.
