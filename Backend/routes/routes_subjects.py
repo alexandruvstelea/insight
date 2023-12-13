@@ -31,7 +31,7 @@ def create_subject():
         with db.session.begin():
             db.session.add(new_subject)
             db.session.commit()
-            logger.info(f"New subject added to database.{new_subject}")
+            # logger.info(f"New subject added to database.{new_subject}")
             return {"response": "New subject added to database"}, 200
     except exc.SQLAlchemyError as e:
         logger.error(f"An error has occured while adding obejct to database.\n {e}")

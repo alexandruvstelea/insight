@@ -3,12 +3,18 @@ import Image from 'next/image'
 import React, { useState } from 'react';
 import Subject from './Subject';
 import styles from './card.module.css'
+
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min) + min);
+}
+
 export default function Card({ professor }) {
 
   const [isFlipped, setIsFlipped] = useState(false);
   const [subjects, setSubjects] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
-
+  const imageNumber = getRandomInt(1, 17);
+  const imagePath = professor.gender === 'male' ? `/images/maleImages/M16.png` : "/images/femaleAvatar4.png";
 
   async function fetchSubject(professor_id) {
     if (!isLoaded) {
@@ -43,7 +49,7 @@ export default function Card({ professor }) {
                 <Image
                   width={158}
                   height={158}
-                  src={professor.gender === 'male' ? "/images/maleAvatar4.png" : "/images/femaleAvatar4.png"}
+                  src={imagePath}
                   alt="Avatar"
                   className={styles.cardImg} />
               </div>

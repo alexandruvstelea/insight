@@ -32,7 +32,7 @@ def create_professor():
         with db.session.begin():
             db.session.add(new_professor)
             db.session.commit()
-            logger.info(f"New professor added to database. {new_professor}")
+            # logger.info(f"New professor added to database. {new_professor}")
             return {"response": "New professor added to database"}, 200
     except exc.SQLAlchemyError as e:
         logger.error(f"An error has occured while adding object to database.\n {e}")

@@ -1,0 +1,51 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+
+}
+
+.buttonsContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 1rem;
+
+}
+
+
+
+.logoSquare {
+  background-color: #d8d7d7;
+  border-radius: 10px;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+  padding: 5px;
+  transition: box-shadow 0.1s ease, transform 0.1s ease;
+
+}
+
+.logoSquare:hover {
+  cursor: pointer;
+}
+
+.logoSquare:active {
+  transform: scale(0.95);
+}
+
+.logoSquare:hover img {
+  filter: brightness(70%);
+  transition: filter 0.4s;
+}
+
+.logoSquare:active img {
+  filter: brightness(50%);
+}
+
+.infoSignContainer {
+  position: absolute;
+  top: 0;
+  right: 2rem;
+  background-color: transparent;
+}

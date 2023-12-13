@@ -1,6 +1,7 @@
 'use client'
 import Chart from "@/components/infoCourse/Chart";
 import RatingOverview from "@/components/infoCourse/RatingOverview";
+import LikeDislike from "@/components/infoCourse/LikeDislike";
 import { useSearchParams } from 'next/navigation'
 import styles from './page.module.css'
 import React, { useState } from 'react';
@@ -23,12 +24,13 @@ export default function InfoCourse() {
         <div className={styles.infoCourseContainer}>
 
           <Chart onError={handleError} subjectId={subjectId} />
-          <div className={styles.cont}>
+          <div className={styles.container}>
             <RatingOverview subjectId={subjectId} onError={handleError} />
-            <div className={styles.fakeContainer}></div>
+            <LikeDislike subjectId={subjectId} />
           </div>
         </div>
-      )}
+      )
+      }
     </>
   )
 }

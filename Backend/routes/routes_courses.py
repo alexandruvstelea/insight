@@ -41,7 +41,7 @@ def create_course():
             )
             db.session.add(new_course)
             db.session.commit()
-            logger.info(f"New course added to database.{new_course}")
+            # logger.info(f"New course added to database.{new_course}")
             return {"response": "New course added to database"}, 200
     except exc.SQLAlchemyError as e:
         logger.error(f"An error has occured while adding object to database.\n {e}")

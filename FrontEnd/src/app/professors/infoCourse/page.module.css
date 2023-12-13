@@ -1,18 +1,15 @@
 .infoCourseContainer {
   height: calc(100vh - 300px);
   display: flex;
-  margin: 0 30px;
+  margin: 0 5rem;
 }
 
-.cont {
+.container {
   display: flex;
   margin: auto;
   flex-direction: column;
-}
+  gap: 3rem;
 
-.fakeContainer {
-  width: 400px;
-  height: 500px;
 }
 
 @media screen and (max-width: 1191px) {
