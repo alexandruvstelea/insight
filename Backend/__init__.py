@@ -28,7 +28,7 @@ def init_app():
         from models.rooms import Room
         from models.subjects import Subject
         from models.weeks import Week
-        from models.subjectLike import SubjectLike
+        from models.comments import Comment
 
         db.create_all()
 
@@ -39,7 +39,7 @@ def init_app():
         from routes.routes_subjects import subject_bp
         from routes.routes_weeks import weeks_bp
         from routes.routes_admin import admin_bp
-        from routes.routes_subjectLike import subjectLike_bp
+        from routes.routes_comments import comments_bp
 
         app.register_blueprint(course_bp)
         app.register_blueprint(professor_bp)
@@ -48,7 +48,7 @@ def init_app():
         app.register_blueprint(subject_bp)
         app.register_blueprint(weeks_bp)
         app.register_blueprint(admin_bp)
-        app.register_blueprint(subjectLike_bp)
+        app.register_blueprint(comments_bp)
 
         logging.basicConfig(
             filename="app.log",
