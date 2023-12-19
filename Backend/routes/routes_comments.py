@@ -177,3 +177,26 @@ def delete_comment(comment_id):
     except exc.SQLAlchemyError as e:
         logger.error(f"An error has occured while updating object.\n {e}")
         return abort(500, f"An error has occured while updating object.")
+
+
+@comments_bp.route("/nr_likes/<int:subject_id>", methods=["GET"])
+@limiter.limit("50 per minute")
+def get_likes_dislikes(subject_id):
+    try:
+        with db.session.begin():
+            likes_count = (
+                db.session.query(Comment)
+                .filter_by(subject_id=subject_id, is_like=0)
+                .count()
+            )
+            dislikes_count = (
+                db.session.query(Comment)
+                .filter_by(subject_id=subject_id, is_like=1)
+                .count()
+            )
+        response = {"like": likes_count, "dislike": dislikes_count}
+        logger.info(f"Retrieved likes count for subject_id {subject_id}.")
+        return jsonify(response), 200
+    except exc.SQLAlchemyError as e:
+        logger.error(f"An error has occured while retrieving likes count.\n {e}")
+        return abort(500, "An error has occurred while retrieving likes count.")

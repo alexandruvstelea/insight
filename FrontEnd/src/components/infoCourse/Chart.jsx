@@ -1,9 +1,12 @@
+
+
 'use client'
 import React, { useEffect, useState } from 'react';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import styles from './chart.module.css'
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+
 
 function getOptions(chartOrientation) {
   return {
@@ -34,10 +37,11 @@ function getOptions(chartOrientation) {
   };
 }
 
-export default function Chart({ subjectId, onError }) {
+export default function BarChart({ subjectId, onError }) {
   const [error404, setError404] = useState(false);
   const isWindowAvailable = typeof window !== 'undefined';
   const [viewportWidth, setViewportWidth] = useState(isWindowAvailable ? window.innerWidth : null);
+
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [{
@@ -109,10 +113,14 @@ export default function Chart({ subjectId, onError }) {
     }
   }, [error404]);
 
+
+
   return (
-    <div className={styles.chartContainer}>
-      <Bar options={getOptions(chartOrientation)} data={chartData} />
-    </div>
+    // <div className={styles.chartContainer}>
+    <Bar options={getOptions(chartOrientation)} data={chartData} />
+    // </div>
+
+
   )
 
 
