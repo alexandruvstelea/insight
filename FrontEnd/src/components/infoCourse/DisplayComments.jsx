@@ -1,22 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { Box, Paper, Typography, Rating } from '@mui/material';
+import React from "react";
+import { Box, Paper, Typography } from '@mui/material';
 import Masonry from '@mui/lab/Masonry';
-
+import { createTheme } from '@mui/material/styles';
 
 export default function DisplayComments({ comments }) {
 
   return (
     <>
-      <Box sx={{ display: 'flex', justifyContent: 'center', margin: 'auto' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', margin: 'auto', width: "80vw" }}>
         <Masonry columns={{ xs: 1, sm: 2, md: 3, lg: 3 }} spacing={4} >
 
           {comments.map((commentData) => (
             <Box key={commentData.id}
               sx={{
-                width: 450,
-                maxWidth: 450,
+                width: 500,
+                maxWidth: 500,
+                minWidth: 300,
                 wordBreak: 'break-word',
                 fontFamily: 'Montserrat',
+
               }}
             >
               <Paper elevation={3} sx={{ p: 2, backgroundColor: 'rgba(255, 255, 255, 0.2)' }}>
@@ -28,7 +30,7 @@ export default function DisplayComments({ comments }) {
                     {commentData.timestamp}
                   </Typography>
                 </Box>
-                <Typography variant="h6" component="div">
+                <Typography variant="h6" component="div" sx={{ fontSize: 17 }}>
                   {commentData.comment}
                 </Typography>
               </Paper>

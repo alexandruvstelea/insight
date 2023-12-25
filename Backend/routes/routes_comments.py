@@ -23,9 +23,21 @@ def send_email(code: int, email: str):
         PASSWORD = os.getenv("PASSWORD")
         yag = yagmail.SMTP(EMAIL, PASSWORD)
         contents = [
-            f"Codul tău pentru a posta comentariul pe Feedback IESC este: {code}."
+            f"""
+            <html>
+                <body>
+                    <p>Dragă utilizator,</p>
+                    <p>Mai jos vei găsi codul unic necesar pentru a posta comentariul tău:</p>
+                    <p><b>Codul tău: {code}</b></p>
+                    <p>Te rugăm să introduci acest cod în câmpul corespunzător pe site pentru a continua.</p>
+                    <p>Dacă nu ai solicitat acest cod, te rog să ignori acest e-mail sau să ne contactezi pentru asistență.</p>
+                    <p>O zi excelentă,</p>
+                    <p>Echipa Feedback IESC</p>
+                </body>
+            </html>
+            """
         ]
-        yag.send(email, "Cod comentariu Feedback IESC", contents)
+        yag.send(email, "Codul tău pentru Feedback IESC", contents)
         # logger.info(f"Email sent to {email} with code {code}.")
     except Exception as e:
         logger.error(

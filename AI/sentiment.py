@@ -3,7 +3,9 @@ from flair.data import Sentence
 from dotenv import load_dotenv
 from os import getenv
 import psycopg2
+from translate import Translator
 
+translator = Translator(from_lang="ro", to_lang="en")
 load_dotenv(".env")
 
 USER = getenv("POSTGRES_USER")
@@ -22,9 +24,9 @@ comments_list = cur.fetchall()
 
 classifier = TextClassifier.load("en-sentiment")
 for comment in comments_list:
-    print(comment[3])
     text = comment[3]
-    sentence = Sentence(text)
+    translated_text = translator.translate(text)
+    sentence = Sentence(translated_text)
     classifier.predict(sentence)
     score = sentence.labels[0].score
     value = sentence.labels[0].value

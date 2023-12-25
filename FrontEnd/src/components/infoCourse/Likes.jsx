@@ -2,26 +2,8 @@ import React, { useEffect, useState } from 'react';
 import styles from './likes.module.css'
 import { Chart } from "react-google-charts";
 
-export default function Likes({ subjectId }) {
-  const [likesData, setLikesData] = useState({ like: 0, dislike: 0 });
+export default function Likes({ subjectId, likesData }) {
 
-  const fetchLikes = async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/nr_likes/${subjectId}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch');
-      }
-      const data = await response.json();
-      setLikesData(data);
-
-    } catch (err) {
-      console.error('Fetch error:', err);
-    }
-  };
-
-  useEffect(() => {
-    fetchLikes()
-  }, [subjectId]);
 
 
   const data = [

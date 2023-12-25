@@ -6,8 +6,8 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './page.module.css';
 import TextField from '@mui/material/TextField';
-import { Box, Button, DialogContent, DialogActions } from '@mui/material';
-
+import { Box, DialogContent, DialogActions } from '@mui/material';
+import Button from '@mui/joy/Button';
 export default function AdminLogin() {
 
   const [username, setUsername] = useState('');
@@ -54,6 +54,16 @@ export default function AdminLogin() {
         pauseOnHover
         theme="colored"
       />
+      <div className={styles.buttonContainer}>
+        <Button
+          component="a"
+          href="/"
+          size="lg"
+          sx={{ width: '32rem', margin: '2rem 0', fontSize: '1.5rem', fontFamily: 'inherit', }}
+        >
+          Către Pagina Principală
+        </Button>
+      </div>
       <div className={styles.middleContainer}>
         <div className={styles.loginAdmin}>
           <div className={styles.adminTitle}>Admin Page</div>

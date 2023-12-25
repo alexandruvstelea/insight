@@ -7,7 +7,7 @@ import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import { ToastContainer, toast } from 'react-toastify';
 
-export default function Comments({ subjectId, fetchComments }) {
+export default function Comments({ subjectId, fetchComments, fetchLikes }) {
 
   const [anonymous, setAnonymous] = React.useState(false);
   const [vote, setVote] = React.useState('');
@@ -50,12 +50,17 @@ export default function Comments({ subjectId, fetchComments }) {
 
   const validateCommentBeforeOpeningModal = () => {
     if (comment.length < 30) {
-      toast.error('Comentariul trebuie să conțină minim 30 de caractere');
+      toast.error('Comentariul trebuie să conțină minim 30 de caractere.');
+      return false;
+    }
+
+    if (comment.length > 700) {
+      toast.error(`Comentariul NU poate contine mai mult de 700 de caractere.(${comment.length})`);
       return false;
     }
 
     if (!vote) {
-      toast.error('Te rog selectează o opțiune (like sau dislike)');
+      toast.error('Te rog selectează o opțiune (like sau dislike).');
       return false;
     }
 
@@ -71,16 +76,6 @@ export default function Comments({ subjectId, fetchComments }) {
     }
     return true;
   };
-
-  const handleSubmit = () => {
-
-    console.log({
-      anonymous,
-      vote,
-      examGrade,
-      comment
-    });
-  }
 
   const handleSubmitEmail = async () => {
 
@@ -142,6 +137,7 @@ export default function Comments({ subjectId, fetchComments }) {
 
       const data = await response.json();
       fetchComments()
+      fetchLikes()
       resetForm()
       setOpenCodeModal(false);
     } catch (error) {
@@ -216,7 +212,7 @@ export default function Comments({ subjectId, fetchComments }) {
                 sx={{ width: 120 }}
                 inputProps={{
                   min: 1,
-                  max: 10,
+                  max: 9,
                 }}
               />
             </Box>

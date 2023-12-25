@@ -28,3 +28,10 @@
 .copyRightContent a:hover {
   color: #0da5af;
 }
+
+
+@media screen and (max-width: 600px) {
+  .copyRightAdminLogo {
+    display: none;
+  }
+}

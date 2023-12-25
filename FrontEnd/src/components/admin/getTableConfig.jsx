@@ -55,15 +55,6 @@ export const tableConfig = (columns, data, tableName, handleCreate, handleSaveRo
       size: 100,
     },
   },
-
-  initialState: {
-    density: 'compact',
-    sorting: [{
-      id: 'id',
-      desc: false
-    }],
-    // columnPinning: { left: ['mrt-row-actions'] },
-  },
   renderCreateRowDialogContent: ({ table, row, internalEditComponents }) => (
     <>
       <DialogTitle variant="h4">Adaugă {tableName}</DialogTitle>
