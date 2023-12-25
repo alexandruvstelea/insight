@@ -62,6 +62,7 @@ def create_comment():
         subject_id = clean(request.form["subject_id"])
         grade = -1
         timestamp = datetime.now()
+        sentiment = -1
     except KeyError as e:
         logger.error(f"An error has occured: missing key in request parameters.\n {e}")
         abort(400, f"An error has occured: missing key in request parameters.")
@@ -72,7 +73,15 @@ def create_comment():
         )
     send_email(code, email)
     new_comment = Comment(
-        email, code, comment, is_like, is_anonymous, subject_id, grade, timestamp
+        email,
+        code,
+        comment,
+        is_like,
+        is_anonymous,
+        subject_id,
+        grade,
+        timestamp,
+        sentiment,
     )
     try:
         with db.session.begin():
@@ -98,14 +107,13 @@ def get_comments():
                         "id": comment.id,
                         "comment": comment.comment,
                         "is_like": comment.is_like,
-                        "timestamp": comment.datetime.strftime("%d %b %Y")
-                        if comment.datetime
-                        else comment.datetime,
+                        "timestamp": comment.datetime.strftime("%d %b %Y"),
+                        "email": "Anonim",
+                        "sentiment": comment.sentiment,
                     }
                     if not comment.is_anonymous:
                         comment_dict["email"] = comment.email
-                    elif comment.is_anonymous:
-                        comment_dict["email"] = "Anonim"
+
                     if comment.grade != -1:
                         comment_dict["grade"] = comment.grade
                     comments_list.append(comment_dict)
@@ -204,3 +212,19 @@ def get_likes_dislikes(subject_id):
     except exc.SQLAlchemyError as e:
         logger.error(f"An error has occured while retrieving likes count.\n {e}")
         return abort(500, "An error has occurred while retrieving likes count.")
+
+
+@comments_bp.route("/approval/<int:subject_id>", methods=["GET"])
+@limiter.limit("50 per minute")
+def get_aproval(subject_id):
+    try:
+        sentiments_list = (
+            db.session.query(Comment.sentiment)
+            .filter_by(subject_id=subject_id)
+            .filter(Comment.sentiment != -1)
+            .all()
+        )
+        return {"average": sum(sentiments_list) / len(sentiments_list)}, 200
+    except exc.SQLAlchemyError as e:
+        logger.error(f"An error has occured while retrieving average .\n {e}")
+        return abort(500, "An error has occurred while retrieving average .")

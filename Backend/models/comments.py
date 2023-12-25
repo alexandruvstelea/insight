@@ -12,6 +12,7 @@ class Comment(db.Model):
     subject_id = db.Column(db.Integer, db.ForeignKey("Subjects.id"))
     grade = db.Column(db.Integer)
     datetime = db.Column(db.DateTime(timezone=False))
+    sentiment = db.Column(db.Float)
 
     def __init__(
         self,
@@ -23,6 +24,7 @@ class Comment(db.Model):
         subject_id: int,
         grade: int,
         datetime,
+        sentiment: float,
     ):
         self.email = email
         self.code = code
@@ -32,3 +34,4 @@ class Comment(db.Model):
         self.subject_id = subject_id
         self.grade = grade
         self.datetime = datetime
+        self.sentiment = sentiment
