@@ -1,16 +1,18 @@
 .rowContainer {
   display: flex;
   flex-direction: column;
+  height: 74vh;
+  justify-content: center;
+
 }
 
 .searchBar {
-  margin-top: 1.5rem;
   align-self: center;
   margin-bottom: 2rem;
 }
 
 @media screen and (max-width: 768px) {
   .rowContainer {
-    margin-top: 2rem;
+    height: 83vh;
   }
 }

@@ -13,7 +13,7 @@ export default function WavesSVG() {
           <use href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
           <use href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
           <use href="#gentle-wave" x="48" y="7" fill="#EFEFEF" />
-        </g>
+        </g>z
       </svg>
     </div>
   )

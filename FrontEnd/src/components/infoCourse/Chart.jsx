@@ -4,7 +4,6 @@
 import React, { useEffect, useState } from 'react';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import styles from './chart.module.css'
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 
@@ -22,16 +21,16 @@ function getOptions(chartOrientation) {
       x: {
         ticks: {
           stepSize: 1,
-          max: 5,
         },
         beginAtZero: true,
+        suggestedMax: 5,
       },
       y: {
         ticks: {
           stepSize: 1,
-          max: 5,
         },
         beginAtZero: true,
+        suggestedMax: 5,
       }
     }
   };
@@ -51,7 +50,7 @@ export default function BarChart({ subjectId, onError }) {
       borderWidth: 1,
     }],
   });
-  const chartOrientation = viewportWidth < 500 ? 'horizontalBar' : 'bar';
+  const chartOrientation = viewportWidth < 600 ? 'horizontalBar' : 'bar';
 
 
 
@@ -116,11 +115,7 @@ export default function BarChart({ subjectId, onError }) {
 
 
   return (
-    // <div className={styles.chartContainer}>
     <Bar options={getOptions(chartOrientation)} data={chartData} />
-    // </div>
-
-
   )
 
 

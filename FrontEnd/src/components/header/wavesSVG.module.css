@@ -7,8 +7,8 @@
 
 @media screen and (max-width: 768px) {
   .waves {
-    height: 3.75rem;
-    min-height: 2.5rem;
+    height: 6vh;
+    /* min-height: 2.5rem; */
   }
 }
 

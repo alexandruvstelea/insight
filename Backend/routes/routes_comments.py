@@ -98,10 +98,14 @@ def get_comments():
                         "id": comment.id,
                         "comment": comment.comment,
                         "is_like": comment.is_like,
-                        "timestamp": comment.datetime,
+                        "timestamp": comment.datetime.strftime("%d %b %Y")
+                        if comment.datetime
+                        else comment.datetime,
                     }
                     if not comment.is_anonymous:
                         comment_dict["email"] = comment.email
+                    elif comment.is_anonymous:
+                        comment_dict["email"] = "Anonim"
                     if comment.grade != -1:
                         comment_dict["grade"] = comment.grade
                     comments_list.append(comment_dict)

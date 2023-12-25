@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { FormLabel, Input, FormControl, Stack, DialogContent, DialogTitle, ModalDialog, DialogActions, ModalClose, Modal, Textarea, Box, Button } from '@mui/joy';
 import { FormControlLabel, Checkbox, ToggleButton, ToggleButtonGroup, TextField } from '@mui/material';
-// import { ThumbUpAltIcon, ThumbUpOffAltIcon, ThumbDownAltIcon, ThumbDownOffAltIcon } from '@mui/icons-material';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
-import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt'; // Verifică dacă aceasta este denumirea corectă
+import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
-import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt'; // Verifică dacă aceasta este denumirea corectă
+import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import { ToastContainer, toast } from 'react-toastify';
 
-export default function Comments({ subjectId }) {
+export default function Comments({ subjectId, fetchComments }) {
 
   const [anonymous, setAnonymous] = React.useState(false);
   const [vote, setVote] = React.useState('');
@@ -38,6 +37,17 @@ export default function Comments({ subjectId }) {
     setAnonymous(event.target.checked);
   };
 
+  const resetForm = () => {
+
+    setEmailForCode('');
+    setExamGrade('');
+    setComment('');
+    setVote('');
+    setAnonymous(false);
+    setCode('');
+    setEmailForGenerate('');
+  };
+
   const validateCommentBeforeOpeningModal = () => {
     if (comment.length < 30) {
       toast.error('Comentariul trebuie să conțină minim 30 de caractere');
@@ -53,7 +63,7 @@ export default function Comments({ subjectId }) {
   };
 
   const validateEmailBeforeFetch = (email) => {
-    const emailSuffix = "@yahoo.com";
+    const emailSuffix = "";
 
     if (email.includes(' ') || !email.endsWith(emailSuffix)) {
       toast.error('Email-ul nu este valid');
@@ -131,12 +141,17 @@ export default function Comments({ subjectId }) {
       }
 
       const data = await response.json();
-
+      fetchComments()
+      resetForm()
       setOpenCodeModal(false);
     } catch (error) {
       console.error('A apărut o eroare:', error);
     }
   };
+
+
+
+
 
 
   return (
@@ -167,7 +182,7 @@ export default function Comments({ subjectId }) {
           border: '1px solid #bbb',
           backgroundColor: '#EFEFEF',
           '&:focus-within::before': { boxShadow: 'none' },
-          width: '50rem'
+          width: '50rem',
         }}
         required
         startDecorator={

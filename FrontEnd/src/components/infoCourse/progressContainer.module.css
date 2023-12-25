@@ -1,7 +1,6 @@
 .progressContainer {
   display: flex;
   align-items: center;
-  /* width: 25rem; */
   width: 100%;
   margin: 0.7rem 0;
 }
@@ -13,4 +12,5 @@
 
 .textM {
   font-size: 1.2rem;
+  min-width: 4.2rem;
 }

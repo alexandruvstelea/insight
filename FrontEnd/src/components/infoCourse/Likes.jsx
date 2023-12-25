@@ -12,10 +12,8 @@ export default function Likes({ subjectId }) {
         throw new Error('Failed to fetch');
       }
       const data = await response.json();
-      console.log(data)
       setLikesData(data);
 
-      console.log(likesData)
     } catch (err) {
       console.error('Fetch error:', err);
     }
@@ -28,7 +26,7 @@ export default function Likes({ subjectId }) {
 
   const data = [
     ["Like/Dislike", "Voturi"],
-    ["like", likesData.like],
+    ["Like", likesData.like],
     ["Dislike", likesData.dislike],
   ];
 
@@ -45,6 +43,12 @@ export default function Likes({ subjectId }) {
       1: { offset: 0.1 },
 
     },
+
+    legend: {
+      position: 'top',
+      alignment: 'center',
+    }
+
   };
 
   return (
@@ -55,8 +59,8 @@ export default function Likes({ subjectId }) {
             chartType="PieChart"
             data={data}
             options={options}
-            width={"320px"}
-            height={"320px"}
+            width={"300px"}
+            height={"300px"}
           />
         </div>
       </div>
