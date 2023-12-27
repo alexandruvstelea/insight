@@ -528,7 +528,7 @@ def get_old_professor_subjects(year, professor_id):
 
         query = sql.SQL(
             "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = {})"
-        ).format(sql.Identifier(table_name))
+        ).format(sql.Literal(table_name))
         cursor.execute(query)
         table_exists = cursor.fetchone()[0]
 
@@ -536,7 +536,7 @@ def get_old_professor_subjects(year, professor_id):
             logger.warning(f"No subjects found for the year {year}.")
             abort(404, f"No subjects found for the year {year}.")
         query = sql.SQL("SELECT * FROM {} WHERE professor_id = {}").format(
-            sql.Identifier(table_name, professor_id)
+            sql.Identifier(table_name), sql.Literal(str(professor_id))
         )
         cursor.execute(query)
         subjects = cursor.fetchall()
@@ -545,11 +545,11 @@ def get_old_professor_subjects(year, professor_id):
             for subject in subjects:
                 subjects_list.append(
                     {
-                        "id": subject.id,
-                        "name": subject.name,
-                        "abbreviation": subject.abbreviation,
-                        "professor_id": subject.professor_id,
-                        "semester": subject.semester,
+                        "id": subject[0],
+                        "name": subject[1],
+                        "abbreviation": subject[2],
+                        "professor_id": subject[3],
+                        "semester": subject[4],
                     }
                 )
             logger.info(f"Retrieved subjects list. {subjects_list}")

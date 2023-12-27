@@ -74,7 +74,7 @@ def create_comment():
         subject_id = clean(request.form["subject_id"])
         grade = -1
         timestamp = datetime.now()
-        sentiment = -1
+        sentiment = -2
     except KeyError as e:
         logger.error(f"An error has occured: missing key in request parameters.\n {e}")
         abort(400, f"An error has occured: missing key in request parameters.")
