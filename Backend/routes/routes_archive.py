@@ -108,23 +108,23 @@ def get_old_comments_by_id(year, subject_id):
             sql.Identifier(table_name), sql.Literal(str(subject_id))
         )
         cursor.execute(query)
-        comments = cursor.fetchone()[0]
+        comments = cursor.fetchall()
         comments_list = []
         for comment in comments:
-            comment_dict = {
-                "id": comment[0],
-                "comment": comment[1],
-                "is_like": comment[2],
-                "timestamp": comment[3].strftime("%d %b %Y"),
-                "email": "Anonim",
-                "sentiment": comment[5],
-            }
-            if comment[4] != "":
-                comment_dict["email"] = comment[4]
+            if comment[3]:
+                comment_dict = {
+                    "id": comment[0],
+                    "comment": comment[3],
+                    "is_like": comment[4],
+                    "timestamp": comment[8].strftime("%d %b %Y"),
+                    "email": "Anonim",
+                }
+                if comment[1] != "":
+                    comment_dict["email"] = comment[1]
 
-            if comment[6] != -1:
-                comment_dict["grade"] = comment[6]
-            comments_list.append(comment_dict)
+                if comment[7] != -1:
+                    comment_dict["grade"] = comment[7]
+                comments_list.append(comment_dict)
 
         if comments_list:
             logger.info(f"Retrieved comments list: {comments_list}")
@@ -632,7 +632,7 @@ def get_old_average_rating(year, subject_id):
         if not table_exists:
             logger.warning(f"No weeks found for the year {year}.")
             abort(404, f"No weeks found for the year {year}.")
-        query = sql.SQL("SELECT AVG(ratig) FROM {} WHERE subject_id = {}").format(
+        query = sql.SQL("SELECT AVG(rating) FROM {} WHERE subject_id = {}").format(
             sql.Identifier(table_name), sql.Literal(str(subject_id))
         )
         cursor.execute(query)
@@ -676,7 +676,7 @@ def get_old_ratings(year, subject_id):
             abort(404, f"No weeks found for the year {year}.")
         query = sql.SQL(
             "SELECT rating, COUNT(rating) FROM {} WHERE subject_id = {} GROUP BY rating"
-        ).format(sql.Identifier(table_name)), sql.Literal(str(subject_id))
+        ).format(sql.Identifier(table_name), sql.Literal(str(subject_id)))
         cursor.execute(query)
         rating_counts = cursor.fetchall()
         if rating_counts:
@@ -731,7 +731,8 @@ def get_old_graph_data(year):
             sql.Identifier(subjects_table), sql.Literal(str(subject_id))
         )
         cursor.execute(query)
-        subject = cursor.fetchone()[0]
+        subject = cursor.fetchone()
+
         query = sql.SQL("SELECT * FROM {} WHERE subject_id = {}").format(
             sql.Identifier(ratings_table), sql.Literal(str(subject_id))
         )
@@ -795,12 +796,12 @@ def get_old_likes_dislikes(year, subject_id):
             abort(404, f"No weeks found for the year {year}.")
         query = sql.SQL(
             "SELECT COUNT(*) FROM {} WHERE subject_id = {} AND is_like = 0"
-        ).format(sql.Identifier(table_name)), sql.Literal(str(subject_id))
+        ).format(sql.Identifier(table_name), sql.Literal(str(subject_id)))
         cursor.execute(query)
         likes_count = cursor.fetchone()[0]
         query = sql.SQL(
             "SELECT COUNT(*) FROM {} WHERE subject_id = {} AND is_like = 1"
-        ).format(sql.Identifier(table_name)), sql.Literal(str(subject_id))
+        ).format(sql.Identifier(table_name), sql.Literal(str(subject_id)))
         cursor.execute(query)
         dislikes_count = cursor.fetchone()[0]
         response = {"like": likes_count, "dislike": dislikes_count}
