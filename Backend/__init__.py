@@ -40,6 +40,7 @@ def init_app():
         from routes.routes_weeks import weeks_bp
         from routes.routes_admin import admin_bp
         from routes.routes_comments import comments_bp
+        from routes.routes_archive import archive_bp
 
         app.register_blueprint(course_bp)
         app.register_blueprint(professor_bp)
@@ -49,6 +50,7 @@ def init_app():
         app.register_blueprint(weeks_bp)
         app.register_blueprint(admin_bp)
         app.register_blueprint(comments_bp)
+        app.register_blueprint(archive_bp)
 
         logging.basicConfig(
             filename="app.log",
