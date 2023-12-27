@@ -97,7 +97,7 @@ export default function AdminLogin() {
                 />
               </DialogContent>
               <DialogActions >
-                <Button type='submit' variant='contained' color='primary' sx={{ fontSize: '1.2rem' }}>LOGIN</Button>
+                <Button type='submit' sx={{ fontSize: '1.2rem' }}>LOGIN</Button>
               </DialogActions>
             </form>
           </Box>

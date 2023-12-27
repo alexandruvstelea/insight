@@ -41,13 +41,12 @@ export default function InfoCourse() {
 
   const fetchComments = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/comments`);
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/comments/${subjectId}`);
       if (!response.ok) {
         throw new Error('Failed to fetch');
       }
       const data = await response.json();
       setComments(data);
-
     } catch (err) {
       console.error('Fetch error:', err);
     }
@@ -59,12 +58,13 @@ export default function InfoCourse() {
   }, [subjectId]);
 
 
-
   return (
     <>
 
       {isError404 ? (
-        <div className={styles.noFoundContainer}>NU EXISTĂ DATE!</div>
+        <div className={styles.cont}>
+          <div className={styles.noFoundContainer}>NU EXISTĂ DATE!</div>
+        </div>
       ) : (
         <>
           <div className={styles.mainContainer}>

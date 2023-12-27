@@ -33,12 +33,42 @@
   height: 640px;
 }
 
+.cont {
+  width: 100vw;
+  height: 74vh;
+  display: flex;
+  position: relative;
+}
+
+.noFoundContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60vw;
+  height: 15vh;
+  text-align: center;
+  background-color: #f2f2f2;
+  color: #333;
+  font-size: 2rem;
+  font-weight: 600;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 
 @media screen and (max-width: 1350px) {
 
   .chartContainer {
     min-width: 700px;
     height: 540px;
+  }
+
+  .noFoundContainer {
+    width: 90vw;
   }
 }
 
@@ -70,6 +100,12 @@
 
   .commentsContainer {
     margin: 2rem 2rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .cont {
+    height: 83vh;
   }
 }
 
