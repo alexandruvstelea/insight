@@ -139,6 +139,49 @@ def get_comments():
         abort(500, f"An error has occured while retrieving objects.")
 
 
+@comments_bp.route("/comments/<int:subject_id>", methods=["GET"])
+@limiter.limit("50 per minute")
+def get_comments_by_id(subject_id):
+    try:
+        comments = (
+            db.session.query(Comment).filter(Comment.subject_id == subject_id).all()
+        )
+
+        comments_list = []
+
+        for comment in comments:
+            if comment.comment:
+                comment_dict = {
+                    "id": comment.id,
+                    "comment": comment.comment,
+                    "is_like": comment.is_like,
+                    "timestamp": comment.datetime.strftime("%d %b %Y"),
+                    "email": "Anonim",
+                    "sentiment": comment.sentiment,
+                }
+                if not comment.is_anonymous:
+                    comment_dict["email"] = comment.email
+
+                if comment.grade != -1:
+                    comment_dict["grade"] = comment.grade
+                comments_list.append(comment_dict)
+
+        if comments_list:
+            logger.info(
+                f"Retrieved comments list for subject_id {subject_id}: {comments_list}"
+            )
+            return jsonify(comments_list), 200
+        else:
+            logger.warning(f"No comments found for subject_id {subject_id}.")
+            return jsonify({"message": "No comments found for this subject."}), 404
+
+    except exc.SQLAlchemyError as e:
+        logger.error(
+            f"An error has occured while retrieving comments for subject_id {subject_id}.\n {e}"
+        )
+        abort(500, f"An error has occured while retrieving comments.")
+
+
 @comments_bp.route("/comments", methods=["PUT"])
 @limiter.limit("50 per minute")
 def update_comment():

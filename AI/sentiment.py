@@ -25,11 +25,27 @@ comments_list = cur.fetchall()
 classifier = TextClassifier.load("en-sentiment")
 for comment in comments_list:
     text = comment[3]
+    comment_id = comment[0]
+    sentiment_value = comment[9]
+    if text == "":
+        continue
     translated_text = translator.translate(text)
+
     sentence = Sentence(translated_text)
     classifier.predict(sentence)
-    score = sentence.labels[0].score
+    score = sentence.labels[0].score * 100
     value = sentence.labels[0].value
+
+    if value == "NEGATIVE":
+        score = -score
+    if sentiment_value == -1:
+        update_query = (
+            f'UPDATE "Comments" SET sentiment = {score} WHERE id = {comment_id}'
+        )
+        cur.execute(update_query)
 
     print(f"score = {score}")
     print(f"value = {value}")
+con.commit()
+cur.close()
+con.close()
