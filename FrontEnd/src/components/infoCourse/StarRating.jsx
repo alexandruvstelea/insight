@@ -6,8 +6,18 @@ export default function StarRating({ subjectId }) {
   const [averageRating, setAverageRating] = useState(0);
 
   async function fetchRatingAverage(subjectId) {
+
+    const selectedYear = sessionStorage.getItem("selectedYear");
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1;
+    const adjustedYear = currentMonth < 10 ? currentYear - 1 : currentYear;
+    let url = ''
+    if (selectedYear == adjustedYear) { url = `${process.env.REACT_APP_API_URL}/rating/${subjectId}` }
+    else { url = `${process.env.REACT_APP_API_URL}/rating_archive/${selectedYear}/${subjectId}` }
+
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/rating/${subjectId}`, { method: "GET" });
+      const response = await fetch(url, { method: "GET" });
 
       if (!response.ok) {
         throw new Error(`HTTP error: ${response.status}`);

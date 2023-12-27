@@ -9,8 +9,17 @@ export default function RatingOverview({ subjectId, onError }) {
 
   async function fetchRatingData(subjectId, setData) {
 
+    const selectedYear = sessionStorage.getItem("selectedYear");
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1;
+    const adjustedYear = currentMonth < 10 ? currentYear - 1 : currentYear;
+    let url = ''
+    if (selectedYear == adjustedYear) { url = `${process.env.REACT_APP_API_URL}/ratingsnumber/${subjectId}` }
+    else { url = `${process.env.REACT_APP_API_URL}/ratingsnumber_archive/${selectedYear}/${subjectId}` }
+
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/ratingsnumber/${subjectId}`, { method: "GET" });
+      const response = await fetch(url, { method: "GET" });
 
       if (!response.ok) {
         if (response.status === 404) {

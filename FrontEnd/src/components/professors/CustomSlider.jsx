@@ -22,7 +22,14 @@ export default function CustomSlider({ searchTerm }) {
 
 
   async function fetchProfessors() {
-    const url = `http://127.0.0.1:5000/professors`;
+    const selectedYear = sessionStorage.getItem("selectedYear");
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1;
+    const adjustedYear = currentMonth < 10 ? currentYear - 1 : currentYear;
+    let url = ''
+    if (selectedYear == adjustedYear) { url = `${process.env.REACT_APP_API_URL}/professors` }
+    else { url = `${process.env.REACT_APP_API_URL}/professors_archive/${selectedYear}` }
     try {
       const response = await fetch(url, { method: "GET" });
       const complete_response = await response.json();

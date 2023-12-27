@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styles from './likes.module.css'
 import { Chart } from "react-google-charts";
 
-export default function Likes({ subjectId, likesData }) {
+export default function Likes({ likesData }) {
 
 
 
