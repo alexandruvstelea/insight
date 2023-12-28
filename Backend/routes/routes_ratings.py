@@ -62,7 +62,7 @@ def insert_rating():
                         )
                         db.session.add(new_rating)
                         db.session.commit()
-                        logger.info(f"New rating added to database. {new_rating}")
+                        # logger.info(f"New rating added to database. {new_rating}")
                         return {"response": "New rating added to database."}
                     except exc.SQLAlchemyError as e:
                         logger.error(
