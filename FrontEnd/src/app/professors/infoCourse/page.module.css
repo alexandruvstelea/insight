@@ -20,7 +20,7 @@
 .commentsContainer {
   display: flex;
   justify-content: center;
-  margin: 2rem 0;
+  margin-top: 3rem;
 }
 
 
@@ -114,4 +114,17 @@
     flex-direction: column;
     justify-content: center;
   }
+}
+
+@media screen and (max-width: 650px) {
+  .mainContainer {
+    margin-top: 20px;
+  }
+}
+
+@media screen and (max-height: 800px) {
+  .mainContainer {
+    margin-top: 40px;
+  }
+
 }

@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from './dropdownArchive.module.css'
 
 export default function DropdownArchive() {
 
   const [isOpen, setIsOpen] = useState(false);
-
   const [selectedYear, setSelectedYear] = useState('Arhiva');
-
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     const currentDate = new Date();
@@ -14,14 +13,26 @@ export default function DropdownArchive() {
     const currentMonth = currentDate.getMonth() + 1;
     const adjustedYear = currentMonth < 10 ? currentYear - 1 : currentYear;
 
-    const storedYear = sessionStorage.getItem('rangeYear') || adjustedYear;
+    const storedYear = sessionStorage.getItem('rangeYear') || 'Arhiva';
 
     if (!sessionStorage.getItem('selectedYear') || sessionStorage.getItem('selectedYear') === '') {
       sessionStorage.setItem('selectedYear', adjustedYear);
     }
 
     setSelectedYear(storedYear);
+
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+
   }, []);
+
 
 
   const toggleDropdown = () => setIsOpen(!isOpen);
@@ -37,13 +48,13 @@ export default function DropdownArchive() {
 
   return (
     <>
-      <div className={styles.dropdown}>
+      <div ref={dropdownRef} className={styles.dropdown}>
         <button onClick={toggleDropdown} className={styles.dropbtn}> {selectedYear}</button>
         {isOpen && (
           <div className={styles.dropdownContent}>
-            <a onClick={() => handleSelectYear('2023-2024')} href="#">2023-2024</a>
-            <a onClick={() => handleSelectYear('2024-2025')} href="#">2024-2025</a>
-            <a onClick={() => handleSelectYear('2025-2026')} href="#">2025-2026</a>
+            <button onClick={() => handleSelectYear('2023-2024')}>2023-2024</button>
+            <button onClick={() => handleSelectYear('2024-2025')}>2024-2025</button>
+            <button onClick={() => handleSelectYear('2025-2026')}>2025-2026</button>
           </div>
         )}
       </div>

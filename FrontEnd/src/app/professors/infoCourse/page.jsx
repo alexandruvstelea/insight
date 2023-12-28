@@ -99,8 +99,6 @@ export default function InfoCourse() {
 
   return (
     <>
-
-      <DropdownArchive />
       {
         isError404 ? (
           <div className={styles.cont} >
@@ -108,7 +106,6 @@ export default function InfoCourse() {
           </div>
         ) : (
           <>
-
             <div className={styles.mainContainer}>
               <div className={styles.containerCol}>
                 <div className={styles.chartContainer}>

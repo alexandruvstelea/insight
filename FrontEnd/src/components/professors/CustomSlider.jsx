@@ -8,9 +8,9 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import Card from './Card';
 
-export default function CustomSlider({ searchTerm }) {
+export default function CustomSlider({ searchTerm, onError }) {
   const [professors, setProfessors] = useState([]);
-
+  const [error404, setError404] = useState(false);
   const filteredProfessors = professors.filter(professor =>
     `${professor.first_name} ${professor.last_name}`.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -19,6 +19,7 @@ export default function CustomSlider({ searchTerm }) {
   useEffect(() => {
     fetchProfessors();
   }, []);
+
 
 
   async function fetchProfessors() {
@@ -32,6 +33,14 @@ export default function CustomSlider({ searchTerm }) {
     else { url = `${process.env.REACT_APP_API_URL}/professors_archive/${selectedYear}` }
     try {
       const response = await fetch(url, { method: "GET" });
+
+      if (!response.ok) {
+        if (response.status === 404) {
+          setError404(true);
+        }
+        throw new Error(`HTTP error: ${response.status}`);
+      }
+
       const complete_response = await response.json();
       setProfessors(complete_response);
     } catch (err) {
@@ -74,6 +83,12 @@ export default function CustomSlider({ searchTerm }) {
       },
     }
   }
+
+  useEffect(() => {
+    if (error404) {
+      onError(true);
+    }
+  }, [error404]);
 
   return (
     <div>
