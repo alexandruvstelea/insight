@@ -1,6 +1,8 @@
 .vscode
 Backend/__pycache__
 Backend/.env
+AI/.env
+Archive_System/.env
 Backend/models/__pycache__
 Backend/routes/__pycache__
 Backend/app.log
