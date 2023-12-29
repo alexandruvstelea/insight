@@ -341,7 +341,7 @@ def get_old_professor_by_id(year, professor_id):
 @archive_bp.route(
     "/professors_archive/average/<int:year>/<int:professor_id>", methods=["GET"]
 )
-def get_professor_average(year, professor_id):
+def get_old_professor_average(year, professor_id):
     try:
         conn = psycopg2.connect(
             dbname=DB_NAME, user=USER, password=PASSWORD, host=HOST, port=PORT
@@ -390,8 +390,8 @@ def get_professor_average(year, professor_id):
             if ratings_list:
                 return {"average": sum(ratings_list) / len(ratings_list)}
             else:
-                logger.warning(f"No ratings found for subject with ID={subject.id}.")
-                abort(404, f"No ratings found for subject with ID={subject.id}.")
+                logger.warning(f"No ratings found for subject with ID={subject[0]}.")
+                abort(404, f"No ratings found for subject with ID={subject[0]}.")
         else:
             logger.warning(f"No subjects found for professor with ID={professor_id}.")
             abort(404, f"No subjects found for professor with ID={professor_id}.")
@@ -622,6 +622,61 @@ def get_old_professor_subjects(year, professor_id):
     except psycopg2.Error as e:
         logger.error(f"An error has occured while retrieving objects.\n {e}")
         abort(500, f"An error has occured while retrieving objects.")
+
+
+@archive_bp.route(
+    "/subjects_archive/sentiment/<int:year>/<int:subject_id>", methods=["GET"]
+)
+def get_subject_sentiment(year, subject_id):
+    try:
+        conn = psycopg2.connect(
+            dbname=DB_NAME, user=USER, password=PASSWORD, host=HOST, port=PORT
+        )
+        cursor = conn.cursor()
+        table_name = f"Subjects_{year}_{year+1}"
+
+        if year < 2023 or type(year) != int:
+            logger.warning(f"No subjects found for the year {year}.")
+            abort(404, f"No subjects found for the year {year}.")
+
+        query = sql.SQL(
+            "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = {})"
+        ).format(sql.Literal(table_name))
+        cursor.execute(query)
+        table_exists = cursor.fetchone()[0]
+
+        if not table_exists:
+            logger.warning(f"No subjects found for the year {year}.")
+            abort(404, f"No subjects found for the year {year}.")
+        query = sql.SQL(
+            "SELECT sentiment FROM {} WHERE sentiment != -2 AND sentiment != 0 AND subject_id = {}"
+        ).format(sql.Identifier(table_name), sql.Literal(str(subject_id)))
+        cursor.execute(query)
+        comments_sentiment = cursor.fetchall()
+        if comments_sentiment:
+            total_count = len(comments_sentiment)
+            positive_count = sum(
+                1 for sentiment in comments_sentiment if sentiment[0] == 1
+            )
+            negative_count = sum(
+                1 for sentiment in comments_sentiment if sentiment[0] == -1
+            )
+            positive_percentage = (
+                (positive_count / total_count) * 100 if total_count > 0 else 0
+            )
+            negative_percentage = (
+                (negative_count / total_count) * 100 if total_count > 0 else 0
+            )
+            return {
+                "positive": round(positive_percentage, 1),
+                "negative": round(negative_percentage, 1),
+            }
+        else:
+            logger.warning(f"No comments found for subject with ID={subject_id}.")
+            return abort(404, f"No comments found for subject with ID={subject_id}.")
+    except psycopg2.Error as e:
+        logger.error(f"An error has occured while retrieving data.\n {e}")
+        abort(500, f"An error has occured while retrieving data.")
 
 
 @archive_bp.route("/weeks_archive/<int:year>", methods=["GET"])
