@@ -381,7 +381,7 @@ def get_professor_average(year, professor_id):
                     logger.warning(f"No subjects found for the year {year}.")
                     abort(404, f"No subjects found for the year {year}.")
                 query = sql.SQL(
-                    "SELECT AVG(rating) FROM {} WHERE professor_id = {}"
+                    "SELECT AVG(rating) FROM {} WHERE subject_id = {}"
                 ).format(sql.Identifier(table_name), sql.Literal(str(subject[0])))
                 cursor.execute(query)
                 ratings_average = cursor.fetchone()[0]
