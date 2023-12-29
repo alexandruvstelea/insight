@@ -338,6 +338,68 @@ def get_old_professor_by_id(year, professor_id):
         abort(500, f"An error has occured while retrieving data.")
 
 
+@archive_bp.route(
+    "/professors_archive/<int:year>/average/<int:professor_id>", methods=["GET"]
+)
+def get_professor_average(year, professor_id):
+    try:
+        conn = psycopg2.connect(
+            dbname=DB_NAME, user=USER, password=PASSWORD, host=HOST, port=PORT
+        )
+        cursor = conn.cursor()
+        table_name = f"Subjects_{year}_{year+1}"
+
+        if year < 2023 or type(year) != int:
+            logger.warning(f"No subjects found for the year {year}.")
+            abort(404, f"No subjects found for the year {year}.")
+
+        query = sql.SQL(
+            "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = {})"
+        ).format(sql.Literal(table_name))
+        cursor.execute(query)
+        table_exists = cursor.fetchone()[0]
+
+        if not table_exists:
+            logger.warning(f"No subjects found for the year {year}.")
+            abort(404, f"No subjects found for the year {year}.")
+        query = sql.SQL("SELECT * FROM {} WHERE professor_id = {}").format(
+            sql.Identifier(table_name), sql.Literal(str(professor_id))
+        )
+        cursor.execute(query)
+        professor_subjects = cursor.fetchall()
+        ratings_list = []
+        if professor_subjects:
+            for subject in professor_subjects:
+                table_name = f"Ratings_{year}_{year+1}"
+                query = sql.SQL(
+                    "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = {})"
+                ).format(sql.Literal(table_name))
+                cursor.execute(query)
+                table_exists = cursor.fetchone()[0]
+
+                if not table_exists:
+                    logger.warning(f"No subjects found for the year {year}.")
+                    abort(404, f"No subjects found for the year {year}.")
+                query = sql.SQL(
+                    "SELECT AVG(rating) FROM {} WHERE professor_id = {}"
+                ).format(sql.Identifier(table_name), sql.Literal(str(subject[0])))
+                cursor.execute(query)
+                ratings_average = cursor.fetchone()[0]
+                if ratings_average is not None:
+                    ratings_list.append(round(float(ratings_average), 1))
+            if ratings_list:
+                return {"average": sum(ratings_list) / len(ratings_list)}
+            else:
+                logger.warning(f"No ratings found for subject with ID={subject.id}.")
+                abort(404, f"No ratings found for subject with ID={subject.id}.")
+        else:
+            logger.warning(f"No subjects found for professor with ID={professor_id}.")
+            abort(404, f"No subjects found for professor with ID={professor_id}.")
+    except psycopg2.Error as e:
+        logger.error(f"An error has occured while retrieving data.\n {e}")
+        abort(500, f"An error has occured while retrieving data.")
+
+
 @archive_bp.route("/rooms_archive/<int:year>", methods=["GET"])
 @limiter.limit("50 per minute")
 def get_old_rooms(year):
@@ -810,37 +872,3 @@ def get_old_likes_dislikes(year, subject_id):
     except psycopg2.Error as e:
         logger.error(f"An error has occured while retrieving likes count.\n {e}")
         return abort(500, "An error has occurred while retrieving likes count.")
-
-
-@archive_bp.route("/approval_archive/<int:year>/<int:subject_id>", methods=["GET"])
-@limiter.limit("50 per minute")
-def get_old_aproval(year, subject_id):
-    try:
-        conn = psycopg2.connect(
-            dbname=DB_NAME, user=USER, password=PASSWORD, host=HOST, port=PORT
-        )
-        cursor = conn.cursor()
-        table_name = f"Ratings_{year}_{year+1}"
-
-        if year < 2023 or type(year) != int:
-            logger.warning(f"No ratings found for the year {year}.")
-            abort(404, f"No ratings found for the year {year}.")
-
-        query = sql.SQL(
-            "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = {})"
-        ).format(sql.Literal(table_name))
-        cursor.execute(query)
-        table_exists = cursor.fetchone()[0]
-
-        if not table_exists:
-            logger.warning(f"No weeks found for the year {year}.")
-            abort(404, f"No weeks found for the year {year}.")
-        query = sql.SQL(
-            "SELECT sentiment FROM {} WHERE subject_id = {} AND sentiment != -1"
-        ).format(sql.Identifier(table_name)), sql.Literal(str(subject_id))
-        cursor.execute(query)
-        sentiments_list = cursor.fetchall()
-        return {"average": sum(sentiments_list) / len(sentiments_list)}, 200
-    except psycopg2.Error as e:
-        logger.error(f"An error has occured while retrieving average .\n {e}")
-        return abort(500, "An error has occurred while retrieving average .")
