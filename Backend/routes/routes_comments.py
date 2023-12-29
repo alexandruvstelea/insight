@@ -267,19 +267,3 @@ def get_likes_dislikes(subject_id):
     except exc.SQLAlchemyError as e:
         logger.error(f"An error has occured while retrieving likes count.\n {e}")
         return abort(500, "An error has occurred while retrieving likes count.")
-
-
-@comments_bp.route("/approval/<int:subject_id>", methods=["GET"])
-@limiter.limit("50 per minute")
-def get_aproval(subject_id):
-    try:
-        sentiments_list = (
-            db.session.query(Comment.sentiment)
-            .filter_by(subject_id=subject_id)
-            .filter(Comment.sentiment != -1)
-            .all()
-        )
-        return {"average": sum(sentiments_list) / len(sentiments_list)}, 200
-    except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while retrieving average .\n {e}")
-        return abort(500, "An error has occurred while retrieving average .")
