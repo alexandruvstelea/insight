@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import Blueprint, jsonify, request, abort
 from models.courses import Course
 from models.subjects import Subject
@@ -33,6 +34,28 @@ def create_course():
             semester = 0
             if subject:
                 semester = subject.semester
+                existing_courses = (
+                    db.session.query(Course)
+                    .filter(
+                        Course.day == day,
+                        Course.week_type == week_type,
+                        Course.room_id == room_id,
+                        Course.semester == semester,
+                    )
+                    .all()
+                )
+                filtered_courses = []
+                for course in existing_courses:
+                    if (
+                        course.start_end[0] <= datetime.strptime(start, "%H:%M").time()
+                        and course.start_end[1]
+                        >= datetime.strptime(end, "%H:%M").time()
+                    ):
+                        filtered_courses.append(course)
+
+                if filtered_courses:
+                    logger.warning("A course is already scheduled in the given slot.")
+                    abort(409, "A course is already scheduled in the given slot.")
             else:
                 logger.warning("Couldn't determine subject for course.")
                 abort(404, "Couldn't determine subject for course.")
