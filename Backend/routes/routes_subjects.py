@@ -223,12 +223,13 @@ def get_current_subject():
         abort(400, f"Error retrieving query parameters.")
 
     try:
-        week_type = find_week_type(date_time)
+        week_type, semester = find_week_type(date_time)
         courses = (
             db.session.query(Course)
             .filter(
                 Course.room_id == room_id,
                 Course.day == date_time.weekday(),
+                Course.semester == semester,
                 db.or_(Course.week_type == week_type, Course.week_type == 0),
             )
             .all()
@@ -241,7 +242,7 @@ def get_current_subject():
                     filtered_courses.append(course)
 
             if len(filtered_courses) == 1:
-                subject_id = filtered_courses[0].id
+                subject_id = filtered_courses[0].subject_id
                 subject = db.session.query(Subject).filter_by(id=subject_id).first()
                 if subject:
                     logger.info(f"Retrieved current subject.{subject}")
@@ -269,9 +270,14 @@ def find_week_type(date_time):
         .filter(Week.start <= date_time, Week.end >= date_time)
         .first()
     )
+    logger.info(f"{date_time}")
     if current_week:
         logger.info("Retrieved current week type.")
-        return 2 if current_week.id % 2 == 0 else 1
+        return (
+            [2, current_week.semester]
+            if current_week.id % 2 == 0
+            else [1, current_week.semester]
+        )
     else:
         logger.error("Current week couldn't be determined.")
         abort(404, "Current week couldn't be determined.")
