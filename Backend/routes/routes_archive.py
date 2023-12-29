@@ -633,7 +633,7 @@ def get_subject_sentiment(year, subject_id):
             dbname=DB_NAME, user=USER, password=PASSWORD, host=HOST, port=PORT
         )
         cursor = conn.cursor()
-        table_name = f"Subjects_{year}_{year+1}"
+        table_name = f"Comments_{year}_{year+1}"
 
         if year < 2023 or type(year) != int:
             logger.warning(f"No subjects found for the year {year}.")
