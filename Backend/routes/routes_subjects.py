@@ -111,8 +111,8 @@ def get_subject_sentiment(subject_id):
                 (negative_count / total_count) * 100 if total_count > 0 else 0
             )
             return {
-                "positive": positive_percentage,
-                "negative": negative_percentage,
+                "positive": round(positive_percentage, 1),
+                "negative": round(negative_percentage, 1),
             }
         else:
             logger.warning(f"No comments found for subject with ID={subject_id}.")
