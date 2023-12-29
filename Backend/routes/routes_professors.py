@@ -1,7 +1,9 @@
 from flask import Blueprint, jsonify, request, abort
 from models.professors import Professor
+from models.subjects import Subject
+from models.ratings import Rating
 from __init__ import db, limiter
-from sqlalchemy import exc
+from sqlalchemy import exc, func
 from bleach import clean
 from flask_jwt_extended import jwt_required
 import logging
@@ -83,6 +85,35 @@ def get_professor_by_id(professor_id):
         else:
             logger.warning(f"No professor with ID={professor_id} found.")
             return abort(404, f"No professor with ID={professor_id} found.")
+    except exc.SQLAlchemyError as e:
+        logger.error(f"An error has occured while retrieving data.\n {e}")
+        abort(500, f"An error has occured while retrieving data.")
+
+
+@professor_bp.route("/professors/average/<int:professor_id>", methods=["GET"])
+def get_professor_average(professor_id):
+    try:
+        professor_subjects = (
+            db.session.query(Subject).filter_by(professor_id=professor_id).all()
+        )
+        ratings_list = []
+        if professor_subjects:
+            for subject in professor_subjects:
+                ratings_average = (
+                    db.session.query(func.avg(Rating.rating))
+                    .filter(Rating.subject_id == subject.id)
+                    .scalar()
+                )
+                if ratings_average is not None:
+                    ratings_list.append(round(float(ratings_average), 1))
+            if ratings_list:
+                return {"average": sum(ratings_list) / len(ratings_list)}
+            else:
+                logger.warning(f"No ratings found for subject with ID={subject.id}.")
+                abort(404, f"No ratings found for subject with ID={subject.id}.")
+        else:
+            logger.warning(f"No subjects found for professor with ID={professor_id}.")
+            abort(404, f"No subjects found for professor with ID={professor_id}.")
     except exc.SQLAlchemyError as e:
         logger.error(f"An error has occured while retrieving data.\n {e}")
         abort(500, f"An error has occured while retrieving data.")

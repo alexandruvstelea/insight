@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request, abort
 from models.subjects import Subject
+from models.comments import Comment
 from __init__ import db, limiter
 from sqlalchemy import exc
 from datetime import datetime
@@ -85,6 +86,35 @@ def get_subject_by_id(subject_id):
     except exc.SQLAlchemyError as e:
         logger.error(f"An error has occured while retrieving objects.\n {e}")
         abort(500, f"An error has occured while retrieving objects.")
+
+
+@subject_bp.route("/subjects/sentiment/<int:subject_id>", methods=["GET"])
+def get_subject_sentiment(subject_id):
+    try:
+        comments_sentiment = (
+            db.session.query(Comment.sentiment).filter(Comment.sentiment != -2).all()
+        )
+        if comments_sentiment:
+            total_count = len(comments_sentiment)
+            positive_count = sum(
+                1 for sentiment in comments_sentiment if sentiment[0] == 1
+            )
+            negative_count = sum(
+                1 for sentiment in comments_sentiment if sentiment[0] == -1
+            )
+            positive_percentage = (
+                (positive_count / total_count) * 100 if total_count > 0 else 0
+            )
+            negative_percentage = (
+                (negative_count / total_count) * 100 if total_count > 0 else 0
+            )
+            return {"positive": positive_percentage, "negative": negative_percentage}
+        else:
+            logger.warning(f"No comments found for subject with ID={subject_id}.")
+            return abort(404, f"No comments found for subject with ID={subject_id}.")
+    except exc.SQLAlchemyError as e:
+        logger.error(f"An error has occured while retrieving data.\n {e}")
+        abort(500, f"An error has occured while retrieving data.")
 
 
 @subject_bp.route("/subjects/<int:subject_id>", methods=["PUT"])
