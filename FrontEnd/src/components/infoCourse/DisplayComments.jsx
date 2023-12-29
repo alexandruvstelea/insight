@@ -20,7 +20,7 @@ export default function DisplayComments({ comments }) {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <Box sx={{ display: 'flex', justifyContent: 'center', margin: 'auto', width: "90vw", mt: 10 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', margin: 'auto', width: "90vw", mt: 5 }}>
           <Masonry columns={{ xs: 1, sm: 1, md: 2, lg: 3 }} spacing={4} >
 
             {comments.map((commentData) => (

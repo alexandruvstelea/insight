@@ -12,7 +12,7 @@ export default function ProgressContainer({ name, percentage }) {
         <div className={styles.progressBar}>
           <LinearProgress style={{ height: '7px' }} variant="determinate" value={calculatePercentage(percentage)} />
         </div>
-        <span className={styles.textM} >{percentage}%</span>
+        <span className={styles.textMM} >{percentage}%</span>
       </div>
     </>
   )

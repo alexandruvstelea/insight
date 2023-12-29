@@ -1,4 +1,8 @@
-.rating-overview {
+.ratingOverview {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   width: 400px;
   flex-shrink: 0;
 }

@@ -1,16 +1,22 @@
 .progressContainer {
   display: flex;
   align-items: center;
+  justify-content: center;
   width: 100%;
-  margin: 0.7rem 0;
+  margin: 0.4rem 0;
 }
 
 .progressBar {
   margin: 0 0.3rem;
-  min-width: 12rem;
+  min-width: 15rem;
 }
 
 .textM {
   font-size: 1.2rem;
-  min-width: 4.2rem;
+  min-width: 4rem;
+}
+
+.textMM {
+  font-size: 1.2rem;
+  min-width: 3.5rem;
 }

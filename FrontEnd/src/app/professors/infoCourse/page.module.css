@@ -59,6 +59,21 @@
   transform: translate(-50%, -50%);
 }
 
+.sentimentContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-size: 24px;
+}
+
+.sentimentTitle {
+  margin-top: 25px;
+  margin-bottom: 8px;
+  text-align: center;
+  font-size: 24px;
+}
+
 
 @media screen and (max-width: 1350px) {
 
@@ -127,4 +142,15 @@
     margin-top: 40px;
   }
 
+}
+
+@media screen and (max-width: 500px) {
+  .sentimentTitle {
+    font-size: 20px;
+    margin-top: 10px;
+  }
+
+  .sentimentContainer {
+    font-size: 20px;
+  }
 }
