@@ -92,7 +92,9 @@ def get_subject_by_id(subject_id):
 def get_subject_sentiment(subject_id):
     try:
         comments_sentiment = (
-            db.session.query(Comment.sentiment).filter(Comment.sentiment != -2).all()
+            db.session.query(Comment.sentiment)
+            .filter(Comment.sentiment != -2, Comment.sentiment != 0)
+            .all()
         )
         if comments_sentiment:
             total_count = len(comments_sentiment)
@@ -108,7 +110,10 @@ def get_subject_sentiment(subject_id):
             negative_percentage = (
                 (negative_count / total_count) * 100 if total_count > 0 else 0
             )
-            return {"positive": positive_percentage, "negative": negative_percentage}
+            return {
+                "positive": positive_percentage,
+                "negative": negative_percentage,
+            }
         else:
             logger.warning(f"No comments found for subject with ID={subject_id}.")
             return abort(404, f"No comments found for subject with ID={subject_id}.")
