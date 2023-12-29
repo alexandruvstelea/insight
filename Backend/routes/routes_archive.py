@@ -339,7 +339,7 @@ def get_old_professor_by_id(year, professor_id):
 
 
 @archive_bp.route(
-    "/professors_archive/<int:year>/average/<int:professor_id>", methods=["GET"]
+    "/professors_archive/average/<int:year>/<int:professor_id>", methods=["GET"]
 )
 def get_professor_average(year, professor_id):
     try:
