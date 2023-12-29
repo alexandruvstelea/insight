@@ -93,7 +93,11 @@ def get_subject_sentiment(subject_id):
     try:
         comments_sentiment = (
             db.session.query(Comment.sentiment)
-            .filter(Comment.sentiment != -2, Comment.sentiment != 0)
+            .filter(
+                Comment.sentiment != -2,
+                Comment.sentiment != 0,
+                Comment.subject_id == subject_id,
+            )
             .all()
         )
         if comments_sentiment:
