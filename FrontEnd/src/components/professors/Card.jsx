@@ -10,30 +10,28 @@ export default function Card({ professor }) {
 
   const [isFlipped, setIsFlipped] = useState(false);
   const [subjects, setSubjects] = useState([]);
-  const [isLoaded, setIsLoaded] = useState(false);
   const [average, setAverage] = useState();
   const imagePath = professor.gender === 'male' ? `/images/maleImages/M16.png` : "/images/femaleAvatar4.png";
 
   async function fetchSubject(professor_id) {
-    if (!isLoaded) {
-      const selectedYear = sessionStorage.getItem("selectedYear");
-      const currentDate = new Date();
-      const currentYear = currentDate.getFullYear();
-      const currentMonth = currentDate.getMonth() + 1;
-      const adjustedYear = currentMonth < 10 ? currentYear - 1 : currentYear;
-      let url = ''
-      if (selectedYear == adjustedYear) { url = `${process.env.REACT_APP_API_URL}/subjects/professor/${professor_id}` }
-      else { url = `${process.env.REACT_APP_API_URL}/subjects_archive/professor/${selectedYear}/${professor_id}` }
+    const selectedYear = sessionStorage.getItem("selectedYear");
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1;
+    const adjustedYear = currentMonth < 10 ? currentYear - 1 : currentYear;
+    let url = ''
+    if (selectedYear == adjustedYear) { url = `${process.env.REACT_APP_API_URL}/subjects/professor/${professor_id}` }
+    else { url = `${process.env.REACT_APP_API_URL}/subjects_archive/professor/${selectedYear}/${professor_id}` }
 
-      try {
-        const response = await fetch(url);
-        const complete_response = await response.json();
-        setSubjects(complete_response);
-        setIsLoaded(true);
-      } catch (err) {
-        console.log(err);
-      }
+    try {
+      const response = await fetch(url);
+      const complete_response = await response.json();
+      setSubjects(complete_response);
+
+    } catch (err) {
+      console.log(err);
     }
+
   }
 
   async function fetchAvgProfessor(professor_id) {
@@ -116,7 +114,7 @@ export default function Card({ professor }) {
 
             <h1 className={styles.titleCurs}>Cursuri:</h1>
             <ul className={styles.coursesList} >
-              {isLoaded && subjects.map(subject => (
+              {subjects.map(subject => (
                 <Subject key={subject.id} subject={subject} />
               ))}
             </ul>

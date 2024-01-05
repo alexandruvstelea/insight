@@ -1,0 +1,42 @@
+.spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 74vh;
+  position: relative;
+}
+
+@media screen and (max-width: 768px) {
+  .spinner {
+    height: 78vh;
+  }
+}
+
+.loader {
+  position: relative;
+  border: 8px solid rgba(0, 0, 0, 0.1);
+  border-top: 16px solid #0040C1;
+  border-radius: 50%;
+  width: 160px;
+  height: 160px;
+  animation: spin 1s linear infinite;
+}
+
+.image {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  height: 100px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

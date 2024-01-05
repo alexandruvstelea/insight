@@ -11,6 +11,7 @@ import Card from './Card';
 export default function CustomSlider({ searchTerm, onError }) {
   const [professors, setProfessors] = useState([]);
   const [error404, setError404] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const filteredProfessors = professors.filter(professor =>
     `${professor.first_name} ${professor.last_name}`.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -23,6 +24,7 @@ export default function CustomSlider({ searchTerm, onError }) {
 
 
   async function fetchProfessors() {
+    setIsLoading(true);
     const selectedYear = sessionStorage.getItem("selectedYear");
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
@@ -37,12 +39,14 @@ export default function CustomSlider({ searchTerm, onError }) {
       if (!response.ok) {
         if (response.status === 404) {
           setError404(true);
+          setIsLoading(true);
         }
         throw new Error(`HTTP error: ${response.status}`);
       }
 
       const complete_response = await response.json();
       setProfessors(complete_response);
+      setIsLoading(false);
     } catch (err) {
       console.log(err);
     }
@@ -89,6 +93,18 @@ export default function CustomSlider({ searchTerm, onError }) {
       onError(true);
     }
   }, [error404]);
+
+
+  // function CardSkeleton() {
+  //   return (
+
+  //   );
+  // }
+
+  // if (isLoading) {
+  //   return <CardSkeleton />;
+  // }
+
 
   return (
     <div>
