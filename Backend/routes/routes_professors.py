@@ -90,6 +90,7 @@ def get_professor_by_id(professor_id):
         abort(500, f"An error has occured while retrieving data.")
 
 
+@limiter.limit("500 per minute")
 @professor_bp.route("/professors/average/<int:professor_id>", methods=["GET"])
 def get_professor_average(professor_id):
     try:
