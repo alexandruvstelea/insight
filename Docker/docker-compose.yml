@@ -37,10 +37,35 @@ services:
     depends_on:
       - backend
     ports:
-      - "80:80"
+      - "3001"
+  mongodb:
+    image: mongodb/mongodb-community-server:6.0-ubi8
+    restart: always
+    container_name: mongodb_container
+    env_file:
+      - .env  
+    volumes:
+      - volume_mongodb:/data/db
+    expose:
+      - "27017"
+    networks:
+      - feedback_network
+  nginx:
+    image: nginx:latest
+    container_name: nginx_container
+    restart: always
+    build:
+      context: ../nginx
+      dockerfile: ../Docker/Dockerfile.nginx
+    ports:
+      - "3000:3000"
+    networks:
+      - feedback_network
+    depends_on:
+      - frontend
+      - backend
 volumes:
   volume_postgres:
-
-
+  volume_mongodb:
 networks:
   feedback_network:

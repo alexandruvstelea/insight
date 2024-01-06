@@ -10,3 +10,4 @@ crud_functions_deprecated.py
 feedback_venv
 Docker/.env
 gmailSecret.txt
+nginx

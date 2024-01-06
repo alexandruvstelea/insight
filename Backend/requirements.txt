@@ -8,3 +8,5 @@ python-dotenv>=1.0.0
 SQLAlchemy>=2.0.22
 yagmail>=0.15.293
 psycopg2-binary
+pymongo>4.1,<5
+motor>=3,<4
