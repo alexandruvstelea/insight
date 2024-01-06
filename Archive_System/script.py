@@ -82,5 +82,6 @@ update_foreign_keys(
 cur = conn.cursor()
 cur.execute(f'TRUNCATE "Ratings"')
 cur.execute(f'TRUNCATE "Weeks"')
+conn.commit()
 cur.close()
 conn.close()
