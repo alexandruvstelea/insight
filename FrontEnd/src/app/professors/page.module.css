@@ -19,7 +19,7 @@
 
 .cont {
   width: 100vw;
-  height: 77vh;
+  height: 74vh;
   display: flex;
   position: relative;
 }
@@ -53,7 +53,7 @@
 
 @media screen and (max-width: 768px) {
   .cont {
-    height: 83vh;
+    height: 83.05vh;
   }
 }
 
