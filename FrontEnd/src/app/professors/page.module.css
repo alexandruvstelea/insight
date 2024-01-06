@@ -56,3 +56,18 @@
     height: 83vh;
   }
 }
+
+@media screen and (max-height: 860px) {
+  .searchBar {
+    margin-top: 36px;
+    margin-bottom: 1rem;
+  }
+
+}
+
+@media screen and (max-height: 700px) {
+  .searchBar {
+    margin-top: 85px;
+
+  }
+}

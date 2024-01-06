@@ -58,3 +58,12 @@
     box-shadow: 0px 8px 16px 0px rgba(97, 96, 96, 0.2);
   }
 }
+
+@media screen and (max-height: 830px) {
+  .dropdown {
+    position: relative;
+    left: 0;
+    top: 40px;
+  }
+
+}

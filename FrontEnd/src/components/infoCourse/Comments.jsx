@@ -209,7 +209,7 @@ export default function Comments({ subjectId, fetchComments, fetchLikes }) {
                 size="small"
                 value={examGrade}
                 onChange={handleExamGradeChange}
-                sx={{ width: 120 }}
+                sx={{ width: 100 }}
                 inputProps={{
                   min: 1,
                   max: 9,

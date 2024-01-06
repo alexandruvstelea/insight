@@ -95,16 +95,6 @@ export default function CustomSlider({ searchTerm, onError }) {
   }, [error404]);
 
 
-  // function CardSkeleton() {
-  //   return (
-
-  //   );
-  // }
-
-  // if (isLoading) {
-  //   return <CardSkeleton />;
-  // }
-
 
   return (
     <div>

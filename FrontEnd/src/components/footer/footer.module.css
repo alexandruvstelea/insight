@@ -36,3 +36,9 @@
     display: none;
   }
 }
+
+@media screen and (max-height: 700px) {
+  .copyRight {
+    display: none;
+  }
+}
