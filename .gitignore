@@ -2,7 +2,9 @@
 Backend/__pycache__
 Backend/.env
 AI/.env
+AI/sentiment_venv
 Archive_System/.env
+Archive_System/archive_venv
 Backend/models/__pycache__
 Backend/routes/__pycache__
 Backend/app.log
