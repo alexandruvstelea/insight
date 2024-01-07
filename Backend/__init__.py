@@ -9,10 +9,10 @@ from dotenv import load_dotenv
 from os import getenv
 
 load_dotenv(".env")
-MONGO_USER = getenv("MONGO_INITDB_ROOT_USERNAME") 
-MONGO_PASSWORD = getenv("MONGO_INITDB_ROOT_PASSWORD") 
-MONGO_HOST = getenv("MONGO_HOST") 
-MONGO_PORT = getenv("MONGO_PORT") 
+MONGO_USER = getenv("MONGODB_INITDB_ROOT_USERNAME")
+MONGO_PASSWORD = getenv("MONGODB_INITDB_ROOT_PASSWORD")
+MONGO_HOST = getenv("MONGO_HOST")
+MONGO_PORT = getenv("MONGO_PORT")
 
 db = SQLAlchemy()
 limiter = Limiter(
