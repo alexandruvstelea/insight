@@ -24,10 +24,16 @@ export default function Comments({ subjectId, fetchComments, fetchLikes }) {
       setVote(newVote);
     }
   };
-
   const handleExamGradeChange = (event) => {
-    setExamGrade(event.target.value);
+    const value = event.target.value;
+
+    const isValid = /^([1-9]|10)?$/.test(value);
+
+    if (isValid) {
+      setExamGrade(value);
+    }
   };
+
 
   const handleCommentChange = (event) => {
     setComment(event.target.value);
