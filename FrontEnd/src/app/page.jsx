@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Image from 'next/image'
 import styles from './page.module.css'
 
 export default function Home() {
@@ -9,7 +8,7 @@ export default function Home() {
       <div className={styles.backgroundLandingPage}>
         <div className={styles.titleLandingPageContainer}>
           <div className={styles.titleLandingPage}>
-            <Image width={88} height={88} src="/images/unitbvLogo.png" alt="Logo" className={styles.logoLandingPage} />
+            <img src="/images/unitbvLogo.png" alt="Logo" className={styles.logoLandingPage} />
             <h1 className={styles.textTitleLandingPage}>FeedBack IESC</h1>
           </div>
           <Link className={styles.buttonLandingPage} href="professors">

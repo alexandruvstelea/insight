@@ -25,6 +25,8 @@
 .logoLandingPage {
   margin-right: 1.5rem;
   transition: transform 0.3s ease;
+  width: 88px;
+  height: 88px;
 }
 
 .logoLandingPage:hover {
