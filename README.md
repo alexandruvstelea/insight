@@ -4,7 +4,7 @@ Initiated at Transilvania University of Brașov, this project aims to streamline
 
 ## Presentation
 
-![Webapp presentation](ReadMe_Resources\feedback_presentation_gif.gif)
+![Webapp presentation](https://github.com/alexandruvstelea/FeedBack_IESC/blob/master/ReadMe_Resources/feedback_presentation_gif.gif)
 
 ## Key features
 
