@@ -1,13 +1,28 @@
 # About the Project
 
-Initiated by students at Transilvania University of Brașov, this project aims to streamline the collection and analysis of course feedback. It integrates a 3D printed device with a Raspberry Pi 3A, allowing students to rate their courses on a scale of 1 to 5. The system is complemented by a web application, an administrative tool, and a Grafana dashboard, providing a holistic approach to feedback visualization and management.
+Initiated at Transilvania University of Brașov, this project aims to streamline the collection and analysis of course feedback. It integrates a 3D printed device with a Raspberry Pi 3A, allowing students to rate their courses on a scale of 1 to 5. The system is complemented by a web application, and an administrative tool, providing a holistic approach to feedback visualization and management.
 
-## Key Features
+## Presentation
+
+![Webapp presentation](ReadMe_Resources\feedback_presentation_gif.gif)
+
+## Key features
+
+- **Feedback Visualization:** The web application provides an intuitive interface to visualize course feedback, presenting  graphical representations of student sentiments and ratings.
+
+- **Interactive Commenting:** Students can actively engage by leaving comments for respective courses, enabling a qualitative dimension to the feedback process.
+
+- **Feedback Submission via 3D Printed Box:** After attending a course, students can provide feedback using the tactile 3D printed device, offering a convenient and tactile means of rating courses.
+
+- **Admin Database Management:** Administrators have robust tools to efficiently manage the database, performing tasks such as data entry, updates, and maintenance.
+
+## Project features and functionalities
 
 - **3D Printed Box with RaspberryPi:** This device, equipped with rating buttons, offers a straightforward method for students to submit their course feedback.
 - **Web Application:** Featuring a user-centric design, the web interface allows for easy access and visualization of course feedback, offering a view of student sentiments.
 - **Admin Tool:** The admin tool streamlines database management with efficient Create, Read, Update, and Delete (CRUD) functionalities.
-- **Grafana Dashboard:** Integrating Grafana, the project offers an insightful dashboard for detailed feedback analysis, highlighting trends and providing valuable insights.
+- **AI Sentiment Analysist:** Integrated into the system, this script performs sentiment analysis on comments provided in the feedback. It generates an average sentiment score, providing deeper insights into qualitative feedback.
+- **Archiving System:** Implemented to store and visualize historical data, enabling users to access and analyze past feedback trends. This system allows for comparisons and trend analysis over time.
 
 ## Technologies Used
 
@@ -19,8 +34,8 @@ This project utilizes a range of technologies:
 - **PostgreSQL:** Serves as the robust database management system.
 - **RaspberryPi:** Integral to the feedback collection device, facilitating data capture and transmission.
 - **3D Printer:** Used to construct the tactile feedback box.
-- **Grafana:** For in-depth data visualization and analysis.
 - **Docker:** Streamlines deployment and management through containerization of the database, backend, and frontend.
+- **Natural Language Processing:** Utilizes NLP for sentiment analysis on textual feedback.
 
 ## Authors
 
