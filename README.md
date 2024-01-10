@@ -6,16 +6,6 @@ Initiated at Transilvania University of Brașov, this project aims to streamline
 
 ![Webapp presentation](https://github.com/alexandruvstelea/FeedBack_IESC/blob/master/ReadMe_Resources/feedback_presentation_gif.gif)
 
-## Key features
-
-- **Feedback Visualization:** The web application provides an intuitive interface to visualize course feedback, presenting  graphical representations of student sentiments and ratings.
-
-- **Interactive Commenting:** Students can actively engage by leaving comments for respective courses, enabling a qualitative dimension to the feedback process.
-
-- **Feedback Submission via 3D Printed Box:** After attending a course, students can provide feedback using the tactile 3D printed device, offering a convenient and tactile means of rating courses.
-
-- **Admin Database Management:** Administrators have robust tools to efficiently manage the database, performing tasks such as data entry, updates, and maintenance.
-
 ## Project features and functionalities
 
 - **3D Printed Box with RaspberryPi:** This device, equipped with rating buttons, offers a straightforward method for students to submit their course feedback.
