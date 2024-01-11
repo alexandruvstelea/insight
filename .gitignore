@@ -13,3 +13,4 @@ feedback_venv
 Docker/.env
 gmailSecret.txt
 nginx
+auto-deploy.sh
