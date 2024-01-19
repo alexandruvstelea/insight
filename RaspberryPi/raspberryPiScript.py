@@ -23,17 +23,20 @@ BUTTON_4 = 5
 BUTTON_5 = 6
 INTERNET_CONNECTION = False
 CURRENT_COURSE = "N/A"
-API_URL = "http://192.168.1.129:5000"
+API_URL = "http://192.168.1.134:5000"
 LAST_SEND = None
-ROOM = 1
 
+ROOM = 1
+ROOM_NAME = "NII1"
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
+
 GPIO.setup(BUTTON_1, GPIO.IN)
 GPIO.setup(BUTTON_2, GPIO.IN)
 GPIO.setup(BUTTON_3, GPIO.IN)
 GPIO.setup(BUTTON_4, GPIO.IN)
 GPIO.setup(BUTTON_5, GPIO.IN)
+
 lcd = LCD()
 lcd.clear()
 lcd.text("System", 1)
@@ -43,9 +46,8 @@ logging.info("System Started")
 
 def display_no_internet():
     lcd.clear()
-    lcd.text("No internet", 1)
-    lcd.text("Connection", 2)
-    logging.error("No internet connection")
+    lcd.text("Fara conexiune", 1)
+    lcd.text("la internet!", 2)
 
 
 def display_sent(grade: int):
@@ -58,7 +60,9 @@ def display_sent(grade: int):
 def send_to_postgresql(grade, timestamp):
     global ROOM
     print(f"Sending to PostgreSQL grade {grade} with timestamp {timestamp}.")
-    logging.info("Sending to  PostgreSQL grade {grade} with timestamp {timestamp}")
+    logging.info(
+        f"Preparing to send to PostgreSQL grade {grade} with timestamp {timestamp}."
+    )
     # data = {"rating":grade,"date":str(timestamp),"room":ROOM}
     data = {"rating": grade, "date": "2024-02-19 09:10:10.10", "room": ROOM}
     try:
@@ -74,20 +78,20 @@ def send_to_postgresql(grade, timestamp):
             print("Post failed")
             print(response.text)
             logging.error(f"Post failed {response.text}")
+    except requests.exceptions.Timeout as e:
+        logging.error(f"Timeout error: {e}")
     except requests.exceptions.RequestException as e:
-        print(f"An error ocurred: {str(e)}")
-        logging.error(f"An error ocurred: {str(e)}")
+        logging.error(f"Network error: {e}")
     except Exception as e:
-        print(f"An error ocurred: {str(e)}")
-        logging.error(f"General error occurred: {str(e)}")
+        logging.error(f"Unexpected error in send_to_postgresql: {e}")
 
 
 def send_grade(grade: int):
     global LAST_SEND
     current_send = datetime.now()
     if LAST_SEND == None or current_send - LAST_SEND >= timedelta(seconds=1.75):
-        print(f"Sent {grade} with timestamp {current_send}")
-        logging.info(f"Sent {grade} with timestamp {current_send}")
+        print(f"Send {grade} with timestamp {current_send}")
+        logging.info(f"Send {grade} with timestamp {current_send}")
         LAST_SEND = current_send
         send_to_postgresql(grade, current_send)
         display_sent(grade)
@@ -99,8 +103,8 @@ def send_grade(grade: int):
 
 def display_course():
     lcd.clear()
-    lcd.text(f"Curs:{CURRENT_COURSE}", 1)
-    lcd.text("I <3 IESC", 2)
+    lcd.text(f"Curs: {CURRENT_COURSE}", 1)
+    lcd.text(f"Sala: {ROOM_NAME}", 2)
 
 
 def button_press(channel):
@@ -132,11 +136,18 @@ def get_current_course():
         CURRENT_COURSE = data["abbreviation"]
     except requests.exceptions.RequestException as e:
         print(f"An error ocurred: {str(e)}")
-        logging.error(f"An error ocurred: {str(e)}")
+        logging.error(f"Error fetching current course: {e}")
+    except Exception as e:
+        logging.error(f"Unexpected error in get_current_course: {e}")
+
+
+import os
 
 
 def check_internet_connection():
     global INTERNET_CONNECTION
+    pid = os.getpid()
+    print(pid)
     try:
         response = requests.get("http://www.google.com", timeout=5)
         print(response)
@@ -146,9 +157,12 @@ def check_internet_connection():
             display_course()
         else:
             INTERNET_CONNECTION = False
-    except requests.ConnectionError:
+    except requests.exceptions.ConnectionError:
         INTERNET_CONNECTION = False
         display_no_internet()
+        logging.error("No internet connection available.")
+    except Exception as e:
+        logging.error(f"Unexpected error in check_internet_connection: {e}")
 
 
 GPIO.add_event_detect(BUTTON_1, GPIO.BOTH, callback=button_press, bouncetime=800)
@@ -160,7 +174,6 @@ get_current_course()
 check_internet_connection()
 schedule.every(1).minutes.do(check_internet_connection)
 schedule.every(5).minutes.do(get_current_course)
-
 while True:
     schedule.run_pending()
     sleep(0.2)
