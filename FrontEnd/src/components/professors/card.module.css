@@ -1,13 +1,12 @@
 .card {
   border-radius: 25px;
   perspective: 500px;
-  width: 267px;
-  height: 450px;
-
+  width: 340px;
+  height: 540px;
 }
 
 .content {
-  background-color: #FFF;
+  background-color: #fff;
   border-radius: 25px;
   position: absolute;
   width: 100%;
@@ -18,7 +17,6 @@
 
 .card.flipped .content {
   transform: rotateX(180deg);
-
 }
 
 .front,
@@ -41,13 +39,12 @@
   position: absolute;
   bottom: 10px;
   left: 50%;
-  background-color: #03446A;
+  background-color: #0040c1;
   color: white;
   padding: 5px 10px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-
 }
 
 .coursesList {
@@ -67,7 +64,7 @@
 }
 
 .coursesList::-webkit-scrollbar-thumb {
-  background-color: #6E93f7;
+  background-color: #6e93f7;
   border: 4px solid white;
   background-clip: padding-box;
   border-radius: 9999px;
@@ -82,7 +79,6 @@
   padding: 10px 14px;
 }
 
-
 .imageContent {
   position: relative;
   row-gap: 5px;
@@ -95,35 +91,34 @@
   top: 0;
   height: 100%;
   width: 100%;
-  background-color: #4070F4;
+  background-color: #0040c1;
   border-radius: 25px 25px 0 25px;
 }
 
 .overlay::before,
 .overlay::after {
-  content: '';
+  content: "";
   position: absolute;
   right: 0;
   bottom: -40px;
   height: 40px;
   width: 40px;
-  background-color: #4070F4;
+  background-color: #0040c1;
 }
 
 .overlay::after {
   border-radius: 0 25px 0 0;
-  background-color: #FFF;
+  background-color: #fff;
 }
 
 .cardImage {
   position: relative;
-  height: 150px;
-  width: 150px;
+  height: 180px;
+  width: 180px;
   border-radius: 50%;
-  background: #FFF;
+  background: #fff;
   padding: 2px;
 }
-
 
 .cardImage .cardImg {
   height: 100%;
@@ -133,8 +128,8 @@
 }
 
 .name {
-  font-size: 18px;
-  font-weight: 500;
+  font-size: 24px;
+  font-weight: 600;
   color: #333;
   padding: 10px;
   height: 40px;
@@ -144,7 +139,6 @@
 }
 
 .titleCurs {
-
   font-size: 24px;
   font-weight: 500;
   color: #333;
@@ -158,9 +152,9 @@
 .buttonCard {
   border: none;
   font-size: 16px;
-  color: #FFF;
+  color: #fff;
   padding: 8px 16px;
-  background-color: #4070F4;
+  background-color: #0040c1;
   border-radius: 6px;
   margin: 14px;
   cursor: pointer;
@@ -182,12 +176,12 @@
   height: 50px;
   padding: 1px;
   border-radius: 50%;
-  border: 2px solid #0040C1;
+  border: 2px solid #0040c1;
   font-weight: 800;
 }
 
 .buttonCard:hover {
-  background: #265DF2;
+  background: #318ce7;
 }
 
 .backButton {

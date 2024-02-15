@@ -1,51 +1,40 @@
-.rowContainer {
+.professorsPageContainer {
   display: flex;
   flex-direction: column;
-  height: 77vh;
-  justify-content: center;
-  margin-top: -3vh;
+  height: 100vh;
+  width: 100vw;
 }
 
 .searchBar {
-  align-self: center;
-  margin-bottom: 2rem;
-}
-
-@media screen and (max-width: 768px) {
-  .rowContainer {
-    height: 86vh;
-  }
-}
-
-.cont {
-  width: 100vw;
-  height: 74vh;
-  display: flex;
-  position: relative;
-}
-
-.noFoundContainer {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 60vw;
-  height: 15vh;
-  text-align: center;
-  background-color: #f2f2f2;
-  color: #333;
-  font-size: 2rem;
-  font-weight: 600;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 15%;
 }
 
+.notFoundContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+  height: 80%;
+  text-align: center;
+  background-color: #f2f2f2;
+  color: black;
+  font-size: 64px;
+  font-weight: 600;
+}
+
+.infoSVG {
+  fill: black;
+  width: 64px;
+  height: 64px;
+}
 
 @media screen and (max-width: 1350px) {
-
   .noFoundContainer {
     width: 90vw;
   }
@@ -62,12 +51,10 @@
     margin-top: 36px;
     margin-bottom: 1rem;
   }
-
 }
 
 @media screen and (max-height: 700px) {
   .searchBar {
     margin-top: 85px;
-
   }
 }

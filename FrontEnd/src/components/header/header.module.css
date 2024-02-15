@@ -1,15 +1,30 @@
 .header {
-  position: relative;
-  text-align: center;
-  background: linear-gradient(60deg, rgba(84, 58, 183, 1) 0%, rgba(0, 172, 193, 1) 100%);
-  color: #fff;
+  background-color: #0040c1;
+  width: 100%;
+  height: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.headerLeft {
+  width: 25%;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  margin-left: 8px;
+}
+
+.headerCenter {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .headerTitle {
-  padding: 1.25rem;
   font-size: 2.5rem;
   color: #fff;
-
 }
 
 .headerTitle a {
@@ -23,23 +38,29 @@
   font-size: 2.6rem;
 }
 
-.innerHeader {
+.headerRight {
+  width: 25%;
   display: flex;
-  justify-content: center;
+  justify-content: right;
   align-items: center;
-  position: relative;
-  height: 7vh;
-  width: 100%;
-  margin: 0;
-  padding: 0;
+  margin-right: 16px;
+}
+
+.headerRight .adminSVG {
+  fill: white;
+  width: 48px;
+  height: 48px;
+  transition: all 0.3s ease-in-out;
+}
+
+.headerRight .adminSVG:hover {
+  fill: #bebebe;
+  width: 56px;
+  height: 56px;
 }
 
 @media screen and (max-width: 650px) {
   .headerTitle {
     margin-top: 20px;
-  }
-
-  .innerHeader {
-    flex-direction: column-reverse;
   }
 }
