@@ -3,6 +3,7 @@ import CustomSlider from "@/components/professors/CustomSlider";
 import styles from "./page.module.css";
 import TextField from "@mui/material/TextField";
 import { useState } from "react";
+import DropdownArchive from "@/components/infoCourse/DropdownArchive";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 
@@ -26,7 +27,6 @@ export default function Professors() {
         <>
           <div className={styles.professorsPageContainer}>
             <Header />
-
             <div className={styles.notFoundContainer}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -53,6 +53,9 @@ export default function Professors() {
                 value={searchTerm}
                 onChange={handleSearchChange}
               />
+            </div>
+            <div className={styles.secondaryDropdown}>
+              <DropdownArchive />
             </div>
           </div>
           <CustomSlider onError={handleError} searchTerm={searchTerm} />

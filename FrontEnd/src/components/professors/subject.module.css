@@ -1,47 +1,46 @@
 .buttonCourses {
-  width: 200px;
-  align-items: center;
-  appearance: none;
-  background-color: #FCFCFD;
-  border-radius: 4px;
+  width: 256px;
+  height: 50px;
+  background-color: #007fff;
+  border-radius: 8px;
   border-width: 0;
-  box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
-  box-sizing: border-box;
-  color: #36395A;
+  box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
+    rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
+  color: black;
   cursor: pointer;
-  display: inline-flex;
-  height: 3rem;
-  justify-content: center;
-  line-height: 1;
-  list-style: none;
   overflow: hidden;
-  padding-left: 16px;
-  padding-right: 16px;
-  position: relative;
-  text-align: left;
-  text-decoration: none;
-  transition: box-shadow .15s, transform .15s;
+  text-align: center;
+  transition: box-shadow 0.15s, transform 0.15s;
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
-  white-space: nowrap;
   will-change: box-shadow, transform;
-  font-size: 1.5rem;
-  margin-bottom: 0.333rem;
+  font-size: 18px;
   font-family: inherit;
   font-weight: 500;
+  margin-top: 4px;
+  color: white;
 }
 
 .buttonCourses:focus {
-  box-shadow: #D6D6E7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+  box-shadow: #d6d6e7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px,
+    rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
 }
 
 .buttonCourses:hover {
-  box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+  box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px,
+    rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
   transform: translateY(-2px);
 }
 
 .buttonCourses:active {
-  box-shadow: #D6D6E7 0 3px 7px inset;
+  box-shadow: #d6d6e7 0 3px 7px inset;
   transform: translateY(2px);
+}
+
+@media screen and (max-width: 375px) {
+  .buttonCourses {
+    width: 225px;
+    font-size: 14px;
+  }
 }

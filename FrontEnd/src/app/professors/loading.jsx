@@ -1,7 +1,5 @@
+import LoadingSpin from "@/components/infoCourse/LoadingSpin";
 
-import LoadingSpin from "@/components/infoCourse/LoadingSpin"
 export default function Loading() {
-  return (
-    <LoadingSpin />
-  )
+  return <LoadingSpin />;
 }

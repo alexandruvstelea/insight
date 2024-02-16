@@ -1,5 +1,5 @@
 .card {
-  border-radius: 25px;
+  border-radius: 24px;
   perspective: 500px;
   width: 340px;
   height: 540px;
@@ -7,7 +7,7 @@
 
 .content {
   background-color: #fff;
-  border-radius: 25px;
+  border-radius: 24px;
   position: absolute;
   width: 100%;
   height: 100%;
@@ -27,10 +27,15 @@
   backface-visibility: hidden;
 }
 
+.front {
+  display: flex;
+  flex-direction: column;
+}
+
 .back {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   transform: rotateX(180deg);
 }
@@ -48,11 +53,13 @@
 }
 
 .coursesList {
-  align-self: center;
-  text-align: center;
-  margin-top: 20px;
-  height: 225px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: 75%;
   overflow-y: auto;
+  gap: 12px;
 }
 
 .coursesList li {
@@ -83,32 +90,13 @@
   position: relative;
   row-gap: 5px;
   padding: 25px 0;
-}
-
-.overlay {
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 100%;
   background-color: #0040c1;
-  border-radius: 25px 25px 0 25px;
+  border-radius: 24px;
+  height: 40%;
 }
 
-.overlay::before,
-.overlay::after {
-  content: "";
-  position: absolute;
-  right: 0;
-  bottom: -40px;
-  height: 40px;
-  width: 40px;
-  background-color: #0040c1;
-}
-
-.overlay::after {
-  border-radius: 0 25px 0 0;
-  background-color: #fff;
+.cardContent {
+  height: 60%;
 }
 
 .cardImage {
@@ -118,6 +106,9 @@
   border-radius: 50%;
   background: #fff;
   padding: 2px;
+  -webkit-box-shadow: -10px 10px 20px -10px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: -10px 10px 20px -10px rgba(0, 0, 0, 0.5);
+  box-shadow: -10px 10px 20px -10px rgba(0, 0, 0, 0.5);
 }
 
 .cardImage .cardImg {
@@ -147,11 +138,12 @@
   margin-bottom: 20px;
   text-align: center;
   border-bottom: #c3c3c3 1px solid;
+  height: 5%;
 }
 
 .buttonCard {
   border: none;
-  font-size: 16px;
+  font-size: 20px;
   color: #fff;
   padding: 8px 16px;
   background-color: #0040c1;
@@ -181,10 +173,68 @@
 }
 
 .buttonCard:hover {
-  background: #318ce7;
+  background: #007fff;
 }
 
 .backButton {
+  font-size: 20px;
   align-self: center;
-  margin-top: 49px;
+  height: 10%;
+}
+
+@media screen and (max-width: 450px) {
+  .card {
+    width: 310px;
+  }
+  .name {
+    font-size: 20px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .card {
+    width: 280px;
+    height: 500px;
+  }
+}
+
+@media screen and (max-width: 375px) {
+  .card {
+    width: 267px;
+    height: 450px;
+  }
+
+  .imageContent {
+    height: 30%;
+  }
+
+  .cardImage {
+    height: 128px;
+    width: 128px;
+  }
+}
+
+@media screen and (max-width: 350px) {
+  .card {
+    width: 230px;
+    height: 420px;
+  }
+  .cardImage {
+    height: 112px;
+    width: 112px;
+  }
+}
+
+@media screen and (max-height: 780px) and (min-width: 350px) {
+  .card {
+    width: 260px;
+    height: 420px;
+  }
+  .imageContent {
+    height: 30%;
+  }
+  .cardImage {
+    height: 104px;
+    width: 104px;
+  }
 }

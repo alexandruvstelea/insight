@@ -6,6 +6,7 @@ import styles from "./customSlider.module.css";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import "swiper/css/a11y";
 import Card from "./Card";
 
 export default function CustomSlider({ searchTerm, onError }) {
@@ -65,7 +66,6 @@ export default function CustomSlider({ searchTerm, onError }) {
     navigation: {
       navigation: true,
     },
-
     breakpoints: {
       0: {
         slidesPerView: 1,
@@ -75,7 +75,7 @@ export default function CustomSlider({ searchTerm, onError }) {
         slidesPerView: 1,
         slidesPerGroup: 1,
       },
-      1030: {
+      850: {
         slidesPerView: 2,
         slidesPerGroup: 2,
       },

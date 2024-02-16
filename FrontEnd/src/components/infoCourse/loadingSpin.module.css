@@ -1,21 +1,25 @@
+.loadingPageContainer {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .spinner {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 74vh;
+  height: 85%;
+  width: 100vw;
   position: relative;
-}
-
-@media screen and (max-width: 768px) {
-  .spinner {
-    height: 83vh;
-  }
 }
 
 .loader {
   position: relative;
   border: 8px solid rgba(0, 0, 0, 0.1);
-  border-top: 16px solid #0040C1;
+  border-top: 16px solid #0040c1;
   border-radius: 50%;
   width: 160px;
   height: 160px;
@@ -38,5 +42,11 @@
 
   100% {
     transform: rotate(360deg);
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .spinner {
+    height: 90%;
   }
 }

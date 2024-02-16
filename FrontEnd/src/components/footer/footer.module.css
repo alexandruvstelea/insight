@@ -13,7 +13,7 @@
   text-align: center;
   font-size: 16px;
   font-weight: bold;
-  width: 60%;
+  width: 100%;
 }
 
 .footerAuthors a {
@@ -24,4 +24,10 @@
 
 .footerAuthors a:hover {
   color: #0040c1;
+}
+
+@media screen and (max-width: 380px) {
+  .footer {
+    display: none;
+  }
 }

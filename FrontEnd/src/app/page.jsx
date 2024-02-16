@@ -33,7 +33,7 @@ export default function Home() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Stelea Alexandru
+              Alexandru Stelea
             </a>{" "}
             &{" "}
             <a
@@ -41,7 +41,7 @@ export default function Home() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Sava Andrei
+              Andrei Sava
             </a>
           </h1>
         </div>

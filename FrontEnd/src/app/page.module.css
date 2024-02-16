@@ -56,13 +56,13 @@
 }
 
 .rightLandingPage h1 {
-  color: #efefef;
+  color: white;
   font-size: 48px;
   font-weight: bold;
 }
 
 .rightLandingPage .likeSVG {
-  fill: #efefef;
+  fill: white;
   letter-spacing: 8px;
   height: 384px;
   width: 384px;
@@ -83,16 +83,16 @@
   display: flex;
   width: 99vw;
   height: 5vh;
-  color: #efefef;
+  color: white;
   font-weight: bold;
   align-items: center;
   justify-content: right;
 }
 
 .landingPageFooter a {
-  color: #efefef;
+  color: white;
   text-decoration: none;
-  transition: color 0.3s ease-in-out;
+  transition: color 0.15s ease-in-out;
 }
 
 .landingPageFooter a:hover {

@@ -5,18 +5,25 @@
 .dropbtn {
   background-color: transparent;
   color: white;
-  width: 130px;
+  width: 160px;
   font-size: 24px;
   border: none;
   cursor: pointer;
   font-weight: 600;
+  transition: all 0.2s ease-in-out;
+}
+
+.dropbtn:hover {
+  border: none;
+  letter-spacing: 1px;
+  font-weight: 700;
 }
 
 .dropdownContent {
   display: none;
   position: absolute;
   background-color: #f9f9f9;
-  min-width: 130px;
+  min-width: 160px;
   z-index: 1001;
   border-radius: 16px;
 }
@@ -42,24 +49,8 @@
   display: block;
 }
 
-@media screen and (max-width: 650px) {
-  .dropdown {
-    position: relative;
-    left: 0;
-    top: 75px;
-  }
-
+@media screen and (max-width: 850px) {
   .dropbtn {
-    border-radius: 5px;
     color: black;
-    box-shadow: 0px 8px 16px 0px rgba(97, 96, 96, 0.2);
-  }
-}
-
-@media screen and (max-height: 830px) {
-  .dropdown {
-    position: relative;
-    left: 0;
-    top: 40px;
   }
 }

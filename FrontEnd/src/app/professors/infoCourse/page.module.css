@@ -1,5 +1,8 @@
 .containerCol {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100vw;
 }
 
 .containerRow {
@@ -13,50 +16,57 @@
 
 .mainContainer {
   display: flex;
+  align-items: center;
+  justify-content: center;
   flex-direction: column;
-  padding: 1rem;
+  height: fit-content;
+  width: 100vw;
 }
 
 .commentsContainer {
   display: flex;
   justify-content: center;
-  margin-top: 3rem;
+  align-items: center;
+  margin-top: 4px;
+  width: 95vw;
 }
 
-
 .chartContainer {
-
   width: 50%;
   min-width: 900px;
   flex-shrink: 0;
   padding-top: 2rem;
   height: 640px;
+  margin-left: 8px;
 }
 
 .cont {
   width: 100vw;
-  height: 74vh;
+  height: 100vh;
   display: flex;
   position: relative;
+  flex-direction: column;
 }
 
-.noFoundContainer {
+.notFoundContainer {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 60vw;
-  height: 15vh;
+  gap: 24px;
+  width: 100vw;
+  height: 85%;
   text-align: center;
   background-color: #f2f2f2;
-  color: #333;
-  font-size: 2rem;
+  color: black;
+  font-size: 64px;
   font-weight: 600;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+}
+
+.infoSVG {
+  fill: black;
+  width: 64px;
+  height: 64px;
 }
 
 .sentimentContainer {
@@ -65,6 +75,7 @@
   align-items: center;
   gap: 8px;
   font-size: 24px;
+  width: 90vw;
 }
 
 .sentimentTitle {
@@ -72,18 +83,17 @@
   margin-bottom: 8px;
   text-align: center;
   font-size: 24px;
+  width: 100vw;
 }
 
-
 @media screen and (max-width: 1350px) {
-
   .chartContainer {
     min-width: 700px;
     height: 540px;
   }
 
   .noFoundContainer {
-    width: 90vw;
+    width: 100vw;
   }
 }
 
@@ -103,7 +113,7 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    width: 100%;
+    width: 100vw;
     gap: 10px;
   }
 }
@@ -120,7 +130,7 @@
 
 @media screen and (max-width: 768px) {
   .cont {
-    height: 83vh;
+    height: 100vh;
   }
 }
 
@@ -129,19 +139,6 @@
     flex-direction: column;
     justify-content: center;
   }
-}
-
-@media screen and (max-width: 650px) {
-  .mainContainer {
-    margin-top: 20px;
-  }
-}
-
-@media screen and (max-height: 800px) {
-  .mainContainer {
-    margin-top: 40px;
-  }
-
 }
 
 @media screen and (max-width: 500px) {
@@ -155,41 +152,109 @@
   }
 }
 
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  width: 100%;
+  height: 34px;
+  color: white;
+  font-size: 0.8rem;
+}
 
+.footerAuthors {
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  width: 100%;
+}
 
-.spinner {
+.footerAuthors a {
+  text-decoration: none;
+  color: white;
+  transition: color 0.15s ease-in-out;
+}
+
+.footerAuthors a:hover {
+  color: #0040c1;
+}
+
+.header {
+  background-color: #007fff;
+  width: 100%;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.headerLeft {
+  width: 25%;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  margin-left: 8px;
+}
+
+.headerCenter {
+  width: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 50vh;
-  position: relative;
 }
 
-.loader {
-  position: relative;
-  border: 8px solid rgba(0, 0, 0, 0.1);
-  border-top: 16px solid #0040C1;
-  border-radius: 50%;
-  width: 160px;
-  height: 160px;
-  animation: spin 1s linear infinite;
+.headerTitle {
+  font-size: 2.5rem;
+  color: #fff;
 }
 
-.image {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100px;
-  height: 100px;
+.headerTitle a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  transition: font-size 0.3s ease;
 }
 
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
+.headerTitle a:hover {
+  font-size: 2.6rem;
+}
+
+.headerRight {
+  width: 25%;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  margin-right: 16px;
+}
+
+.headerRight .adminSVG {
+  fill: white;
+  width: 48px;
+  height: 48px;
+  transition: all 0.2s ease-in-out;
+}
+
+.headerRight .adminSVG:hover {
+  fill: #bebebe;
+}
+
+@media screen and (max-width: 850px) {
+  .headerLeft,
+  .headerRight {
+    display: none;
+  }
+  .headerCenter {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 370px) {
+  .headerTitle a {
+    font-size: 32px;
   }
 
-  100% {
-    transform: rotate(360deg);
+  .headerTitle a:hover {
+    font-size: 34px;
   }
 }

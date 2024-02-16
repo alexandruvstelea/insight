@@ -13,7 +13,7 @@ export default function Footer() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Stelea Alexandru
+            Alexandru Stelea
           </a>{" "}
           &{" "}
           <a
@@ -21,7 +21,7 @@ export default function Footer() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Sava Andrei
+            Andrei Sava
           </a>
         </div>
       </div>

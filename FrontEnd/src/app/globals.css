@@ -130,7 +130,7 @@ blockquote:before,
 blockquote:after,
 q:before,
 q:after {
-  content: '';
+  content: "";
   content: none;
 }
 
@@ -142,15 +142,13 @@ table {
 /*#endregion*/
 
 body {
-  background-color: #EFEFEF;
+  background-color: #efefef;
   height: 100%;
   margin: 0;
   overflow-x: hidden;
 }
 
-
 /*#region Swiper*/
-
 
 .swiper-wrapper {
   padding-bottom: 2.5rem;
@@ -164,7 +162,6 @@ body {
 
 /*#endregion*/
 
-
 .table {
   margin-bottom: 3rem;
   width: 100%;
@@ -175,4 +172,22 @@ body {
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
   font-weight: 700;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #0a66c2;
+  height: 32px;
+  transition: all 1s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #0080ff;
 }
