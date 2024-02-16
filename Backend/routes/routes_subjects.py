@@ -207,6 +207,7 @@ def get_professor_subjects(professor_id):
                         "semester": subject.semester,
                     }
                 )
+            subjects_list.sort(key=lambda subj: subj["name"])
             logger.info(f"Retrieved subjects list. {subjects_list}")
             return jsonify(subjects_list), 200
         else:

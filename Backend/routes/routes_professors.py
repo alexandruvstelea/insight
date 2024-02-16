@@ -58,6 +58,7 @@ def get_professors():
                         "gender": professor.gender,
                     }
                 )
+            professors_list.sort(key=lambda prof: prof["first_name"])
             logger.info(f"Professors retrieved from database.{professors_list}")
             return jsonify(professors_list), 200
         else:
