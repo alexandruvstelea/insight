@@ -1,6 +1,8 @@
 from flask import Blueprint, jsonify, request, abort
+from flask_login import current_user, login_required
 from models.subjects import Subject
 from models.comments import Comment
+from models.programmes import Programme
 from __init__ import db, limiter
 from sqlalchemy import exc
 from datetime import datetime
@@ -8,7 +10,6 @@ from models.courses import Course
 from models.weeks import Week
 from bleach import clean
 from models.ratings import Rating
-from flask_jwt_extended import jwt_required
 import logging
 
 logger = logging.getLogger(__name__)
@@ -16,32 +17,42 @@ subject_bp = Blueprint("subjects", __name__)
 
 
 @subject_bp.route("/subjects", methods=["POST"])
-@jwt_required()
+@login_required
 @limiter.limit("50 per minute")
 def create_subject():
-    try:
-        name = clean(request.form["name"])
-        abbreviation = clean(request.form["abbreviation"])
-        professor_id = clean(request.form["professor_id"])
-        semester = clean(request.form["semester"])
-    except KeyError as e:
-        logger.error(f"An error has occured: missing key in request parameters.\n {e}")
-        abort(400, f"An error has occured: missing key in request parameters.")
-    new_subject = Subject(name, abbreviation, professor_id, semester)
-    try:
-        with db.session.begin():
-            db.session.add(new_subject)
-            db.session.commit()
-            # logger.info(f"New subject added to database.{new_subject}")
-            return {"response": "New subject added to database"}, 200
-    except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while adding obejct to database.\n {e}")
-        return abort(500, f"An error has occured while adding obejct to database.")
+    if current_user.user_type == 0:
+        try:
+            name = clean(request.form["name"])
+            abbreviation = clean(request.form["abbreviation"])
+            professor_id = clean(request.form["professor_id"])
+            semester = clean(request.form["semester"])
+            programme_ids = [int(i) for i in request.form.getlist("programme_ids")]
+        except KeyError as e:
+            logger.error(
+                f"An error has occured: missing key in request parameters.\n {e}"
+            )
+            abort(400, f"An error has occured: missing key in request parameters.")
+
+        try:
+            with db.session.begin():
+                new_subject = Subject(name, abbreviation, professor_id, semester)
+                for pid in programme_ids:
+                    programme = db.session.query(Programme).filter_by(id=pid).first()
+                    if programme:
+                        new_subject.programmes.append(programme)
+                db.session.add(new_subject)
+                db.session.commit()
+                # logger.info(f"New subject added to database.{new_subject}")
+                return {"response": "New subject added to database"}, 200
+        except exc.SQLAlchemyError as e:
+            logger.error(f"An error has occured while adding obejct to database.\n {e}")
+            return abort(500, f"An error has occured while adding obejct to database.")
+    abort(401, "Not authorized.")
 
 
 @subject_bp.route("/subjects", methods=["GET"])
 @limiter.limit("50 per minute")
-def get_subject():
+def get_subjects():
     try:
         subjects = db.session.query(Subject).all()
         subjects_list = []
@@ -54,6 +65,9 @@ def get_subject():
                         "abbreviation": subject.abbreviation,
                         "professor_id": subject.professor_id,
                         "semester": subject.semester,
+                        "programmes": [
+                            {"id": p.id, "name": p.name} for p in subject.programmes
+                        ],
                     }
                 )
             logger.info(f"Retrieved subjects list from database.{subjects_list}")
@@ -79,6 +93,9 @@ def get_subject_by_id(subject_id):
                 "abbreviation": subject.abbreviation,
                 "professor_id": subject.professor_id,
                 "semester": subject.semester,
+                "programmes": [
+                    {"id": p.id, "name": p.name} for p in subject.programmes
+                ],
             }, 200
         else:
             logger.warning(f"No subject with ID={subject_id} found.")
@@ -88,106 +105,68 @@ def get_subject_by_id(subject_id):
         abort(500, f"An error has occured while retrieving objects.")
 
 
-@subject_bp.route("/subjects/sentiment/<int:subject_id>", methods=["GET"])
-def get_subject_sentiment(subject_id):
-    try:
-        comments_sentiment = (
-            db.session.query(Comment.sentiment)
-            .filter(
-                Comment.sentiment != -2,
-                Comment.sentiment != 0,
-                Comment.subject_id == subject_id,
-            )
-            .all()
-        )
-        if comments_sentiment:
-            total_count = len(comments_sentiment)
-            positive_count = sum(
-                1 for sentiment in comments_sentiment if sentiment[0] == 1
-            )
-            negative_count = sum(
-                1 for sentiment in comments_sentiment if sentiment[0] == -1
-            )
-            positive_percentage = (
-                (positive_count / total_count) * 100 if total_count > 0 else 0
-            )
-            negative_percentage = (
-                (negative_count / total_count) * 100 if total_count > 0 else 0
-            )
-            return {
-                "positive": round(positive_percentage, 1),
-                "negative": round(negative_percentage, 1),
-            }
-        else:
-            logger.warning(f"No comments found for subject with ID={subject_id}.")
-            return abort(404, f"No comments found for subject with ID={subject_id}.")
-    except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while retrieving data.\n {e}")
-        abort(500, f"An error has occured while retrieving data.")
-
-
 @subject_bp.route("/subjects/<int:subject_id>", methods=["PUT"])
-@jwt_required()
+@login_required
 @limiter.limit("50 per minute")
 def update_subject(subject_id):
-    try:
-        new_name = clean(request.form["new_name"])
-        new_abbreviation = clean(request.form["new_abbreviation"])
-        new_professor_id = clean(request.form["new_professor_id"])
-        new_semester = clean(request.form["new_semester"])
-    except KeyError as e:
-        logger.error(f"An error has occured: missing key in request parameters.\n {e}")
-        abort(400, f"An error has occured: missing key in request parameters.")
-    try:
-        with db.session.begin():
-            subject = db.session.query(Subject).filter_by(id=subject_id).first()
-            if subject.semester != new_semester:
-                db.session.query(Course).filter(Course.subject_id == subject_id).update(
-                    {"semester": new_semester}
-                )
-                db.session.query(Rating).filter_by(subject_id=subject_id).delete()
-            affected_rows = (
-                db.session.query(Subject)
-                .filter_by(id=subject_id)
-                .update(
-                    {
-                        "name": new_name,
-                        "abbreviation": new_abbreviation,
-                        "professor_id": new_professor_id,
-                        "semester": new_semester,
-                    }
-                )
+    if current_user.user_type == 0:
+        try:
+            new_name = clean(request.form["new_name"])
+            new_abbreviation = clean(request.form["new_abbreviation"])
+            new_professor_id = clean(request.form["new_professor_id"])
+            new_semester = clean(request.form["new_semester"])
+            programme_ids = [int(i) for i in request.form.getlist("programme_ids")]
+        except KeyError as e:
+            logger.error(
+                f"An error has occured: missing key in request parameters.\n {e}"
             )
-
-            if affected_rows > 0:
+            abort(400, f"An error has occured: missing key in request parameters.")
+        try:
+            with db.session.begin():
+                subject = db.session.query(Subject).filter_by(id=subject_id).first()
+                if not subject:
+                    abort(404, f"No subject with ID={subject_id} to update")
+                subject.name = new_name
+                subject.abbreviation = new_abbreviation
+                subject.professor_id = new_professor_id
+                subject.semester = new_semester
+                new_programmes = (
+                    db.session.query(Programme)
+                    .filter(Programme.id.in_(programme_ids))
+                    .all()
+                )
+                subject.programmes = new_programmes
                 db.session.commit()
                 logger.info(f"Subject with ID={subject_id} updated")
                 return {"response": f"Subject with ID={subject_id} updated"}, 200
-            else:
-                logger.warning(f"No subject with ID={subject_id} to update")
-                return abort(404, f"No subject with ID={subject_id} to update")
-    except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while retrieving objects.\n {e}")
-        abort(500, f"An error has occured while retrieving objects.")
+        except exc.SQLAlchemyError as e:
+            logger.error(f"An error has occured while retrieving objects.\n {e}")
+            abort(500, f"An error has occured while retrieving objects.")
+    abort(401, "Not authorized.")
 
 
 @subject_bp.route("/subjects/<int:subject_id>", methods=["DELETE"])
-@jwt_required()
+@login_required
 @limiter.limit("50 per minute")
 def delete_subjects(subject_id):
-    try:
-        with db.session.begin():
-            affected_rows = db.session.query(Subject).filter_by(id=subject_id).delete()
-            if affected_rows > 0:
-                db.session.commit()
-                logger.info(f"Subject with ID={subject_id} deleted")
-                return {"response": f"Subject with ID={subject_id} deleted"}, 200
-            else:
-                logger.warning(f"No subject with ID={subject_id} to delete")
-                return abort(404, f"No subject with ID={subject_id} to delete")
-    except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while deleting objects.\n {e}")
-        abort(500, f"An error has occured while deleting objects.")
+    if current_user.user_type == 0:
+        try:
+            with db.session.begin():
+                subject = db.session.query(Subject).filter_by(id=subject_id).first()
+                if subject:
+                    for programme in subject.programmes:
+                        programme.subjects.remove(subject)
+                    db.session.delete(subject)
+                    db.session.commit()
+                    logger.info(f"Subject with ID={subject_id} deleted")
+                    return {"response": f"Subject with ID={subject_id} deleted"}, 200
+                else:
+                    logger.warning(f"No subject with ID={subject_id} to delete")
+                    return abort(404, f"No subject with ID={subject_id} to delete")
+        except exc.SQLAlchemyError as e:
+            logger.error(f"An error has occured while deleting objects.\n {e}")
+            abort(500, f"An error has occured while deleting objects.")
+    abort(401, "Not authorized.")
 
 
 @subject_bp.route("/subjects/professor/<int:professor_id>", methods=["GET"])

@@ -4,6 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from flask_jwt_extended import JWTManager
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+from flask_login import LoginManager
 import logging
 from dotenv import load_dotenv
 from os import getenv
@@ -21,6 +22,7 @@ limiter = Limiter(
     storage_uri=f"mongodb://{MONGO_USER}:{MONGO_PASSWORD}@{MONGO_HOST}:{MONGO_PORT}",
     strategy="fixed-window",
 )
+login_manager = LoginManager()
 
 
 def init_app():
@@ -30,6 +32,7 @@ def init_app():
 
     db.init_app(app)
     limiter.init_app(app)
+    login_manager.init_app(app)
 
     with app.app_context():
         from models.ratings import Rating
@@ -39,6 +42,8 @@ def init_app():
         from models.subjects import Subject
         from models.weeks import Week
         from models.comments import Comment
+        from models.programmes import Programme
+        from models.users import User
 
         db.create_all()
 
@@ -48,9 +53,10 @@ def init_app():
         from routes.routes_rooms import room_bp
         from routes.routes_subjects import subject_bp
         from routes.routes_weeks import weeks_bp
-        from routes.routes_admin import admin_bp
         from routes.routes_comments import comments_bp
         from routes.routes_archive import archive_bp
+        from routes.routes_programmes import programme_bp
+        from routes.routes_users import user_bp
 
         app.register_blueprint(course_bp)
         app.register_blueprint(professor_bp)
@@ -58,9 +64,10 @@ def init_app():
         app.register_blueprint(room_bp)
         app.register_blueprint(subject_bp)
         app.register_blueprint(weeks_bp)
-        app.register_blueprint(admin_bp)
         app.register_blueprint(comments_bp)
         app.register_blueprint(archive_bp)
+        app.register_blueprint(programme_bp)
+        app.register_blueprint(user_bp)
 
         logging.basicConfig(
             filename="app.log",

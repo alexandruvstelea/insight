@@ -1,9 +1,9 @@
 from flask import Blueprint, jsonify, request, abort
+from flask_login import current_user, login_required
 from models.rooms import Room
 from __init__ import db, limiter
 from sqlalchemy import exc
 from bleach import clean
-from flask_jwt_extended import jwt_required
 import logging
 
 logger = logging.getLogger(__name__)
@@ -11,24 +11,31 @@ room_bp = Blueprint("rooms", __name__)
 
 
 @room_bp.route("/rooms", methods=["POST"])
-@jwt_required()
+@login_required
 @limiter.limit("50 per minute")
 def create_room():
-    try:
-        name = clean(request.form["name"])
-    except KeyError as e:
-        logger.error(f"An error has occured: missing key in request parameters.\n {e}")
-        abort(400, f"An error has occured: missing key in request parameters.")
-    new_room = Room(name)
-    try:
-        with db.session.begin():
+    if current_user.user_type == 0:
+        try:
+            name = clean(request.form["name"])
+        except KeyError as e:
+            logger.error(
+                f"An error has occured: missing key in request parameters.\n {e}"
+            )
+            abort(400, f"An error has occured: missing key in request parameters.")
+        new_room = Room(name)
+        try:
             db.session.add(new_room)
             db.session.commit()
             logger.info("New room added to database")
             return {"response": "New room added to database"}, 200
-    except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while adding object to the database.\n {e}")
-        return abort(500, f"An error has occured while adding object to the database.")
+        except exc.SQLAlchemyError as e:
+            logger.error(
+                f"An error has occured while adding object to the database.\n {e}"
+            )
+            return abort(
+                500, f"An error has occured while adding object to the database."
+            )
+    abort(401, "Not authorized")
 
 
 @room_bp.route("/rooms", methods=["GET"])
@@ -67,44 +74,52 @@ def get_room_by_id(room_id):
 
 
 @room_bp.route("/rooms/<int:room_id>", methods=["PUT"])
-@jwt_required()
+@login_required
 @limiter.limit("50 per minute")
 def update_room(room_id):
-    try:
-        new_room = clean(request.form["new_room"])
-    except KeyError as e:
-        logger.error(f"An error has occured: missing key in request parameters.\n {e}")
-        abort(400, f"An error has occured: missing key in request parameters.")
-    try:
-        with db.session.begin():
-            affected_rows = (
-                db.session.query(Room).filter_by(id=room_id).update({"name": new_room})
+    if current_user.user_type == 0:
+        try:
+            new_room = clean(request.form["new_room"])
+        except KeyError as e:
+            logger.error(
+                f"An error has occured: missing key in request parameters.\n {e}"
             )
-            if affected_rows > 0:
-                db.session.commit()
-                logger.info(f"Room with ID={room_id} updated")
-                return {"response": f"Room with ID={room_id} updated"}, 200
-            else:
-                logger.warning(f"No room with ID={room_id} to update")
-                return abort(404, f"No room with ID={room_id} to update")
-    except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while updating object.\n {e}")
-        return abort(500, f"An error has occured while updating object.")
+            abort(400, f"An error has occured: missing key in request parameters.")
+        try:
+            with db.session.begin():
+                affected_rows = (
+                    db.session.query(Room)
+                    .filter_by(id=room_id)
+                    .update({"name": new_room})
+                )
+                if affected_rows > 0:
+                    db.session.commit()
+                    logger.info(f"Room with ID={room_id} updated")
+                    return {"response": f"Room with ID={room_id} updated"}, 200
+                else:
+                    logger.warning(f"No room with ID={room_id} to update")
+                    return abort(404, f"No room with ID={room_id} to update")
+        except exc.SQLAlchemyError as e:
+            logger.error(f"An error has occured while updating object.\n {e}")
+            return abort(500, f"An error has occured while updating object.")
+    abort(401, "Not authorized")
 
 
 @room_bp.route("/rooms/<int:room_id>", methods=["DELETE"])
-@jwt_required()
+@login_required
 @limiter.limit("50 per minute")
 def delete_room(room_id):
-    try:
-        affected_rows = db.session.query(Room).filter_by(id=room_id).delete()
-        if affected_rows > 0:
-            db.session.commit()
-            logger.info(f"Room with ID={room_id} deleted")
-            return {"response": f"Room with ID={room_id} deleted"}, 200
-        else:
-            logger.warning(f"No room with ID={room_id} to delete")
-            return abort(404, f"No room with ID={room_id} to delete")
-    except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while updating object.\n {e}")
-        return abort(500, f"An error has occured while updating object.")
+    if current_user.user_type == 0:
+        try:
+            affected_rows = db.session.query(Room).filter_by(id=room_id).delete()
+            if affected_rows > 0:
+                db.session.commit()
+                logger.info(f"Room with ID={room_id} deleted")
+                return {"response": f"Room with ID={room_id} deleted"}, 200
+            else:
+                logger.warning(f"No room with ID={room_id} to delete")
+                return abort(404, f"No room with ID={room_id} to delete")
+        except exc.SQLAlchemyError as e:
+            logger.error(f"An error has occured while updating object.\n {e}")
+            return abort(500, f"An error has occured while updating object.")
+    abort(401, "Not authorized.")
