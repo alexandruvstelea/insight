@@ -1,6 +1,10 @@
 .card {
   border-radius: 24px;
   perspective: 500px;
+  -webkit-perspective: 500px; 
+  -moz-perspective: 500px;    
+  -ms-perspective: 500px;     
+  -o-perspective: 500px;      
   width: 340px;
   height: 540px;
 }
@@ -12,11 +16,24 @@
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d; 
+  -moz-transform-style: preserve-3d;    
+  -ms-transform-style: preserve-3d;     
+  -o-transform-style: preserve-3d;      
   transition: transform 1s;
+  -webkit-transition: -webkit-transform 1s; 
+  -moz-transition: -moz-transform 1s;       
+  -o-transition: -o-transform 1s;           
+  -ms-transition: -ms-transform 1s;         
+
 }
 
 .card.flipped .content {
   transform: rotateX(180deg);
+  -webkit-transform: rotateX(180deg); 
+  -moz-transform: rotateX(180deg);    
+  -ms-transform: rotateX(180deg);     
+  -o-transform: rotateX(180deg);      
 }
 
 .front,
@@ -25,6 +42,16 @@
   height: 100%;
   width: 100%;
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden; 
+  -moz-backface-visibility: hidden;    
+  -ms-backface-visibility: hidden;     
+  -o-backface-visibility: hidden;      
+  transform: rotateX(0deg);
+  -webkit-transform: rotateX(0deg); 
+  -moz-transform: rotateX(0deg);    
+  -ms-transform: rotateX(0deg);     
+  -o-transform: rotateX(0deg);    
+
 }
 
 .front {
@@ -38,6 +65,11 @@
   justify-content: center;
   align-items: center;
   transform: rotateX(180deg);
+  -webkit-transform: rotateX(180deg);
+  -moz-transform: rotateX(180deg);   
+  -ms-transform: rotateX(180deg);    
+  -o-transform: rotateX(180deg);     
+
 }
 
 .flipButton {
@@ -151,6 +183,10 @@
   margin: 14px;
   cursor: pointer;
   transition: all 0.3s ease;
+  -webkit-transition: all 0.3s ease; 
+  -moz-transition: all 0.3s ease;    
+  -o-transition: all 0.3s ease;      
+  -ms-transition: all 0.3s ease;     
   font-family: inherit;
 }
 
