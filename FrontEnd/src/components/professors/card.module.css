@@ -1,10 +1,10 @@
 .card {
   border-radius: 24px;
   perspective: 500px;
-  -webkit-perspective: 500px; 
-  -moz-perspective: 500px;    
-  -ms-perspective: 500px;     
-  -o-perspective: 500px;      
+  -webkit-perspective: 500px;
+  -moz-perspective: 500px;
+  -ms-perspective: 500px;
+  -o-perspective: 500px;
   width: 340px;
   height: 540px;
 }
@@ -16,24 +16,23 @@
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
-  -webkit-transform-style: preserve-3d; 
-  -moz-transform-style: preserve-3d;    
-  -ms-transform-style: preserve-3d;     
-  -o-transform-style: preserve-3d;      
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  -ms-transform-style: preserve-3d;
+  -o-transform-style: preserve-3d;
   transition: transform 1s;
-  -webkit-transition: -webkit-transform 1s; 
-  -moz-transition: -moz-transform 1s;       
-  -o-transition: -o-transform 1s;           
-  -ms-transition: -ms-transform 1s;         
-
+  -webkit-transition: -webkit-transform 1s;
+  -moz-transition: -moz-transform 1s;
+  -o-transition: -o-transform 1s;
+  -ms-transition: -ms-transform 1s;
 }
 
 .card.flipped .content {
   transform: rotateX(180deg);
-  -webkit-transform: rotateX(180deg); 
-  -moz-transform: rotateX(180deg);    
-  -ms-transform: rotateX(180deg);     
-  -o-transform: rotateX(180deg);      
+  -webkit-transform: rotateX(180deg);
+  -moz-transform: rotateX(180deg);
+  -ms-transform: rotateX(180deg);
+  -o-transform: rotateX(180deg);
 }
 
 .front,
@@ -42,16 +41,15 @@
   height: 100%;
   width: 100%;
   backface-visibility: hidden;
-  -webkit-backface-visibility: hidden; 
-  -moz-backface-visibility: hidden;    
-  -ms-backface-visibility: hidden;     
-  -o-backface-visibility: hidden;      
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  -o-backface-visibility: hidden;
   transform: rotateX(0deg);
-  -webkit-transform: rotateX(0deg); 
-  -moz-transform: rotateX(0deg);    
-  -ms-transform: rotateX(0deg);     
-  -o-transform: rotateX(0deg);    
-
+  -webkit-transform: rotateX(0deg);
+  -moz-transform: rotateX(0deg);
+  -ms-transform: rotateX(0deg);
+  -o-transform: rotateX(0deg);
 }
 
 .front {
@@ -66,10 +64,9 @@
   align-items: center;
   transform: rotateX(180deg);
   -webkit-transform: rotateX(180deg);
-  -moz-transform: rotateX(180deg);   
-  -ms-transform: rotateX(180deg);    
-  -o-transform: rotateX(180deg);     
-
+  -moz-transform: rotateX(180deg);
+  -ms-transform: rotateX(180deg);
+  -o-transform: rotateX(180deg);
 }
 
 .flipButton {
@@ -82,31 +79,6 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-}
-
-.coursesList {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  height: 75%;
-  overflow-y: auto;
-  gap: 12px;
-}
-
-.coursesList li {
-  line-height: 2;
-}
-
-.coursesList::-webkit-scrollbar {
-  width: 12px;
-}
-
-.coursesList::-webkit-scrollbar-thumb {
-  background-color: #6e93f7;
-  border: 4px solid white;
-  background-clip: padding-box;
-  border-radius: 9999px;
 }
 
 .imageContent,
@@ -161,18 +133,6 @@
   margin-left: 14px;
 }
 
-.titleCurs {
-  font-size: 24px;
-  font-weight: 500;
-  color: #333;
-  padding: 10px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  text-align: center;
-  border-bottom: #c3c3c3 1px solid;
-  height: 5%;
-}
-
 .buttonCard {
   border: none;
   font-size: 20px;
@@ -183,10 +143,10 @@
   margin: 14px;
   cursor: pointer;
   transition: all 0.3s ease;
-  -webkit-transition: all 0.3s ease; 
-  -moz-transition: all 0.3s ease;    
-  -o-transition: all 0.3s ease;      
-  -ms-transition: all 0.3s ease;     
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
   font-family: inherit;
 }
 

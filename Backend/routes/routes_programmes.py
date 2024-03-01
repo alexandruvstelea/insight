@@ -25,11 +25,10 @@ def create_programme():
             abort(400, f"An error has occured: missing key in request parameters.")
         new_programme = Programme(name, abbreviation)
         try:
-            with db.session.begin():
-                db.session.add(new_programme)
-                db.session.commit()
-                logger.info("New programme added to database")
-                return {"response": "New programme added to database"}, 200
+            db.session.add(new_programme)
+            db.session.commit()
+            logger.info("New programme added to database")
+            return {"response": "New programme added to database"}, 200
         except exc.SQLAlchemyError as e:
             logger.error(
                 f"An error has occured while adding object to the database.\n {e}"

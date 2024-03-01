@@ -29,7 +29,6 @@ def generate_weeks():
 
         def add_weeks(number_of_weeks, interval_start, counter):
             try:
-                with db.session.begin():
                     for x in range(number_of_weeks):
                         counter += 1
                         if counter <= 14:

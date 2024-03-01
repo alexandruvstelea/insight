@@ -9,7 +9,7 @@ import styles from "./page.module.css";
 import React, { useEffect, useState } from "react";
 import LinearProgress from "@mui/material/LinearProgress";
 import "react-toastify/dist/ReactToastify.css";
-import DropdownArchive from "@/components/infoCourse/DropdownArchive";
+import DropdownArchive from "@/components/header/DropdownArchive";
 import Link from "next/link";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";

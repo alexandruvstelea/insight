@@ -1,81 +1,21 @@
 "use client";
 import Image from "next/image";
-import React, { useState, useEffect } from "react";
-import Subject from "./Subject";
+import React, { useState } from "react";
 import styles from "./card.module.css";
 import { Box, Typography } from "@mui/material";
 import GradeRoundedIcon from "@mui/icons-material/GradeRounded";
+import SubjectsList from "./SubjectsList";
 
 export default function Card({ professor }) {
   const [isFlipped, setIsFlipped] = useState(false);
-  const [subjects, setSubjects] = useState([]);
-  const [average, setAverage] = useState();
   const imagePath =
     professor.gender === "male"
-      ? `/images/maleImages/M16.png`
-      : "/images/femaleAvatar4.png";
-
-  async function fetchSubject(professor_id) {
-    const selectedYear = sessionStorage.getItem("selectedYear");
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    const currentMonth = currentDate.getMonth() + 1;
-    const adjustedYear = currentMonth < 10 ? currentYear - 1 : currentYear;
-    let url = "";
-    if (selectedYear == adjustedYear) {
-      url = `${process.env.REACT_APP_API_URL}/subjects/professor/${professor_id}`;
-    } else {
-      url = `${process.env.REACT_APP_API_URL}/subjects_archive/professor/${selectedYear}/${professor_id}`;
-    }
-
-    try {
-      const response = await fetch(url);
-      const complete_response = await response.json();
-      setSubjects(complete_response);
-      console.log(complete_response);
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  async function fetchAvgProfessor(professor_id) {
-    const selectedYear = sessionStorage.getItem("selectedYear");
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    const currentMonth = currentDate.getMonth() + 1;
-    const adjustedYear = currentMonth < 10 ? currentYear - 1 : currentYear;
-    let url = "";
-    if (selectedYear == adjustedYear) {
-      url = `${process.env.REACT_APP_API_URL}/professors/average/${professor_id}`;
-    } else {
-      url = `${process.env.REACT_APP_API_URL}/professors_archive/average/${selectedYear}/${professor_id}`;
-    }
-    try {
-      const response = await fetch(url);
-
-      if (!response.ok) {
-        if (response.status === 404) {
-          setAverage("N/A");
-        }
-        throw new Error(`HTTP error: ${response.status}`);
-      }
-      const complete_response = await response.json();
-      setAverage(complete_response.average);
-    } catch (err) {
-      console.log(err);
-    }
-  }
+      ? `/images/maleAvatar.png`
+      : "/images/femaleAvatar.png";
 
   const flipCard = () => {
     setIsFlipped(!isFlipped);
-    if (!isFlipped) {
-      fetchSubject(professor.id);
-    }
   };
-
-  useEffect(() => {
-    fetchAvgProfessor(professor.id);
-  }, []);
 
   return (
     <>
@@ -117,7 +57,7 @@ export default function Card({ professor }) {
                     fontWeight: 600,
                   }}
                 >
-                  {average}
+                  {professor.average}
                 </Typography>
               </Box>
               <button className={styles.buttonCard} onClick={flipCard}>
@@ -126,17 +66,12 @@ export default function Card({ professor }) {
             </div>
           </div>
           <div className={styles.back}>
-            <h1 className={styles.titleCurs}>Cursuri</h1>
-            <ul className={styles.coursesList}>
-              {subjects.map((subject) => (
-                <Subject key={subject.id} subject={subject} />
-              ))}
-            </ul>
+            <SubjectsList subjects={professor.subjects} />
             <button
               className={`${styles.buttonCard} ${styles.backButton}`}
               onClick={flipCard}
             >
-              Înapoi
+              &#206;napoi
             </button>
           </div>
         </div>

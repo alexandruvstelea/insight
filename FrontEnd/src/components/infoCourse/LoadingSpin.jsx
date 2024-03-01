@@ -10,11 +10,6 @@ export default function Loading() {
         <Header />
         <div className={styles.spinner}>
           <div className={styles.loader}></div>
-          <img
-            src={"/images/unitbvLogo.png"}
-            alt="Loading"
-            className={styles.image}
-          />
         </div>
         <Footer />
       </div>

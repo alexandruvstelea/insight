@@ -3,7 +3,7 @@ import styles from "./dropdownArchive.module.css";
 
 export default function DropdownArchive() {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedYear, setSelectedYear] = useState("Arhivă ▼");
+  const [selectedYear, setSelectedYear] = useState("Arhiv&#259;");
   const dropdownRef = useRef(null);
 
   useEffect(() => {
@@ -12,7 +12,7 @@ export default function DropdownArchive() {
     const currentMonth = currentDate.getMonth() + 1;
     const adjustedYear = currentMonth < 10 ? currentYear - 1 : currentYear;
 
-    const storedYear = sessionStorage.getItem("rangeYear") || "Arhivă ▼";
+    const storedYear = sessionStorage.getItem("rangeYear") || "Arhiv&#259;";
 
     if (
       !sessionStorage.getItem("selectedYear") ||

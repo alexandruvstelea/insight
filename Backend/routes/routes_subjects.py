@@ -34,7 +34,6 @@ def create_subject():
             abort(400, f"An error has occured: missing key in request parameters.")
 
         try:
-            with db.session.begin():
                 new_subject = Subject(name, abbreviation, professor_id, semester)
                 for pid in programme_ids:
                     programme = db.session.query(Programme).filter_by(id=pid).first()
@@ -151,7 +150,6 @@ def update_subject(subject_id):
 def delete_subjects(subject_id):
     if current_user.user_type == 0:
         try:
-            with db.session.begin():
                 subject = db.session.query(Subject).filter_by(id=subject_id).first()
                 if subject:
                     for programme in subject.programmes:

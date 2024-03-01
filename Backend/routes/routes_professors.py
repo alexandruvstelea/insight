@@ -36,11 +36,10 @@ def create_professor():
             abort(400, f"An error has occured: missing key in request parameters.")
         new_professor = Professor(first_name, last_name, title, gender)
         try:
-            with db.session.begin():
-                db.session.add(new_professor)
-                db.session.commit()
-                # logger.info(f"New professor added to database. {new_professor}")
-                return {"response": "New professor added to database"}, 200
+            db.session.add(new_professor)
+            db.session.commit()
+            # logger.info(f"New professor added to database. {new_professor}")
+            return {"response": "New professor added to database"}, 200
         except exc.SQLAlchemyError as e:
             logger.error(f"An error has occured while adding object to database.\n {e}")
             abort(500, f"An error has occured while adding object to database.")
@@ -184,7 +183,6 @@ def update_professor(professor_id):
 def delete_professor(professor_id):
     if current_user.user_type == 0:
         try:
-            with db.session.begin():
                 affected_rows = (
                     db.session.query(Professor).filter_by(id=professor_id).delete()
                 )
