@@ -20,7 +20,6 @@ def create_professor():
         try:
             first_name = clean(request.form["first_name"])
             last_name = clean(request.form["last_name"])
-            title = clean(request.form["title"])
             gender = clean(request.form["gender"])
             if gender not in ["male", "female"]:
                 logger.error(
@@ -34,7 +33,7 @@ def create_professor():
                 f"An error has occurred: missing key in request parameters.\n {e}"
             )
             abort(400, f"An error has occured: missing key in request parameters.")
-        new_professor = Professor(first_name, last_name, title, gender)
+        new_professor = Professor(first_name, last_name, gender)
         try:
             db.session.add(new_professor)
             db.session.commit()
@@ -59,7 +58,6 @@ def get_professors():
                         "id": professor.id,
                         "first_name": professor.first_name,
                         "last_name": professor.last_name,
-                        "title": professor.title,
                         "gender": professor.gender,
                     }
                 )
@@ -85,7 +83,6 @@ def get_professor_by_id(professor_id):
                 "id": professor.id,
                 "first_name": professor.first_name,
                 "last_name": professor.last_name,
-                "title": professor.title,
                 "gender": professor.gender,
             }, 200
         else:
@@ -134,7 +131,6 @@ def update_professor(professor_id):
         try:
             new_first_name = clean(request.form["new_first_name"])
             new_last_name = clean(request.form["new_last_name"])
-            new_title = clean(request.form["new_title"])
             new_gender = clean(request.form["new_gender"])
             if new_gender not in ["male", "female"]:
                 logger.error(
@@ -157,7 +153,6 @@ def update_professor(professor_id):
                         {
                             "first_name": new_first_name,
                             "last_name": new_last_name,
-                            "title": new_title,
                             "gender": new_gender,
                         }
                     )
@@ -183,18 +178,16 @@ def update_professor(professor_id):
 def delete_professor(professor_id):
     if current_user.user_type == 0:
         try:
-                affected_rows = (
-                    db.session.query(Professor).filter_by(id=professor_id).delete()
-                )
-                if affected_rows > 0:
-                    db.session.commit()
-                    logger.info(f"Professor with ID={professor_id} deleted")
-                    return {
-                        "response": f"Professor with ID={professor_id} deleted"
-                    }, 200
-                else:
-                    logger.warning(f"No professor with ID={professor_id} to delete")
-                    return abort(404, f"No professor with ID={professor_id} to delete")
+            affected_rows = (
+                db.session.query(Professor).filter_by(id=professor_id).delete()
+            )
+            if affected_rows > 0:
+                db.session.commit()
+                logger.info(f"Professor with ID={professor_id} deleted")
+                return {"response": f"Professor with ID={professor_id} deleted"}, 200
+            else:
+                logger.warning(f"No professor with ID={professor_id} to delete")
+                return abort(404, f"No professor with ID={professor_id} to delete")
         except exc.SQLAlchemyError as e:
             logger.error(f"An error while updating the object.\n {e}")
             return abort(500, f"An error while updating the object.")
