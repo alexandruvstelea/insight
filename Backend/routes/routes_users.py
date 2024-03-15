@@ -2,11 +2,14 @@ from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Blueprint, jsonify, request, abort
 from __init__ import db, limiter, login_manager
+from flask_cors import cross_origin
+from flask_wtf.csrf import generate_csrf
 from models.programmes import Programme
 from dotenv import load_dotenv
 from models.users import User
 from random import randint
 from sqlalchemy import exc
+
 from bleach import clean
 import logging
 import yagmail
@@ -72,6 +75,7 @@ def register():
                 abort(400, "Invalid programme ID.")
             existing_user = db.session.query(User).filter_by(email=email).first()
             if existing_user:
+                logger.warning("User already exists.")
                 abort(400, "User already exists.")
             new_user = User(
                 email=email,
@@ -111,6 +115,7 @@ def login():
                 and check_password_hash(user.password, password)
                 and user.active == 0
             ):
+            #! nu inteleg aici, nu mai bine punem abort ?
                 return {"message": "Account not activated."}
             abort(401, "Invalid username or password!")
     except exc.SQLAlchemyError as e:
@@ -118,7 +123,7 @@ def login():
         return abort(500, f"An error has occured while authenticating the user.")
 
 
-@user_bp.route("/request-reset", methods=["GET"])
+@user_bp.route("/request-reset", methods=["POST"])
 @limiter.limit("10 per minute")
 def request_reset_password():
     try:
@@ -147,7 +152,7 @@ def request_reset_password():
         return abort(500, f"An error has occured while sending email.")
 
 
-@user_bp.route("/reset", methods=["GET"])
+@user_bp.route("/reset", methods=["POST"])
 @limiter.limit("10 per minute")
 def reset_password():
     try:
@@ -241,6 +246,7 @@ def activate_account():
                 return {"message": "Account activated."}
             else:
                 abort(400, "Invalid credentials or account already active.")
+                #! Daca pui litere da 500 
     except exc.SQLAlchemyError as e:
         logger.error(f"An error has occured while activating account.\n {e}")
         return abort(500, f"An error has occured while activating account.")
@@ -293,7 +299,6 @@ def send_registration_email(code: int, email: str):
             f"An error has occured while sending an email to {email}.\n {str(e)}"
         )
         return e
-
 
 def send_password_email(code: int, email: str):
     try:
