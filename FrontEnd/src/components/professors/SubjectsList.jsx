@@ -1,11 +1,6 @@
 import styles from "./subjectsList.module.css";
 import Link from "next/link";
 export default function SubjectsList({ subjects }) {
-  // const router = useRouter();
-  // function handleClick(id) {
-  //   router.push(`/professors/infoCourse?subjectId=${id}`);
-  // }
-
   return (
     <>
       <h1 className={styles.titleCurs}>Cursuri</h1>

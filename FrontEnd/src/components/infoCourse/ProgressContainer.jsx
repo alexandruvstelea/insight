@@ -1,19 +1,20 @@
-import LinearProgress from '@mui/material/LinearProgress';
-import styles from './progressContainer.module.css'
-export default function ProgressContainer({ name, percentage }) {
-  const MIN = 0;
-  const MAX = 100;
-
-  const calculatePercentage = (value) => ((value - MIN) * 100) / (MAX - MIN);
+import LinearProgress from "@mui/material/LinearProgress";
+import styles from "./progressContainer.module.css";
+export default function ProgressContainer({ name, average }) {
+  const normalizedAverage = (average / 5) * 100;
   return (
     <>
       <div className={styles.progressContainer}>
         <span className={styles.textM}>{name}</span>
         <div className={styles.progressBar}>
-          <LinearProgress style={{ height: '7px' }} variant="determinate" value={calculatePercentage(percentage)} />
+          <LinearProgress
+            style={{ height: "7px" }}
+            variant="determinate"
+            value={normalizedAverage}
+          />
         </div>
-        <span className={styles.textMM} >{percentage}%</span>
+        <span className={styles.textMM}>5</span>
       </div>
     </>
-  )
+  );
 }

@@ -1,5 +1,4 @@
 "use client";
-import { useState, useEffect } from "react";
 import { Navigation, Pagination, A11y } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import styles from "./customSlider.module.css";

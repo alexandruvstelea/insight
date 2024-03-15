@@ -1,28 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./dropdownArchive.module.css";
-
+import Link from "next/link";
 export default function DropdownArchive() {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedYear, setSelectedYear] = useState("Arhiv&#259;");
+  const [selectedYear, setSelectedYear] = useState("Arhiv\u0103");
   const dropdownRef = useRef(null);
 
   useEffect(() => {
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    const currentMonth = currentDate.getMonth() + 1;
-    const adjustedYear = currentMonth < 10 ? currentYear - 1 : currentYear;
-
-    const storedYear = sessionStorage.getItem("rangeYear") || "Arhiv&#259;";
-
-    if (
-      !sessionStorage.getItem("selectedYear") ||
-      sessionStorage.getItem("selectedYear") === ""
-    ) {
-      sessionStorage.setItem("selectedYear", adjustedYear);
-    }
-
-    setSelectedYear(storedYear);
-
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsOpen(false);
@@ -53,6 +37,12 @@ export default function DropdownArchive() {
         </button>
         {isOpen && (
           <div className={styles.dropdownContent}>
+            <Link
+              className={styles.buttonCourses}
+              href={`/professors/archive/2023-2024`}
+            >
+              2023-2024
+            </Link>
             <button onClick={() => handleSelectYear("2023-2024")}>
               2023-2024
             </button>

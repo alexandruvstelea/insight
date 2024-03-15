@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -19,53 +19,12 @@ ChartJS.register(
   Legend
 );
 
-function getOptions(chartOrientation) {
-  return {
-    responsive: true,
-    maintainAspectRatio: false,
-    indexAxis: chartOrientation === "horizontalBar" ? "y" : "x",
-    plugins: {
-      legend: {
-        display: false,
-      },
-    },
-    scales: {
-      x: {
-        ticks: {
-          stepSize: 1,
-        },
-        beginAtZero: true,
-        suggestedMax: 5,
-      },
-      y: {
-        ticks: {
-          stepSize: 1,
-        },
-        beginAtZero: true,
-        suggestedMax: 5,
-      },
-    },
-  };
-}
-
-export default function BarChart({ subjectId, onError }) {
-  const [error404, setError404] = useState(false);
+export default function BarChart({ graphData }) {
   const isWindowAvailable = typeof window !== "undefined";
   const [viewportWidth, setViewportWidth] = useState(
     isWindowAvailable ? window.innerWidth : null
   );
 
-  const [chartData, setChartData] = useState({
-    labels: [],
-    datasets: [
-      {
-        data: [],
-        backgroundColor: "#4070F4",
-        borderColor: "blue",
-        borderWidth: 1,
-      },
-    ],
-  });
   const chartOrientation = viewportWidth < 600 ? "horizontalBar" : "bar";
 
   useEffect(() => {
@@ -79,64 +38,118 @@ export default function BarChart({ subjectId, onError }) {
     }
   }, [isWindowAvailable]);
 
-  async function fetchSubjectGraphData(subjectId) {
-    const selectedYear = sessionStorage.getItem("selectedYear");
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    const currentMonth = currentDate.getMonth() + 1;
-    const adjustedYear = currentMonth < 10 ? currentYear - 1 : currentYear;
-    let url = "";
-    if (selectedYear == adjustedYear) {
-      url = `${process.env.REACT_APP_API_URL}/graph?subject_id=${subjectId}`;
-    } else {
-      url = `${process.env.REACT_APP_API_URL}/graph_archive/${selectedYear}?subject_id=${subjectId}`;
-    }
+  const colors = [
+    "rgba(75, 192, 192, 0.5)",
+    "rgba(255, 99, 132, 0.5)",
+    "rgba(54, 162, 235, 0.5)",
+    "rgba(255, 206, 86, 0.5)",
+    "rgba(153, 102, 255, 0.5)",
+  ];
 
-    try {
-      const response = await fetch(url, { method: "GET" });
+  const characteristics = [
+    "overall",
+    "clarity",
+    "comprehension",
+    "interactivity",
+    "relevance",
+  ];
 
-      if (!response.ok) {
-        if (response.status === 404) {
-          setError404(true);
-        }
-        throw new Error(`HTTP error: ${response.status}`);
-      }
+  const characteristicData = {};
+  characteristics.forEach((characteristic) => {
+    characteristicData[characteristic] = Object.keys(graphData).map(
+      (week) => graphData[week][characteristic]
+    );
+  });
 
-      const data = await response.json();
+  const options = {
+    indexAxis: chartOrientation === "horizontalBar" ? "y" : "x",
+    responsive: true,
 
-      const sortedWeeks = Object.keys(data).sort((a, b) => {
-        return parseInt(a.split("_")[1], 10) - parseInt(b.split("_")[1], 10);
-      });
-
-      const weeksNumber = sortedWeeks.map(
-        (week) => `Sapt ${week.split("_")[1]}`
-      );
-      const values = sortedWeeks.map((week) => data[week]);
-
-      setChartData((prevChartData) => ({
-        labels: weeksNumber,
-        datasets: [
-          {
-            ...prevChartData.datasets[0],
-            data: values,
+    plugins: {
+      legend: {
+        position: "top",
+        onClick: () => {},
+      },
+      title: {
+        display: true,
+        text: "Chart.js Bar Chart",
+      },
+    },
+    scales: {
+      x: {
+        ticks: {
+          stepSize: 1,
+        },
+        beginAtZero: true,
+        suggestedMax: 5,
+        title: {
+          display: true,
+          text: "Saptamana",
+          font: {
+            size: 14,
           },
-        ],
-      }));
-    } catch (error) {
-      console.error("Error fetching graph data:", error);
-    }
+        },
+      },
+      y: {
+        title: {
+          display: true,
+          text: "Media",
+          font: {
+            size: 14,
+          },
+        },
+        ticks: {
+          stepSize: 1,
+        },
+        beginAtZero: true,
+        suggestedMax: 5,
+      },
+    },
+
+    elements: {
+      bar: {
+        borderWidth: 1,
+        borderColor: "rgba(0,0,0,0.4)",
+      },
+    },
+  };
+
+  const labels = [];
+  for (let i = 1; i <= 14; i++) {
+    labels.push(`${i}S`);
   }
-  useEffect(() => {
-    if (subjectId) {
-      fetchSubjectGraphData(subjectId);
-    }
-  }, [subjectId]);
 
-  useEffect(() => {
-    if (error404) {
-      onError(true);
-    }
-  }, [error404]);
+  const [selectedDataset, setSelectedDataset] = useState("overall");
 
-  return <Bar options={getOptions(chartOrientation)} data={chartData} />;
+  const handleDatasetChange = (event) => {
+    setSelectedDataset(event.target.value);
+  };
+
+  const datasets = characteristics.map((characteristic, index) => ({
+    label: characteristic,
+    data: characteristicData[characteristic],
+    backgroundColor: colors[index],
+  }));
+
+  const selectedData = datasets.find(
+    (dataset) => dataset.label === selectedDataset
+  );
+
+  return (
+    <div>
+      <select value={selectedDataset} onChange={handleDatasetChange}>
+        {characteristics.map((characteristic, index) => (
+          <option key={index} value={characteristic}>
+            {characteristic}
+          </option>
+        ))}
+      </select>
+      <Bar
+        options={options}
+        data={{ labels, datasets: [selectedData] }}
+        width={800}
+        height={550}
+      />
+    </div>
+  );
 }

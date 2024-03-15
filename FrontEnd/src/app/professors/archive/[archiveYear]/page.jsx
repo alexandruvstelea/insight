@@ -1,14 +1,14 @@
 "use server";
-import styles from "./page.module.css";
-import { fetchProfessorsData } from "../Actions/getProfessorData";
+import styles from "@/app/professors/page.module.css";
+import { fetchOldProfessorsData } from "@/app/Actions/getOldProfessorData";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 import CustomSlider from "@/components/professors/CustomSlider";
 import SearchBar from "@/components/professors/SearchBar";
-export default async function Professors({ searchParams }) {
+export default async function Professors({ searchParams, params }) {
   const search = searchParams.search;
-
-  const professors = await fetchProfessorsData();
+  console.log(search);
+  const professors = await fetchOldProfessorsData(params.archiveYear);
 
   const filteredProfessors = search
     ? [
@@ -26,7 +26,6 @@ export default async function Professors({ searchParams }) {
         ),
       ]
     : professors;
-
   return (
     <>
       {professors && professors.length > 0 ? (
