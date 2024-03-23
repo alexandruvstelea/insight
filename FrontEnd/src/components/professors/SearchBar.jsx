@@ -1,7 +1,7 @@
 "use client";
-import styles from "./searchBar.module.css";
+import React ,{ useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import styles from "./searchBar.module.css";
 import TextField from "@mui/material/TextField";
 export default function SearchBar() {
   const router = useRouter();

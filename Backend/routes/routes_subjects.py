@@ -195,7 +195,7 @@ def get_professor_subjects(professor_id):
         abort(500, f"An error has occured while retrieving objects.")
 
 
-@subject_bp.route("/subjects/current", methods=["GET"])
+@subject_bp.route("/subjects/current", methods=["POST"])
 @limiter.limit("50 per minute")
 def get_current_subject():
     try:

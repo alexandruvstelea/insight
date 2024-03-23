@@ -1,60 +1,63 @@
-'use client'
-import { tableConfigDef, columnOption } from './getTableConfig'
-import React, { useMemo, useState } from 'react';
-import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
-import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
-import TextField from '@mui/material/TextField';
+"use client";
+import { tableConfigDef, columnOption } from "./getTableConfig";
+import React, { useMemo, useState } from "react";
+import {
+  MaterialReactTable,
+  useMaterialReactTable,
+} from "material-react-table";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
+import TextField from "@mui/material/TextField";
 
 export default function Weeks({ weeks, fetchWeeks }) {
   const [open, setOpen] = useState(false);
 
   const addWeeks = async (weeks) => {
-    weeks.preventDefault()
-    const token = sessionStorage.getItem('access_token');
+    weeks.preventDefault();
+
     const formData = new FormData(weeks.target);
 
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/weeks`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
+        method: "POST",
+        credentials: "include",
         body: formData,
       });
 
       if (!response.ok) {
-        throw new Error('Failed to add weeks');
+        throw new Error("Failed to add weeks");
       }
       fetchWeeks();
       handleClose();
     } catch (err) {
-      console.error('Error adding weeks:', err);
+      console.error("Error adding weeks:", err);
     }
   };
 
   const deleteWeeks = async () => {
-    const token = sessionStorage.getItem('access_token');
-
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/weeks`, {
         method: "DELETE",
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        }
+        credentials: "include",
       });
 
       if (!response.ok) {
-        throw new Error('Failed to delete weeks');
+        throw new Error("Failed to delete weeks");
       }
       fetchWeeks();
-    }
-    catch (err) {
-      console.error('Fetch error:', err);
+    } catch (err) {
+      console.error("Fetch error:", err);
     }
   };
 
   const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const options = { year: "numeric", month: "long", day: "numeric" };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
@@ -67,35 +70,31 @@ export default function Weeks({ weeks, fetchWeeks }) {
   };
 
   const openDeleteConfirmModal = () => {
-    if (window.confirm('Ești sigur ca vrei sa stergi săptămânile?')) {
+    if (window.confirm("Ești sigur ca vrei sa stergi săptămânile?")) {
       deleteWeeks();
     }
   };
 
   const columns = useMemo(
     () => [
-      columnOption('id', 'ID', 80, 40, false),
-      columnOption('start', 'Început', 220, 100, false, {
+      columnOption("id", "ID", 80, 40, false),
+      columnOption("start", "Început", 220, 100, false, {
         Cell: ({ cell }) => formatDate(cell.getValue()),
       }),
-      columnOption('end', 'Sfarșit', 220, 100, false, {
+      columnOption("end", "Sfarșit", 220, 100, false, {
         Cell: ({ cell }) => formatDate(cell.getValue()),
       }),
-      columnOption('semester', 'Semestru', 170, 100, false),
+      columnOption("semester", "Semestru", 170, 100, false),
     ],
-    [],
+    []
   );
-
 
   const table = useMaterialReactTable({
     ...tableConfigDef(columns, weeks),
     renderTopToolbarCustomActions: () => (
       <>
-        <Box sx={{ display: 'flex', gap: '1rem' }}>
-          <Button
-            variant="contained"
-            onClick={handleClickOpen}
-          >
+        <Box sx={{ display: "flex", gap: "1rem" }}>
+          <Button variant="contained" onClick={handleClickOpen}>
             Adaugă Săptămânile
           </Button>
           <Button
@@ -103,7 +102,6 @@ export default function Weeks({ weeks, fetchWeeks }) {
             color="error"
             onClick={() => openDeleteConfirmModal()}
           >
-
             Sterge Săptămânile
           </Button>
         </Box>
@@ -111,26 +109,25 @@ export default function Weeks({ weeks, fetchWeeks }) {
     ),
   });
 
-
   return (
     <>
       <Dialog
         open={open}
         onClose={handleClose}
         sx={{
-          '& .MuiDialog-paper': { width: '444px' }
+          "& .MuiDialog-paper": { width: "444px" },
         }}
       >
-        <form onSubmit={addWeeks} >
+        <form onSubmit={addWeeks}>
           <DialogTitle variant="h4">Adaugă Săptămâni</DialogTitle>
           <DialogContent
-            sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+            sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}
           >
             <TextField
-              type='date'
+              type="date"
               label="Prima zi din anul universitar"
               name="year_start"
-              variant='standard'
+              variant="standard"
               required
               InputLabelProps={{
                 shrink: true,
@@ -138,81 +135,77 @@ export default function Weeks({ weeks, fetchWeeks }) {
             />
             <TextField
               type="number"
-              label='Activitate didactică'
-              name='intervals'
-              variant='standard'
+              label="Activitate didactică"
+              name="intervals"
+              variant="standard"
               required
             />
             <TextField
               type="number"
-              label='Vacanță'
-              name='intervals'
-              variant='standard'
+              label="Vacanță"
+              name="intervals"
+              variant="standard"
               required
-
             />
             <TextField
               type="number"
-              label='Activitate didactică'
-              name='intervals'
-              variant='standard'
+              label="Activitate didactică"
+              name="intervals"
+              variant="standard"
               required
-
             />
             <TextField
               type="number"
-              label='Sesiune'
-              name='intervals'
-              variant='standard'
+              label="Sesiune"
+              name="intervals"
+              variant="standard"
               required
-
             />
             <TextField
               type="number"
-              label='Vacantă'
-              name='intervals'
-              variant='standard'
+              label="Vacantă"
+              name="intervals"
+              variant="standard"
               required
-
             />
             <TextField
               type="number"
-              label='Activitate didactică'
-              name='intervals'
-              variant='standard'
+              label="Activitate didactică"
+              name="intervals"
+              variant="standard"
               required
-
             />
             <TextField
               type="number"
-              label='Vacanță'
-              name='intervals'
-              variant='standard'
+              label="Vacanță"
+              name="intervals"
+              variant="standard"
               required
-
             />
             <TextField
               type="number"
-              label='Activitate didactică'
-              name='intervals'
-              variant='standard'
+              label="Activitate didactică"
+              name="intervals"
+              variant="standard"
               required
-
             />
           </DialogContent>
-          <DialogActions >
+          <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button type='submit' variant='contained' color='primary'>Save</Button>
+            <Button type="submit" variant="contained" color="primary">
+              Save
+            </Button>
           </DialogActions>
         </form>
       </Dialog>
-      <div className='table'>
+      <div className="table">
         <div>
-          <DialogTitle sx={{ textAlign: 'center' }} variant="h3">Tabel Săptămâni</DialogTitle>
+          <DialogTitle sx={{ textAlign: "center" }} variant="h3">
+            Tabel Săptămâni
+          </DialogTitle>
           <MaterialReactTable table={table} />
         </div>
       </div>
     </>
-
-  )
+  );
 }

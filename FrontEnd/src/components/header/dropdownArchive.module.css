@@ -10,6 +10,7 @@
   border: none;
   cursor: pointer;
   font-weight: 600;
+  letter-spacing: 1px;
   transition: all 0.2s ease-in-out;
 }
 
@@ -17,6 +18,7 @@
   border: none;
   letter-spacing: 1px;
   font-weight: 700;
+  background-color: #0070e0;
 }
 
 .dropdownContent {
@@ -26,13 +28,14 @@
   min-width: 160px;
   z-index: 1001;
   border-radius: 16px;
+  text-align: center;
 }
 
-.dropdownContent button {
+.buttonArchive {
   background-color: transparent;
   border: none;
   font-size: 20px;
-  width: 100%;
+  width: 80%;
   color: black;
   padding: 12px 16px;
   text-decoration: none;
@@ -40,7 +43,7 @@
   border-radius: 16px;
 }
 
-.dropdownContent button:hover {
+.buttonArchive:hover {
   cursor: pointer;
   background-color: #bebebe;
 }

@@ -1,55 +1,52 @@
-'use client'
-import { tableConfig, columnOption } from './getTableConfig'
-import React, { useMemo } from 'react';
-import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
-import { DialogTitle } from '@mui/material';
-
+"use client";
+import { tableConfig, columnOption } from "./getTableConfig";
+import React, { useMemo } from "react";
+import {
+  MaterialReactTable,
+  useMaterialReactTable,
+} from "material-react-table";
+import { DialogTitle } from "@mui/material";
 
 export default function Rooms({ rooms, fetchRooms }) {
-
   const addRoom = async (room) => {
-    const token = sessionStorage.getItem('access_token');
     const formData = new FormData();
-    formData.append('name', room.name);
+    formData.append("name", room.name);
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/rooms`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
+        method: "POST",
+        credentials: "include",
         body: formData,
       });
 
       if (!response.ok) {
-        throw new Error('Failed to add room');
+        throw new Error("Failed to add room");
       }
       fetchRooms();
     } catch (err) {
-      console.error('Error adding room:', err);
+      console.error("Error adding room:", err);
     }
   };
 
   const updateRoom = async (room) => {
-    const token = sessionStorage.getItem('access_token');
-
     const formData = new FormData();
-    formData.append('new_room', room.name);
+    formData.append("new_room", room.name);
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/rooms/${room.id}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-        body: formData,
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/rooms/${room.id}`,
+        {
+          method: "PUT",
+          credentials: "include",
+          body: formData,
+        }
+      );
 
       if (!response.ok) {
-        throw new Error('Failed to update room');
+        throw new Error("Failed to update room");
       }
       fetchRooms();
     } catch (err) {
-      console.error('Error updating room:', err);
+      console.error("Error updating room:", err);
     }
   };
 
@@ -64,23 +61,32 @@ export default function Rooms({ rooms, fetchRooms }) {
 
   const columns = useMemo(
     () => [
-      columnOption('id', 'ID', 80, 40, false),
-      columnOption('name', 'Nume Sală', 200, 40, true),
+      columnOption("id", "ID", 80, 40, false),
+      columnOption("name", "Nume Sală", 200, 40, true),
     ],
-    [],
+    []
   );
 
-  const table = useMaterialReactTable(tableConfig(columns, rooms, 'sală de curs', handleCreateRoom, handleSaveRoom, 'rooms', fetchRooms));
+  const table = useMaterialReactTable(
+    tableConfig(
+      columns,
+      rooms,
+      "sală de curs",
+      handleCreateRoom,
+      handleSaveRoom,
+      "rooms",
+      fetchRooms
+    )
+  );
 
   return (
     <>
       <div className="table">
-        <DialogTitle sx={{ textAlign: 'center' }} variant="h3">Tabel Săli de Curs</DialogTitle>
+        <DialogTitle sx={{ textAlign: "center" }} variant="h3">
+          Tabel Săli de Curs
+        </DialogTitle>
         <MaterialReactTable table={table} />
       </div>
     </>
-  )
+  );
 }
-
-
-

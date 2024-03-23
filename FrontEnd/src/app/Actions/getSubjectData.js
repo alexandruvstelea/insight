@@ -34,3 +34,17 @@ export const fetchProgrammesData = async () => {
 
   return programmes;
 };
+
+export const fetchCommentsData = async (subjectId) => {
+  const response = await fetch(
+    `${process.env.REACT_APP_API_URL}/comments/${subjectId}`,
+    {
+      cache: "no-store",
+    }
+  );
+
+  if (!response.ok) return [];
+  const comments = await response.json();
+
+  return comments;
+};

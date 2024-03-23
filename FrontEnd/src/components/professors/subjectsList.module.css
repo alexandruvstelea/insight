@@ -1,12 +1,13 @@
 .buttonCourses {
+  display: inline-block;
+  text-decoration: none;
   width: 256px;
-  height: 50px;
+  height: 45px;
   background-color: #007fff;
   border-radius: 8px;
   border-width: 0;
   box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
     rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
-  color: black;
   cursor: pointer;
   overflow: hidden;
   text-align: center;
@@ -17,8 +18,10 @@
   will-change: box-shadow, transform;
   font-size: 18px;
   font-family: inherit;
-  font-weight: 500;
+  font-weight: 600;
   margin-top: 4px;
+  padding-top: 4px;
+
   color: white;
 }
 

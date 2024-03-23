@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import styles from "./chart.module.css";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -64,15 +65,11 @@ export default function BarChart({ graphData }) {
   const options = {
     indexAxis: chartOrientation === "horizontalBar" ? "y" : "x",
     responsive: true,
-
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: "top",
         onClick: () => {},
-      },
-      title: {
-        display: true,
-        text: "Chart.js Bar Chart",
       },
     },
     scales: {
@@ -113,6 +110,12 @@ export default function BarChart({ graphData }) {
       },
     },
   };
+  const axisLabels =
+    chartOrientation === "horizontalBar"
+      ? ["Media", "Saptamana"]
+      : ["Saptamana", "Media"];
+  options.scales.x.title.text = axisLabels[0];
+  options.scales.y.title.text = axisLabels[1];
 
   const labels = [];
   for (let i = 1; i <= 14; i++) {
@@ -136,20 +139,22 @@ export default function BarChart({ graphData }) {
   );
 
   return (
-    <div>
-      <select value={selectedDataset} onChange={handleDatasetChange}>
-        {characteristics.map((characteristic, index) => (
-          <option key={index} value={characteristic}>
-            {characteristic}
-          </option>
-        ))}
-      </select>
+    <>
       <Bar
         options={options}
         data={{ labels, datasets: [selectedData] }}
-        width={800}
-        height={550}
+        width="600"
+        height="250"
       />
-    </div>
+      <div className={styles.selectContainer}>
+        <select value={selectedDataset} onChange={handleDatasetChange}>
+          {characteristics.map((characteristic, index) => (
+            <option key={index} value={characteristic}>
+              {characteristic}
+            </option>
+          ))}
+        </select>
+      </div>
+    </>
   );
 }

@@ -15,11 +15,7 @@ export default function Header() {
             <Link href="/professors">FEEDBACK IESC</Link>
           </h1>
         </div>
-        <div className={styles.headerRight}>
-          <Link href="/adminLogin">
-            <h1>Login</h1>
-          </Link>
-        </div>
+        <div className={styles.headerRight}></div>
       </div>
     </>
   );

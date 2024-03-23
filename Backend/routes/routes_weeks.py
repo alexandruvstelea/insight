@@ -95,11 +95,10 @@ def get_weeks():
 def reset_weeks():
     if current_user.user_type == 0:
         try:
-            with db.session.begin():
-                db.session.execute(text('TRUNCATE TABLE "Weeks" RESTART IDENTITY;'))
-                db.session.commit()
-                logger.info("Weeks deleted from database.")
-                return {"response": "Weeks deleted from database."}, 200
+            db.session.execute(text('TRUNCATE TABLE "Weeks" RESTART IDENTITY;'))
+            db.session.commit()
+            logger.info("Weeks deleted from database.")
+            return {"response": "Weeks deleted from database."}, 200
         except exc.SQLAlchemyError as e:
             logger.error(f"An error has occured while deleting objects.\n {e}")
             return abort(500, f"An error has occured while deleting objects.")

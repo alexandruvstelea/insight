@@ -1,28 +1,101 @@
-.containerCol {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100vw;
-}
-
-.containerRow {
-  display: flex;
-  width: 50%;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 40px;
-}
-
 .mainContainer {
   display: flex;
-  align-items: center;
-  justify-content: center;
   flex-direction: column;
-  height: fit-content;
-  width: 100vw;
 }
 
+.titleContainer {
+  margin-top: 2px;
+  text-align: center;
+}
+.professorName {
+  font-size: 24px;
+  font-weight: 600;
+}
+.courseName {
+  margin-top: 2px;
+}
+
+.dataContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100vw;
+  height: 650px;
+}
+.chartContainer {
+  width: 60%;
+  padding-left: 8px;
+}
+
+.rightContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 40%;
+  gap: 10px;
+}
+.pieChart {
+  width: 380px;
+  height: 380px;
+}
+
+.dummy {
+  display: none;
+}
+@media screen and (max-width: 1450px) {
+  .dataContainer {
+    height: 550px;
+  }
+  .chartContainer {
+    width: 65%;
+  }
+
+  .rightContainer {
+    width: 35%;
+  }
+  .pieChart {
+    width: 300px;
+    height: 300px;
+  }
+}
+@media screen and (max-width: 1100px) {
+  .dataContainer {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    height: auto;
+  }
+  .chartContainer {
+    max-height: 500px;
+    padding-left: 0;
+    width: 90%;
+  }
+  .rightContainer {
+    width: 50%;
+    flex-direction: row-reverse;
+    justify-content: center;
+  }
+}
+@media screen and (max-width: 768px) {
+  .rightContainer {
+    flex-direction: column-reverse;
+    width: 100%;
+    gap: 0;
+  }
+  .pieChart {
+    width: 400px;
+    height: 400px;
+  }
+}
+@media screen and (max-width: 420px) {
+  .pieChart {
+    width: 350px;
+    height: 350px;
+  }
+}
+/* 
 .commentsContainer {
   display: flex;
   justify-content: center;
@@ -31,15 +104,7 @@
   width: 95vw;
 }
 
-.chartContainer {
-  width: 50%;
-  min-width: 900px;
-  flex-shrink: 0;
-  padding-top: 2rem;
 
-  height: 640px;
-  margin-left: 8px;
-}
 
 .cont {
   width: 100vw;
@@ -70,22 +135,6 @@
   height: 64px;
 }
 
-.sentimentContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  font-size: 24px;
-  width: 90vw;
-}
-
-.sentimentTitle {
-  margin-top: 25px;
-  margin-bottom: 8px;
-  text-align: center;
-  font-size: 24px;
-  width: 100vw;
-}
 
 @media screen and (max-width: 1350px) {
   .chartContainer {
@@ -259,3 +308,4 @@
     font-size: 34px;
   }
 }
+*/

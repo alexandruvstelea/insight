@@ -41,27 +41,6 @@ export default function UserLogin() {
     }
   };
 
-  async function checkLoginStatus() {
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/check-login`,
-        {
-          method: "GET",
-          credentials: "include",
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-      } else {
-        console.error("Request failed with status:", response.status);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  }
-
   return (
     <>
       <div className={styles.mainContiner}>

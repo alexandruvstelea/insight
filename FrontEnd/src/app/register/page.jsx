@@ -1,7 +1,7 @@
 "use client";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
-import styles from "../userLogin/page.module.css";
+import styles from "../login/page.module.css";
 import Link from "next/link";
 import { fetchProgrammesData } from "@/app/Actions/getSubjectData";
 import { extractTextFromHTML } from "@/app/Actions/functions";
@@ -34,7 +34,7 @@ export default function UserRegister() {
         {
           method: "POST",
           body: registrationFormData,
-          credentials: 'include',
+          credentials: "include",
         }
       );
 
@@ -64,7 +64,7 @@ export default function UserRegister() {
         {
           method: "POST",
           body: activationFormData,
-          credentials: 'include',
+          credentials: "include",
         }
       );
 
@@ -91,7 +91,7 @@ export default function UserRegister() {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/resend`, {
         method: "PUT",
         body: resendData,
-        credentials: 'include',
+        credentials: "include",
       });
 
       if (response.ok) {

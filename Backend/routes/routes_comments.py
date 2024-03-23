@@ -80,10 +80,12 @@ def get_comments():
         if comments:
             for comment in comments:
                 if comment.comment != "":
+                    timestamp = comment.datetime.strftime("%d %b %Y") if comment.datetime else "00"
                     comment_dict = {
                         "id": comment.id,
                         "comment": comment.comment,
-                        "timestamp": comment.datetime.strftime("%d %b %Y"),
+                        # "timestamp": comment.datetime.strftime("%d %b %Y"),
+                        "timestamp": timestamp,
                         "email": "Anonim",
                     }
                     if not comment.is_anonymous:

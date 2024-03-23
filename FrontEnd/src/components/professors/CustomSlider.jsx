@@ -1,12 +1,13 @@
 "use client";
+import React from "react";
+import styles from "./customSlider.module.css";
 import { Navigation, Pagination, A11y } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import styles from "./customSlider.module.css";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/a11y";
-import Card from "./Card";
+import Card from "@/components/professors/Card";
 
 export default function CustomSlider({ professors }) {
   const swiperSettings = {

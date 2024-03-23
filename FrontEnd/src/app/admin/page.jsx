@@ -1,25 +1,22 @@
-'use client'
-import React, { useState, useEffect } from 'react';
-import styles from './page.module.css'
-import Weeks from '@/components/admin/Weeks';
-import Professors from '@/components/admin/Professors';
-import Subjects from '@/components/admin/Subjects';
-import Rooms from '@/components/admin/Rooms';
-import Courses from '@/components/admin/Courses';
-import Comments from '@/components/admin/Comments';
-import useTokenCheck from '@/components/admin/useTokenCheck';
-import Button from '@mui/joy/Button';
-import { ToastContainer } from 'react-toastify';
+"use client";
+import React, { useState, useEffect } from "react";
+import styles from "./page.module.css";
+import Weeks from "@/components/admin/Weeks";
+import Professors from "@/components/admin/Professors";
+import Subjects from "@/components/admin/Subjects";
+import Rooms from "@/components/admin/Rooms";
+import Courses from "@/components/admin/Courses";
+import Comments from "@/components/admin/Comments";
+import Button from "@mui/joy/Button";
+import { ToastContainer } from "react-toastify";
 
-export default function AdminPage() {
+export default function Admin() {
   const [weeks, setWeeks] = useState();
   const [professors, setProfessors] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [rooms, setRooms] = useState([]);
   const [courses, setCourses] = useState();
   const [comments, setComments] = useState();
-
-  useTokenCheck();
 
   const fetchWeeks = async () => {
     try {
@@ -28,30 +25,32 @@ export default function AdminPage() {
         if (response.status === 404) {
           setWeeks([]);
         } else {
-          throw new Error('Failed to fetch');
+          throw new Error("Failed to fetch");
         }
       }
       const data = await response.json();
-      setWeeks(data)
+      setWeeks(data);
     } catch (err) {
-      console.error('Fetch error:', err);
+      console.error("Fetch error:", err);
     }
   };
 
   const fetchProfessors = async () => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/professors`);
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/professors`
+      );
       if (!response.ok) {
         if (response.status === 404) {
           setProfessors([]);
         } else {
-          throw new Error('Failed to fetch');
+          throw new Error("Failed to fetch");
         }
       }
       const data = await response.json();
       setProfessors(data);
     } catch (err) {
-      console.error('Fetch error:', err);
+      console.error("Fetch error:", err);
     }
   };
 
@@ -62,13 +61,13 @@ export default function AdminPage() {
         if (response.status === 404) {
           setSubjects([]);
         } else {
-          throw new Error('Failed to fetch');
+          throw new Error("Failed to fetch");
         }
       }
       const data = await response.json();
-      setSubjects(data)
+      setSubjects(data);
     } catch (err) {
-      console.error('Fetch error:', err);
+      console.error("Fetch error:", err);
     }
   };
 
@@ -79,13 +78,13 @@ export default function AdminPage() {
         if (response.status === 404) {
           setRooms([]);
         } else {
-          throw new Error('Failed to fetch');
+          throw new Error("Failed to fetch");
         }
       }
       const data = await response.json();
-      setRooms(data)
+      setRooms(data);
     } catch (err) {
-      console.error('Fetch error:', err);
+      console.error("Fetch error:", err);
     }
   };
 
@@ -96,14 +95,14 @@ export default function AdminPage() {
         if (response.status === 404) {
           setCourses([]);
         } else {
-          throw new Error('Failed to fetch');
+          throw new Error("Failed to fetch");
         }
       }
 
       const data = await response.json();
-      setCourses(data)
+      setCourses(data);
     } catch (err) {
-      console.error('Fetch error:', err);
+      console.error("Fetch error:", err);
     }
   };
   const fetchCommnets = async () => {
@@ -113,14 +112,14 @@ export default function AdminPage() {
         if (response.status === 404) {
           setComments([]);
         } else {
-          throw new Error('Failed to fetch');
+          throw new Error("Failed to fetch");
         }
       }
 
       const data = await response.json();
-      setComments(data)
+      setComments(data);
     } catch (err) {
-      console.error('Fetch error:', err);
+      console.error("Fetch error:", err);
     }
   };
 
@@ -130,7 +129,7 @@ export default function AdminPage() {
     fetchRooms();
     fetchSubjects();
     fetchCourses();
-    fetchCommnets()
+    fetchCommnets();
   }, []);
 
   return (
@@ -148,30 +147,49 @@ export default function AdminPage() {
         theme="colored"
       />
 
-      <div className={styles.tablesContainer} >
+      <div className={styles.tablesContainer}>
         <Button
           component="a"
           href="/"
           size="lg"
-          sx={{ width: '32rem', margin: '2rem 0', fontSize: '1.5rem', fontFamily: 'inherit' }}
+          sx={{
+            width: "32rem",
+            margin: "2rem 0",
+            fontSize: "1.5rem",
+            fontFamily: "inherit",
+          }}
         >
           Către Pagina Principală
         </Button>
         <Weeks weeks={weeks} fetchWeeks={fetchWeeks} />
         <Professors professors={professors} fetchProfessors={fetchProfessors} />
-        <Subjects professors={professors} subjects={subjects} fetchSubjects={fetchSubjects} />
+        <Subjects
+          professors={professors}
+          subjects={subjects}
+          fetchSubjects={fetchSubjects}
+        />
         <Rooms rooms={rooms} fetchRooms={fetchRooms} />
-        <Courses courses={courses} rooms={rooms} subjects={subjects} fetchCourses={fetchCourses} />
+        <Courses
+          courses={courses}
+          rooms={rooms}
+          subjects={subjects}
+          fetchCourses={fetchCourses}
+        />
         <Comments comments={comments} fetchCommnets={fetchCommnets} />
         <Button
           component="a"
           href="/"
           size="lg"
-          sx={{ width: '32rem', margin: '0 0 3.5rem 0', fontSize: '1.5rem', fontFamily: 'inherit' }}
+          sx={{
+            width: "32rem",
+            margin: "0 0 3.5rem 0",
+            fontSize: "1.5rem",
+            fontFamily: "inherit",
+          }}
         >
           Către Pagina Principală
         </Button>
-      </div >
+      </div>
     </>
   );
-};
+}

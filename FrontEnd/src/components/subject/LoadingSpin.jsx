@@ -1,5 +1,5 @@
-import styles from "./loadingSpin.module.css";
 import React from "react";
+import styles from "./loadingSpin.module.css";
 import Footer from "../footer/Footer";
 import Header from "../header/Header";
 

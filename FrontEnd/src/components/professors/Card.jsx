@@ -1,11 +1,10 @@
 "use client";
-import Image from "next/image";
 import React, { useState } from "react";
 import styles from "./card.module.css";
+import Image from "next/image";
 import { Box, Typography } from "@mui/material";
 import GradeRoundedIcon from "@mui/icons-material/GradeRounded";
-import SubjectsList from "./SubjectsList";
-
+import SubjectsList from "@/components/professors/SubjectsList";
 export default function Card({ professor }) {
   const [isFlipped, setIsFlipped] = useState(false);
   const imagePath =
@@ -66,7 +65,11 @@ export default function Card({ professor }) {
             </div>
           </div>
           <div className={styles.back}>
-            <SubjectsList subjects={professor.subjects} />
+            <SubjectsList
+              subjects={professor.subjects}
+              first_name={professor.first_name}
+              last_name={professor.last_name}
+            />
             <button
               className={`${styles.buttonCard} ${styles.backButton}`}
               onClick={flipCard}

@@ -1,0 +1,50 @@
+.progressContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 6px 0;
+}
+
+.progressBar {
+  margin: 0 5px;
+  width: 224px;
+}
+
+.textLeft {
+  text-align: right;
+  font-size: 18px;
+  width: 130px;
+}
+
+.textRight {
+  font-size: 18px;
+  width: 35px;
+}
+
+@media screen and (min-width: 1100px) and (max-width: 1450px) {
+  .progressBar {
+    width: 160px;
+  }
+
+  .textM {
+    font-size: 16px;
+  }
+
+  .textMM {
+    font-size: 16px;
+  }
+}
+@media screen and (max-width: 420px) {
+  .progressBar {
+    width: 160px;
+  }
+
+  .textM {
+    font-size: 16px;
+  }
+
+  .textMM {
+    font-size: 16px;
+  }
+}

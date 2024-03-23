@@ -1,9 +1,10 @@
+"use client";
 import React from "react";
 import { Box, Paper, Typography } from "@mui/material";
 import Masonry from "@mui/lab/Masonry";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-export default function DisplayComments({ comments }) {
+export default function Comments({ comments }) {
   const theme = createTheme({
     breakpoints: {
       values: {
@@ -29,9 +30,9 @@ export default function DisplayComments({ comments }) {
           }}
         >
           <Masonry columns={{ xs: 1, sm: 1, md: 2, lg: 3 }} spacing={4}>
-            {comments.map((commentData) => (
+            {comments.map((comment) => (
               <Box
-                key={commentData.id}
+                key={comment.id}
                 sx={{
                   width: 500,
                   wordBreak: "break-word",
@@ -64,14 +65,14 @@ export default function DisplayComments({ comments }) {
                     }}
                   >
                     <Typography variant="body2" color="#0040C1">
-                      {commentData.email}
+                      {comment.email}
                     </Typography>
                     <Typography
                       variant="body2"
                       color="text.secondary"
                       sx={{ ml: 2 }}
                     >
-                      {commentData.timestamp}
+                      {comment.timestamp}
                     </Typography>
                   </Box>
                   <Typography
@@ -79,15 +80,15 @@ export default function DisplayComments({ comments }) {
                     component="div"
                     sx={{ fontSize: 17 }}
                   >
-                    {commentData.comment}
+                    {comment.comment}
                   </Typography>
-                  {commentData.grade && (
+                  {comment.grade && (
                     <Typography
                       variant="h6"
                       component="div"
                       sx={{ fontSize: 17, fontWeight: "bold" }}
                     >
-                      Notă obținută: {commentData.grade}
+                      Notă obținută: {comment.grade}
                     </Typography>
                   )}
                 </Paper>

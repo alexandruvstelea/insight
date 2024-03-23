@@ -1,6 +1,8 @@
+import React from "react";
 import styles from "./subjectsList.module.css";
 import Link from "next/link";
-export default function SubjectsList({ subjects }) {
+export default function SubjectsList({ subjects, first_name, last_name }) {
+  console.log(first_name, last_name);
   return (
     <>
       <h1 className={styles.titleCurs}>Cursuri</h1>
@@ -11,7 +13,9 @@ export default function SubjectsList({ subjects }) {
               <li key={subject.id}>
                 <Link
                   className={styles.buttonCourses}
-                  href={`/professors/${subject.id}`}
+                  href={{
+                    pathname: `/professors/${subject.id}`,
+                  }}
                 >
                   {subject.name}
                 </Link>

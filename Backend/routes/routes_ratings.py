@@ -74,6 +74,7 @@ def get_average_ratings(subject_id):
             )
             return jsonify(
                 {
+                    #! Da eroare backendu daca intru pe un curs fara note  "clarity": round(average_ratings.clarity, 1) TypeError: type NoneType doesn't define __round__ method
                     "clarity": round(average_ratings.clarity, 1),
                     "interactivity": round(average_ratings.interactivity, 1),
                     "relevance": round(average_ratings.relevance, 1),

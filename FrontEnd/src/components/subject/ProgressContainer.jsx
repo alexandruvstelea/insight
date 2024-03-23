@@ -1,11 +1,13 @@
-import LinearProgress from "@mui/material/LinearProgress";
+"use server";
+import React from "react";
 import styles from "./progressContainer.module.css";
-export default function ProgressContainer({ name, average }) {
+import LinearProgress from "@mui/material/LinearProgress";
+export default async function ProgressContainer({ name, average }) {
   const normalizedAverage = (average / 5) * 100;
   return (
     <>
       <div className={styles.progressContainer}>
-        <span className={styles.textM}>{name}</span>
+        <span className={styles.textLeft}>{name}</span>
         <div className={styles.progressBar}>
           <LinearProgress
             style={{ height: "7px" }}
@@ -13,7 +15,7 @@ export default function ProgressContainer({ name, average }) {
             value={normalizedAverage}
           />
         </div>
-        <span className={styles.textMM}>5</span>
+        <span className={styles.textRight}>{average}</span>
       </div>
     </>
   );

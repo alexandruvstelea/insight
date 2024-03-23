@@ -1,8 +1,9 @@
+"use server";
 import React from "react";
-import Rating from "@mui/material/Rating";
 import styles from "./starRatings.module.css";
+import Rating from "@mui/material/Rating";
 
-export default function StarRating({ overall }) {
+export default async function StarRating({ overall }) {
   return (
     <>
       <div className={styles.starContent}>
