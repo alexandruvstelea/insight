@@ -145,7 +145,6 @@ def update_professor(professor_id):
             )
             abort(400, f"An error has occured: missing key in request parameters.")
         try:
-            with db.session.begin():
                 affected_rows = (
                     db.session.query(Professor)
                     .filter_by(id=professor_id)

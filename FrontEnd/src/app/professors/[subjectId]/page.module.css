@@ -3,16 +3,17 @@
   flex-direction: column;
 }
 
-.titleContainer {
-  margin-top: 2px;
-  text-align: center;
-}
 .professorName {
   font-size: 24px;
   font-weight: 600;
 }
 .courseName {
   margin-top: 2px;
+}
+
+.titleContainer {
+  margin-top: 2px;
+  text-align: center;
 }
 
 .dataContainer {

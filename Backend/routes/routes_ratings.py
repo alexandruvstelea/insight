@@ -68,13 +68,12 @@ def get_average_ratings(subject_id):
             .filter(Rating.subject_id == subject_id)
             .one()
         )
-        if average_ratings:
+        if average_ratings.clarity and average_ratings.interactivity and average_ratings.relevance and average_ratings.comprehension and average_ratings.overall:
             logger.info(
                 f"Calculated and returned average rating for subject with ID={subject_id}"
             )
             return jsonify(
                 {
-                    #! Da eroare backendu daca intru pe un curs fara note  "clarity": round(average_ratings.clarity, 1) TypeError: type NoneType doesn't define __round__ method
                     "clarity": round(average_ratings.clarity, 1),
                     "interactivity": round(average_ratings.interactivity, 1),
                     "relevance": round(average_ratings.relevance, 1),

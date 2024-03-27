@@ -1,7 +1,6 @@
 from flask import Blueprint, jsonify, request, abort
 from flask_login import current_user, login_required
 from models.subjects import Subject
-from models.comments import Comment
 from models.programmes import Programme
 from __init__ import db, limiter
 from sqlalchemy import exc
@@ -9,7 +8,7 @@ from datetime import datetime
 from models.courses import Course
 from models.weeks import Week
 from bleach import clean
-from models.ratings import Rating
+from models.professors import Professor
 import logging
 
 logger = logging.getLogger(__name__)
@@ -194,6 +193,22 @@ def get_professor_subjects(professor_id):
         logger.error(f"An error has occured while retrieving objects.\n {e}")
         abort(500, f"An error has occured while retrieving objects.")
 
+@subject_bp.route("/subjects/description/<int:subject_id>", methods=["GET"])
+@limiter.limit("50 per minute")
+def get_subject_description(subject_id):
+    try:
+        subject = db.session.query(Subject).filter_by(id = subject_id).first()
+        if subject.professor_id:
+            professor = db.session.query(Professor).filter_by(id = subject.professor_id).first()
+        if professor:
+            if professor.last_name == "Cațaron" or professor.last_name == "Danciu":
+                return {"subject_name":subject.name,"professor_name":f"{professor.first_name} {professor.last_name} 😎"}
+            return {"subject_name":subject.name,"professor_name":f"{professor.first_name} {professor.last_name}"}
+        else:
+            abort(404,"Subject details not found!")
+    except exc.SQLAlchemyError as e:
+        logger.error(f"An error has occured while retrieving objects.\n {e}")
+        abort(500, f"An error has occured while retrieving objects.")
 
 @subject_bp.route("/subjects/current", methods=["POST"])
 @limiter.limit("50 per minute")

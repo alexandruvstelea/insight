@@ -1,8 +1,8 @@
 import React from "react";
 import styles from "./subjectsList.module.css";
 import Link from "next/link";
+
 export default function SubjectsList({ subjects, first_name, last_name }) {
-  console.log(first_name, last_name);
   return (
     <>
       <h1 className={styles.titleCurs}>Cursuri</h1>
@@ -15,6 +15,12 @@ export default function SubjectsList({ subjects, first_name, last_name }) {
                   className={styles.buttonCourses}
                   href={{
                     pathname: `/professors/${subject.id}`,
+                  }}
+                  onClick={() => {
+                    sessionStorage.setItem(
+                      "name",
+                      `${first_name} ${last_name}`
+                    );
                   }}
                 >
                   {subject.name}

@@ -1,14 +1,16 @@
+"use server";
+import styles from "./page.module.css";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 import Chart from "@/components/subject/Chart";
 import DegreeChart from "@/components/subject/DegreeChart";
 import RatingOverview from "@/components/subject/RatingOverview";
 import Comments from "@/components/subject/Comments";
-import styles from "./page.module.css";
 import {
   fetchGraphData,
   fetchRatingsAverageData,
   fetchCommentsData,
+  fetchDescriptionData,
 } from "@/app/Actions/getSubjectData";
 
 export default async function InfoCourse({ params }) {
@@ -16,14 +18,18 @@ export default async function InfoCourse({ params }) {
   const graphData = await fetchGraphData(subjectId);
   const ratingsAverage = await fetchRatingsAverageData(subjectId);
   const comments = await fetchCommentsData(subjectId);
+  const description = await fetchDescriptionData(subjectId);
+  console.log(description);
   return (
     <>
       <div className="globalContainer">
         <Header />
         <div className="content">
           <div className={styles.titleContainer}>
-            <h1 className={styles.professorName}>Numele la prof</h1>
-            <p className={styles.courseName}>- cursul - </p>
+            <h1 className={styles.professorName}>
+              {description.professor_name}
+            </h1>
+            <p className={styles.courseName}>- {description.subject_name} - </p>
           </div>
           <div className={styles.mainContainer}>
             <div className={styles.dataContainer}>

@@ -48,3 +48,17 @@ export const fetchCommentsData = async (subjectId) => {
 
   return comments;
 };
+
+export const fetchDescriptionData = async (subjectId) => {
+  const response = await fetch(
+    `${process.env.REACT_APP_API_URL}/subjects/description/${subjectId}`,
+    {
+      cache: "no-store",
+    }
+  );
+
+  if (!response.ok) return false;
+  const description = await response.json();
+
+  return description;
+};
