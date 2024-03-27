@@ -43,7 +43,6 @@ export default async function Professors({ searchParams }) {
         <>
           <div className={styles.professorsPageContainer}>
             <Header />
-
             <div className={styles.notFoundContainer}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"

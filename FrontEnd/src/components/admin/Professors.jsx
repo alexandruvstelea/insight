@@ -80,9 +80,8 @@ export default function Professors({ professors, fetchProfessors }) {
   const columns = useMemo(
     () => [
       columnOption("id", "ID", 100, 30, false),
-      columnOption("first_name", "Nume", 120, 80, true),
-      columnOption("last_name", "Prenume", 120, 80, true),
-      columnOption("title", "Titlu", 120, 80, true),
+      columnOption("last_name", "Nume", 120, 80, true),
+      columnOption("first_name", "Prenume", 120, 80, true),
       columnOption("gender", "Gen", 120, 80, true, {
         ...defSelectColumnOption(genderOptions),
         Cell: ({ cell }) =>

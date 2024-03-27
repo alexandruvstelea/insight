@@ -19,12 +19,11 @@ export default async function InfoCourse({ params }) {
   const ratingsAverage = await fetchRatingsAverageData(subjectId);
   const comments = await fetchCommentsData(subjectId);
   const description = await fetchDescriptionData(subjectId);
-  console.log(description);
   return (
     <>
-      <div className="globalContainer">
+      <div className={styles.globalContainer}>
         <Header />
-        <div className="content">
+        <div className={styles.content}>
           <div className={styles.titleContainer}>
             <h1 className={styles.professorName}>
               {description.professor_name}
