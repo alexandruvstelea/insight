@@ -206,11 +206,11 @@ def get_subject_description(subject_id):
             if professor.last_name == "Cațaron" or professor.last_name == "Danciu":
                 return {
                     "subject_name": subject.name,
-                    "professor_name": f"{professor.first_name} {professor.last_name} 😎",
+                    "professor_name": f"{professor.last_name} {professor.first_name} 😎",
                 }
             return {
                 "subject_name": subject.name,
-                "professor_name": f"{professor.first_name} {professor.last_name}",
+                "professor_name": f"{professor.last_name} {professor.first_name}",
             }
         else:
             abort(404, "Subject details not found!")
