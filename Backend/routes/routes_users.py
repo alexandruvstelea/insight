@@ -2,8 +2,6 @@ from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Blueprint, jsonify, request, abort
 from __init__ import db, limiter, login_manager
-from flask_cors import cross_origin
-from flask_wtf.csrf import generate_csrf
 from models.programmes import Programme
 from dotenv import load_dotenv
 from models.users import User
@@ -67,23 +65,22 @@ def register():
     code = randint(100000, 999999)
     hashed_password = generate_password_hash(password)
     try:
-        with db.session.begin():
-            existing_programme = (
-                db.session.query(Programme).filter_by(id=programme_id).first()
-            )
-            if not existing_programme:
-                abort(400, "Invalid programme ID.")
-            existing_user = db.session.query(User).filter_by(email=email).first()
-            if existing_user:
-                logger.warning("User already exists.")
-                abort(400, "User already exists.")
-            new_user = User(
-                email=email,
-                password=hashed_password,
-                programme_id=programme_id,
-                registration_code=code,
-            )
-            db.session.add(new_user)
+        existing_programme = (
+            db.session.query(Programme).filter_by(id=programme_id).first()
+        )
+        if not existing_programme:
+            abort(400, "Invalid programme ID.")
+        existing_user = db.session.query(User).filter_by(email=email).first()
+        if existing_user:
+            logger.warning("User already exists.")
+            abort(400, "User already exists.")
+        new_user = User(
+            email=email,
+            password=hashed_password,
+            programme_id=programme_id,
+            registration_code=code,
+        )
+        db.session.add(new_user)
         send_registration_email(code, email)
         return {"message": "Registration successful!"}, 201
     except exc.SQLAlchemyError as e:
@@ -101,23 +98,14 @@ def login():
         logger.error(f"An error has occured: missing key in request parameters.\n {e}")
         abort(400, f"An error has occured: missing key in request parameters.")
     try:
-        with db.session.begin():
-            user = db.session.query(User).filter_by(email=email).first()
-            if (
-                user
-                and check_password_hash(user.password, password)
-                and user.active == 1
-            ):
-                login_user(user)
-                return {"message": "Login successful!"}, 200
-            elif (
-                user
-                and check_password_hash(user.password, password)
-                and user.active == 0
-            ):
+        user = db.session.query(User).filter_by(email=email).first()
+        if user and check_password_hash(user.password, password) and user.active == 1:
+            login_user(user)
+            return {"message": "Login successful!"}, 200
+        elif user and check_password_hash(user.password, password) and user.active == 0:
             #! nu inteleg aici, nu mai bine punem abort ?
-                return {"message": "Account not activated."}
-            abort(401, "Invalid username or password!")
+            return {"message": "Account not activated."}
+        abort(401, "Invalid username or password!")
     except exc.SQLAlchemyError as e:
         logger.error(f"An error has occured while authenticating the user.\n {e}")
         return abort(500, f"An error has occured while authenticating the user.")
@@ -132,21 +120,20 @@ def request_reset_password():
         logger.error(f"An error has occured: missing key in request parameters.\n {e}")
         abort(400, f"An error has occured: missing key in request parameters.")
     try:
-        with db.session.begin():
-            user = db.session.query(User).filter_by(email=email).first()
-            if user and user.active == 1:
-                code = randint(100000, 999999)
-                affected_rows = (
-                    db.session.query(User)
-                    .filter_by(email=email)
-                    .update({"registration_code": code})
-                )
-                if affected_rows > 0:
-                    db.session.commit()
-                send_password_email(code, email)
-                return {"message": "Password reset code sent."}
-            else:
-                abort(400, "Invalid credentials or account already inactive.")
+        user = db.session.query(User).filter_by(email=email).first()
+        if user and user.active == 1:
+            code = randint(100000, 999999)
+            affected_rows = (
+                db.session.query(User)
+                .filter_by(email=email)
+                .update({"registration_code": code})
+            )
+            if affected_rows > 0:
+                db.session.commit()
+            send_password_email(code, email)
+            return {"message": "Password reset code sent."}
+        else:
+            abort(400, "Invalid credentials or account already inactive.")
     except exc.SQLAlchemyError as e:
         logger.error(f"An error has occured while sending email.\n {e}")
         return abort(500, f"An error has occured while sending email.")
@@ -166,20 +153,19 @@ def reset_password():
         abort(400, "Not institutional email or password too short.")
     hashed_password = generate_password_hash(new_password)
     try:
-        with db.session.begin():
-            user = db.session.query(User).filter_by(email=email).first()
-            if user and user.active == 1 and user.registration_code == code:
-                affected_rows = (
-                    db.session.query(User)
-                    .filter_by(email=email)
-                    .update({"password": hashed_password})
-                )
-                if affected_rows > 0:
-                    db.session.commit()
-                send_password_email(code, email)
-                return {"message": "Password reset."}
-            else:
-                abort(400, "Invalid credentials.")
+        user = db.session.query(User).filter_by(email=email).first()
+        if user and user.active == 1 and user.registration_code == code:
+            affected_rows = (
+                db.session.query(User)
+                .filter_by(email=email)
+                .update({"password": hashed_password})
+            )
+            if affected_rows > 0:
+                db.session.commit()
+            send_password_email(code, email)
+            return {"message": "Password reset."}
+        else:
+            abort(400, "Invalid credentials.")
     except exc.SQLAlchemyError as e:
         logger.error(f"An error has occured while reseting password.\n {e}")
         return abort(500, f"An error has occured while reseting password.")
@@ -195,25 +181,20 @@ def resend_activation_code():
         logger.error(f"An error has occured: missing key in request parameters.\n {e}")
         abort(400, f"An error has occured: missing key in request parameters.")
     try:
-        with db.session.begin():
-            user = db.session.query(User).filter_by(email=email).first()
-            if (
-                user
-                and check_password_hash(user.password, password)
-                and user.active == 0
-            ):
-                code = randint(100000, 999999)
-                affected_rows = (
-                    db.session.query(User)
-                    .filter_by(email=email)
-                    .update({"registration_code": code})
-                )
-                if affected_rows > 0:
-                    db.session.commit()
-                send_registration_email(code, email)
-                return {"message": "New registration code sent."}
-            else:
-                abort(400, "Invalid credentials or account already active.")
+        user = db.session.query(User).filter_by(email=email).first()
+        if user and check_password_hash(user.password, password) and user.active == 0:
+            code = randint(100000, 999999)
+            affected_rows = (
+                db.session.query(User)
+                .filter_by(email=email)
+                .update({"registration_code": code})
+            )
+            if affected_rows > 0:
+                db.session.commit()
+            send_registration_email(code, email)
+            return {"message": "New registration code sent."}
+        else:
+            abort(400, "Invalid credentials or account already active.")
     except exc.SQLAlchemyError as e:
         logger.error(f"An error has occured while resending email.\n {e}")
         return abort(500, f"An error has occured while resending email.")
@@ -230,23 +211,22 @@ def activate_account():
         logger.error(f"An error has occured: missing key in request parameters.\n {e}")
         abort(400, f"An error has occured: missing key in request parameters.")
     try:
-        with db.session.begin():
-            user = db.session.query(User).filter_by(email=email).first()
-            if (
-                user
-                and check_password_hash(user.password, password)
-                and user.active == 0
-                and user.registration_code == code
-            ):
-                affected_rows = (
-                    db.session.query(User).filter_by(email=email).update({"active": 1})
-                )
-                if affected_rows > 0:
-                    db.session.commit()
-                return {"message": "Account activated."}
-            else:
-                abort(400, "Invalid credentials or account already active.")
-                #! Daca pui litere da 500 
+        user = db.session.query(User).filter_by(email=email).first()
+        if (
+            user
+            and check_password_hash(user.password, password)
+            and user.active == 0
+            and user.registration_code == code
+        ):
+            affected_rows = (
+                db.session.query(User).filter_by(email=email).update({"active": 1})
+            )
+            if affected_rows > 0:
+                db.session.commit()
+            return {"message": "Account activated."}
+        else:
+            abort(400, "Invalid credentials or account already active.")
+            #! Daca pui litere da 500
     except exc.SQLAlchemyError as e:
         logger.error(f"An error has occured while activating account.\n {e}")
         return abort(500, f"An error has occured while activating account.")
@@ -299,6 +279,7 @@ def send_registration_email(code: int, email: str):
             f"An error has occured while sending an email to {email}.\n {str(e)}"
         )
         return e
+
 
 def send_password_email(code: int, email: str):
     try:

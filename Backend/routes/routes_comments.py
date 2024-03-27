@@ -4,11 +4,9 @@ from models.comments import Comment
 from __init__ import db, limiter
 from dotenv import load_dotenv
 from datetime import datetime
-from random import randint
 from sqlalchemy import exc
 from bleach import clean
 import logging
-import yagmail
 import os
 
 logger = logging.getLogger(__name__)

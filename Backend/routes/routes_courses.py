@@ -31,9 +31,7 @@ def create_course():
             abort(400, f"An error has occured: missing key in request parameters.")
         try:
 
-            subject = (
-                db.session.query(Subject).filter(Subject.id == subject_id).first()
-            )
+            subject = db.session.query(Subject).filter(Subject.id == subject_id).first()
             semester = 0
             if subject:
                 semester = subject.semester
@@ -50,17 +48,14 @@ def create_course():
                 filtered_courses = []
                 for course in existing_courses:
                     if (
-                        course.start_end[0]
-                        <= datetime.strptime(start, "%H:%M").time()
+                        course.start_end[0] <= datetime.strptime(start, "%H:%M").time()
                         and course.start_end[1]
                         >= datetime.strptime(end, "%H:%M").time()
                     ):
                         filtered_courses.append(course)
 
                 if filtered_courses:
-                    logger.warning(
-                        "A course is already scheduled in the given slot."
-                    )
+                    logger.warning("A course is already scheduled in the given slot.")
                     abort(409, "A course is already scheduled in the given slot.")
             else:
                 logger.warning("Couldn't determine subject for course.")
@@ -155,38 +150,35 @@ def update_course(course_id):
             )
             abort(400, f"An error has occured: missing key in request parameters.")
         try:
-            with db.session.begin():
-                subject = (
-                    db.session.query(Subject)
-                    .filter(Subject.id == new_subject_id)
-                    .first()
+            subject = (
+                db.session.query(Subject).filter(Subject.id == new_subject_id).first()
+            )
+            new_semester = subject.semester if subject else 0
+            if new_semester == 0:
+                logger.error("Couldn't determine subject for course.")
+                abort(404, "Couldn't determine subject for course.")
+            affected_rows = (
+                db.session.query(Course)
+                .filter_by(id=course_id)
+                .update(
+                    {
+                        "subject_id": new_subject_id,
+                        "type": new_type,
+                        "room_id": new_room_id,
+                        "day": new_day,
+                        "week_type": new_week_type,
+                        "start_end": new_start_end,
+                        "semester": new_semester,
+                    }
                 )
-                new_semester = subject.semester if subject else 0
-                if new_semester == 0:
-                    logger.error("Couldn't determine subject for course.")
-                    abort(404, "Couldn't determine subject for course.")
-                affected_rows = (
-                    db.session.query(Course)
-                    .filter_by(id=course_id)
-                    .update(
-                        {
-                            "subject_id": new_subject_id,
-                            "type": new_type,
-                            "room_id": new_room_id,
-                            "day": new_day,
-                            "week_type": new_week_type,
-                            "start_end": new_start_end,
-                            "semester": new_semester,
-                        }
-                    )
-                )
-                if affected_rows > 0:
-                    db.session.commit()
-                    logger.info(f"Course with ID={course_id} updated.")
-                    return {"response": f"Course with ID={course_id} updated."}, 200
-                else:
-                    logger.warning(f"No course with ID={course_id} to update.")
-                    abort(404, f"No course with ID={course_id} to update.")
+            )
+            if affected_rows > 0:
+                db.session.commit()
+                logger.info(f"Course with ID={course_id} updated.")
+                return {"response": f"Course with ID={course_id} updated."}, 200
+            else:
+                logger.warning(f"No course with ID={course_id} to update.")
+                abort(404, f"No course with ID={course_id} to update.")
         except exc.SQLAlchemyError as e:
             logger.error(f"An error has occured while updating the object.\n {e}")
             abort(500, f"An error has occured while updating the object.")
@@ -199,17 +191,14 @@ def update_course(course_id):
 def delete_course(course_id):
     if current_user.user_type == 0:
         try:
-            with db.session.begin():
-                affected_rows = (
-                    db.session.query(Course).filter_by(id=course_id).delete()
-                )
-                if affected_rows > 0:
-                    db.session.commit()
-                    logger.info(f"Course with ID={course_id} deleted.")
-                    return {"response": f"Course with ID={course_id} deleted."}, 200
-                else:
-                    logger.warning(f"No course with ID={course_id} to delete.")
-                    abort(404, f"No course with ID={course_id} to delete.")
+            affected_rows = db.session.query(Course).filter_by(id=course_id).delete()
+            if affected_rows > 0:
+                db.session.commit()
+                logger.info(f"Course with ID={course_id} deleted.")
+                return {"response": f"Course with ID={course_id} deleted."}, 200
+            else:
+                logger.warning(f"No course with ID={course_id} to delete.")
+                abort(404, f"No course with ID={course_id} to delete.")
         except exc.SQLAlchemyError as e:
             logger.error(f"An error has occured while deleting the object.\n {e}")
             abort(500, f"An error has occured while deleting the object.")
