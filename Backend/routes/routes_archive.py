@@ -1,7 +1,6 @@
 from flask import Blueprint, jsonify, request, abort
-from __init__ import db, limiter
+from __init__ import limiter
 from dotenv import load_dotenv
-from datetime import datetime
 from bleach import clean
 from psycopg2 import sql
 from os import getenv, path

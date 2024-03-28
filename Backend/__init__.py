@@ -1,7 +1,5 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import sessionmaker
-from flask_jwt_extended import JWTManager
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_login import LoginManager
@@ -28,7 +26,6 @@ login_manager = LoginManager()
 def init_app():
     app = Flask(__name__, instance_relative_config=False)
     app.config.from_object("config.Config")
-    jwt = JWTManager(app)
 
     db.init_app(app)
     limiter.init_app(app)

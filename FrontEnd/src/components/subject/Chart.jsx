@@ -40,25 +40,25 @@ export default function BarChart({ graphData }) {
   }, [isWindowAvailable]);
 
   const colors = [
-    "rgba(75, 192, 192, 0.5)",
-    "rgba(255, 99, 132, 0.5)",
-    "rgba(54, 162, 235, 0.5)",
-    "rgba(255, 206, 86, 0.5)",
-    "rgba(153, 102, 255, 0.5)",
+    "rgba(0, 64, 193, 1)",
+    "rgba(5, 145, 248, 1)",
+    "rgba(39, 223, 243, 1)",
+    "rgba(117, 220, 159, 1)",
+    "rgba(0, 169, 165, 1)",
   ];
 
   const characteristics = [
-    "overall",
-    "clarity",
-    "comprehension",
-    "interactivity",
-    "relevance",
+    ["overall", "Total"],
+    ["clarity", "Claritate"],
+    ["comprehension", "Înțelegere"],
+    ["interactivity", "Interactivitate"],
+    ["relevance", "Relevanță"],
   ];
 
   const characteristicData = {};
   characteristics.forEach((characteristic) => {
-    characteristicData[characteristic] = Object.keys(graphData).map(
-      (week) => graphData[week][characteristic]
+    characteristicData[characteristic[0]] = Object.keys(graphData).map(
+      (week) => graphData[week][characteristic[0]]
     );
   });
 
@@ -81,7 +81,7 @@ export default function BarChart({ graphData }) {
         suggestedMax: 5,
         title: {
           display: true,
-          text: "Saptamana",
+          text: "Săptămâna",
           font: {
             size: 14,
           },
@@ -102,37 +102,32 @@ export default function BarChart({ graphData }) {
         suggestedMax: 5,
       },
     },
-
-    elements: {
-      bar: {
-        borderWidth: 1,
-        borderColor: "rgba(0,0,0,0.4)",
-      },
-    },
   };
   const axisLabels =
     chartOrientation === "horizontalBar"
-      ? ["Media", "Saptamana"]
-      : ["Saptamana", "Media"];
+      ? ["Media", "Săptămâna"]
+      : ["Săptămâna", "Media"];
   options.scales.x.title.text = axisLabels[0];
   options.scales.y.title.text = axisLabels[1];
 
   const labels = [];
   for (let i = 1; i <= 14; i++) {
-    labels.push(`${i}S`);
+    labels.push(`S${i}`);
   }
 
-  const [selectedDataset, setSelectedDataset] = useState("overall");
+  const [selectedDataset, setSelectedDataset] = useState("Total");
 
   const handleDatasetChange = (event) => {
     setSelectedDataset(event.target.value);
   };
 
   const datasets = characteristics.map((characteristic, index) => ({
-    label: characteristic,
-    data: characteristicData[characteristic],
+    label: characteristic[1],
+    data: characteristicData[characteristic[0]],
     backgroundColor: colors[index],
   }));
+
+  console.log(datasets);
 
   const selectedData = datasets.find(
     (dataset) => dataset.label === selectedDataset
@@ -149,8 +144,8 @@ export default function BarChart({ graphData }) {
       <div className={styles.selectContainer}>
         <select value={selectedDataset} onChange={handleDatasetChange}>
           {characteristics.map((characteristic, index) => (
-            <option key={index} value={characteristic}>
-              {characteristic}
+            <option key={index} value={characteristic[1]}>
+              {characteristic[1]}
             </option>
           ))}
         </select>

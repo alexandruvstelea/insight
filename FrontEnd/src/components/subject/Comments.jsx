@@ -64,7 +64,7 @@ export default function Comments({ comments }) {
                       mb: 2,
                     }}
                   >
-                    <Typography variant="body2" color="#0040C1">
+                    <Typography variant="body1" color="#0040C1">
                       {comment.email}
                     </Typography>
                     <Typography
@@ -78,19 +78,10 @@ export default function Comments({ comments }) {
                   <Typography
                     variant="h6"
                     component="div"
-                    sx={{ fontSize: 17 }}
+                    sx={{ fontSize: 19 }}
                   >
                     {comment.comment}
                   </Typography>
-                  {comment.grade && (
-                    <Typography
-                      variant="h6"
-                      component="div"
-                      sx={{ fontSize: 17, fontWeight: "bold" }}
-                    >
-                      Notă obținută: {comment.grade}
-                    </Typography>
-                  )}
                 </Paper>
               </Box>
             ))}

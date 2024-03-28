@@ -11,7 +11,7 @@ export default async function RatingOverview({ ratingsAverage }) {
   return (
     <>
       <div className={styles.ratingOverview}>
-        <h1 className={styles.title}>Media totala</h1>
+        <h1 className={styles.title}>Media totală</h1>
         <ProgressContainer name="Claritate" average={clarity} />
         <ProgressContainer name="Înţelegere" average={comprehension} />
         <ProgressContainer name="Interactivitate" average={interactivity} />

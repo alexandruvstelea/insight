@@ -34,7 +34,7 @@ export default function Card({ professor }) {
             </div>
             <div className={styles.cardContent}>
               <h2 className={styles.name}>
-                {professor.first_name} {professor.last_name}
+                {professor.last_name} {professor.first_name}
               </h2>
               <Box
                 position="relative"
@@ -42,7 +42,10 @@ export default function Card({ professor }) {
                 alignItems="center"
                 justifyContent="center"
               >
-                <GradeRoundedIcon sx={{ fontSize: 128, color: "#0040C1" }} />
+                <GradeRoundedIcon
+                  sx={{ fontSize: 128, color: "#0040C1" }}
+                  className={styles.gradeStar}
+                />
                 <Typography
                   variant="caption"
                   component="span"

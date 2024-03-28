@@ -98,21 +98,18 @@ def update_room(programme_id):
             )
             abort(400, f"An error has occured: missing key in request parameters.")
         try:
-            with db.session.begin():
-                affected_rows = (
-                    db.session.query(Programme)
-                    .filter_by(id=programme_id)
-                    .update({"name": new_name, "abbreviation": new_abbreviation})
-                )
-                if affected_rows > 0:
-                    db.session.commit()
-                    logger.info(f"Programme with ID={programme_id} updated")
-                    return {
-                        "response": f"Programme with ID={programme_id} updated"
-                    }, 200
-                else:
-                    logger.warning(f"No programme with ID={programme_id} to update")
-                    return abort(404, f"No programme with ID={programme_id} to update")
+            affected_rows = (
+                db.session.query(Programme)
+                .filter_by(id=programme_id)
+                .update({"name": new_name, "abbreviation": new_abbreviation})
+            )
+            if affected_rows > 0:
+                db.session.commit()
+                logger.info(f"Programme with ID={programme_id} updated")
+                return {"response": f"Programme with ID={programme_id} updated"}, 200
+            else:
+                logger.warning(f"No programme with ID={programme_id} to update")
+                return abort(404, f"No programme with ID={programme_id} to update")
         except exc.SQLAlchemyError as e:
             logger.error(f"An error has occured while updating object.\n {e}")
             return abort(500, f"An error has occured while updating object.")
