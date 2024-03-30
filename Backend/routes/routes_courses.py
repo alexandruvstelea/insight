@@ -1,11 +1,11 @@
-from datetime import datetime
+from flask_login import current_user, login_required
 from flask import Blueprint, jsonify, request, abort
-from models.courses import Course
 from models.subjects import Subject
+from models.courses import Course
 from __init__ import db, limiter
+from datetime import datetime
 from sqlalchemy import exc
 from bleach import clean
-from flask_login import current_user, login_required
 import logging
 
 logger = logging.getLogger(__name__)
@@ -18,19 +18,21 @@ course_bp = Blueprint("courses", __name__)
 def create_course():
     if current_user.user_type == 0:
         try:
-            subject_id = clean(request.form["subject_id"])
-            type = clean(request.form["type"])
-            room_id = clean(request.form["room_id"])
-            day = clean(request.form["day"])
-            week_type = clean(request.form["week_type"])
+            subject_id = int(clean(request.form["subject_id"]))
+            type = int(clean(request.form["type"]))
+            room_id = int(clean(request.form["room_id"]))
+            day = int(clean(request.form["day"]))
+            week_type = int(clean(request.form["week_type"]))
             start = clean(request.form["start"])
             end = clean(request.form["end"])
             start_end = [start, end]
         except KeyError as e:
             logger.error(f"An error has occured: missing key in request parameters.")
             abort(400, f"An error has occured: missing key in request parameters.")
+        except ValueError as e:
+            logger.error(f"An error has occurred: {e}")
+            abort(400, f"An error has occurred: {e}")
         try:
-
             subject = db.session.query(Subject).filter(Subject.id == subject_id).first()
             semester = 0
             if subject:
@@ -65,12 +67,11 @@ def create_course():
             )
             db.session.add(new_course)
             db.session.commit()
-            # logger.info(f"New course added to database.{new_course}")
             return {"response": "New course added to database"}, 200
         except exc.SQLAlchemyError as e:
-            logger.error(f"An error has occured while adding object to database.\n {e}")
-            abort(500, f"An error has occured while adding object to database.")
-    abort(401, "Not authorized.")
+            logger.error(f"An error has occured while adding course to database.\n {e}")
+            abort(500, f"An error has occured while adding course to database.")
+    abort(401, "Account not authorized to perform this action.")
 
 
 @course_bp.route("/courses", methods=["GET"])
@@ -100,8 +101,8 @@ def get_courses():
             logger.warning(f"No courses found.")
             abort(404, f"No courses found.")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while retrieving objects.\n {e}")
-        abort(500, f"An error has occured while retrieving objects.")
+        logger.error(f"An error has occured while retrieving courses.\n{e}")
+        abort(500, f"An error has occured while retrieving courses.")
 
 
 @course_bp.route("/courses/<int:course_id>", methods=["GET"])
@@ -126,8 +127,8 @@ def get_course_by_id(course_id):
             logger.warning(f"No course with ID={course_id} found.")
             abort(404, f"No course with ID={course_id} found.")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while retrieving the object.\n {e}")
-        abort(500, f"An error has occured while retrieving the object.")
+        logger.error(f"An error has occured while retrieving courses.\n{e}")
+        abort(500, f"An error has occured while retrieving courses.")
 
 
 @course_bp.route("/courses/<int:course_id>", methods=["PUT"])
@@ -136,11 +137,11 @@ def get_course_by_id(course_id):
 def update_course(course_id):
     if current_user.user_type == 0:
         try:
-            new_subject_id = clean(request.form["new_subject_id"])
-            new_type = clean(request.form["new_type"])
-            new_room_id = clean(request.form["new_room_id"])
-            new_day = clean(request.form["new_day"])
-            new_week_type = clean(request.form["new_week_type"])
+            new_subject_id = int(clean(request.form["new_subject_id"]))
+            new_type = int(clean(request.form["new_type"]))
+            new_room_id = int(clean(request.form["new_room_id"]))
+            new_day = int(clean(request.form["new_day"]))
+            new_week_type = int(clean(request.form["new_week_type"]))
             new_start = clean(request.form["new_start"])
             new_end = clean(request.form["new_end"])
             new_start_end = [new_start, new_end]
@@ -149,6 +150,9 @@ def update_course(course_id):
                 f"An error has occured: missing key in request parameters.\n {e}"
             )
             abort(400, f"An error has occured: missing key in request parameters.")
+        except ValueError as e:
+            logger.error(f"An error has occurred: {e}")
+            abort(400, f"An error has occurred: {e}")
         try:
             subject = (
                 db.session.query(Subject).filter(Subject.id == new_subject_id).first()
@@ -180,9 +184,9 @@ def update_course(course_id):
                 logger.warning(f"No course with ID={course_id} to update.")
                 abort(404, f"No course with ID={course_id} to update.")
         except exc.SQLAlchemyError as e:
-            logger.error(f"An error has occured while updating the object.\n {e}")
-            abort(500, f"An error has occured while updating the object.")
-    abort(401, "Not authorized.")
+            logger.error(f"An error has occured while updating course.\n {e}")
+            abort(500, f"An error has occured while updating course.")
+    abort(401, "Account not authorized to perform this action.")
 
 
 @course_bp.route("/courses/<int:course_id>", methods=["DELETE"])
@@ -200,6 +204,6 @@ def delete_course(course_id):
                 logger.warning(f"No course with ID={course_id} to delete.")
                 abort(404, f"No course with ID={course_id} to delete.")
         except exc.SQLAlchemyError as e:
-            logger.error(f"An error has occured while deleting the object.\n {e}")
-            abort(500, f"An error has occured while deleting the object.")
-    abort(401, "Not authorized.")
+            logger.error(f"An error has occured while deleting course.\n {e}")
+            abort(500, f"An error has occured while deleting course.")
+    abort(401, "Account not authorized to perform this action.")

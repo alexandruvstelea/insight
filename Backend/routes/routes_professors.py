@@ -23,9 +23,9 @@ def create_professor():
             gender = clean(request.form["gender"])
             if gender not in ["male", "female"]:
                 logger.error(
-                    f"Invalid gender provided. Gender must be 'male' or 'female'."
+                    "Invalid gender provided. Gender must be 'male' or 'female'."
                 )
-                raise KeyError(
+                raise ValueError(
                     "Invalid gender provided. Gender must be 'male' or 'female'."
                 )
         except KeyError as e:
@@ -33,16 +33,20 @@ def create_professor():
                 f"An error has occurred: missing key in request parameters.\n {e}"
             )
             abort(400, f"An error has occured: missing key in request parameters.")
+        except ValueError as e:
+            logger.error(f"An error has occurred: {e}")
+            abort(400, f"An error has occurred: {e}")
         new_professor = Professor(first_name, last_name, gender)
         try:
             db.session.add(new_professor)
             db.session.commit()
-            # logger.info(f"New professor added to database. {new_professor}")
             return {"response": "New professor added to database"}, 200
         except exc.SQLAlchemyError as e:
-            logger.error(f"An error has occured while adding object to database.\n {e}")
-            abort(500, f"An error has occured while adding object to database.")
-    abort(401, "Not authorized.")
+            logger.error(
+                f"An error has occured while adding professor to database.\n {e}"
+            )
+            abort(500, f"An error has occured while adding professor to database.")
+    abort(401, "Account not authorized to perform this action.")
 
 
 @professor_bp.route("/professors", methods=["GET"])
@@ -89,8 +93,8 @@ def get_professor_by_id(professor_id):
             logger.warning(f"No professor with ID={professor_id} found.")
             return abort(404, f"No professor with ID={professor_id} found.")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while retrieving data.\n {e}")
-        abort(500, f"An error has occured while retrieving data.")
+        logger.error(f"An error has occured while retrieving professors.\n {e}")
+        abort(500, f"An error has occured while retrieving professors.")
 
 
 @limiter.limit("500 per minute")
@@ -119,8 +123,8 @@ def get_professor_average(professor_id):
             logger.warning(f"No subjects found for professor with ID={professor_id}.")
             abort(404, f"No subjects found for professor with ID={professor_id}.")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while retrieving data.\n {e}")
-        abort(500, f"An error has occured while retrieving data.")
+        logger.error(f"An error has occured while retrieving professors.\n {e}")
+        abort(500, f"An error has occured while retrieving professors.")
 
 
 @professor_bp.route("/professors/<int:professor_id>", methods=["PUT"])
@@ -136,39 +140,40 @@ def update_professor(professor_id):
                 logger.error(
                     "Invalid gender provided. Gender must be 'male' or 'female'."
                 )
-                raise KeyError(
+                raise ValueError(
                     "Invalid gender provided. Gender must be 'male' or 'female'."
                 )
         except KeyError as e:
-            logger.warning(
-                f"An error has occured: missing key in request parameters.\n {e}"
+            logger.error(
+                f"An error has occurred: missing key in request parameters.\n {e}"
             )
             abort(400, f"An error has occured: missing key in request parameters.")
+        except ValueError as e:
+            logger.error(f"An error has occurred: {e}")
+            abort(400, f"An error has occurred: {e}")
         try:
-                affected_rows = (
-                    db.session.query(Professor)
-                    .filter_by(id=professor_id)
-                    .update(
-                        {
-                            "first_name": new_first_name,
-                            "last_name": new_last_name,
-                            "gender": new_gender,
-                        }
-                    )
+            affected_rows = (
+                db.session.query(Professor)
+                .filter_by(id=professor_id)
+                .update(
+                    {
+                        "first_name": new_first_name,
+                        "last_name": new_last_name,
+                        "gender": new_gender,
+                    }
                 )
-                if affected_rows > 0:
-                    db.session.commit()
-                    logger.info(f"Professor with ID={professor_id} updated")
-                    return {
-                        "response": f"Professor with ID={professor_id} updated"
-                    }, 200
-                else:
-                    logger.warning(f"No professor with ID={professor_id} to update")
-                    return abort(404, f"No professor with ID={professor_id} to update")
+            )
+            if affected_rows > 0:
+                db.session.commit()
+                logger.info(f"Professor with ID={professor_id} updated")
+                return {"response": f"Professor with ID={professor_id} updated"}, 200
+            else:
+                logger.warning(f"No professor with ID={professor_id} to update")
+                return abort(404, f"No professor with ID={professor_id} to update")
         except exc.SQLAlchemyError as e:
-            logger.error(f"An error while updating the object.\n {e}")
-            return abort(500, f"An error while updating the object.")
-    abort(401, "Not authorized.")
+            logger.error(f"An error while updating professor.\n {e}")
+            return abort(500, f"An error while updating professor.")
+    abort(401, "Account not authorized to perform this action.")
 
 
 @professor_bp.route("/professors/<int:professor_id>", methods=["DELETE"])
@@ -188,6 +193,6 @@ def delete_professor(professor_id):
                 logger.warning(f"No professor with ID={professor_id} to delete")
                 return abort(404, f"No professor with ID={professor_id} to delete")
         except exc.SQLAlchemyError as e:
-            logger.error(f"An error while updating the object.\n {e}")
-            return abort(500, f"An error while updating the object.")
-    abort(401, "Not authorized.")
+            logger.error(f"An error while updating professor.\n {e}")
+            return abort(500, f"An error while updating professor.")
+    abort(401, "Account not authorized to perform this action.")

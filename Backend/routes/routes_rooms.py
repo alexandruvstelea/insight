@@ -19,7 +19,7 @@ def create_room():
             name = clean(request.form["name"])
         except KeyError as e:
             logger.error(
-                f"An error has occured: missing key in request parameters.\n {e}"
+                f"An error has occured: missing key in request parameters.\n{e}"
             )
             abort(400, f"An error has occured: missing key in request parameters.")
         new_room = Room(name)
@@ -30,12 +30,12 @@ def create_room():
             return {"response": "New room added to database"}, 200
         except exc.SQLAlchemyError as e:
             logger.error(
-                f"An error has occured while adding object to the database.\n {e}"
+                f"An error has occured while adding room to the database.\n{e}"
             )
             return abort(
-                500, f"An error has occured while adding object to the database."
+                500, f"An error has occured while adding room to the database."
             )
-    abort(401, "Not authorized")
+    abort(401, "Account not authorized to perform this action.")
 
 
 @room_bp.route("/rooms", methods=["GET"])
@@ -53,8 +53,8 @@ def get_rooms():
             logger.warning("No rooms found.")
             abort(404, "No rooms found.")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while retrieving objects.\n {e}")
-        abort(500, f"An error has occured while retrieving objects.")
+        logger.error(f"An error has occured while retrieving rooms.\n{e}")
+        abort(500, f"An error has occured while retrieving rooms.")
 
 
 @room_bp.route("/rooms/<int:room_id>", methods=["GET"])
@@ -69,8 +69,8 @@ def get_room_by_id(room_id):
             logger.warning(f"No room with ID={room_id} found.")
             return abort(404, f"No room with ID={room_id} found.")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while retrieving objects.\n {e}")
-        abort(500, f"An error has occured while retrieving objects.")
+        logger.error(f"An error has occured while retrieving rooms.\n{e}")
+        abort(500, f"An error has occured while retrieving rooms.")
 
 
 @room_bp.route("/rooms/<int:room_id>", methods=["PUT"])
@@ -82,7 +82,7 @@ def update_room(room_id):
             new_room = clean(request.form["new_room"])
         except KeyError as e:
             logger.error(
-                f"An error has occured: missing key in request parameters.\n {e}"
+                f"An error has occured: missing key in request parameters.\n{e}"
             )
             abort(400, f"An error has occured: missing key in request parameters.")
         try:
@@ -97,9 +97,9 @@ def update_room(room_id):
                 logger.warning(f"No room with ID={room_id} to update")
                 return abort(404, f"No room with ID={room_id} to update")
         except exc.SQLAlchemyError as e:
-            logger.error(f"An error has occured while updating object.\n {e}")
-            return abort(500, f"An error has occured while updating object.")
-    abort(401, "Not authorized")
+            logger.error(f"An error has occured while updating room.\n{e}")
+            return abort(500, f"An error has occured while updating room.")
+    abort(401, "Account not authorized to perform this action.")
 
 
 @room_bp.route("/rooms/<int:room_id>", methods=["DELETE"])
@@ -117,6 +117,6 @@ def delete_room(room_id):
                 logger.warning(f"No room with ID={room_id} to delete")
                 return abort(404, f"No room with ID={room_id} to delete")
         except exc.SQLAlchemyError as e:
-            logger.error(f"An error has occured while updating object.\n {e}")
-            return abort(500, f"An error has occured while updating object.")
-    abort(401, "Not authorized.")
+            logger.error(f"An error has occured while deleting room.\n{e}")
+            return abort(500, f"An error has occured while deleting room.")
+    abort(401, "Account not authorized to perform this action.")

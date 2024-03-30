@@ -1,13 +1,12 @@
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask import Blueprint, jsonify, request, abort
+from flask import Blueprint, jsonify, abort, request
 from __init__ import db, limiter, login_manager
 from models.programmes import Programme
 from dotenv import load_dotenv
 from models.users import User
 from random import randint
 from sqlalchemy import exc
-
 from bleach import clean
 import logging
 import yagmail
@@ -45,9 +44,9 @@ def get_users():
                 logger.warning("No users found.")
                 abort(404, "No users found.")
         except exc.SQLAlchemyError as e:
-            logger.error(f"An error has occured while retrieving objects.\n {e}")
-            abort(500, f"An error has occured while retrieving objects.")
-    abort(401, "Not authorized")
+            logger.error(f"An error has occured while retrieving users.\n{e}")
+            abort(500, f"An error has occured while retrieving users.")
+    abort(401, "Account not authorized to perform this action.")
 
 
 @user_bp.route("/register", methods=["POST"])
@@ -58,10 +57,15 @@ def register():
         password = clean(request.form.get("password"))
         programme_id = int(clean(request.form.get("programme_id")))
     except KeyError as e:
-        logger.error(f"An error has occured: missing key in request parameters.\n {e}")
+        logger.error(f"An error has occured: missing key in request parameters.\n{e}")
         abort(400, f"An error has occured: missing key in request parameters.")
-    if not check_email_password(email, password):
-        abort(400, "Not institutional email or password too short.")
+    except (ValueError, TypeError):
+        logger.error("An error has occurred: code is not a number.")
+        abort(400, "An error has occurred: code is not a number.")
+    if not check_email(email):
+        abort(400, "The provided email is not institutional.")
+    if not check_password(password):
+        abort(400, "The provided password is too short.")
     code = randint(100000, 999999)
     hashed_password = generate_password_hash(password)
     try:
@@ -85,7 +89,7 @@ def register():
         send_registration_email(code, email)
         return {"message": "Registration successful!"}, 201
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while registering the user.\n {e}")
+        logger.error(f"An error has occured while registering the user.\n{e}")
         return abort(500, f"An error has occured while registering the user.")
 
 
@@ -104,8 +108,8 @@ def delete_user(user_id):
                 logger.warning(f"No user with ID={user_id} to delete")
                 return abort(404, f"No user with ID={user_id} to delete")
         except exc.SQLAlchemyError as e:
-            logger.error(f"An error has occured while deleting objects.\n {e}")
-            abort(500, f"An error has occured while deleting objects.")
+            logger.error(f"An error has occured while deleting user.\n{e}")
+            abort(500, f"An error has occured while deleting user.")
     abort(401, "Account not authorized to perform this action.")
 
 
@@ -116,7 +120,7 @@ def login():
         email = clean(request.form.get("email"))
         password = clean(request.form.get("password"))
     except KeyError as e:
-        logger.error(f"An error has occured: missing key in request parameters.\n {e}")
+        logger.error(f"An error has occured: missing key in request parameters.\n{e}")
         abort(400, f"An error has occured: missing key in request parameters.")
     try:
         user = db.session.query(User).filter_by(email=email).first()
@@ -128,7 +132,7 @@ def login():
             return {"message": "Account not activated."}
         abort(401, "Invalid username or password!")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while authenticating the user.\n {e}")
+        logger.error(f"An error has occured while authenticating the user.\n{e}")
         return abort(500, f"An error has occured while authenticating the user.")
 
 
@@ -138,7 +142,7 @@ def request_reset_password():
     try:
         email = clean(request.form.get("email"))
     except KeyError as e:
-        logger.error(f"An error has occured: missing key in request parameters.\n {e}")
+        logger.error(f"An error has occured: missing key in request parameters.\n{e}")
         abort(400, f"An error has occured: missing key in request parameters.")
     try:
         user = db.session.query(User).filter_by(email=email).first()
@@ -156,7 +160,7 @@ def request_reset_password():
         else:
             abort(400, "Invalid credentials or account already inactive.")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while sending email.\n {e}")
+        logger.error(f"An error has occured while sending email.\n{e}")
         return abort(500, f"An error has occured while sending email.")
 
 
@@ -168,10 +172,13 @@ def reset_password():
         code = int(clean(request.form.get("code")))
         new_password = clean(request.form.get(f"new_password"))
     except KeyError as e:
-        logger.error(f"An error has occured: missing key in request parameters.\n {e}")
+        logger.error(f"An error has occured: missing key in request parameters.\n{e}")
         abort(400, f"An error has occured: missing key in request parameters.")
-    if not check_email_password(email, new_password):
-        abort(400, "Not institutional email or password too short.")
+    except (ValueError, TypeError):
+        logger.error("An error has occurred: code is not a number.")
+        abort(400, "An error has occurred: code is not a number.")
+    if not check_password(new_password):
+        abort(400, "The provided password is too short.")
     hashed_password = generate_password_hash(new_password)
     try:
         user = db.session.query(User).filter_by(email=email).first()
@@ -188,7 +195,7 @@ def reset_password():
         else:
             abort(400, "Invalid credentials.")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while reseting password.\n {e}")
+        logger.error(f"An error has occured while reseting password.\n{e}")
         return abort(500, f"An error has occured while reseting password.")
 
 
@@ -199,7 +206,7 @@ def resend_activation_code():
         email = clean(request.form.get("email"))
         password = clean(request.form.get("password"))
     except KeyError as e:
-        logger.error(f"An error has occured: missing key in request parameters.\n {e}")
+        logger.error(f"An error has occured: missing key in request parameters.\n{e}")
         abort(400, f"An error has occured: missing key in request parameters.")
     try:
         user = db.session.query(User).filter_by(email=email).first()
@@ -217,7 +224,7 @@ def resend_activation_code():
         else:
             abort(400, "Invalid credentials or account already active.")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while resending email.\n {e}")
+        logger.error(f"An error has occured while resending email.\n{e}")
         return abort(500, f"An error has occured while resending email.")
 
 
@@ -229,8 +236,11 @@ def activate_account():
         password = clean(request.form.get("password"))
         code = int(clean(request.form.get("code")))
     except KeyError as e:
-        logger.error(f"An error has occured: missing key in request parameters.\n {e}")
+        logger.error(f"An error has occured: missing key in request parameters.\n{e}")
         abort(400, f"An error has occured: missing key in request parameters.")
+    except (ValueError, TypeError):
+        logger.error("An error has occurred: code is not a number.")
+        abort(400, "An error has occurred: code is not a number.")
     try:
         user = db.session.query(User).filter_by(email=email).first()
         if (
@@ -247,9 +257,8 @@ def activate_account():
             return {"message": "Account activated."}
         else:
             abort(400, "Invalid credentials or account already active.")
-            #! Daca pui litere da 500
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while activating account.\n {e}")
+        logger.error(f"An error has occured while activating account.\n{e}")
         return abort(500, f"An error has occured while activating account.")
 
 
@@ -263,7 +272,11 @@ def logout():
 @user_bp.route("/check-login", methods=["GET"])
 def check_login_status():
     if current_user.is_authenticated:
-        return {"logged_in": True, "user": current_user.email, "type":current_user.user_type}, 200
+        return {
+            "logged_in": True,
+            "user": current_user.email,
+            "type": current_user.user_type,
+        }, 200
     else:
         return {"logged_in": False}, 200
 
@@ -294,12 +307,11 @@ def send_registration_email(code: int, email: str):
             """
         ]
         yag.send(email, "Codul tău Feedback IESC pentru activarea contului", contents)
-        # logger.info(f"Email sent to {email} with code {code}.")
-    except Exception as e:
+    except Exception as error:
         logger.error(
-            f"An error has occured while sending an email to {email}.\n {str(e)}"
+            f"An error has occured while sending an email to {email}.\n {str(error)}"
         )
-        return e
+        return error
 
 
 def send_password_email(code: int, email: str):
@@ -323,15 +335,14 @@ def send_password_email(code: int, email: str):
             """
         ]
         yag.send(email, "Codul tău Feedback IESC pentru resetarea parolei", contents)
-        # logger.info(f"Email sent to {email} with code {code}.")
     except Exception as e:
-        logger.error(
-            f"An error has occured while sending an email to {email}.\n {str(e)}"
-        )
+        logger.error(f"An error has occured while sending an email to {email}.\n{e}")
         return e
 
 
-def check_email_password(email: str, password: str):
-    if len(password) > 7 and email.endswith("@student.unitbv.ro"):
-        return True
-    return False
+def check_email(email: str):
+    return email.endswith("@student.unitbv.ro")
+
+
+def check_password(password: str):
+    return len(password) > 7

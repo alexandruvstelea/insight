@@ -11,7 +11,6 @@ import os
 
 logger = logging.getLogger(__name__)
 comments_bp = Blueprint("comments", __name__)
-
 load_dotenv(os.path.normpath("../.env"))
 
 
@@ -27,7 +26,7 @@ def check_comments_number(email: str, subject_id: int) -> bool:
         return False
     except exc.SQLAlchemyError as e:
         logger.error(
-            f"An error has occured while checking the number of comments.\n{str(e)}"
+            f"An error has occured while checking the number of comments.\n{e}"
         )
         return False
 
@@ -45,14 +44,15 @@ def create_comment():
     except KeyError as e:
         logger.error(f"An error has occured: missing key in request parameters.\n {e}")
         abort(400, f"An error has occured: missing key in request parameters.")
-
+    except (ValueError, TypeError):
+        logger.error("An error has occurred: subject id is not a number.")
+        abort(400, "An error has occurred: subject id is not a number.")
     try:
-        if not check_comments_number(email, subject_id):
-            abort(
-                400,
-                f"User with email {email} has posted too many comments for this subject.",
-            )
-
+        # if not check_comments_number(email, subject_id):
+        #    abort(
+        #        400,
+        #        f"User with email {email} has posted too many comments for this subject.",
+        #    )
         new_comment = Comment(
             email,
             comment,
@@ -93,8 +93,8 @@ def get_comments():
             logger.warning("No comments found.")
             abort(404, "No comments found.")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while retrieving objects.\n {e}")
-        abort(500, f"An error has occured while retrieving objects.")
+        logger.error(f"An error has occured while retrieving comments.\n {e}")
+        abort(500, f"An error has occured while retrieving comments.")
 
 
 @comments_bp.route("/comments/<int:subject_id>", methods=["GET"])
@@ -129,9 +129,7 @@ def get_comments_by_id(subject_id):
             return jsonify({"message": "No comments found for this subject."}), 404
 
     except exc.SQLAlchemyError as e:
-        logger.error(
-            f"An error has occured while retrieving comments for subject_id {subject_id}.\n {e}"
-        )
+        logger.error(f"An error has occured while retrieving comments.\n {e}")
         abort(500, f"An error has occured while retrieving comments.")
 
 
@@ -150,6 +148,6 @@ def delete_comment(comment_id):
                 logger.warning(f"No comment with ID={comment_id} to delete")
                 return abort(404, f"No comment with ID={comment_id} to delete")
         except exc.SQLAlchemyError as e:
-            logger.error(f"An error has occured while updating object.\n {e}")
-            return abort(500, f"An error has occured while updating object.")
-    abort(401, "Not authorized.")
+            logger.error(f"An error has occured while deleting comment.\n {e}")
+            return abort(500, f"An error has occured while deleting comment.")
+    abort(401, "Account not authorized to perform this action.")

@@ -1,9 +1,9 @@
 from flask import Blueprint, jsonify, request, abort
 from flask_login import current_user, login_required
-from models.weeks import Week
-from __init__ import db, limiter
-from sqlalchemy import text, exc
 from datetime import timedelta, datetime
+from __init__ import db, limiter
+from models.weeks import Week
+from sqlalchemy import text, exc
 from bleach import clean
 import logging
 
@@ -23,25 +23,25 @@ def generate_weeks():
             intervals = [int(i) for i in request.form.getlist("intervals")]
         except KeyError as e:
             logger.error(
-                f"An error has occured: missing key in request parameters.\n {e}"
+                f"An error has occured: missing key in request parameters.\n{e}"
             )
             abort(400, f"An error has occured: missing key in request parameters.")
 
         def add_weeks(number_of_weeks, interval_start, counter):
             try:
-                    for x in range(number_of_weeks):
-                        counter += 1
-                        if counter <= 14:
-                            semester = 1
-                        else:
-                            semester = 2
-                        end = interval_start + timedelta(days=6)
-                        db.session.add(Week(interval_start, end, semester))
-                        interval_start = end + timedelta(days=1)
-                    db.session.commit()
-                    return interval_start, counter
+                for x in range(number_of_weeks):
+                    counter += 1
+                    if counter <= 14:
+                        semester = 1
+                    else:
+                        semester = 2
+                    end = interval_start + timedelta(days=6)
+                    db.session.add(Week(interval_start, end, semester))
+                    interval_start = end + timedelta(days=1)
+                db.session.commit()
+                return interval_start, counter
             except Exception as e:
-                logger.error(f"An error has occured while generating weeks.\n {e}")
+                logger.error(f"An error has occured while generating weeks.\n{e}")
                 abort(500, f"An error has occured while generating weeks.")
 
         try:
@@ -58,9 +58,9 @@ def generate_weeks():
             logger.info("Generated weeks.")
             return {"response": "Weeks generated"}, 200
         except Exception as e:
-            logger.error(f"An error has occured while generating weeks.\n {e}")
+            logger.error(f"An error has occured while generating weeks.\n{e}")
             abort(500, f"An error has occured while generating weeks.")
-    abort(401, "Not authorized.")
+    abort(401, "Account not authorized to perform this action.")
 
 
 @weeks_bp.route("/weeks", methods=["GET"])
@@ -85,7 +85,7 @@ def get_weeks():
             logger.warning("No weeks found.")
             abort(404, "No weeks found.")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while retrieving data.\n {e}")
+        logger.error(f"An error has occured while retrieving data.\n{e}")
         abort(500, f"An error has occured while retrieving data.")
 
 
@@ -100,6 +100,6 @@ def reset_weeks():
             logger.info("Weeks deleted from database.")
             return {"response": "Weeks deleted from database."}, 200
         except exc.SQLAlchemyError as e:
-            logger.error(f"An error has occured while deleting objects.\n {e}")
-            return abort(500, f"An error has occured while deleting objects.")
-    abort(401, "Not authorized.")
+            logger.error(f"An error has occured while deleting weeks.\n{e}")
+            return abort(500, f"An error has occured while deleting weeks.")
+    abort(401, "Account not authorized to perform this action.")

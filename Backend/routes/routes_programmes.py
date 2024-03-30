@@ -31,12 +31,12 @@ def create_programme():
             return {"response": "New programme added to database"}, 200
         except exc.SQLAlchemyError as e:
             logger.error(
-                f"An error has occured while adding object to the database.\n {e}"
+                f"An error has occured while adding programme to the database.\n {e}"
             )
             return abort(
-                500, f"An error has occured while adding object to the database."
+                500, f"An error has occured while adding programme to the database."
             )
-    abort(401, "Not authorized.")
+    abort(401, "Account not authorized to perform this action.")
 
 
 @programme_bp.route("/programmes", methods=["GET"])
@@ -60,8 +60,8 @@ def get_programmes():
             logger.warning("No programmes found.")
             abort(404, "No programmes found.")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while retrieving objects.\n {e}")
-        abort(500, f"An error has occured while retrieving objects.")
+        logger.error(f"An error has occured while retrieving programmes.\n{e}")
+        abort(500, f"An error has occured while retrieving programmes.")
 
 
 @programme_bp.route("/programmes/<int:programme_id>", methods=["GET"])
@@ -80,8 +80,8 @@ def get_programme_by_id(programme_id):
             logger.warning(f"No programme with ID={programme_id} found.")
             return abort(404, f"No programme with ID={programme_id} found.")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while retrieving objects.\n {e}")
-        abort(500, f"An error has occured while retrieving objects.")
+        logger.error(f"An error has occured while retrieving programmes.\n {e}")
+        abort(500, f"An error has occured while retrieving programmes.")
 
 
 @programme_bp.route("/programmes/<int:programme_id>", methods=["PUT"])
@@ -111,9 +111,9 @@ def update_room(programme_id):
                 logger.warning(f"No programme with ID={programme_id} to update")
                 return abort(404, f"No programme with ID={programme_id} to update")
         except exc.SQLAlchemyError as e:
-            logger.error(f"An error has occured while updating object.\n {e}")
-            return abort(500, f"An error has occured while updating object.")
-    abort(401, "Not authorized.")
+            logger.error(f"An error has occured while updating programme.\n {e}")
+            return abort(500, f"An error has occured while updating programme.")
+    abort(401, "Account not authorized to perform this action.")
 
 
 @programme_bp.route("/programmes/<int:programme_id>", methods=["DELETE"])
@@ -133,6 +133,6 @@ def delete_room(programme_id):
                 logger.warning(f"No programme with ID={programme_id} to delete")
                 return abort(404, f"No programme with ID={programme_id} to delete")
         except exc.SQLAlchemyError as e:
-            logger.error(f"An error has occured while updating object.\n {e}")
-            return abort(500, f"An error has occured while updating object.")
-    abort(401, "Not authorized.")
+            logger.error(f"An error has occured while deleting programme.\n {e}")
+            return abort(500, f"An error has occured while deleting programme.")
+    abort(401, "Account not authorized to perform this action.")
