@@ -9,8 +9,28 @@ import Courses from "@/components/admin/Courses";
 import Comments from "@/components/admin/Comments";
 import Button from "@mui/joy/Button";
 import { ToastContainer } from "react-toastify";
+import { fetchCheckLogin } from "@/app/Actions/getUserData";
+import { useRouter } from "next/navigation";
 
 export default function Admin() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkLoggedIn = async () => {
+      try {
+        const user = await fetchCheckLogin();
+        console.log(user);
+        if (!user.logged_in || user.type != 0) {
+          router.push("/login");
+        }
+      } catch (error) {
+        console.error("Error checking login status:", error);
+      }
+    };
+
+    checkLoggedIn();
+  }, [router]);
+
   const [weeks, setWeeks] = useState();
   const [professors, setProfessors] = useState([]);
   const [subjects, setSubjects] = useState([]);

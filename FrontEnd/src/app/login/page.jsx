@@ -71,14 +71,14 @@ export default function UserLogin() {
             {error && <div className={styles.errorContainer}>{error}</div>}
             <div className={styles.content}>
               <div className={styles.passLink}>
-                <Link href="/userRecover">Recuperare parola!</Link>
+                <Link href="/recover">Recuperare parola!</Link>
               </div>
             </div>
             <div className={styles.field}>
               <input className={styles.input} type="submit" value="Login" />
             </div>
             <div className={styles.signupLink}>
-              Nu ai cont? <Link href="/userRegister">Creaza cont!</Link>
+              Nu ai cont? <Link href="/register">Creaza cont!</Link>
             </div>
           </form>
         </div>
