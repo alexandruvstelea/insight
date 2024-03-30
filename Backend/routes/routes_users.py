@@ -81,11 +81,32 @@ def register():
             registration_code=code,
         )
         db.session.add(new_user)
+        db.session.commit()
         send_registration_email(code, email)
         return {"message": "Registration successful!"}, 201
     except exc.SQLAlchemyError as e:
         logger.error(f"An error has occured while registering the user.\n {e}")
         return abort(500, f"An error has occured while registering the user.")
+
+
+@user_bp.route(f"/users/<int:user_id>", methods=["DELETE"])
+@limiter.limit("50 per minute")
+@login_required
+def delete_user(user_id):
+    if current_user.user_type == 0:
+        try:
+            affected_rows = db.session.query(User).filter_by(id=user_id).delete()
+            if affected_rows > 0:
+                db.session.commit()
+                logger.info(f"User with ID={user_id} deleted")
+                return {"response": f"User with ID={user_id} deleted"}, 200
+            else:
+                logger.warning(f"No user with ID={user_id} to delete")
+                return abort(404, f"No user with ID={user_id} to delete")
+        except exc.SQLAlchemyError as e:
+            logger.error(f"An error has occured while deleting objects.\n {e}")
+            abort(500, f"An error has occured while deleting objects.")
+    abort(401, "Account not authorized to perform this action.")
 
 
 @user_bp.route("/login", methods=["POST"])
