@@ -1,9 +1,9 @@
+"use client";
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./dropdownArchive.module.css";
 import Link from "next/link";
 export default function DropdownArchive() {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedYear, setSelectedYear] = useState("Arhiv\u0103");
   const dropdownRef = useRef(null);
 
   useEffect(() => {
@@ -24,7 +24,7 @@ export default function DropdownArchive() {
     <>
       <div ref={dropdownRef} className={styles.dropdown}>
         <button onClick={toggleDropdown} className={styles.dropbtn}>
-          {selectedYear}
+          Arhivă ▼
         </button>
         {isOpen && (
           <div className={styles.dropdownContent}>

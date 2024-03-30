@@ -263,7 +263,7 @@ def logout():
 @user_bp.route("/check-login", methods=["GET"])
 def check_login_status():
     if current_user.is_authenticated:
-        return {"logged_in": True, "user": current_user.email}, 200
+        return {"logged_in": True, "user": current_user.email, "type":current_user.user_type}, 200
     else:
         return {"logged_in": False}, 200
 

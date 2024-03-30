@@ -1,7 +1,7 @@
 "use client";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
-import styles from "../userLogin/page.module.css";
+import styles from "../login/page.module.css";
 import Link from "next/link";
 import React, { useState } from "react";
 import { extractTextFromHTML } from "@/app/Actions/functions";
@@ -59,7 +59,7 @@ export default function UserRecover() {
 
       if (response.ok) {
         setError("");
-        router.push(`/userLogin`);
+        router.push(`/login`);
       } else if (response.status === 400) {
         const errorMessage = await response.text();
         setError(extractTextFromHTML(errorMessage));
@@ -97,7 +97,7 @@ export default function UserRecover() {
                   />
                 </div>
                 <div className={styles.signupLink}>
-                  Ai deja cont? <Link href="/userLogin">Conecteaza-te!</Link>
+                  Ai deja cont? <Link href="/login">Conecteaza-te!</Link>
                 </div>
               </form>
             </div>

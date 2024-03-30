@@ -70,7 +70,7 @@ export default function UserRegister() {
 
       if (response.ok) {
         setError("");
-        router.push(`/userLogin`);
+        router.push(`/login`);
       } else if (response.status === 400) {
         const errorMessage = await response.text();
         setError(extractTextFromHTML(errorMessage));
@@ -171,7 +171,7 @@ export default function UserRegister() {
                   />
                 </div>
                 <div className={styles.signupLink}>
-                  Ai deja cont? <Link href="/userLogin">Conecteaza-te!</Link>
+                  Ai deja cont? <Link href="/login">Conecteaza-te!</Link>
                 </div>
               </form>
             </div>
