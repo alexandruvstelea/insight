@@ -4,6 +4,7 @@ import styles from "./page.module.css";
 import Weeks from "@/components/admin/Weeks";
 import Professors from "@/components/admin/Professors";
 import Subjects from "@/components/admin/Subjects";
+import Programmes from "@/components/admin/Programmes";
 import Rooms from "@/components/admin/Rooms";
 import Courses from "@/components/admin/Courses";
 import Comments from "@/components/admin/Comments";
@@ -19,7 +20,6 @@ export default function Admin() {
     const checkLoggedIn = async () => {
       try {
         const user = await fetchCheckLogin();
-        console.log(user);
         if (!user.logged_in || user.type != 0) {
           router.push("/login");
         }
@@ -37,6 +37,7 @@ export default function Admin() {
   const [rooms, setRooms] = useState([]);
   const [courses, setCourses] = useState();
   const [comments, setComments] = useState();
+  const [programmes, setProgrammes] = useState();
 
   const fetchWeeks = async () => {
     try {
@@ -142,6 +143,25 @@ export default function Admin() {
       console.error("Fetch error:", err);
     }
   };
+  const fetchProgrammes = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/programmes`
+      );
+      if (!response.ok) {
+        if (response.status === 404) {
+          setProgrammes([]);
+        } else {
+          throw new Error("Failed to fetch");
+        }
+      }
+
+      const data = await response.json();
+      setProgrammes(data);
+    } catch (err) {
+      console.error("Fetch error:", err);
+    }
+  };
 
   useEffect(() => {
     fetchWeeks();
@@ -150,6 +170,7 @@ export default function Admin() {
     fetchSubjects();
     fetchCourses();
     fetchCommnets();
+    fetchProgrammes();
   }, []);
 
   return (
@@ -189,6 +210,7 @@ export default function Admin() {
           fetchSubjects={fetchSubjects}
         />
         <Rooms rooms={rooms} fetchRooms={fetchRooms} />
+        <Programmes programmes={programmes} fetchProgrammes={fetchProgrammes} />
         <Courses
           courses={courses}
           rooms={rooms}
