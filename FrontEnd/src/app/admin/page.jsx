@@ -8,6 +8,7 @@ import Programmes from "@/components/admin/Programmes";
 import Rooms from "@/components/admin/Rooms";
 import Courses from "@/components/admin/Courses";
 import Comments from "@/components/admin/Comments";
+import Users from "@/components/admin/Users";
 import Button from "@mui/joy/Button";
 import { ToastContainer } from "react-toastify";
 import { fetchCheckLogin } from "@/app/Actions/getUserData";
@@ -31,13 +32,14 @@ export default function Admin() {
     checkLoggedIn();
   }, [router]);
 
-  const [weeks, setWeeks] = useState();
+  const [weeks, setWeeks] = useState([]);
   const [professors, setProfessors] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [rooms, setRooms] = useState([]);
-  const [courses, setCourses] = useState();
-  const [comments, setComments] = useState();
-  const [programmes, setProgrammes] = useState();
+  const [courses, setCourses] = useState([]);
+  const [comments, setComments] = useState([]);
+  const [programmes, setProgrammes] = useState([]);
+  const [users, setUsers] = useState([]);
 
   const fetchWeeks = async () => {
     try {
@@ -163,6 +165,26 @@ export default function Admin() {
     }
   };
 
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/users`, {
+        credentials: "include",
+      });
+      if (!response.ok) {
+        if (response.status === 404) {
+          setUsers([]);
+        } else {
+          throw new Error("Failed to fetch");
+        }
+      }
+
+      const data = await response.json();
+      setUsers(data);
+    } catch (err) {
+      console.error("Fetch error:", err);
+    }
+  };
+
   useEffect(() => {
     fetchWeeks();
     fetchProfessors();
@@ -171,6 +193,7 @@ export default function Admin() {
     fetchCourses();
     fetchCommnets();
     fetchProgrammes();
+    fetchUsers();
   }, []);
 
   return (
@@ -218,6 +241,8 @@ export default function Admin() {
           fetchCourses={fetchCourses}
         />
         <Comments comments={comments} fetchCommnets={fetchCommnets} />
+        <Users programmes={programmes} users={users} fetchUsers={fetchUsers} />
+
         <Button
           component="a"
           href="/"
