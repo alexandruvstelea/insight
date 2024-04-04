@@ -3,12 +3,12 @@ import Link from "next/link";
 import styles from "./header.module.css";
 import DropdownArchive from "@/components/header/DropdownArchive";
 
-export default function Header() {
+export default function Header({ showArchive }) {
   return (
     <>
       <div className={styles.header}>
         <div className={styles.headerLeft}>
-          <DropdownArchive />
+          {showArchive && <DropdownArchive />}
         </div>
         <div className={styles.headerCenter}>
           <h1 className={styles.headerTitle}>

@@ -23,6 +23,16 @@ export default function UserRegister() {
   const handleRegister = async (e) => {
     e.preventDefault();
 
+    if (!email.endsWith("@student.unitbv.ro")) {
+      setError("Adresa de email nu este instituțională");
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("Parola trebuie să conțină minim 6 caractere");
+      return;
+    }
+
     const registrationFormData = new FormData();
     registrationFormData.append("email", email);
     registrationFormData.append("password", password);
@@ -120,7 +130,7 @@ export default function UserRegister() {
   return (
     <>
       <div className={styles.mainContiner}>
-        <Header />
+        <Header showArchive={false} />
 
         <div className={styles.wrapper}>
           {!showActivationForm ? (
@@ -152,8 +162,9 @@ export default function UserRegister() {
                     className={styles.select}
                     value={programmeId}
                     onChange={(e) => setProgrammeId(e.target.value)}
+                    required
                   >
-                    <option value="">Selecteaza o optiune</option>
+                    <option value="" hidden></option>
                     {programmes.map((programme) => (
                       <option key={programme.id} value={programme.id}>
                         {programme.name}
@@ -167,11 +178,11 @@ export default function UserRegister() {
                   <input
                     className={styles.input}
                     type="submit"
-                    value="Inregistreaza-te"
+                    value="Înregistrează-te"
                   />
                 </div>
                 <div className={styles.signupLink}>
-                  Ai deja cont? <Link href="/login">Conecteaza-te!</Link>
+                  Ai deja cont? <Link href="/login">Conectează-te!</Link>
                 </div>
               </form>
             </div>
@@ -191,7 +202,7 @@ export default function UserRegister() {
                 </div>
                 <div className={styles.signupLink}>
                   <button className={styles.button} onClick={handleResendCode}>
-                    Retrimitere cod
+                    Retrimitere cod!
                   </button>
                 </div>
                 {error && <div className={styles.errorContainer}>{error}</div>}

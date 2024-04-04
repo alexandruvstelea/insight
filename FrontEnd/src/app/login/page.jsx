@@ -30,9 +30,8 @@ export default function UserLogin() {
 
       if (response.ok) {
         setError("");
-        router.push(`/professors`);
+        router.push(`/form`);
       } else if (response.status === 401 || response.status === 400) {
-        console.log("adwadawdawd");
         const errorMessage = await response.text();
         setError(extractTextFromHTML(errorMessage));
       }
@@ -44,7 +43,7 @@ export default function UserLogin() {
   return (
     <>
       <div className={styles.mainContiner}>
-        <Header />
+        <Header showArchive={false} />
         <div className={styles.wrapper}>
           <div className={styles.title}>Login</div>
           <form className={styles.form} onSubmit={handleSubmit}>
@@ -71,14 +70,14 @@ export default function UserLogin() {
             {error && <div className={styles.errorContainer}>{error}</div>}
             <div className={styles.content}>
               <div className={styles.passLink}>
-                <Link href="/recover">Recuperare parola!</Link>
+                <Link href="/recover">Recuperare parolă!</Link>
               </div>
             </div>
             <div className={styles.field}>
               <input className={styles.input} type="submit" value="Login" />
             </div>
             <div className={styles.signupLink}>
-              Nu ai cont? <Link href="/register">Creaza cont!</Link>
+              Nu ai cont? <Link href="/register">Crează cont!</Link>
             </div>
           </form>
         </div>

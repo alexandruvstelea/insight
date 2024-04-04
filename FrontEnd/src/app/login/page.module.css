@@ -4,6 +4,7 @@
   justify-content: space-between;
   align-items: center;
   height: 100vh;
+  height: 100dvh !important;
   width: 100vw;
 }
 .wrapper {
@@ -20,10 +21,10 @@
   color: #fff;
   user-select: none;
   border-radius: 15px 15px 0 0;
-  background: linear-gradient(-135deg, #6650c8, #4158d0);
+  background: linear-gradient(-135deg, #007fff, #68aff7);
 }
 .form {
-  padding: 10px 30px 50px 30px;
+  padding: 10px 20px 50px 20px;
 }
 .field {
   height: 50px;
@@ -37,20 +38,24 @@
   width: 100%;
   outline: none;
   font-size: 17px;
-  padding-left: 20px;
   border: 1px solid lightgrey;
   border-radius: 25px;
   transition: all 0.3s ease;
 }
 .select {
-  width: calc(100% + 24px);
+  width: calc(100% + 4px);
 }
 .input:focus,
-.input:valid {
+.input:valid,
+.select:focus,
+.select:valid {
   border-color: #4158d0;
 }
 .select {
   appearance: none;
+}
+.select:hover {
+  cursor: pointer;
 }
 .label {
   position: absolute;
@@ -63,10 +68,10 @@
   transform: translateY(-50%);
   transition: all 0.3s ease;
 }
-.input:focus ~ label,
-.input:valid ~ label,
-.select:focus ~ label,
-.select:valid ~ label {
+.input:focus ~ .label,
+.input:valid ~ .label,
+.select:focus ~ .label,
+.select:valid ~ .label {
   top: 0%;
   font-size: 16px;
   color: #4158d0;
@@ -102,19 +107,17 @@
   font-size: 20px;
   font-weight: 500;
   cursor: pointer;
-  background: linear-gradient(-135deg, #c850c0, #4158d0);
+  background: linear-gradient(-135deg, #68aff7, #007fff);
   transition: all 0.3s ease;
 }
-/* .input[type="submit"]:active {
-  transform: scale(0.95);
-} */
+
 .signupLink {
   color: #262626;
   margin-top: 20px;
   text-align: center;
 }
 .button {
-  background-color: none;
+  background-color: white;
   border: none;
   color: #3a98d8;
   font-size: 16px;

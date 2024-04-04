@@ -72,7 +72,7 @@ export default function UserRecover() {
   return (
     <>
       <div className={styles.mainContiner}>
-        <Header />
+        <Header showArchive={false} />
         <div className={styles.wrapper}>
           {!showChangePassForm ? (
             <div>
@@ -97,7 +97,7 @@ export default function UserRecover() {
                   />
                 </div>
                 <div className={styles.signupLink}>
-                  Ai deja cont? <Link href="/login">Conecteaza-te!</Link>
+                  Ai deja cont? <Link href="/login">Conectează-te!</Link>
                 </div>
               </form>
             </div>
