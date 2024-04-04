@@ -68,8 +68,7 @@ export default function BarChart({ graphData }) {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: "top",
-        onClick: () => {},
+        display: false,
       },
     },
     scales: {
@@ -117,8 +116,8 @@ export default function BarChart({ graphData }) {
 
   const [selectedDataset, setSelectedDataset] = useState("Total");
 
-  const handleDatasetChange = (event) => {
-    setSelectedDataset(event.target.value);
+  const handleDatasetChange = (label) => {
+    setSelectedDataset(label);
   };
 
   const datasets = characteristics.map((characteristic, index) => ({
@@ -135,21 +134,27 @@ export default function BarChart({ graphData }) {
 
   return (
     <>
+      <div className={styles.buttonsContainer}>
+        {characteristics.map((characteristic, index) => (
+          <div
+            key={index}
+            onClick={() => handleDatasetChange(characteristic[1])}
+            className={`${styles.button} ${
+              selectedDataset === characteristic[1] ? styles.selectedButton : ""
+            }`}
+            style={{ backgroundColor: colors[index] }}
+          >
+            {characteristic[1]}
+          </div>
+        ))}
+      </div>
+
       <Bar
         options={options}
         data={{ labels, datasets: [selectedData] }}
         width="600"
         height="250"
       />
-      <div className={styles.selectContainer}>
-        <select value={selectedDataset} onChange={handleDatasetChange}>
-          {characteristics.map((characteristic, index) => (
-            <option key={index} value={characteristic[1]}>
-              {characteristic[1]}
-            </option>
-          ))}
-        </select>
-      </div>
     </>
   );
 }

@@ -19,6 +19,7 @@
 
 .titleContainer {
   text-align: center;
+  margin-bottom: 15px;
 }
 
 .dataContainer {
@@ -26,11 +27,13 @@
   flex-direction: row;
   justify-content: space-between;
   width: 100vw;
-  height: 650px;
+  height: 700px;
+  border: 5px solid #e0e0e0;
 }
 .chartContainer {
   width: 60%;
   padding-left: 8px;
+  height: 650px;
 }
 
 .rightContainer {
@@ -55,6 +58,7 @@
   }
   .chartContainer {
     width: 65%;
+    height: 500px;
   }
 
   .rightContainer {
@@ -70,7 +74,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 20px;
+    gap: 50px;
     height: auto;
   }
   .chartContainer {
@@ -86,6 +90,7 @@
 }
 @media screen and (max-width: 768px) {
   .rightContainer {
+    margin-top: 15px;
     flex-direction: column-reverse;
     width: 100%;
     gap: 0;
