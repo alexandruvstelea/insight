@@ -1,7 +1,7 @@
 .header {
   background-color: #007fff;
-  width: 100%;
-  height: 70px;
+  width: 100vw;
+  height: 68px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -67,11 +67,18 @@
 .button:hover {
   background-color: #0070e0;
 }
-
+.dropdownContainer {
+  display: none;
+}
 @media screen and (max-width: 850px) {
   .headerLeft,
   .headerRight {
     display: none;
+  }
+  .dropdownContainer {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
   }
   .headerCenter {
     width: 100%;

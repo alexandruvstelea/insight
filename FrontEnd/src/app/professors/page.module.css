@@ -2,17 +2,23 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
+  height: 100dvh;
   width: 100vw;
+}
+.contentContainer {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 
 .notFoundContainer {
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 24px;
-  width: 100%;
-  height: 85%;
   text-align: center;
   background-color: #f2f2f2;
   color: black;
@@ -24,26 +30,4 @@
   fill: black;
   width: 64px;
   height: 64px;
-}
-
-.secondaryDropdown {
-  display: none;
-}
-
-@media screen and (max-width: 850px) {
-  .secondaryDropdown {
-    display: inline;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .cont {
-    height: 83.05vh;
-  }
-}
-
-@media screen and (max-width: 400px) {
-  .searchBar {
-    height: 15%;
-  }
 }

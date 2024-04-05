@@ -9,14 +9,14 @@
   font-size: 24px;
   border: none;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 1px;
   transition: all 0.2s ease-in-out;
 }
 
 .dropbtn:hover {
   border: none;
-  letter-spacing: 1px;
+  letter-spacing: 1.2px;
   font-weight: 700;
   background-color: #0070e0;
 }
@@ -55,5 +55,9 @@
 @media screen and (max-width: 850px) {
   .dropbtn {
     color: black;
+  }
+
+  .dropbtn:hover {
+    background-color: #c9d1da;
   }
 }

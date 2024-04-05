@@ -46,10 +46,6 @@ export default function DropdownArchive() {
             >
               2025-2026
             </Link>
-
-            {/* <button onClick={() => handleSelectYear("2025-2026")}>
-              2025-2026
-            </button> */}
           </div>
         )}
       </div>

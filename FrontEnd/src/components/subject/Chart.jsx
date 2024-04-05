@@ -126,14 +126,18 @@ export default function BarChart({ graphData }) {
     backgroundColor: colors[index],
   }));
 
-  console.log(datasets);
-
   const selectedData = datasets.find(
     (dataset) => dataset.label === selectedDataset
   );
 
   return (
     <>
+      <Bar
+        options={options}
+        data={{ labels, datasets: [selectedData] }}
+        width="600"
+        height="250"
+      />
       <div className={styles.buttonsContainer}>
         {characteristics.map((characteristic, index) => (
           <div
@@ -148,13 +152,6 @@ export default function BarChart({ graphData }) {
           </div>
         ))}
       </div>
-
-      <Bar
-        options={options}
-        data={{ labels, datasets: [selectedData] }}
-        width="600"
-        height="250"
-      />
     </>
   );
 }

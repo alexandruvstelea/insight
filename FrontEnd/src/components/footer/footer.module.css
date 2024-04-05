@@ -4,8 +4,8 @@
   justify-content: center;
   background: #000;
   width: 100%;
-  height: 30px;
-  max-height: 30px;
+  min-height: 33px;
+  max-height: 33px;
   color: white;
   font-size: 0.8rem;
 }
@@ -27,7 +27,7 @@
   color: #0040c1;
 }
 
-@media screen and (max-width: 380px) {
+@media screen and (max-width: 350px) {
   .footer {
     display: none;
   }

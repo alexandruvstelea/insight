@@ -7,7 +7,7 @@ import CustomSlider from "@/components/professors/CustomSlider";
 import SearchBar from "@/components/professors/SearchBar";
 export default async function Professors({ searchParams, params }) {
   const search = searchParams.search;
-  console.log(search);
+
   const professors = await fetchOldProfessorsData(params.archiveYear);
 
   const filteredProfessors = search
@@ -31,17 +31,19 @@ export default async function Professors({ searchParams, params }) {
       {professors && professors.length > 0 ? (
         <>
           <div className={styles.professorsPageContainer}>
-            <Header />
-            <SearchBar />
-            <CustomSlider professors={filteredProfessors} />
+            <Header showArchive={true} />
+            <div className={styles.contentContainer}>
+              <SearchBar />
+              <CustomSlider professors={filteredProfessors} />
+            </div>
+
             <Footer />
           </div>
         </>
       ) : (
         <>
           <div className={styles.professorsPageContainer}>
-            <Header />
-
+            <Header showArchive={true} />
             <div className={styles.notFoundContainer}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
