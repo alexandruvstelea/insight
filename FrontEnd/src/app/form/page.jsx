@@ -28,10 +28,10 @@ export default function RatingForm() {
     },
   }));
   const [ratings, setRatings] = useState({
-    clarity: 0,
-    comprehension: 0,
-    interactivity: 0,
-    relevance: 0,
+    clarity: null,
+    comprehension: null,
+    interactivity: null,
+    relevance: null,
   });
   const handleRatingChange = (name, value) => {
     setRatings({
@@ -40,11 +40,12 @@ export default function RatingForm() {
     });
   };
   const handleSubmit = async () => {
+    console.log(ratings);
     if (
-      ratings.clarity === 0 ||
-      ratings.comprehension === 0 ||
-      ratings.interactivity === 0 ||
-      ratings.relevance === 0
+      ratings.clarity === null ||
+      ratings.comprehension === null ||
+      ratings.interactivity === null ||
+      ratings.relevance === null
     ) {
       setErrorMessage(
         "Te rugăm să evaluezi toate categoriile înainte de a trimite."
@@ -65,11 +66,10 @@ export default function RatingForm() {
       3,
       "0"
     );
-
     const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}.${milliseconds}`;
-    console.log(formattedDateTime);
+
     const formData = new FormData();
-    // formData.append("date", "2024-04-15 09:00:10.559345");
+    // formData.append("date", "2024-04-15 09:00:10.559345"); // for testing purposes
     formData.append("date", formattedDateTime);
     formData.append("clarity", ratings.clarity);
     formData.append("interactivity", ratings.interactivity);
