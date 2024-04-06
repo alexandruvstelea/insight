@@ -3,11 +3,15 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
   flex-shrink: 0;
-  margin-top: 50px;
 }
 .title {
   font-size: 24px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
+}
+@media screen and (max-width: 1100px) {
+  .ratingOverview {
+    width: 50%;
+    flex-shrink: 0;
+  }
 }

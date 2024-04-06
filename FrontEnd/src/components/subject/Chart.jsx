@@ -20,7 +20,7 @@ ChartJS.register(
   Legend
 );
 
-export default function BarChart({ graphData }) {
+export default function BarChart({ graphData, colors }) {
   const isWindowAvailable = typeof window !== "undefined";
   const [viewportWidth, setViewportWidth] = useState(
     isWindowAvailable ? window.innerWidth : null
@@ -38,14 +38,6 @@ export default function BarChart({ graphData }) {
       return () => window.removeEventListener("resize", handleResize);
     }
   }, [isWindowAvailable]);
-
-  const colors = [
-    "rgba(0, 64, 193, 1)",
-    "rgba(5, 145, 248, 1)",
-    "rgba(39, 223, 243, 1)",
-    "rgba(117, 220, 159, 1)",
-    "rgba(0, 169, 165, 1)",
-  ];
 
   const characteristics = [
     ["overall", "Total"],
@@ -120,6 +112,10 @@ export default function BarChart({ graphData }) {
     setSelectedDataset(label);
   };
 
+  const handleDatasetChangeSelect = (event) => {
+    setSelectedDataset(event.target.value);
+  };
+
   const datasets = characteristics.map((characteristic, index) => ({
     label: characteristic[1],
     data: characteristicData[characteristic[0]],
@@ -132,12 +128,33 @@ export default function BarChart({ graphData }) {
 
   return (
     <>
-      <Bar
-        options={options}
-        data={{ labels, datasets: [selectedData] }}
-        width="600"
-        height="250"
-      />
+      <div className={styles.selectContainer}>
+        <select
+          className={styles.select}
+          value={selectedDataset}
+          onChange={handleDatasetChangeSelect}
+        >
+          {characteristics.map((characteristic, index) => (
+            <option
+              className={styles.option}
+              key={index}
+              value={characteristic[1]}
+            >
+              {characteristic[1]}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className={styles.chartContainer}>
+        <Bar
+          options={options}
+          data={{ labels, datasets: [selectedData] }}
+          width="600"
+          height="250"
+        />
+      </div>
+
       <div className={styles.buttonsContainer}>
         {characteristics.map((characteristic, index) => (
           <div

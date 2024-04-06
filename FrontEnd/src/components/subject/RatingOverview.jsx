@@ -4,7 +4,7 @@ import styles from "./ratingOverview.module.css";
 import ProgressContainer from "./ProgressContainer";
 import StarRating from "./StarRating";
 
-export default async function RatingOverview({ ratingsAverage }) {
+export default async function RatingOverview({ ratingsAverage, colors }) {
   const { clarity, comprehension, interactivity, relevance, overall } =
     ratingsAverage;
 
@@ -12,11 +12,27 @@ export default async function RatingOverview({ ratingsAverage }) {
     <>
       <div className={styles.ratingOverview}>
         <h1 className={styles.title}>Media totală</h1>
-        <ProgressContainer name="Claritate" average={clarity} />
-        <ProgressContainer name="Înţelegere" average={comprehension} />
-        <ProgressContainer name="Interactivitate" average={interactivity} />
-        <ProgressContainer name="Relevanţă" average={relevance} />
-        <StarRating overall={overall} />
+        <ProgressContainer
+          name="Claritate"
+          average={clarity}
+          color={colors[1]}
+        />
+        <ProgressContainer
+          name="Înţelegere"
+          average={comprehension}
+          color={colors[2]}
+        />
+        <ProgressContainer
+          name="Interactivitate"
+          average={interactivity}
+          color={colors[3]}
+        />
+        <ProgressContainer
+          name="Relevanţă"
+          average={relevance}
+          color={colors[4]}
+        />
+        <StarRating overall={overall} color={colors[0]} />
       </div>
     </>
   );

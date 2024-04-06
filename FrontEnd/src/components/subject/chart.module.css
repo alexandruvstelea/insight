@@ -4,7 +4,10 @@
   justify-content: center;
   flex-wrap: wrap;
   gap: 10px;
-  margin-bottom: 10px;
+  flex: 7%;
+}
+.chartContainer {
+  flex: 93%;
 }
 
 .button {
@@ -26,4 +29,46 @@
 
 .selectedButton {
   color: black;
+}
+
+.selectContainer {
+  display: none;
+}
+.select {
+  display: flex;
+  text-align: center;
+  padding: 3px;
+  background-color: transparent;
+  outline: none;
+  font-size: 20px;
+  border: 1px solid lightgrey;
+  border-radius: 25px;
+  appearance: none;
+  width: 150px;
+  transition: all 0.2s ease-in-out;
+}
+.select:hover {
+  cursor: pointer;
+  background-color: #c9d1da;
+}
+.option {
+  text-align: center;
+  background-color: lightgrey;
+}
+
+@media screen and (max-width: 768px) {
+  .button {
+    font-size: 15px;
+    padding: 0.5em 1.2em 0.5em 0.9em;
+  }
+}
+@media screen and (max-width: 660px) {
+  .selectContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+  .buttonsContainer {
+    display: none;
+  }
 }

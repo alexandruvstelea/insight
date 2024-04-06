@@ -3,7 +3,7 @@ import React from "react";
 import styles from "./starRatings.module.css";
 import Rating from "@mui/material/Rating";
 
-export default async function StarRating({ overall }) {
+export default async function StarRating({ overall, color }) {
   return (
     <>
       <div className={styles.starContent}>
@@ -15,7 +15,7 @@ export default async function StarRating({ overall }) {
           precision={0.1}
           sx={{
             "& .MuiRating-iconFilled": {
-              color: "#1976D2",
+              color: color,
             },
           }}
           readOnly

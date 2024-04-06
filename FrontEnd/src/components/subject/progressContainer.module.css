@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
+
   margin: 6px 0;
 }
 
@@ -35,6 +35,20 @@
     font-size: 16px;
   }
 }
+@media screen and (min-width: 768px) and (max-width: 850px) {
+  .progressBar {
+    width: 170px;
+  }
+
+  .textM {
+    font-size: 16px;
+  }
+
+  .textMM {
+    font-size: 16px;
+  }
+}
+
 @media screen and (max-width: 420px) {
   .progressBar {
     width: 160px;

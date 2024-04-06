@@ -3,7 +3,7 @@
   flex-direction: column;
   height: 100vh;
   height: 100dvh;
-  width: 100vw;
+  width: 100%;
 }
 .contentContainer {
   flex-grow: 1;
