@@ -115,7 +115,7 @@ def get_professor_average(professor_id):
                 if ratings_average is not None:
                     ratings_list.append(round(float(ratings_average), 1))
             if ratings_list:
-                return {"average": sum(ratings_list) / len(ratings_list)}
+                return {"average": round(sum(ratings_list) / len(ratings_list),1)}
             else:
                 logger.warning(f"No ratings found for subject with ID={subject.id}.")
                 abort(404, f"No ratings found for subject with ID={subject.id}.")

@@ -1,3 +1,4 @@
+from helpers import send_password_email, send_registration_email, check_email, check_password
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Blueprint, jsonify, abort, request
@@ -9,9 +10,7 @@ from random import randint
 from sqlalchemy import exc
 from bleach import clean
 import logging
-import yagmail
 import os
-
 
 logger = logging.getLogger(__name__)
 user_bp = Blueprint("users", __name__)
@@ -284,65 +283,3 @@ def check_login_status():
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
-
-
-def send_registration_email(code: int, email: str):
-    try:
-        EMAIL = os.getenv("EMAIL")
-        PASSWORD = os.getenv("PASSWORD")
-        yag = yagmail.SMTP(EMAIL, PASSWORD)
-        contents = [
-            f"""
-            <html>
-                <body>
-                    <p>Salut!</p>
-                    <p>Mai jos vei găsi codul unic necesar pentru a-ți activa contul pe FeedbackIESC.</p>
-                    <p><b>Codul tău: {code}</b></p>
-                    <p>Te rugăm să introduci acest cod în câmpul corespunzător pe site pentru a continua.</p>
-                    <p>Dacă nu ai solicitat acest cod, te rugăm să ignori acest e-mail sau să ne contactezi pentru asistență.</p>
-                    <p>O zi excelentă,</p>
-                    <p>Echipa Feedback IESC</p>
-                </body>
-            </html>
-            """
-        ]
-        yag.send(email, "Codul tău Feedback IESC pentru activarea contului", contents)
-    except Exception as error:
-        logger.error(
-            f"An error has occured while sending an email to {email}.\n {str(error)}"
-        )
-        return error
-
-
-def send_password_email(code: int, email: str):
-    try:
-        EMAIL = os.getenv("EMAIL")
-        PASSWORD = os.getenv("PASSWORD")
-        yag = yagmail.SMTP(EMAIL, PASSWORD)
-        contents = [
-            f"""
-            <html>
-                <body>
-                    <p>Salut!</p>
-                    <p>Mai jos vei găsi codul unic necesar pentru a-ți schimba parola contului FeedbackIESC.</p>
-                    <p><b>Codul tău: {code}</b></p>
-                    <p>Te rugăm să introduci acest cod în câmpul corespunzător pe site pentru a continua.</p>
-                    <p>Dacă nu ai solicitat acest cod, te rugăm să ignori acest e-mail sau să ne contactezi pentru asistență.</p>
-                    <p>O zi excelentă,</p>
-                    <p>Echipa Feedback IESC</p>
-                </body>
-            </html>
-            """
-        ]
-        yag.send(email, "Codul tău Feedback IESC pentru resetarea parolei", contents)
-    except Exception as e:
-        logger.error(f"An error has occured while sending an email to {email}.\n{e}")
-        return e
-
-
-def check_email(email: str):
-    return email.endswith("@student.unitbv.ro")
-
-
-def check_password(password: str):
-    return len(password) > 7

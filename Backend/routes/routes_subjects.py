@@ -3,10 +3,10 @@ from flask_login import current_user, login_required
 from models.professors import Professor
 from models.programmes import Programme
 from models.subjects import Subject
+from helpers import find_week_type
 from models.courses import Course
 from __init__ import db, limiter
 from datetime import datetime
-from models.weeks import Week
 from sqlalchemy import exc
 from bleach import clean
 import logging
@@ -241,6 +241,8 @@ def get_current_subject():
         abort(400, "An error has occurred: room id is not a number.")
     try:
         week_type, semester = find_week_type(date_time)
+        if week_type == False:
+            abort(404, "Current week couldn't be determined.")
         courses = (
             db.session.query(Course)
             .filter(
@@ -279,22 +281,3 @@ def get_current_subject():
     except exc.SQLAlchemyError as e:
         logger.error(f"An error has occured while retrieving subjects.\n{e}")
         abort(500, f"An error has occured while retrieving subjects.")
-
-
-def find_week_type(date_time):
-    current_week = (
-        db.session.query(Week)
-        .filter(Week.start <= date_time, Week.end >= date_time)
-        .first()
-    )
-    logger.info(f"{date_time}")
-    if current_week:
-        logger.info("Retrieved current week type.")
-        return (
-            [2, current_week.semester]
-            if current_week.id % 2 == 0
-            else [1, current_week.semester]
-        )
-    else:
-        logger.error("Current week couldn't be determined.")
-        abort(404, "Current week couldn't be determined.")

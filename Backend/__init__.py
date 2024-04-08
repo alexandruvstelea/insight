@@ -54,6 +54,7 @@ def init_app():
         from routes.routes_archive import archive_bp
         from routes.routes_programmes import programme_bp
         from routes.routes_users import user_bp
+        from Backend.routes.routes_codes import code_bp
 
         app.register_blueprint(course_bp)
         app.register_blueprint(professor_bp)
@@ -65,6 +66,7 @@ def init_app():
         app.register_blueprint(archive_bp)
         app.register_blueprint(programme_bp)
         app.register_blueprint(user_bp)
+        app.register_blueprint(code_bp)
 
         logging.basicConfig(
             filename="app.log",

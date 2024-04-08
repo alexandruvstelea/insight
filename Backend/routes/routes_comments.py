@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request, abort
 from flask_login import current_user, login_required
 from models.comments import Comment
 from __init__ import db, limiter
+from helpers import verify_code
 from dotenv import load_dotenv
 from datetime import datetime
 from sqlalchemy import exc
@@ -35,12 +36,11 @@ def check_comments_number(email: str, subject_id: int) -> bool:
 @login_required
 def create_comment():
     try:
-        email = current_user.email
         comment = clean(request.form.get("comment"))
-        anonymous_choice = clean(request.form["is_anonymous"]).lower()
-        is_anonymous = True if anonymous_choice == "true" else False
         subject_id = int(clean(request.form["subject_id"]))
+        room_id = int(clean(request.form["room_id"]))
         timestamp = datetime.now()
+        code = int(clean(request.form("code")))
     except KeyError as e:
         logger.error(f"An error has occured: missing key in request parameters.\n {e}")
         abort(400, f"An error has occured: missing key in request parameters.")
@@ -48,21 +48,17 @@ def create_comment():
         logger.error("An error has occurred: subject id is not a number.")
         abort(400, "An error has occurred: subject id is not a number.")
     try:
-        # if not check_comments_number(email, subject_id):
-        #    abort(
-        #        400,
-        #        f"User with email {email} has posted too many comments for this subject.",
-        #    )
-        new_comment = Comment(
-            email,
-            comment,
-            is_anonymous,
-            subject_id,
-            timestamp,
-        )
-        db.session.add(new_comment)
-        db.session.commit()
-        return {"response": "New comment added to database"}, 200
+        if verify_code(room_id, code):
+            new_comment = Comment(
+                comment,
+                True,
+                subject_id,
+                timestamp,
+            )
+            db.session.add(new_comment)
+            db.session.commit()
+            return {"response": "New comment added to database"}, 200
+        abort(400,"Invalid code.")
     except exc.SQLAlchemyError as e:
         db.session.rollback()
         logger.error(f"An error has occured while adding object to the database.\n {e}")

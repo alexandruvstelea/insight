@@ -4,6 +4,7 @@ from models.subjects import Subject
 from models.ratings import Rating
 from sqlalchemy import func, exc
 from __init__ import db, limiter
+from helpers import verify_code
 from datetime import datetime
 from models.weeks import Week
 from bleach import clean
@@ -24,6 +25,8 @@ def insert_rating():
         rating_relevance = int(clean(request.form["relevance"]))
         rating_comprehension = int(clean(request.form["comprehension"]))
         subject_id = int(clean(request.form["subject_id"]))
+        room_id = int(clean(request.form["room_id"]))
+        code =int(clean(request.form["code"]))
     except KeyError as e:
         logger.error(f"An error has occured: missing key in request parameters.\n{e}")
         abort(400, f"An error has occured: missing key in request parameters.")
@@ -31,25 +34,27 @@ def insert_rating():
         logger.error("An error has occurred: ratings or subject id not a number.")
         abort(400, "An error has occurred: ratings or subject id not a number.")
     try:
-        rating_overall = (
-            rating_clarity
-            + rating_interactivity
-            + rating_relevance
-            + rating_comprehension
-        ) / 4
+        if verify_code(room_id, code):
+            rating_overall = (
+                rating_clarity
+                + rating_interactivity
+                + rating_relevance
+                + rating_comprehension
+            ) / 4
 
-        new_rating = Rating(
-            rating_clarity,
-            rating_interactivity,
-            rating_relevance,
-            rating_comprehension,
-            rating_overall,
-            subject_id,
-            date_time,
-        )
-        db.session.add(new_rating)
-        db.session.commit()
-        return {"response": "New rating added to database."}
+            new_rating = Rating(
+                rating_clarity,
+                rating_interactivity,
+                rating_relevance,
+                rating_comprehension,
+                rating_overall,
+                subject_id,
+                date_time,
+            )
+            db.session.add(new_rating)
+            db.session.commit()
+            return {"response": "New rating added to database."}
+        abort(400,"Invalid code.")
     except exc.SQLAlchemyError as e:
         logger.error(f"An error has occured while adding object to ratings.\n{e}")
         abort(500, f"An error has occured while adding object to ratings.")

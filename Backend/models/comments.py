@@ -4,8 +4,6 @@ from __init__ import db
 class Comment(db.Model):
     __tablename__ = "Comments"
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String)
-    code = db.Column(db.String)
     comment = db.Column(db.String)
     is_anonymous = db.Column(db.Boolean)
     subject_id = db.Column(db.Integer, db.ForeignKey("Subjects.id"))
