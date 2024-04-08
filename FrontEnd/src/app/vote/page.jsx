@@ -14,7 +14,7 @@ import SentimentVerySatisfiedIcon from "@mui/icons-material/SentimentVerySatisfi
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 
-export default function RatingForm() {
+export default function Vote() {
   const [errorMessage, setErrorMessage] = useState("");
   const [comment, setComment] = useState("");
 
@@ -69,13 +69,14 @@ export default function RatingForm() {
     const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}.${milliseconds}`;
 
     const formData = new FormData();
-    // formData.append("date", "2024-04-15 09:00:10.559345"); // for testing purposes
-    formData.append("date", formattedDateTime);
+    formData.append("date", "2024-04-15 09:00:10.559345"); // for testing purposes
+    // formData.append("date", formattedDateTime);
     formData.append("clarity", ratings.clarity);
     formData.append("interactivity", ratings.interactivity);
     formData.append("relevance", ratings.relevance);
     formData.append("comprehension", ratings.comprehension);
-    formData.append("subject_id", 3);
+    formData.append("code", 658002);
+    formData.append("room_id", 1);
 
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/rating`, {

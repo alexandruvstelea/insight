@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request, abort
-from helpers import verify_code, last_three_digits
+from routes.helpers import verify_code, last_three_digits
 from flask_login import login_required
 from models.subjects import Subject
 from models.ratings import Rating

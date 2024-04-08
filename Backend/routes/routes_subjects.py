@@ -3,7 +3,7 @@ from flask_login import current_user, login_required
 from models.professors import Professor
 from models.programmes import Programme
 from models.subjects import Subject
-from helpers import find_week_type
+from routes.helpers import find_week_type
 from models.courses import Course
 from __init__ import db, limiter
 from datetime import datetime

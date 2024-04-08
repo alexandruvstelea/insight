@@ -41,6 +41,7 @@ def init_app():
         from models.comments import Comment
         from models.programmes import Programme
         from models.users import User
+        from models.codes import Code
 
         db.create_all()
 
@@ -54,7 +55,7 @@ def init_app():
         from routes.routes_archive import archive_bp
         from routes.routes_programmes import programme_bp
         from routes.routes_users import user_bp
-        from Backend.routes.routes_codes import code_bp
+        from routes.routes_codes import code_bp
 
         app.register_blueprint(course_bp)
         app.register_blueprint(professor_bp)

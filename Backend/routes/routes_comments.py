@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request, abort
 from flask_login import current_user, login_required
-from helpers import verify_code, last_three_digits
+from routes.helpers import verify_code, last_three_digits
 from models.comments import Comment
 from __init__ import db, limiter
 from dotenv import load_dotenv

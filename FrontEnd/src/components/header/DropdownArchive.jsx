@@ -28,21 +28,18 @@ export default function DropdownArchive() {
         </button>
         {isOpen && (
           <div className={styles.dropdownContent}>
-            <Link
-              className={styles.buttonArchive}
-              href={`/professors/archive/2023-2024`}
-            >
-              2023-2024
+            <Link className={styles.buttonArchive} href={`/professors`}>
+              Prezent
             </Link>
             <Link
               className={styles.buttonArchive}
-              href={`/professors/archive/2023-2024`}
+              href={`/professors/archive/2024-2025`}
             >
               2024-2025
             </Link>
             <Link
               className={styles.buttonArchive}
-              href={`/professors/archive/2023-2024`}
+              href={`/professors/archive/2025-2026`}
             >
               2025-2026
             </Link>
