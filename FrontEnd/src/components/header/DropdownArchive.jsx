@@ -24,7 +24,7 @@ export default function DropdownArchive() {
     <>
       <div ref={dropdownRef} className={styles.dropdown}>
         <button onClick={toggleDropdown} className={styles.dropbtn}>
-          Arhivă ▼
+          Arhivă ↴
         </button>
         {isOpen && (
           <div className={styles.dropdownContent}>
