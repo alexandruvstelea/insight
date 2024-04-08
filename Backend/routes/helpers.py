@@ -98,3 +98,9 @@ def verify_code(room_id:int, sent_code:int):
                  return False
     except exc.SQLAlchemyError as e:
         logger.error(f"An error has occured while retrieving code.\n{e}")
+
+def last_three_digits(code:int):
+    code_str = str(code)
+    last_three_digits = code_str[-3:]
+    last_three_digits = last_three_digits.lstrip('0')
+    return int(last_three_digits)

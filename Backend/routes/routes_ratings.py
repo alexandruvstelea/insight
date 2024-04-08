@@ -1,10 +1,10 @@
 from flask import Blueprint, jsonify, request, abort
+from helpers import verify_code, last_three_digits
 from flask_login import login_required
 from models.subjects import Subject
 from models.ratings import Rating
 from sqlalchemy import func, exc
 from __init__ import db, limiter
-from helpers import verify_code
 from datetime import datetime
 from models.weeks import Week
 from bleach import clean
@@ -24,7 +24,6 @@ def insert_rating():
         rating_interactivity = int(clean(request.form["interactivity"]))
         rating_relevance = int(clean(request.form["relevance"]))
         rating_comprehension = int(clean(request.form["comprehension"]))
-        subject_id = int(clean(request.form["subject_id"]))
         room_id = int(clean(request.form["room_id"]))
         code =int(clean(request.form["code"]))
     except KeyError as e:
@@ -41,7 +40,7 @@ def insert_rating():
                 + rating_relevance
                 + rating_comprehension
             ) / 4
-
+            subject_id = last_three_digits(code)
             new_rating = Rating(
                 rating_clarity,
                 rating_interactivity,

@@ -1,8 +1,8 @@
 from flask import Blueprint, jsonify, request, abort
 from flask_login import current_user, login_required
+from helpers import verify_code, last_three_digits
 from models.comments import Comment
 from __init__ import db, limiter
-from helpers import verify_code
 from dotenv import load_dotenv
 from datetime import datetime
 from sqlalchemy import exc
@@ -37,7 +37,6 @@ def check_comments_number(email: str, subject_id: int) -> bool:
 def create_comment():
     try:
         comment = clean(request.form.get("comment"))
-        subject_id = int(clean(request.form["subject_id"]))
         room_id = int(clean(request.form["room_id"]))
         timestamp = datetime.now()
         code = int(clean(request.form("code")))
@@ -49,6 +48,7 @@ def create_comment():
         abort(400, "An error has occurred: subject id is not a number.")
     try:
         if verify_code(room_id, code):
+            subject_id = last_three_digits(code)
             new_comment = Comment(
                 comment,
                 True,
