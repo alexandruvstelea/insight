@@ -13,5 +13,7 @@ class Config:
     SECRET_KEY = getenv("FLASK_SECRET")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = f"postgresql://{USER}:{PASSWORD}@{HOST}/{DB_NAME}"
-    SESSION_COOKIE_SECURE = True
-    SESSION_COOKIE_SAMESITE = "None"
+    SESSION_COOKIE_SECURE = False  #!MUST BE True in production environments
+    SESSION_COOKIE_SAMESITE = "Strict"
+    SESSION_COOKIE_HTTPONLY = True
+    SESSION_PROTECTION = "strong"
