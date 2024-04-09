@@ -3,10 +3,16 @@ import { StyleSheet } from "react-native";
 export default styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#daf0f7",
     alignItems: "center",
     justifyContent: "center",
+    gap: 80,
   },
+  titleContainer: { alignItems: "center" },
+  title: { fontSize: 40, fontWeight: "bold" },
+  subtitle: { fontSize: 24 },
+  contentContainer: { alignItems: "center" },
+  dropdownLabel: { fontSize: 20 },
   name: {
     fontSize: 30,
     fontWeight: "bold",
@@ -22,9 +28,11 @@ export default styles = StyleSheet.create({
     fontSize: 60,
     fontWeight: "bold",
   },
+  picker: { height: 50, width: 200 },
   input: {
-    width: 200,
-    backgroundColor: "#c3c3c3",
+    textAlign: "center",
+    width: 250,
+    backgroundColor: "#fff",
     padding: 10,
     marginTop: 10,
     marginBottom: 10,

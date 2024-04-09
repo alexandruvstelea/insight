@@ -10,27 +10,27 @@ export default function MainPage() {
   const [roomId, setRoomId] = useState("");
   const [code, setCode] = useState("");
 
+  const BACKEND_IP = "192.168.1.6:5000";
+
   const fetchSubject = async () => {
     console.log(`${roomId} wadaw`);
     try {
-      const currentTime = "2024-03-11 09:42:00.00";
+      const currentTime = "2024-04-09 19:49:53.079";
       const requestData = {
-        room: roomId,
+        room: 1,
         date: currentTime,
       };
-
-      const response = await fetch(
-        "http://192.168.1.50:5000/subjects/current",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(requestData),
-        }
-      );
+      console.log(requestData);
+      const response = await fetch(`http://${BACKEND_IP}/subjects/current`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      });
 
       if (!response.ok) {
+        console.log(response);
         throw new Error("Network response was not ok");
       }
 
@@ -44,7 +44,7 @@ export default function MainPage() {
   };
   const fetchCode = async () => {
     try {
-      const response = await fetch("http://192.168.1.50:5000/code/1", {
+      const response = await fetch(`http://${BACKEND_IP}/code/1`, {
         method: "GET",
         credentials: "include",
       });
@@ -53,14 +53,15 @@ export default function MainPage() {
         if (response.status === 404) {
           setCode([]);
         } else {
+          console.log(response.status);
           throw new Error("Failed to fetch");
         }
       }
       const data = await response.json();
       console.log(data);
-      setCode(data);
-    } catch (err) {
-      console.error("Fetch error:", err);
+      setCode(data.code);
+    } catch (error) {
+      console.error(error);
     }
   };
 

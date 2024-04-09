@@ -10,23 +10,11 @@ export default function SelectRoomPage({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // useEffect(() => {
-  //   const checkSelectedRoom = async () => {
-  //     try {
-  //       const selectedRoomId = await AsyncStorage.getItem("@selectedRoomId");
-  //       if (selectedRoomId) {
-  //         navigation.replace("MainPage");
-  //       }
-  //     } catch (err) {
-  //       console.error("AsyncStorage error:", err);
-  //     }
-  //   };
-  //   checkSelectedRoom();
-  // }, []);
+  const BACKEND_IP = "192.168.1.6:5000";
 
   const fetchRooms = async () => {
     try {
-      const response = await fetch("http://192.168.1.50:5000/rooms", {
+      const response = await fetch(`http://${BACKEND_IP}/rooms`, {
         method: "GET",
       });
 
@@ -34,13 +22,13 @@ export default function SelectRoomPage({ navigation }) {
         if (response.status === 404) {
           setRooms([]);
         } else {
-          throw new Error("Failed to fetch");
+          throw new Error("Failed to fetch rooms.");
         }
       }
       const data = await response.json();
       setRooms(data);
-    } catch (err) {
-      console.error("Fetch error:", err);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -52,7 +40,7 @@ export default function SelectRoomPage({ navigation }) {
     formData.append("password", password);
 
     try {
-      const response = await fetch("http://192.168.1.50:5000/login", {
+      const response = await fetch(`http://${BACKEND_IP}/login`, {
         method: "POST",
         body: formData,
         credentials: "include",
@@ -61,10 +49,10 @@ export default function SelectRoomPage({ navigation }) {
       if (response.ok) {
         navigation.navigate("MainPage");
       } else {
-        console.error("Autentificare eșuată");
+        throw new Error("Authentication failed.");
       }
     } catch (error) {
-      console.error("Eroare la autentificare:", error);
+      console.error(error);
     }
   };
 
@@ -85,33 +73,39 @@ export default function SelectRoomPage({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text>Selectează sala:</Text>
-      <Picker
-        selectedValue={selectedRoom}
-        onValueChange={(itemValue, itemIndex) => setSelectedRoom(itemValue)}
-        style={{ height: 50, width: 200 }}
-      >
-        {rooms.map((room) => (
-          <Picker.Item
-            key={room.id}
-            label={room.name}
-            value={room.id.toString()}
-          />
-        ))}
-      </Picker>
-      <TextInput
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Password"
-        secureTextEntry={true}
-        value={password}
-        onChangeText={setPassword}
-        style={styles.input}
-      />
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>Feedback IESC</Text>
+        <Text style={styles.subtitle}>Android Companion</Text>
+      </View>
+      <View style={styles.contentContainer}>
+        <Text style={styles.dropdownLabel}>Selectează sala</Text>
+        <Picker
+          selectedValue={selectedRoom}
+          onValueChange={(itemValue, itemIndex) => setSelectedRoom(itemValue)}
+          style={styles.picker}
+        >
+          {rooms.map((room) => (
+            <Picker.Item
+              key={room.id}
+              label={room.name}
+              value={room.id.toString()}
+            />
+          ))}
+        </Picker>
+        <TextInput
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="Password"
+          secureTextEntry={true}
+          value={password}
+          onChangeText={setPassword}
+          style={styles.input}
+        />
+      </View>
 
       <Button title="Continuă" onPress={handleLogin} />
     </View>
