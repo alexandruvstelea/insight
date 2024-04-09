@@ -13,10 +13,14 @@ import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt
 import SentimentVerySatisfiedIcon from "@mui/icons-material/SentimentVerySatisfied";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import { useSearchParams } from "next/navigation";
 
 export default function Vote() {
+  const searchParams = useSearchParams();
   const [errorMessage, setErrorMessage] = useState("");
   const [comment, setComment] = useState("");
+  const roomId = searchParams.get("roomId");
+  const code = searchParams.get("code");
 
   const StyledRating = styled(Rating)(({ theme }) => ({
     "& .MuiRating-iconEmpty .MuiSvgIcon-root": {
@@ -75,8 +79,8 @@ export default function Vote() {
     formData.append("interactivity", ratings.interactivity);
     formData.append("relevance", ratings.relevance);
     formData.append("comprehension", ratings.comprehension);
-    formData.append("code", 658002);
-    formData.append("room_id", 1);
+    formData.append("code", code);
+    formData.append("room_id", roomId);
 
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/rating`, {
