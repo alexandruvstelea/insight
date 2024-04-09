@@ -1,5 +1,6 @@
 from models.weeks import Week
 from models.codes import Code
+from random import randint
 from sqlalchemy import exc
 from __init__ import db
 import logging
@@ -8,6 +9,7 @@ import os
 
 
 logger = logging.getLogger(__name__)
+
 
 def send_registration_email(code: int, email: str):
     try:
@@ -70,6 +72,7 @@ def check_email(email: str):
 def check_password(password: str):
     return len(password) > 7
 
+
 def find_week_type(date_time):
     current_week = (
         db.session.query(Week)
@@ -87,20 +90,29 @@ def find_week_type(date_time):
     else:
         logger.error("Current week couldn't be determined.")
         return False
-    
-def verify_code(room_id:int, sent_code:int):
+
+
+def verify_code(room_id: int, sent_code: int):
     try:
         code = db.session.query(Code).filter(Code.room_id == room_id).first()
         if code:
-             if sent_code == code.code:
+            if sent_code == code.code:
                 return True
-             else:
-                 return False
+            else:
+                return False
     except exc.SQLAlchemyError as e:
         logger.error(f"An error has occured while retrieving code.\n{e}")
 
-def last_three_digits(code:int):
+
+def last_three_digits(code: int):
     code_str = str(code)
     last_three_digits = code_str[-3:]
-    last_three_digits = last_three_digits.lstrip('0')
+    last_three_digits = last_three_digits.lstrip("0")
     return int(last_three_digits)
+
+
+def generate_voting_code(subject_id: int):
+    random_part = "".join(str(randint(0, 9)) for _ in range(3))
+    id_part = str(subject_id).zfill(3)
+    code = random_part + id_part
+    return int(code)
