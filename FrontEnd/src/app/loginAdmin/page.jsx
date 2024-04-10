@@ -3,28 +3,16 @@ import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 import styles from "./page.module.css";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { extractTextFromHTML } from "@/app/Actions/functions";
-import { fetchLogoutUser } from "@/app/Actions/getUserData";
-
+import { fetchCheckLogin, fetchLogoutUser } from "@/app/Actions/getUserData";
 export default function UserLogin() {
   const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
-  useEffect(() => {
-    const logoutUser = async () => {
-      try {
-        await fetchLogoutUser();
-      } catch (error) {
-        console.error("Error logging out user:", error);
-      }
-    };
-
-    logoutUser();
-  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,7 +30,13 @@ export default function UserLogin() {
 
       if (response.ok) {
         setError("");
-        router.push(`/vote`);
+        const loggedIn = await fetchCheckLogin();
+        if (loggedIn.type === 0) {
+          router.push("/loginAdmin/admin");
+        } else if (loggedIn.type === 1) {
+          fetchLogoutUser();
+          router.push("/professors");
+        }
       } else if (response.status === 401 || response.status === 400) {
         const errorMessage = await response.text();
         setError(extractTextFromHTML(errorMessage));
@@ -57,7 +51,7 @@ export default function UserLogin() {
       <div className={styles.mainContiner}>
         <Header showArchive={false} />
         <div className={styles.wrapper}>
-          <div className={styles.title}>Login</div>
+          <div className={styles.title}>Login Admin</div>
           <form className={styles.form} onSubmit={handleSubmit}>
             <div className={styles.field}>
               <input
@@ -87,9 +81,6 @@ export default function UserLogin() {
             </div>
             <div className={styles.field}>
               <input className={styles.input} type="submit" value="Login" />
-            </div>
-            <div className={styles.signupLink}>
-              Nu ai cont? <Link href="/register">Crează cont!</Link>
             </div>
           </form>
         </div>

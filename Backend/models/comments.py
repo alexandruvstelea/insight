@@ -11,13 +11,11 @@ class Comment(db.Model):
 
     def __init__(
         self,
-        email: str,
         comment: str,
         is_anonymous: bool,
         subject_id: int,
         datetime,
     ):
-        self.email = email
         self.comment = comment
         self.is_anonymous = is_anonymous
         self.subject_id = subject_id

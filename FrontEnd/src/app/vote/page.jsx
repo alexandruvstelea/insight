@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 import styles from "./page.module.css";
@@ -14,13 +14,71 @@ import SentimentVerySatisfiedIcon from "@mui/icons-material/SentimentVerySatisfi
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { useSearchParams } from "next/navigation";
-
+import { extractTextFromHTML } from "@/app/Actions/functions";
+import { useRouter } from "next/navigation";
+import { fetchCheckLogin } from "@/app/Actions/getUserData";
 export default function Vote() {
+  const router = useRouter();
   const searchParams = useSearchParams();
+  const [roomId, setRoomId] = useState(null);
+
+  useEffect(() => {
+    const roomIdParam = searchParams.get("roomId");
+    if (roomIdParam) {
+      setRoomId(roomIdParam);
+    }
+  }, []);
+
+  useEffect(() => {
+    const checkLoggedIn = async () => {
+      try {
+        const user = await fetchCheckLogin();
+        if (!user.logged_in) {
+          const roomIdParam = searchParams.get("roomId");
+          if (roomIdParam) {
+            sessionStorage.setItem("roomId", roomIdParam);
+          }
+          router.push("/login");
+        }
+      } catch (error) {
+        console.error("Error checking login status:", error);
+      }
+    };
+
+    checkLoggedIn();
+  }, [router]);
+
+  useEffect(() => {
+    const roomIdFromStorage = sessionStorage.getItem("roomId");
+    if (roomIdFromStorage) {
+      setRoomId(roomIdFromStorage);
+      sessionStorage.removeItem("roomId");
+    }
+  }, []);
+
   const [errorMessage, setErrorMessage] = useState("");
   const [comment, setComment] = useState("");
-  const roomId = searchParams.get("roomId");
-  const code = searchParams.get("code");
+  const [code, setCode] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
+  const [redirectCountdown, setRedirectCountdown] = useState(5);
+
+  useEffect(() => {
+    let countdownInterval;
+
+    if (showPopup) {
+      countdownInterval = setInterval(() => {
+        setRedirectCountdown((prevCountdown) => prevCountdown - 1);
+      }, 1000);
+    }
+
+    return () => clearInterval(countdownInterval);
+  }, [showPopup]);
+
+  useEffect(() => {
+    if (redirectCountdown === 0) {
+      router.push("/");
+    }
+  }, [redirectCountdown]);
 
   const StyledRating = styled(Rating)(({ theme }) => ({
     "& .MuiRating-iconEmpty .MuiSvgIcon-root": {
@@ -44,15 +102,20 @@ export default function Vote() {
     });
   };
   const handleSubmit = async () => {
-    console.log(ratings);
     if (
       ratings.clarity === null ||
       ratings.comprehension === null ||
       ratings.interactivity === null ||
       ratings.relevance === null
     ) {
+      setErrorMessage("Te rugăm să evaluezi toate categoriile.");
+      return;
+    } else if (code.length !== 6) {
+      setErrorMessage("Codul este incorect.");
+      return;
+    } else if (comment.length !== 0 || comment.length >= 20) {
       setErrorMessage(
-        "Te rugăm să evaluezi toate categoriile înainte de a trimite."
+        "Comentariul trebuie să contină între 1 și 20 de caractere."
       );
       return;
     } else {
@@ -72,27 +135,58 @@ export default function Vote() {
     );
     const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}.${milliseconds}`;
 
-    const formData = new FormData();
-    formData.append("date", "2024-04-15 09:00:10.559345"); // for testing purposes
-    // formData.append("date", formattedDateTime);
-    formData.append("clarity", ratings.clarity);
-    formData.append("interactivity", ratings.interactivity);
-    formData.append("relevance", ratings.relevance);
-    formData.append("comprehension", ratings.comprehension);
-    formData.append("code", code);
-    formData.append("room_id", roomId);
+    const ratingsFormData = new FormData();
+    ratingsFormData.append("date", "2024-04-15 09:00:10.559345"); // for testing purposes
+    // ratingsFormData.append("date", formattedDateTime);
+    ratingsFormData.append("clarity", ratings.clarity);
+    ratingsFormData.append("interactivity", ratings.interactivity);
+    ratingsFormData.append("relevance", ratings.relevance);
+    ratingsFormData.append("comprehension", ratings.comprehension);
+    ratingsFormData.append("code", code);
+    ratingsFormData.append("room_id", roomId);
+
+    const commentsFormData = new FormData();
+    commentsFormData.append("comment", comment);
+    commentsFormData.append("code", code);
+    commentsFormData.append("room_id", roomId);
+
+    if (comment.trim() !== "") {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}/comments`,
+          {
+            method: "POST",
+            credentials: "include",
+            body: commentsFormData,
+          }
+        );
+
+        if (response.ok) {
+          setErrorMessage("");
+        } else if (response.status === 400) {
+          const errorMessage = await response.text();
+          setErrorMessage(extractTextFromHTML(errorMessage));
+          return;
+        }
+      } catch (error) {
+        console.error("There was a problem with the fetch operation:", error);
+      }
+    }
 
     try {
       const response = await fetch(`${process.env.REACT_APP_API_URL}/rating`, {
         method: "POST",
         credentials: "include",
-        body: formData,
+        body: ratingsFormData,
       });
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
+      if (response.ok) {
+        setErrorMessage("");
+        setShowPopup(true);
+      } else if (response.status === 400) {
+        const errorMessage = await response.text();
+        setErrorMessage(extractTextFromHTML(errorMessage));
       }
-      console.log("Rating-uri trimise:", ratings);
     } catch (error) {
       console.error("There was a problem with the fetch operation:", error);
     }
@@ -146,7 +240,7 @@ export default function Vote() {
                 width: "350px",
               }}
             >
-              <Box sx={{ my: 2 }}>
+              <Box sx={{ my: 1 }}>
                 <h2 className={styles.titleRating}>Claritate</h2>
                 <StyledRating
                   IconContainerComponent={IconContainer}
@@ -159,7 +253,7 @@ export default function Vote() {
                   size="large"
                 />
               </Box>
-              <Box sx={{ my: 2 }}>
+              <Box sx={{ my: 1 }}>
                 <h2 className={styles.titleRating}>Înțelegere</h2>
                 <StyledRating
                   IconContainerComponent={IconContainer}
@@ -172,7 +266,7 @@ export default function Vote() {
                   size="large"
                 />
               </Box>
-              <Box sx={{ my: 2 }}>
+              <Box sx={{ my: 1 }}>
                 <h2 className={styles.titleRating}>Interactivitate</h2>
                 <StyledRating
                   IconContainerComponent={IconContainer}
@@ -185,7 +279,7 @@ export default function Vote() {
                   size="large"
                 />
               </Box>
-              <Box sx={{ my: 2 }}>
+              <Box sx={{ my: 1 }}>
                 <h2 className={styles.titleRating}>Relevanţă</h2>
                 <StyledRating
                   IconContainerComponent={IconContainer}
@@ -214,19 +308,53 @@ export default function Vote() {
                   * Toate ratingurile sunt anonime.
                 </p>
               </div>
-
+              <div className={styles.codeContainer}>
+                <h2 className={styles.titleRating}>Cod</h2>
+                <input
+                  className={styles.codeInput}
+                  type="number"
+                  name="code"
+                  value={code}
+                  required
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    const newValue = value.replace(/[^\d]/g, "").slice(0, 6);
+                    setCode(newValue);
+                  }}
+                />
+              </div>
               {errorMessage && (
                 <div className={styles.errorText}>{errorMessage}</div>
               )}
               <Button
                 variant="contained"
                 color="primary"
+                size="large"
+                sx={{
+                  padding: "10px 24px",
+                  fontSize: "1rem",
+                }}
                 onClick={handleSubmit}
               >
                 Trimite rating-urile
               </Button>
             </Box>
           </form>
+          {showPopup && (
+            <div className={styles.popupOverlay}>
+              <div className={styles.popup}>
+                <p>Vă mulțumim!</p>
+                <p>Veți fi redirecționat în {redirectCountdown} secunde.</p>
+
+                <div className={styles.progressBar}>
+                  <div
+                    className={styles.progress}
+                    style={{ width: `${(redirectCountdown / 5) * 100}%` }}
+                  ></div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
         <Footer />
       </div>
