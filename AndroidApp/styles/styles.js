@@ -6,7 +6,7 @@ export default styles = StyleSheet.create({
     backgroundColor: "#daf0f7",
     alignItems: "center",
     justifyContent: "center",
-    gap: 80,
+    gap: 50,
   },
   titleContainer: { alignItems: "center" },
   title: { fontSize: 40, fontWeight: "bold" },
@@ -37,4 +37,10 @@ export default styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
   },
+  timerWrapper: { display: "flex", justifyContent: "center" },
+  timer: { display: "flex", flexDirection: "column", alignItems: "center" },
+  timerText: {
+    fontSize: 24,
+  },
+  timerSeconds: { fontSize: 54 },
 });

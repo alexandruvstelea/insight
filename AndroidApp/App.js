@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import SelectRoomPage from "./screens/SelectRoomPage";
 import MainPage from "./screens/MainPage";
 import { NavigationContainer } from "@react-navigation/native";
