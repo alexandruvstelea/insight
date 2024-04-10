@@ -37,14 +37,14 @@ def check_comments_number(email: str, subject_id: int) -> bool:
 def create_comment():
     try:
         comment = clean(request.form.get("comment"))
-        room_id = int(clean(request.form["room_id"]))
+        room_id = int(clean(request.form.get("room_id")))
         timestamp = datetime.now()
-        code = int(clean(request.form("code")))
+        code = int(clean(request.form.get("code")))
     except KeyError as e:
         logger.error(f"An error has occured: missing key in request parameters.\n {e}")
         abort(400, f"An error has occured: missing key in request parameters.")
-    except (ValueError, TypeError):
-        logger.error("An error has occurred: subject id is not a number.")
+    except (ValueError, TypeError) as e:
+        logger.error(f"An error has occurred: {e} ")
         abort(400, "An error has occurred: subject id is not a number.")
     try:
         if verify_code(room_id, code):
