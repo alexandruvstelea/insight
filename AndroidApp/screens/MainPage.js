@@ -3,14 +3,13 @@ import { View, Text } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import styles from "../styles/styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { BACKEND_IP } from "@env";
 
 export default function MainPage() {
   const [name, setName] = useState("");
   const [abbreviation, setAbbreviation] = useState("");
   const [roomId, setRoomId] = useState("");
   const [code, setCode] = useState("");
-
-  const BACKEND_IP = "192.168.1.6:5000";
 
   const fetchSubject = async () => {
     console.log(`${roomId} wadaw`);

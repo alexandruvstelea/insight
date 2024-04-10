@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text } from "react-native";
-import QRCode from "react-native-qrcode-svg";
 import SelectRoomPage from "./screens/SelectRoomPage";
 import MainPage from "./screens/MainPage";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
 export default function App() {
   const Stack = createNativeStackNavigator();
 

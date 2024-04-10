@@ -3,14 +3,13 @@ import { View, Text, Button, TextInput } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import styles from "../styles/styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { BACKEND_IP } from "@env";
 
 export default function SelectRoomPage({ navigation }) {
   const [rooms, setRooms] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const BACKEND_IP = "192.168.1.6:5000";
 
   const fetchRooms = async () => {
     try {
