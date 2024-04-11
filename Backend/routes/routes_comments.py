@@ -11,7 +11,7 @@ import logging
 import os
 
 logger = logging.getLogger(__name__)
-comments_bp = Blueprint("comments", __name__)
+comment_bp = Blueprint("comments", __name__)
 load_dotenv(os.path.normpath("../.env"))
 
 
@@ -32,7 +32,7 @@ def check_comments_number(email: str, subject_id: int) -> bool:
         return False
 
 
-@comments_bp.route("/comments", methods=["POST"])
+@comment_bp.route("/comments", methods=["POST"])
 @login_required
 def create_comment():
     try:
@@ -58,14 +58,14 @@ def create_comment():
             db.session.add(new_comment)
             db.session.commit()
             return {"response": "New comment added to database"}, 200
-        abort(400,"Invalid code.")
+        abort(400, "Invalid code.")
     except exc.SQLAlchemyError as e:
         db.session.rollback()
         logger.error(f"An error has occured while adding object to the database.\n {e}")
         abort(500, f"An error has occured while adding object to the database.")
 
 
-@comments_bp.route("/comments", methods=["GET"])
+@comment_bp.route("/comments", methods=["GET"])
 @limiter.limit("50 per minute")
 def get_comments():
     try:
@@ -93,7 +93,7 @@ def get_comments():
         abort(500, f"An error has occured while retrieving comments.")
 
 
-@comments_bp.route("/comments/<int:subject_id>", methods=["GET"])
+@comment_bp.route("/comments/<int:subject_id>", methods=["GET"])
 @limiter.limit("50 per minute")
 def get_comments_by_id(subject_id):
     try:
@@ -129,7 +129,7 @@ def get_comments_by_id(subject_id):
         abort(500, f"An error has occured while retrieving comments.")
 
 
-@comments_bp.route("/comments/<int:comment_id>", methods=["DELETE"])
+@comment_bp.route("/comments/<int:comment_id>", methods=["DELETE"])
 @login_required
 @limiter.limit("50 per minute")
 def delete_comment(comment_id):
