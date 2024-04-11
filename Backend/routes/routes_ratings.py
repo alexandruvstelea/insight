@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request, abort
 from routes.helpers import verify_code, last_three_digits
-from flask_login import login_required
+from flask_login import login_required, current_user
 from models.subjects import Subject
 from models.ratings import Rating
 from sqlalchemy import func, exc
@@ -29,25 +29,32 @@ def insert_rating():
         room_id = int(clean(request.form.get("room_id")))
         code = int(clean(request.form.get("code")))
         if verify_code(room_id, code):
-            rating_overall = (
-                rating_clarity
-                + rating_interactivity
-                + rating_relevance
-                + rating_comprehension
-            ) / 4
             subject_id = last_three_digits(code)
-            new_rating = Rating(
-                rating_clarity,
-                rating_interactivity,
-                rating_relevance,
-                rating_comprehension,
-                rating_overall,
-                subject_id,
-                date_time,
-            )
-            db.session.add(new_rating)
-            db.session.commit()
-            return {"response": "New rating added to database."}
+            subject = db.session.query(Subject).filter_by(id=subject_id).first()
+            subject_programmes = [programme.id for programme in subject.programmes]
+            if current_user.programme_id in subject_programmes:
+                rating_overall = (
+                    rating_clarity
+                    + rating_interactivity
+                    + rating_relevance
+                    + rating_comprehension
+                ) / 4
+
+                new_rating = Rating(
+                    rating_clarity,
+                    rating_interactivity,
+                    rating_relevance,
+                    rating_comprehension,
+                    rating_overall,
+                    subject_id,
+                    date_time,
+                )
+                db.session.add(new_rating)
+                db.session.commit()
+                return {"response": "New rating added to database."}
+            else:
+                logger.info("User programme doesn't match subject programme.")
+                abort(400, "User programme doesn't match subject programme.")
         abort(400, "Invalid code.")
     except (ValueError, TypeError) as e:
         logger.error(f"An error has occured: request parameters not ok.\n{e}")

@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request, abort
 from flask_login import current_user, login_required
 from routes.helpers import verify_code, last_three_digits
 from models.comments import Comment
+from models.subjects import Subject
 from __init__ import db, limiter
 from dotenv import load_dotenv
 from datetime import datetime
@@ -42,15 +43,21 @@ def create_comment():
         code = int(clean(request.form.get("code")))
         if verify_code(room_id, code):
             subject_id = last_three_digits(code)
-            new_comment = Comment(
-                comment,
-                True,
-                subject_id,
-                timestamp,
-            )
-            db.session.add(new_comment)
-            db.session.commit()
-            return {"response": "New comment added to database"}, 200
+            subject = db.session.query(Subject).filter_by(id=subject_id).first()
+            subject_programmes = [programme.id for programme in subject.programmes]
+            if current_user.programme_id in subject_programmes:
+                new_comment = Comment(
+                    comment,
+                    True,
+                    subject_id,
+                    timestamp,
+                )
+                db.session.add(new_comment)
+                db.session.commit()
+                return {"response": "New comment added to database"}, 200
+            else:
+                logger.info("User programme doesn't match subject programme.")
+                abort(400, "User programme doesn't match subject programme.")
         abort(400, "Invalid code.")
     except (ValueError, TypeError) as e:
         logger.error(f"An error has occured: request parameters not ok.\n{e}")
