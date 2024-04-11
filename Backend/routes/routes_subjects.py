@@ -27,11 +27,12 @@ def create_subject():
             semester = clean(request.form.get("semester"))
             programme_ids = [int(i) for i in request.form.getlist("programme_ids")]
             new_subject = Subject(name, abbreviation, professor_id, semester)
+            db.session.add(new_subject)
+            db.session.commit()
             for pid in programme_ids:
                 programme = db.session.query(Programme).filter_by(id=pid).first()
                 if programme:
                     new_subject.programmes.append(programme)
-            db.session.add(new_subject)
             db.session.commit()
             return {"response": "New subject added to database"}, 200
         except (ValueError, TypeError) as e:
