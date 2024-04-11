@@ -246,6 +246,7 @@ def get_current_subject():
                 if subject:
                     logger.info(f"Retrieved current subject.{subject}")
                     return {
+                        "id": subject.id,
                         "name": subject.name,
                         "abbreviation": subject.abbreviation,
                     }, 200
