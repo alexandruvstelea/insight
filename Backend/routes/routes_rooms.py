@@ -16,25 +16,15 @@ room_bp = Blueprint("rooms", __name__)
 def create_room():
     if current_user.user_type == 0:
         try:
-            name = clean(request.form["name"])
-        except KeyError as e:
-            logger.error(
-                f"An error has occured: missing key in request parameters.\n{e}"
-            )
-            abort(400, f"An error has occured: missing key in request parameters.")
-        new_room = Room(name)
-        try:
+            name = clean(request.form.get("name"))
+            new_room = Room(name)
             db.session.add(new_room)
             db.session.commit()
             logger.info("New room added to database")
             return {"response": "New room added to database"}, 200
         except exc.SQLAlchemyError as e:
-            logger.error(
-                f"An error has occured while adding room to the database.\n{e}"
-            )
-            return abort(
-                500, f"An error has occured while adding room to the database."
-            )
+            logger.error(f"An error occurred while interacting with the database.\n{e}")
+            abort(500, f"An error occurred while interacting with the database.")
     abort(401, "Account not authorized to perform this action.")
 
 
@@ -53,8 +43,8 @@ def get_rooms():
             logger.warning("No rooms found.")
             abort(404, "No rooms found.")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while retrieving rooms.\n{e}")
-        abort(500, f"An error has occured while retrieving rooms.")
+        logger.error(f"An error occurred while interacting with the database.\n{e}")
+        abort(500, f"An error occurred while interacting with the database.")
 
 
 @room_bp.route("/rooms/<int:room_id>", methods=["GET"])
@@ -69,8 +59,8 @@ def get_room_by_id(room_id):
             logger.warning(f"No room with ID={room_id} found.")
             return abort(404, f"No room with ID={room_id} found.")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while retrieving rooms.\n{e}")
-        abort(500, f"An error has occured while retrieving rooms.")
+        logger.error(f"An error occurred while interacting with the database.\n{e}")
+        abort(500, f"An error occurred while interacting with the database.")
 
 
 @room_bp.route("/rooms/<int:room_id>", methods=["PUT"])
@@ -79,13 +69,7 @@ def get_room_by_id(room_id):
 def update_room(room_id):
     if current_user.user_type == 0:
         try:
-            new_room = clean(request.form["new_room"])
-        except KeyError as e:
-            logger.error(
-                f"An error has occured: missing key in request parameters.\n{e}"
-            )
-            abort(400, f"An error has occured: missing key in request parameters.")
-        try:
+            new_room = clean(request.form.get("new_room"))
             affected_rows = (
                 db.session.query(Room).filter_by(id=room_id).update({"name": new_room})
             )
@@ -97,8 +81,8 @@ def update_room(room_id):
                 logger.warning(f"No room with ID={room_id} to update")
                 return abort(404, f"No room with ID={room_id} to update")
         except exc.SQLAlchemyError as e:
-            logger.error(f"An error has occured while updating room.\n{e}")
-            return abort(500, f"An error has occured while updating room.")
+            logger.error(f"An error occurred while interacting with the database.\n{e}")
+            abort(500, f"An error occurred while interacting with the database.")
     abort(401, "Account not authorized to perform this action.")
 
 
@@ -117,6 +101,6 @@ def delete_room(room_id):
                 logger.warning(f"No room with ID={room_id} to delete")
                 return abort(404, f"No room with ID={room_id} to delete")
         except exc.SQLAlchemyError as e:
-            logger.error(f"An error has occured while deleting room.\n{e}")
-            return abort(500, f"An error has occured while deleting room.")
+            logger.error(f"An error occurred while interacting with the database.\n{e}")
+            abort(500, f"An error occurred while interacting with the database.")
     abort(401, "Account not authorized to perform this action.")

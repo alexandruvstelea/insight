@@ -19,20 +19,15 @@ rating_bp = Blueprint("ratings", __name__)
 @limiter.limit("50 per minute")
 def insert_rating():
     try:
-        date_time = datetime.strptime(clean(request.form["date"]), "%Y-%m-%d %H:%M:%S.%f")
-        rating_clarity = int(clean(request.form["clarity"]))
-        rating_interactivity = int(clean(request.form["interactivity"]))
-        rating_relevance = int(clean(request.form["relevance"]))
-        rating_comprehension = int(clean(request.form["comprehension"]))
-        room_id = int(clean(request.form["room_id"]))
-        code =int(clean(request.form["code"]))
-    except KeyError as e:
-        logger.error(f"An error has occured: missing key in request parameters.\n{e}")
-        abort(400, f"An error has occured: missing key in request parameters.")
-    except (ValueError, TypeError):
-        logger.error("An error has occurred: ratings or subject id not a number.")
-        abort(400, "An error has occurred: ratings or subject id not a number.")
-    try:
+        date_time = datetime.strptime(
+            clean(request.form.get("date")), "%Y-%m-%d %H:%M:%S.%f"
+        )
+        rating_clarity = int(clean(request.form.get("clarity")))
+        rating_interactivity = int(clean(request.form.get("interactivity")))
+        rating_relevance = int(clean(request.form.get("relevance")))
+        rating_comprehension = int(clean(request.form.get("comprehension")))
+        room_id = int(clean(request.form.get("room_id")))
+        code = int(clean(request.form.get("code")))
         if verify_code(room_id, code):
             rating_overall = (
                 rating_clarity
@@ -53,10 +48,13 @@ def insert_rating():
             db.session.add(new_rating)
             db.session.commit()
             return {"response": "New rating added to database."}
-        abort(400,"Invalid code.")
+        abort(400, "Invalid code.")
+    except (ValueError, TypeError) as e:
+        logger.error(f"An error has occured: request parameters not ok.\n{e}")
+        abort(400, f"An error has occured: request parameters not ok.")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while adding object to ratings.\n{e}")
-        abort(500, f"An error has occured while adding object to ratings.")
+        logger.error(f"An error occurred while interacting with the database.\n{e}")
+        abort(500, f"An error occurred while interacting with the database.")
 
 
 @rating_bp.route("/rating/<int:subject_id>", methods=["GET"])
@@ -97,8 +95,8 @@ def get_average_ratings(subject_id):
             logger.warning("No average ratings found.")
             abort(404, "No average ratings found.")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while retrieving ratings.\n{e}")
-        abort(500, f"An error has occured while retrieving ratings.")
+        logger.error(f"An error occurred while interacting with the database.\n{e}")
+        abort(500, f"An error occurred while interacting with the database.")
 
 
 @rating_bp.route("/graph", methods=["GET"])
@@ -106,13 +104,6 @@ def get_average_ratings(subject_id):
 def get_graph_data():
     try:
         subject_id = int(clean(request.args.get("subject_id")))
-    except KeyError as e:
-        logger.error(f"An error has occured: missing key in request parameters.\n{e}")
-        abort(400, f"An error has occured: missing key in request parameters.")
-    except (ValueError, TypeError):
-        logger.error("An error has occurred: subject id is not a number.")
-        abort(400, "An error has occurred: subject id is not a number.")
-    try:
         subject = db.session.query(Subject).filter(Subject.id == subject_id).first()
         ratings = db.session.query(Rating).filter_by(subject_id=subject_id).all()
         if subject:
@@ -163,6 +154,9 @@ def get_graph_data():
         else:
             logger.warning("Couldn't find ratings.")
             return abort(404, "Couldn't find ratings.")
+    except (ValueError, TypeError) as e:
+        logger.error(f"An error has occured: request parameters not ok.\n{e}")
+        abort(400, f"An error has occured: request parameters not ok.")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occurred while retrieving graph data.\n{e}")
-        abort(500, f"An error has occurred while retrieving graph data.")
+        logger.error(f"An error occurred while interacting with the database.\n{e}")
+        abort(500, f"An error occurred while interacting with the database.")

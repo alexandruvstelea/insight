@@ -16,26 +16,16 @@ programme_bp = Blueprint("programmes", __name__)
 def create_programme():
     if current_user.user_type == 0:
         try:
-            name = clean(request.form["name"])
-            abbreviation = clean(request.form["abbreviation"])
-        except KeyError as e:
-            logger.error(
-                f"An error has occured: missing key in request parameters.\n {e}"
-            )
-            abort(400, f"An error has occured: missing key in request parameters.")
-        new_programme = Programme(name, abbreviation)
-        try:
+            name = clean(request.form.get("name"))
+            abbreviation = clean(request.form.get("abbreviation"))
+            new_programme = Programme(name, abbreviation)
             db.session.add(new_programme)
             db.session.commit()
             logger.info("New programme added to database")
             return {"response": "New programme added to database"}, 200
         except exc.SQLAlchemyError as e:
-            logger.error(
-                f"An error has occured while adding programme to the database.\n {e}"
-            )
-            return abort(
-                500, f"An error has occured while adding programme to the database."
-            )
+            logger.error(f"An error occurred while interacting with the database.\n{e}")
+            abort(500, f"An error occurred while interacting with the database.")
     abort(401, "Account not authorized to perform this action.")
 
 
@@ -60,8 +50,8 @@ def get_programmes():
             logger.warning("No programmes found.")
             abort(404, "No programmes found.")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while retrieving programmes.\n{e}")
-        abort(500, f"An error has occured while retrieving programmes.")
+        logger.error(f"An error occurred while interacting with the database.\n{e}")
+        abort(500, f"An error occurred while interacting with the database.")
 
 
 @programme_bp.route("/programmes/<int:programme_id>", methods=["GET"])
@@ -80,8 +70,8 @@ def get_programme_by_id(programme_id):
             logger.warning(f"No programme with ID={programme_id} found.")
             return abort(404, f"No programme with ID={programme_id} found.")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while retrieving programmes.\n {e}")
-        abort(500, f"An error has occured while retrieving programmes.")
+        logger.error(f"An error occurred while interacting with the database.\n{e}")
+        abort(500, f"An error occurred while interacting with the database.")
 
 
 @programme_bp.route("/programmes/<int:programme_id>", methods=["PUT"])
@@ -90,14 +80,8 @@ def get_programme_by_id(programme_id):
 def update_room(programme_id):
     if current_user.user_type == 0:
         try:
-            new_name = clean(request.form["new_name"])
-            new_abbreviation = clean(request.form["new_abbreviation"])
-        except KeyError as e:
-            logger.error(
-                f"An error has occured: missing key in request parameters.\n {e}"
-            )
-            abort(400, f"An error has occured: missing key in request parameters.")
-        try:
+            new_name = clean(request.form.get("new_name"))
+            new_abbreviation = clean(request.form.get("new_abbreviation"))
             affected_rows = (
                 db.session.query(Programme)
                 .filter_by(id=programme_id)
@@ -110,9 +94,12 @@ def update_room(programme_id):
             else:
                 logger.warning(f"No programme with ID={programme_id} to update")
                 return abort(404, f"No programme with ID={programme_id} to update")
+        except (ValueError, TypeError) as e:
+            logger.error(f"An error has occured: request parameters not ok.\n{e}")
+            abort(400, f"An error has occured: request parameters not ok.")
         except exc.SQLAlchemyError as e:
-            logger.error(f"An error has occured while updating programme.\n {e}")
-            return abort(500, f"An error has occured while updating programme.")
+            logger.error(f"An error occurred while interacting with the database.\n{e}")
+            abort(500, f"An error occurred while interacting with the database.")
     abort(401, "Account not authorized to perform this action.")
 
 
@@ -133,6 +120,6 @@ def delete_room(programme_id):
                 logger.warning(f"No programme with ID={programme_id} to delete")
                 return abort(404, f"No programme with ID={programme_id} to delete")
         except exc.SQLAlchemyError as e:
-            logger.error(f"An error has occured while deleting programme.\n {e}")
-            return abort(500, f"An error has occured while deleting programme.")
+            logger.error(f"An error occurred while interacting with the database.\n{e}")
+            abort(500, f"An error occurred while interacting with the database.")
     abort(401, "Account not authorized to perform this action.")

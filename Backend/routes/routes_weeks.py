@@ -18,17 +18,11 @@ def generate_weeks():
     if current_user.user_type == 0:
         try:
             year_start = datetime.strptime(
-                clean(request.form["year_start"]), "%Y-%m-%d"
+                clean(request.form.get("year_start")), "%Y-%m-%d"
             )
             intervals = [int(i) for i in request.form.getlist("intervals")]
-        except KeyError as e:
-            logger.error(
-                f"An error has occured: missing key in request parameters.\n{e}"
-            )
-            abort(400, f"An error has occured: missing key in request parameters.")
 
-        def add_weeks(number_of_weeks, interval_start, counter):
-            try:
+            def add_weeks(number_of_weeks, interval_start, counter):
                 for x in range(number_of_weeks):
                     counter += 1
                     if counter <= 14:
@@ -40,11 +34,7 @@ def generate_weeks():
                     interval_start = end + timedelta(days=1)
                 db.session.commit()
                 return interval_start, counter
-            except Exception as e:
-                logger.error(f"An error has occured while generating weeks.\n{e}")
-                abort(500, f"An error has occured while generating weeks.")
 
-        try:
             counter = 0
             interval_start = year_start
             interval_start, counter = add_weeks(intervals[0], interval_start, counter)
@@ -57,9 +47,9 @@ def generate_weeks():
             interval_start, counter = add_weeks(intervals[7], interval_start, counter)
             logger.info("Generated weeks.")
             return {"response": "Weeks generated"}, 200
-        except Exception as e:
-            logger.error(f"An error has occured while generating weeks.\n{e}")
-            abort(500, f"An error has occured while generating weeks.")
+        except exc.SQLAlchemyError as e:
+            logger.error(f"An error occurred while interacting with the database.\n{e}")
+            abort(500, f"An error occurred while interacting with the database.")
     abort(401, "Account not authorized to perform this action.")
 
 
@@ -85,8 +75,8 @@ def get_weeks():
             logger.warning("No weeks found.")
             abort(404, "No weeks found.")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while retrieving data.\n{e}")
-        abort(500, f"An error has occured while retrieving data.")
+        logger.error(f"An error occurred while interacting with the database.\n{e}")
+        abort(500, f"An error occurred while interacting with the database.")
 
 
 @weeks_bp.route("/weeks", methods=["DELETE"])
@@ -100,6 +90,6 @@ def reset_weeks():
             logger.info("Weeks deleted from database.")
             return {"response": "Weeks deleted from database."}, 200
         except exc.SQLAlchemyError as e:
-            logger.error(f"An error has occured while deleting weeks.\n{e}")
-            return abort(500, f"An error has occured while deleting weeks.")
+            logger.error(f"An error occurred while interacting with the database.\n{e}")
+            abort(500, f"An error occurred while interacting with the database.")
     abort(401, "Account not authorized to perform this action.")

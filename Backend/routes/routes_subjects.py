@@ -21,20 +21,11 @@ subject_bp = Blueprint("subjects", __name__)
 def create_subject():
     if current_user.user_type == 0:
         try:
-            name = clean(request.form["name"])
-            abbreviation = clean(request.form["abbreviation"])
-            professor_id = clean(request.form["professor_id"])
-            semester = clean(request.form["semester"])
+            name = clean(request.form.get("name"))
+            abbreviation = clean(request.form.get("abbreviation"))
+            professor_id = clean(request.form.get("professor_id"))
+            semester = clean(request.form.get("semester"))
             programme_ids = [int(i) for i in request.form.getlist("programme_ids")]
-        except KeyError as e:
-            logger.error(
-                f"An error has occured: missing key in request parameters.\n{e}"
-            )
-            abort(400, f"An error has occured: missing key in request parameters.")
-        except (ValueError, TypeError):
-            logger.error("An error has occurred: programme id is not a number.")
-            abort(400, "An error has occurred: programme id is not a number.")
-        try:
             new_subject = Subject(name, abbreviation, professor_id, semester)
             for pid in programme_ids:
                 programme = db.session.query(Programme).filter_by(id=pid).first()
@@ -43,9 +34,12 @@ def create_subject():
             db.session.add(new_subject)
             db.session.commit()
             return {"response": "New subject added to database"}, 200
+        except (ValueError, TypeError) as e:
+            logger.error(f"An error has occured: request parameters not ok.\n{e}")
+            abort(400, f"An error has occured: request parameters not ok.")
         except exc.SQLAlchemyError as e:
-            logger.error(f"An error has occured while adding subject to database.\n{e}")
-            return abort(500, f"An error has occured while adding subject to database.")
+            logger.error(f"An error occurred while interacting with the database.\n{e}")
+            abort(500, f"An error occurred while interacting with the database.")
     abort(401, "Account not authorized to perform this action.")
 
 
@@ -75,8 +69,8 @@ def get_subjects():
             logger.warning("No subjects found.")
             abort(404, "No subjects found.")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while retrieving subjects.\n{e}")
-        abort(500, f"An error has occured while retrieving subjects.")
+        logger.error(f"An error occurred while interacting with the database.\n{e}")
+        abort(500, f"An error occurred while interacting with the database.")
 
 
 @subject_bp.route("/subjects/<int:subject_id>", methods=["GET"])
@@ -100,8 +94,8 @@ def get_subject_by_id(subject_id):
             logger.warning(f"No subject with ID={subject_id} found.")
             return abort(404, f"No subject with ID={subject_id} found.")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while retrieving subjects.\n{e}")
-        abort(500, f"An error has occured while retrieving subjects.")
+        logger.error(f"An error occurred while interacting with the database.\n{e}")
+        abort(500, f"An error occurred while interacting with the database.")
 
 
 @subject_bp.route("/subjects/<int:subject_id>", methods=["PUT"])
@@ -110,20 +104,11 @@ def get_subject_by_id(subject_id):
 def update_subject(subject_id):
     if current_user.user_type == 0:
         try:
-            new_name = clean(request.form["new_name"])
-            new_abbreviation = clean(request.form["new_abbreviation"])
-            new_professor_id = clean(request.form["new_professor_id"])
-            new_semester = clean(request.form["new_semester"])
+            new_name = clean(request.form.get("new_name"))
+            new_abbreviation = clean(request.form.get("new_abbreviation"))
+            new_professor_id = clean(request.form.get("new_professor_id"))
+            new_semester = clean(request.form.get("new_semester"))
             programme_ids = [int(i) for i in request.form.getlist("programme_ids")]
-        except KeyError as e:
-            logger.error(
-                f"An error has occured: missing key in request parameters.\n{e}"
-            )
-            abort(400, f"An error has occured: missing key in request parameters.")
-        except (ValueError, TypeError):
-            logger.error("An error has occurred: programme id is not a number.")
-            abort(400, "An error has occurred: programme id is not a number.")
-        try:
             subject = db.session.query(Subject).filter_by(id=subject_id).first()
             if not subject:
                 abort(404, f"No subject with ID={subject_id} to update")
@@ -141,8 +126,8 @@ def update_subject(subject_id):
             logger.info(f"Subject with ID={subject_id} updated")
             return {"response": f"Subject with ID={subject_id} updated"}, 200
         except exc.SQLAlchemyError as e:
-            logger.error(f"An error has occured while retrieving subjects.\n{e}")
-            abort(500, f"An error has occured while retrieving subjects.")
+            logger.error(f"An error occurred while interacting with the database.\n{e}")
+            abort(500, f"An error occurred while interacting with the database.")
     abort(401, "Account not authorized to perform this action.")
 
 
@@ -163,9 +148,10 @@ def delete_subjects(subject_id):
             else:
                 logger.warning(f"No subject with ID={subject_id} to delete")
                 return abort(404, f"No subject with ID={subject_id} to delete")
+
         except exc.SQLAlchemyError as e:
-            logger.error(f"An error has occured while deleting subject.\n{e}")
-            abort(500, f"An error has occured while deleting subject.")
+            logger.error(f"An error occurred while interacting with the database.\n{e}")
+            abort(500, f"An error occurred while interacting with the database.")
     abort(401, "Account not authorized to perform this action.")
 
 
@@ -193,8 +179,8 @@ def get_professor_subjects(professor_id):
             logger.warning("No subjects found.")
             abort(404, "No subjects found.")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while retrieving subjects.\n{e}")
-        abort(500, f"An error has occured while retrieving subjects.")
+        logger.error(f"An error occurred while interacting with the database.\n{e}")
+        abort(500, f"An error occurred while interacting with the database.")
 
 
 @subject_bp.route("/subjects/description/<int:subject_id>", methods=["GET"])
@@ -219,8 +205,8 @@ def get_subject_description(subject_id):
         else:
             abort(404, "Subject details not found!")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while retrieving subjects.\n{e}")
-        abort(500, f"An error has occured while retrieving subjects.")
+        logger.error(f"An error occurred while interacting with the database.\n{e}")
+        abort(500, f"An error occurred while interacting with the database.")
 
 
 @subject_bp.route("/subjects/current", methods=["POST"])
@@ -231,15 +217,8 @@ def get_current_subject():
         if not data:
             logger.error("Invalid JSON data provided.")
             abort(400, "Invalid JSON data provided.")
-        date_time = datetime.strptime(data["date"], "%Y-%m-%d %H:%M:%S.%f")
-        room_id = int(data["room"])
-    except KeyError as e:
-        logger.error(f"An error has occured: missing key in request parameters.\n{e}")
-        abort(400, f"An error has occured: missing key in request parameters.")
-    except (ValueError, TypeError):
-        logger.error("An error has occurred: room id is not a number.")
-        abort(400, "An error has occurred: room id is not a number.")
-    try:
+        date_time = datetime.strptime(data.get("date"), "%Y-%m-%d %H:%M:%S.%f")
+        room_id = int(data.get("room"))
         week_type, semester = find_week_type(date_time)
         if week_type == False:
             abort(404, "Current week couldn't be determined.")
@@ -278,6 +257,9 @@ def get_current_subject():
         else:
             logger.warning("No courses found.")
             abort(404, "No courses found.")
+    except (ValueError, TypeError) as e:
+        logger.error(f"An error has occured: request parameters not ok.\n{e}")
+        abort(400, f"An error has occured: request parameters not ok.")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while retrieving subjects.\n{e}")
-        abort(500, f"An error has occured while retrieving subjects.")
+        logger.error(f"An error occurred while interacting with the database.\n{e}")
+        abort(500, f"An error occurred while interacting with the database.")

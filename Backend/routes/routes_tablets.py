@@ -38,8 +38,8 @@ def get_rooms():
                 logger.warning("No tablets found.")
                 abort(404, "No tablets found.")
         except exc.SQLAlchemyError as e:
-            logger.error(f"An error has occured while retrieving tablets.\n{e}")
-            abort(500, f"An error has occured while retrieving tablets.")
+            logger.error(f"An error occurred while interacting with the database.\n{e}")
+            abort(500, f"An error occurred while interacting with the database.")
     abort(401, "Account not authorized to perform this action.")
 
 
@@ -70,6 +70,6 @@ def ping(room_id):
                 )
                 return {"response": "Created and pinged."}, 200
         except exc.SQLAlchemyError as e:
-            logger.error(f"An error has occured while pinging.\n{e}")
-            abort(500, f"An error has occured while pinging.")
+            logger.error(f"An error occurred while interacting with the database.\n{e}")
+            abort(500, f"An error occurred while interacting with the database.")
     abort(401, "Account not authorized to perform this action.")

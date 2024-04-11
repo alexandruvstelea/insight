@@ -1,4 +1,9 @@
-from routes.helpers import send_password_email, send_registration_email, check_email, check_password
+from routes.helpers import (
+    send_password_email,
+    send_registration_email,
+    check_email,
+    check_password,
+)
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Blueprint, jsonify, abort, request
@@ -43,8 +48,8 @@ def get_users():
                 logger.warning("No users found.")
                 abort(404, "No users found.")
         except exc.SQLAlchemyError as e:
-            logger.error(f"An error has occured while retrieving users.\n{e}")
-            abort(500, f"An error has occured while retrieving users.")
+            logger.error(f"An error occurred while interacting with the database.\n{e}")
+            abort(500, f"An error occurred while interacting with the database.")
     abort(401, "Account not authorized to perform this action.")
 
 
@@ -55,19 +60,12 @@ def register():
         email = clean(request.form.get("email"))
         password = clean(request.form.get("password"))
         programme_id = int(clean(request.form.get("programme_id")))
-    except KeyError as e:
-        logger.error(f"An error has occured: missing key in request parameters.\n{e}")
-        abort(400, f"An error has occured: missing key in request parameters.")
-    except (ValueError, TypeError):
-        logger.error("An error has occurred: code is not a number.")
-        abort(400, "An error has occurred: code is not a number.")
-    if not check_email(email):
-        abort(400, "The provided email is not institutional.")
-    if not check_password(password):
-        abort(400, "The provided password is too short.")
-    code = randint(100000, 999999)
-    hashed_password = generate_password_hash(password)
-    try:
+        if not check_email(email):
+            abort(400, "The provided email is not institutional.")
+        if not check_password(password):
+            abort(400, "The provided password is too short.")
+        code = randint(100000, 999999)
+        hashed_password = generate_password_hash(password)
         existing_programme = (
             db.session.query(Programme).filter_by(id=programme_id).first()
         )
@@ -87,9 +85,12 @@ def register():
         db.session.commit()
         send_registration_email(code, email)
         return {"message": "Registration successful!"}, 201
+    except (ValueError, TypeError) as e:
+        logger.error(f"An error has occured: request parameters not ok.\n{e}")
+        abort(400, f"An error has occured: request parameters not ok.")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while registering the user.\n{e}")
-        return abort(500, f"An error has occured while registering the user.")
+        logger.error(f"An error occurred while interacting with the database.\n{e}")
+        abort(500, f"An error occurred while interacting with the database.")
 
 
 @user_bp.route(f"/users/<int:user_id>", methods=["DELETE"])
@@ -107,8 +108,8 @@ def delete_user(user_id):
                 logger.warning(f"No user with ID={user_id} to delete")
                 return abort(404, f"No user with ID={user_id} to delete")
         except exc.SQLAlchemyError as e:
-            logger.error(f"An error has occured while deleting user.\n{e}")
-            abort(500, f"An error has occured while deleting user.")
+            logger.error(f"An error occurred while interacting with the database.\n{e}")
+            abort(500, f"An error occurred while interacting with the database.")
     abort(401, "Account not authorized to perform this action.")
 
 
@@ -118,21 +119,16 @@ def login():
     try:
         email = clean(request.form.get("email"))
         password = clean(request.form.get("password"))
-    except KeyError as e:
-        logger.error(f"An error has occured: missing key in request parameters.\n{e}")
-        abort(400, f"An error has occured: missing key in request parameters.")
-    try:
         user = db.session.query(User).filter_by(email=email).first()
         if user and check_password_hash(user.password, password) and user.active == 1:
             login_user(user)
             return {"message": "Login successful!"}, 200
         elif user and check_password_hash(user.password, password) and user.active == 0:
-            #! nu inteleg aici, nu mai bine punem abort ?
             return {"message": "Account not activated."}
         abort(401, "Invalid username or password!")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while authenticating the user.\n{e}")
-        return abort(500, f"An error has occured while authenticating the user.")
+        logger.error(f"An error occurred while interacting with the database.\n{e}")
+        abort(500, f"An error occurred while interacting with the database.")
 
 
 @user_bp.route("/request-reset", methods=["POST"])
@@ -140,10 +136,6 @@ def login():
 def request_reset_password():
     try:
         email = clean(request.form.get("email"))
-    except KeyError as e:
-        logger.error(f"An error has occured: missing key in request parameters.\n{e}")
-        abort(400, f"An error has occured: missing key in request parameters.")
-    try:
         user = db.session.query(User).filter_by(email=email).first()
         if user and user.active == 1:
             code = randint(100000, 999999)
@@ -159,8 +151,8 @@ def request_reset_password():
         else:
             abort(400, "Invalid credentials or account already inactive.")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while sending email.\n{e}")
-        return abort(500, f"An error has occured while sending email.")
+        logger.error(f"An error occurred while interacting with the database.\n{e}")
+        abort(500, f"An error occurred while interacting with the database.")
 
 
 @user_bp.route("/reset", methods=["POST"])
@@ -170,16 +162,9 @@ def reset_password():
         email = clean(request.form.get("email"))
         code = int(clean(request.form.get("code")))
         new_password = clean(request.form.get(f"new_password"))
-    except KeyError as e:
-        logger.error(f"An error has occured: missing key in request parameters.\n{e}")
-        abort(400, f"An error has occured: missing key in request parameters.")
-    except (ValueError, TypeError):
-        logger.error("An error has occurred: code is not a number.")
-        abort(400, "An error has occurred: code is not a number.")
-    if not check_password(new_password):
-        abort(400, "The provided password is too short.")
-    hashed_password = generate_password_hash(new_password)
-    try:
+        if not check_password(new_password):
+            abort(400, "The provided password is too short.")
+        hashed_password = generate_password_hash(new_password)
         user = db.session.query(User).filter_by(email=email).first()
         if user and user.active == 1 and user.registration_code == code:
             affected_rows = (
@@ -194,8 +179,8 @@ def reset_password():
         else:
             abort(400, "Invalid credentials.")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while reseting password.\n{e}")
-        return abort(500, f"An error has occured while reseting password.")
+        logger.error(f"An error occurred while interacting with the database.\n{e}")
+        abort(500, f"An error occurred while interacting with the database.")
 
 
 @user_bp.route("/resend", methods=["PUT"])
@@ -204,10 +189,6 @@ def resend_activation_code():
     try:
         email = clean(request.form.get("email"))
         password = clean(request.form.get("password"))
-    except KeyError as e:
-        logger.error(f"An error has occured: missing key in request parameters.\n{e}")
-        abort(400, f"An error has occured: missing key in request parameters.")
-    try:
         user = db.session.query(User).filter_by(email=email).first()
         if user and check_password_hash(user.password, password) and user.active == 0:
             code = randint(100000, 999999)
@@ -223,8 +204,8 @@ def resend_activation_code():
         else:
             abort(400, "Invalid credentials or account already active.")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while resending email.\n{e}")
-        return abort(500, f"An error has occured while resending email.")
+        logger.error(f"An error occurred while interacting with the database.\n{e}")
+        abort(500, f"An error occurred while interacting with the database.")
 
 
 @user_bp.route("/activate", methods=["POST"])
@@ -234,13 +215,6 @@ def activate_account():
         email = clean(request.form.get("email"))
         password = clean(request.form.get("password"))
         code = int(clean(request.form.get("code")))
-    except KeyError as e:
-        logger.error(f"An error has occured: missing key in request parameters.\n{e}")
-        abort(400, f"An error has occured: missing key in request parameters.")
-    except (ValueError, TypeError):
-        logger.error("An error has occurred: code is not a number.")
-        abort(400, "An error has occurred: code is not a number.")
-    try:
         user = db.session.query(User).filter_by(email=email).first()
         if (
             user
@@ -256,9 +230,12 @@ def activate_account():
             return {"message": "Account activated."}
         else:
             abort(400, "Invalid credentials or account already active.")
+    except (ValueError, TypeError) as e:
+        logger.error(f"An error has occured: request parameters not ok.\n{e}")
+        abort(400, f"An error has occured: request parameters not ok.")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while activating account.\n{e}")
-        return abort(500, f"An error has occured while activating account.")
+        logger.error(f"An error occurred while interacting with the database.\n{e}")
+        abort(500, f"An error occurred while interacting with the database.")
 
 
 @user_bp.route("/logout", methods=["GET"])

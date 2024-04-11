@@ -40,13 +40,6 @@ def create_comment():
         room_id = int(clean(request.form.get("room_id")))
         timestamp = datetime.now()
         code = int(clean(request.form.get("code")))
-    except KeyError as e:
-        logger.error(f"An error has occured: missing key in request parameters.\n {e}")
-        abort(400, f"An error has occured: missing key in request parameters.")
-    except (ValueError, TypeError) as e:
-        logger.error(f"An error has occurred: {e} ")
-        abort(400, "An error has occurred: subject id is not a number.")
-    try:
         if verify_code(room_id, code):
             subject_id = last_three_digits(code)
             new_comment = Comment(
@@ -59,10 +52,12 @@ def create_comment():
             db.session.commit()
             return {"response": "New comment added to database"}, 200
         abort(400, "Invalid code.")
+    except (ValueError, TypeError) as e:
+        logger.error(f"An error has occured: request parameters not ok.\n{e}")
+        abort(400, f"An error has occured: request parameters not ok.")
     except exc.SQLAlchemyError as e:
-        db.session.rollback()
-        logger.error(f"An error has occured while adding object to the database.\n {e}")
-        abort(500, f"An error has occured while adding object to the database.")
+        logger.error(f"An error occurred while interacting with the database.\n{e}")
+        abort(500, f"An error occurred while interacting with the database.")
 
 
 @comment_bp.route("/comments", methods=["GET"])
@@ -89,8 +84,8 @@ def get_comments():
             logger.warning("No comments found.")
             abort(404, "No comments found.")
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while retrieving comments.\n {e}")
-        abort(500, f"An error has occured while retrieving comments.")
+        logger.error(f"An error occurred while interacting with the database.\n{e}")
+        abort(500, f"An error occurred while interacting with the database.")
 
 
 @comment_bp.route("/comments/<int:subject_id>", methods=["GET"])
@@ -123,10 +118,9 @@ def get_comments_by_id(subject_id):
         else:
             logger.warning(f"No comments found for subject_id {subject_id}.")
             return jsonify({"message": "No comments found for this subject."}), 404
-
     except exc.SQLAlchemyError as e:
-        logger.error(f"An error has occured while retrieving comments.\n {e}")
-        abort(500, f"An error has occured while retrieving comments.")
+        logger.error(f"An error occurred while interacting with the database.\n{e}")
+        abort(500, f"An error occurred while interacting with the database.")
 
 
 @comment_bp.route("/comments/<int:comment_id>", methods=["DELETE"])
@@ -144,6 +138,6 @@ def delete_comment(comment_id):
                 logger.warning(f"No comment with ID={comment_id} to delete")
                 return abort(404, f"No comment with ID={comment_id} to delete")
         except exc.SQLAlchemyError as e:
-            logger.error(f"An error has occured while deleting comment.\n {e}")
-            return abort(500, f"An error has occured while deleting comment.")
+            logger.error(f"An error occurred while interacting with the database.\n{e}")
+            abort(500, f"An error occurred while interacting with the database.")
     abort(401, "Account not authorized to perform this action.")

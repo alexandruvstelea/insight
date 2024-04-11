@@ -36,7 +36,7 @@ def get_code(room_id):
 def regenerate_code(room_id):
     if current_user.user_type == 0:
         try:
-            subject_id = int(clean(request.form["subject_id"]))
+            subject_id = int(clean(request.form.get("subject_id")))
             code = generate_voting_code(subject_id)
             affected_rows = (
                 db.session.query(Code).filter_by(room_id=room_id).update({"code": code})
@@ -54,15 +54,10 @@ def regenerate_code(room_id):
                 db.session.commit()
                 logger.info(f"New code generated for room with id={room_id}.")
                 return {"response": "New code generated."}, 200
-        except exc.SQLAlchemyError as e:
-            logger.error(f"An error has occured while generating code.\n{e}")
-            abort(500, f"An error has occured while generating code.")
-        except KeyError as e:
-            logger.error(
-                f"An error has occured: missing key in request parameters.\n {e}"
-            )
-            abort(400, f"An error has occured: missing key in request parameters.")
         except (ValueError, TypeError) as e:
-            logger.error("An error has occurred: subject id is not a number.")
-            abort(400, f"An error has occurred: subject id is not a number.")
+            logger.error(f"An error has occured: request parameters not ok.\n{e}")
+            abort(400, f"An error has occured: request parameters not ok.")
+        except exc.SQLAlchemyError as e:
+            logger.error(f"An error occurred while interacting with the database.\n{e}")
+            abort(500, f"An error occurred while interacting with the database.")
     abort(401, "Account not authorized to perform this action.")
