@@ -17,7 +17,7 @@ db = SQLAlchemy()
 limiter = Limiter(
     key_func=get_remote_address,
     default_limits=["50 per minute"],
-    storage_uri=f"mongodb://localhost:27017",
+    storage_uri=f"mongodb://{MONGO_USER}:{MONGO_PASSWORD}@localhost:27017",
     strategy="fixed-window",
 )
 login_manager = LoginManager()
@@ -42,6 +42,7 @@ def init_app():
         from models.programmes import Programme
         from models.users import User
         from models.codes import Code
+        from models.tablets import Tablet
 
         db.create_all()
 
@@ -51,11 +52,12 @@ def init_app():
         from routes.routes_rooms import room_bp
         from routes.routes_subjects import subject_bp
         from routes.routes_weeks import weeks_bp
-        from routes.routes_comments import comments_bp
+        from routes.routes_comments import comment_bp
         from routes.routes_archive import archive_bp
         from routes.routes_programmes import programme_bp
         from routes.routes_users import user_bp
         from routes.routes_codes import code_bp
+        from routes.routes_tablets import tablet_bp
 
         app.register_blueprint(course_bp)
         app.register_blueprint(professor_bp)
@@ -63,11 +65,12 @@ def init_app():
         app.register_blueprint(room_bp)
         app.register_blueprint(subject_bp)
         app.register_blueprint(weeks_bp)
-        app.register_blueprint(comments_bp)
+        app.register_blueprint(comment_bp)
         app.register_blueprint(archive_bp)
         app.register_blueprint(programme_bp)
         app.register_blueprint(user_bp)
         app.register_blueprint(code_bp)
+        app.register_blueprint(tablet_bp)
 
         logging.basicConfig(
             filename="app.log",
