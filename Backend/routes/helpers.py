@@ -112,7 +112,7 @@ def last_three_digits(code: int):
 
 
 def generate_voting_code(subject_id: int):
-    random_part = "".join(str(randint(0, 9)) for _ in range(3))
+    random_part = "".join(str(randint(1, 9)) for _ in range(3))
     id_part = str(subject_id).zfill(3)
     code = random_part + id_part
     return int(code)
