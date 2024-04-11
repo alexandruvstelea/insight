@@ -63,8 +63,10 @@ export default function SelectRoomPage({ navigation }) {
     const saveSelectedRoom = async () => {
       try {
         await AsyncStorage.setItem("@selectedRoomId", selectedRoom);
-      } catch (err) {
-        console.error("AsyncStorage error:", err);
+      } catch (error) {
+        console.error(
+          `An error has occured while saving selected room: ${error}`
+        );
       }
     };
     saveSelectedRoom();

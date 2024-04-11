@@ -8,12 +8,23 @@ import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import { BackHandler, Button } from "react-native";
 import PasswordModal from "./PasswordModal";
 
+const noCourseList = [
+  "S-a luat curentu'",
+  "Lasa copiutele",
+  "Pauza de tigara?",
+  "Mi-e foame",
+  "As manca o rata",
+  "Veverita jongleaza nuci",
+];
+
 export default function MainPage({ navigation }) {
   const [currentSubject, setCurrentSubject] = useState("");
+  const [isSubject, setIsSubject] = useState(false);
   const [roomId, setRoomId] = useState("");
   const [code, setCode] = useState("");
   const [key, setKey] = useState(0);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [rant, setRant] = useState("");
 
   const handlePasswordEntered = () => {
     navigation.navigate("SelectRoomPage");
@@ -41,6 +52,7 @@ export default function MainPage({ navigation }) {
   };
 
   const fetchSubject = async () => {
+    console.log("fetchSubject()");
     try {
       if (roomId) {
       }
@@ -58,21 +70,30 @@ export default function MainPage({ navigation }) {
       });
 
       if (!response.ok) {
+        if (response.status === 404) {
+          console.log("Nu s-a gasit curs");
+          setCode(false);
+          setIsSubject(false);
+          const randomIndex = Math.floor(Math.random() * noCourseList.length);
+          setRant(noCourseList[randomIndex]);
+          return;
+        }
         console.log(response);
-        throw new Error("Network response was not ok");
       }
-
+      console.log("S-a gasit curs");
+      setIsSubject(true);
       const data = await response.json();
-
       setCurrentSubject(data);
-      return true;
+      return;
     } catch (error) {
       console.error("There was a problem with the fetch operation:", error);
     }
   };
   const fetchCode = async () => {
+    console.log("fetchCode()");
     try {
-      if (roomId) {
+      console.log("fetch code ->", roomId, isSubject);
+      if (roomId && isSubject) {
         const response = await fetch(`http://${BACKEND_IP}/code/${roomId}`, {
           method: "GET",
           credentials: "include",
@@ -80,24 +101,30 @@ export default function MainPage({ navigation }) {
 
         if (!response.ok) {
           if (response.status === 404) {
-            setCode([]);
+            console.log("Nu s-a putut lua noul cod.");
+            setCode(false);
           } else {
             console.log(response.status);
             throw new Error("Failed to fetch");
           }
         }
+        console.log("S-a luat noul cod.");
         const data = await response.json();
         setCode(data.code);
+      } else {
+        setCode(false);
       }
-      return true;
+      return;
     } catch (error) {
       console.error(error);
     }
   };
 
   const regenerateCode = async () => {
+    console.log("regenerateCode()");
     try {
-      if (roomId && currentSubject.id) {
+      console.log("regenerate code ->", roomId, currentSubject, isSubject);
+      if (roomId && currentSubject.id && isSubject) {
         const formData = new FormData();
         formData.append("subject_id", currentSubject.id);
         const response = await fetch(`http://${BACKEND_IP}/code/${roomId}`, {
@@ -111,8 +138,28 @@ export default function MainPage({ navigation }) {
             `An error has occured during code regeneration. Status : ${response.status}`
           );
         }
+        console.log("S-a putut regenera codul.");
+      } else {
+        setCode(false);
       }
-      return true;
+      return;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const pingAlive = async () => {
+    try {
+      const response = await fetch(`http://${BACKEND_IP}/ping/${roomId}`, {
+        method: "POST",
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        console.log(response.status);
+        throw new Error("Failed to ping");
+      }
+      return;
     } catch (error) {
       console.error(error);
     }
@@ -128,8 +175,7 @@ export default function MainPage({ navigation }) {
           .then(async () => {
             if (roomId) {
               await fetchSubject();
-              await regenerateCode();
-              await fetchCode();
+              setCode("Generare cod");
             }
           });
       } catch (error) {
@@ -143,14 +189,29 @@ export default function MainPage({ navigation }) {
 
   useEffect(() => {
     const intervalId = setInterval(async () => {
-      console.log("Regenerating code.");
-      await regenerateCode();
-      fetchCode();
-      setKey((prevKey) => prevKey + 1);
+      console.log("Se regenereaza cod");
+      if (isSubject) {
+        await regenerateCode();
+        fetchCode();
+        setKey((prevKey) => prevKey + 1);
+      } else {
+        const randomIndex = Math.floor(Math.random() * noCourseList.length);
+        setCurrentSubject(noCourseList[randomIndex]);
+      }
     }, 10000);
 
     return () => clearInterval(intervalId);
   }, [code]);
+
+  useEffect(() => {
+    const intervalId = setInterval(async () => {
+      await fetchSubject();
+      await pingAlive();
+      console.log("Se cauta curs.");
+    }, 10000);
+
+    return () => clearInterval(intervalId);
+  }, [isSubject]);
 
   useEffect(() => {
     const backAction = () => {
@@ -168,27 +229,38 @@ export default function MainPage({ navigation }) {
 
   const qrValue = `https://prkws2bw-3002.euw.devtunnels.ms/vote?roomId=${roomId}`;
   return (
-    <View style={styles.container}>
-      <Text style={styles.name}>{currentSubject.name}</Text>
-      <QRCode value={qrValue} size={200} />
-      <Text style={styles.code}>{code}</Text>
-      <View style={styles.timerWrapper}>
-        <CountdownCircleTimer
-          key={key}
-          isPlaying
-          duration={10}
-          colors="#007fff"
-          onComplete={() => [true, 1000]}
-        >
-          {renderTime}
-        </CountdownCircleTimer>
-      </View>
-      <Button title="Inapoi" onPress={() => setIsModalVisible(true)} />
-      <PasswordModal
-        visible={isModalVisible}
-        onClose={() => setIsModalVisible(false)}
-        onPasswordEntered={handlePasswordEntered}
-      />
-    </View>
+    <>
+      {isSubject ? (
+        <View style={styles.container}>
+          <Text style={styles.name}>
+            {isSubject ? currentSubject.name : currentSubject}
+          </Text>
+          <QRCode value={qrValue} size={200} />
+          <Text style={styles.code}>{code}</Text>
+          <View style={styles.timerWrapper}>
+            <CountdownCircleTimer
+              key={key}
+              isPlaying
+              duration={10}
+              colors="#007fff"
+              onComplete={() => [true, 1000]}
+            >
+              {renderTime}
+            </CountdownCircleTimer>
+          </View>
+          <Button title="Inapoi" onPress={() => setIsModalVisible(true)} />
+          <PasswordModal
+            visible={isModalVisible}
+            onClose={() => setIsModalVisible(false)}
+            onPasswordEntered={handlePasswordEntered}
+          />
+        </View>
+      ) : (
+        <View style={styles.container}>
+          <Text>Nu se tine curs.</Text>
+          <Text>{rant}</Text>
+        </View>
+      )}
+    </>
   );
 }
