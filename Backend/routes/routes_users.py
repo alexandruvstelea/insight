@@ -6,7 +6,7 @@ from routes.helpers import (
 )
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask import Blueprint, jsonify, abort, request
+from flask import Blueprint, jsonify, abort, request, session
 from __init__ import db, limiter, login_manager
 from models.programmes import Programme
 from dotenv import load_dotenv
@@ -255,6 +255,13 @@ def check_login_status():
         }, 200
     else:
         return {"logged_in": False}, 200
+
+
+@user_bp.route("/loggedin", methods=["GET"])
+@limiter.limit("10 per minute")
+def loggedin_users():
+    active_sessions = sum(1 for key in session.keys() if key.startswith("_user_id"))
+    return jsonify({"loggedin_users": active_sessions}), 200
 
 
 @login_manager.user_loader
