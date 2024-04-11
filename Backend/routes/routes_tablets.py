@@ -18,7 +18,7 @@ load_dotenv(os.path.normpath("../.env"))
 @tablet_bp.route("/tablets", methods=["GET"])
 @login_required
 @limiter.limit("50 per minute")
-def get_rooms():
+def get_tablets():
     if current_user.user_type == 0:
         try:
             tablets = db.session.query(Tablet).all()
