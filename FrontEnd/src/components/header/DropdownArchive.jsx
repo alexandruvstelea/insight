@@ -18,12 +18,14 @@ export default function DropdownArchive() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const toggleDropdown = () => setIsOpen(!isOpen);
-
   return (
     <>
       <div ref={dropdownRef} className={styles.dropdown}>
-        <button onClick={toggleDropdown} className={styles.dropbtn}>
+        <button
+          type="button"
+          onClick={() => setIsOpen((prev) => !prev)}
+          className={styles.dropbtn}
+        >
           Arhivă ↴
         </button>
         {isOpen && (
