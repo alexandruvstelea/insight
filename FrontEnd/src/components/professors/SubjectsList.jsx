@@ -23,7 +23,9 @@ export default function SubjectsList({ subjects, first_name, last_name }) {
                     );
                   }}
                 >
-                  {subject.name}
+                  {subject.name.length > 27
+                    ? subject.abbreviation
+                    : subject.name}
                 </Link>
               </li>
             ))}
