@@ -6,7 +6,7 @@ import DropdownArchive from "@/components/header/DropdownArchive";
 export default function Header({ showArchive }) {
   return (
     <>
-      <div>
+      <header>
         <div className={styles.header}>
           <div className={styles.headerLeft}>
             {showArchive && <DropdownArchive />}
@@ -21,7 +21,7 @@ export default function Header({ showArchive }) {
         <div className={styles.dropdownContainer}>
           {showArchive && <DropdownArchive />}
         </div>
-      </div>
+      </header>
     </>
   );
 }

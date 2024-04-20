@@ -2,7 +2,7 @@ import styles from "./footer.module.css";
 export default function Footer() {
   return (
     <>
-      <div className={styles.footer}>
+      <footer className={styles.footer}>
         <div className={styles.footerAuthors}>
           ©{" "}
           <a
@@ -21,7 +21,7 @@ export default function Footer() {
             Andrei Sava
           </a>
         </div>
-      </div>
+      </footer>
     </>
   );
 }

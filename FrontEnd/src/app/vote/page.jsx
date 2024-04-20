@@ -46,7 +46,7 @@ export default function Vote() {
     };
 
     checkLoggedIn();
-  }, [router]);
+  }, []);
 
   useEffect(() => {
     const roomIdFromStorage = sessionStorage.getItem("roomId");

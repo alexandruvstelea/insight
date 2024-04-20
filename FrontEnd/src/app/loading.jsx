@@ -1,4 +1,5 @@
-import LoadingSpin from "@/components/subject/LoadingSpin";
+import LoadingSpin from "@/components/globals/LoadingSpin";
+
 export default function Loading() {
   return <LoadingSpin />;
 }
