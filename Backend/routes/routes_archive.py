@@ -47,21 +47,14 @@ def get_old_comments(year):
         comments = cursor.fetchall()
         comments_list = []
         for comment in comments:
-            comment_dict = {
-                "id": comment[0],
-                "comment": comment[1],
-                "is_like": comment[2],
-                "timestamp": comment[3].strftime("%d %b %Y"),
-                "email": "Anonim",
-                "sentiment": comment[5],
-            }
-            if comment[4] != "":
-                comment_dict["email"] = comment[4]
-
-            if comment[6] != -1:
-                comment_dict["grade"] = comment[6]
-            comments_list.append(comment_dict)
-
+            comments_list.append(
+                {
+                    "id": comment[0],
+                    "comment": comment[1],
+                    "timestamp": comment[3].strftime("%d %b %Y"),
+                    "email": "Anonim",
+                }
+            )
         if comments_list:
             logger.info(f"Retrieved comments list: {comments_list}")
             return jsonify(comments_list), 200
@@ -111,20 +104,14 @@ def get_old_comments_by_id(year, subject_id):
         comments_list = []
         for comment in comments:
             if comment[3]:
-                comment_dict = {
-                    "id": comment[0],
-                    "comment": comment[3],
-                    "is_like": comment[4],
-                    "timestamp": comment[8].strftime("%d %b %Y"),
-                    "email": "Anonim",
-                }
-                if comment[1] != "":
-                    comment_dict["email"] = comment[1]
-
-                if comment[7] != -1:
-                    comment_dict["grade"] = comment[7]
-                comments_list.append(comment_dict)
-
+                comments_list.append(
+                    {
+                        "id": comment[0],
+                        "comment": comment[3],
+                        "timestamp": comment[8].strftime("%d %b %Y"),
+                        "email": "Anonim",
+                    }
+                )
         if comments_list:
             logger.info(f"Retrieved comments list: {comments_list}")
             return jsonify(comments_list), 200
@@ -278,8 +265,7 @@ def get_old_professors(year):
                         "id": professor[0],
                         "first_name": professor[1],
                         "last_name": professor[2],
-                        "title": professor[3],
-                        "gender": professor[4],
+                        "gender": professor[3],
                     }
                 )
             logger.info(f"Professors retrieved from database.{professors_list}")
@@ -326,8 +312,7 @@ def get_old_professor_by_id(year, professor_id):
                 "id": professor[0],
                 "first_name": professor[1],
                 "last_name": professor[2],
-                "title": professor[3],
-                "gender": professor[4],
+                "gender": professor[3],
             }, 200
         else:
             logger.warning(f"No professor with ID={professor_id} found.")
@@ -380,12 +365,12 @@ def get_old_professor_average(year, professor_id):
                     logger.warning(f"No subjects found for the year {year}.")
                     abort(404, f"No subjects found for the year {year}.")
                 query = sql.SQL(
-                    "SELECT AVG(rating) FROM {} WHERE subject_id = {}"
+                    "SELECT AVG(rating_overall) FROM {} WHERE subject_id = {}"
                 ).format(sql.Identifier(table_name), sql.Literal(str(subject[0])))
                 cursor.execute(query)
-                ratings_average = cursor.fetchone()[0]
-                if ratings_average is not None:
-                    ratings_list.append(round(float(ratings_average), 1))
+                rating_overall = cursor.fetchone()[0]
+                if rating_overall is not None:
+                    ratings_list.append(round(float(rating_overall), 1))
             if ratings_list:
                 return {"average": sum(ratings_list) / len(ratings_list)}
             else:
@@ -623,61 +608,6 @@ def get_old_professor_subjects(year, professor_id):
         abort(500, f"An error has occured while retrieving objects.")
 
 
-@archive_bp.route(
-    "/subjects_archive/sentiment/<int:year>/<int:subject_id>", methods=["GET"]
-)
-def get_subject_sentiment(year, subject_id):
-    try:
-        conn = psycopg2.connect(
-            dbname=DB_NAME, user=USER, password=PASSWORD, host=HOST, port=PORT
-        )
-        cursor = conn.cursor()
-        table_name = f"Comments_{year}_{year+1}"
-
-        if year < 2023 or type(year) != int:
-            logger.warning(f"No subjects found for the year {year}.")
-            abort(404, f"No subjects found for the year {year}.")
-
-        query = sql.SQL(
-            "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = {})"
-        ).format(sql.Literal(table_name))
-        cursor.execute(query)
-        table_exists = cursor.fetchone()[0]
-
-        if not table_exists:
-            logger.warning(f"No subjects found for the year {year}.")
-            abort(404, f"No subjects found for the year {year}.")
-        query = sql.SQL(
-            "SELECT sentiment FROM {} WHERE sentiment != -2 AND sentiment != 0 AND subject_id = {}"
-        ).format(sql.Identifier(table_name), sql.Literal(str(subject_id)))
-        cursor.execute(query)
-        comments_sentiment = cursor.fetchall()
-        if comments_sentiment:
-            total_count = len(comments_sentiment)
-            positive_count = sum(
-                1 for sentiment in comments_sentiment if sentiment[0] == 1
-            )
-            negative_count = sum(
-                1 for sentiment in comments_sentiment if sentiment[0] == -1
-            )
-            positive_percentage = (
-                (positive_count / total_count) * 100 if total_count > 0 else 0
-            )
-            negative_percentage = (
-                (negative_count / total_count) * 100 if total_count > 0 else 0
-            )
-            return {
-                "positive": round(positive_percentage, 1),
-                "negative": round(negative_percentage, 1),
-            }
-        else:
-            logger.warning(f"No comments found for subject with ID={subject_id}.")
-            return abort(404, f"No comments found for subject with ID={subject_id}.")
-    except psycopg2.Error as e:
-        logger.error(f"An error has occured while retrieving data.\n {e}")
-        abort(500, f"An error has occured while retrieving data.")
-
-
 @archive_bp.route("/weeks_archive/<int:year>", methods=["GET"])
 @limiter.limit("50 per minute")
 def get_old_weeks(year):
@@ -748,16 +678,16 @@ def get_old_average_rating(year, subject_id):
         if not table_exists:
             logger.warning(f"No weeks found for the year {year}.")
             abort(404, f"No weeks found for the year {year}.")
-        query = sql.SQL("SELECT AVG(rating) FROM {} WHERE subject_id = {}").format(
-            sql.Identifier(table_name), sql.Literal(str(subject_id))
-        )
+        query = sql.SQL(
+            "SELECT AVG(rating_overall) FROM {} WHERE subject_id = {}"
+        ).format(sql.Identifier(table_name), sql.Literal(str(subject_id)))
         cursor.execute(query)
-        average_rating = cursor.fetchone()[0]
-        if average_rating:
+        rating_overall = cursor.fetchone()[0]
+        if rating_overall:
             logger.info(
                 f"Calculated and returned average rating for subject with ID={subject_id}"
             )
-            return jsonify({"response": round(average_rating, 2)})
+            return jsonify({"response": round(rating_overall, 1)})
         else:
             logger.warning("No average rating found.")
             abort(404, "No average rating found.")
@@ -769,7 +699,6 @@ def get_old_average_rating(year, subject_id):
 @archive_bp.route("/ratingsnumber_archive/<int:year>/<int:subject_id>", methods=["GET"])
 @limiter.limit("50 per minute")
 def get_old_ratings(year, subject_id):
-    ratings = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
     try:
         conn = psycopg2.connect(
             dbname=DB_NAME, user=USER, password=PASSWORD, host=HOST, port=PORT
@@ -791,19 +720,35 @@ def get_old_ratings(year, subject_id):
             logger.warning(f"No weeks found for the year {year}.")
             abort(404, f"No weeks found for the year {year}.")
         query = sql.SQL(
-            "SELECT rating, COUNT(rating) FROM {} WHERE subject_id = {} GROUP BY rating"
+            "SELECT AVG(rating_clarity),AVG(rating_interactivity),AVG(rating_relevance),AVG(rating_comprehension),AVG(rating_overall) FROM {} WHERE subject_id = {}"
         ).format(sql.Identifier(table_name), sql.Literal(str(subject_id)))
         cursor.execute(query)
-        rating_counts = cursor.fetchall()
-        if rating_counts:
-            for rating, count in rating_counts:
-                ratings[rating] = count
+        row = cursor.fetchone()
+        rating_clarity = row[0]
+        rating_interactivity = row[1]
+        rating_relevance = row[2]
+        rating_comprehension = row[3]
+        rating_overall = row[4]
+        if (
+            rating_clarity
+            and rating_interactivity
+            and rating_relevance
+            and rating_comprehension
+            and rating_overall
+        ):
 
-            ratings_dict = {f"{key}_rating": value for key, value in ratings.items()}
             logger.info(
                 f"Retrieved ratings dictionary for subject with ID={subject_id}"
             )
-            return jsonify(ratings_dict), 200
+            return jsonify(
+                {
+                    "clarity": round(rating_clarity, 1),
+                    "interactivity": round(rating_interactivity, 1),
+                    "relevance": round(rating_relevance, 1),
+                    "comprehension": round(rating_comprehension, 1),
+                    "overall": round(rating_overall, 1),
+                }
+            )
         else:
             logger.warning("No ratings found.")
             abort(404, "No ratings found.")
@@ -873,7 +818,7 @@ def get_old_graph_data(year):
                     week_ratings[f"week_{week[0]}"] = round(
                         sum(week_ratings[f"week_{week[0]}"])
                         / len(week_ratings[f"week_{week[0]}"]),
-                        2,
+                        1,
                     )
                 else:
                     week_ratings[f"week_{week[0]}"] = 0
@@ -885,44 +830,3 @@ def get_old_graph_data(year):
     except psycopg2.Error as e:
         logger.error(f"An error has occured while retrieving data.\n {e}")
         abort(500, f"An error has occured while retrieving data.")
-
-
-@archive_bp.route("/nr_likes_archive/<int:year>/<int:subject_id>", methods=["GET"])
-@limiter.limit("50 per minute")
-def get_old_likes_dislikes(year, subject_id):
-    try:
-        conn = psycopg2.connect(
-            dbname=DB_NAME, user=USER, password=PASSWORD, host=HOST, port=PORT
-        )
-        cursor = conn.cursor()
-        table_name = f"Comments_{year}_{year+1}"
-
-        if year < 2023 or type(year) != int:
-            logger.warning(f"No comments found for the year {year}.")
-            abort(404, f"No comments found for the year {year}.")
-
-        query = sql.SQL(
-            "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = {})"
-        ).format(sql.Literal(table_name))
-        cursor.execute(query)
-        table_exists = cursor.fetchone()[0]
-
-        if not table_exists:
-            logger.warning(f"No weeks found for the year {year}.")
-            abort(404, f"No weeks found for the year {year}.")
-        query = sql.SQL(
-            "SELECT COUNT(*) FROM {} WHERE subject_id = {} AND is_like = 0"
-        ).format(sql.Identifier(table_name), sql.Literal(str(subject_id)))
-        cursor.execute(query)
-        likes_count = cursor.fetchone()[0]
-        query = sql.SQL(
-            "SELECT COUNT(*) FROM {} WHERE subject_id = {} AND is_like = 1"
-        ).format(sql.Identifier(table_name), sql.Literal(str(subject_id)))
-        cursor.execute(query)
-        dislikes_count = cursor.fetchone()[0]
-        response = {"like": likes_count, "dislike": dislikes_count}
-        logger.info(f"Retrieved likes count for subject_id {subject_id}.")
-        return jsonify(response), 200
-    except psycopg2.Error as e:
-        logger.error(f"An error has occured while retrieving likes count.\n {e}")
-        return abort(500, "An error has occurred while retrieving likes count.")
