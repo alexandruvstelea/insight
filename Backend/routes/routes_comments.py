@@ -16,25 +16,9 @@ comment_bp = Blueprint("comments", __name__)
 load_dotenv(os.path.normpath("../.env"))
 
 
-def check_comments_number(email: str, subject_id: int) -> bool:
-    try:
-        existing_comments = (
-            db.session.query(Comment)
-            .filter_by(email=email, subject_id=subject_id)
-            .count()
-        )
-        if existing_comments < 5:
-            return True
-        return False
-    except exc.SQLAlchemyError as e:
-        logger.error(
-            f"An error has occured while checking the number of comments.\n{e}"
-        )
-        return False
-
-
 @comment_bp.route("/comments", methods=["POST"])
 @login_required
+@limiter.limit("1 per hour")
 def create_comment():
     try:
         comment = clean(request.form.get("comment"))
@@ -48,7 +32,6 @@ def create_comment():
             if current_user.programme_id in subject_programmes:
                 new_comment = Comment(
                     comment,
-                    True,
                     subject_id,
                     timestamp,
                 )
@@ -72,19 +55,17 @@ def create_comment():
 def get_comments():
     try:
         comments = db.session.query(Comment).all()
-        comments_list = []
         if comments:
+            comments_list = []
             for comment in comments:
-                if comment.comment != "":
-                    comment_dict = {
+                comments_list.append(
+                    {
                         "id": comment.id,
                         "comment": comment.comment,
                         "timestamp": comment.datetime.strftime("%d %b %Y"),
                         "email": "Anonim",
                     }
-                    if not comment.is_anonymous:
-                        comment_dict["email"] = comment.email
-                    comments_list.append(comment_dict)
+                )
             logger.info(f"Retrieved comments list.{comments_list}")
             return jsonify(comments_list), 200
         else:
@@ -102,20 +83,17 @@ def get_comments_by_id(subject_id):
         comments = (
             db.session.query(Comment).filter(Comment.subject_id == subject_id).all()
         )
-
         comments_list = []
-
         for comment in comments:
             if comment.comment:
-                comment_dict = {
-                    "id": comment.id,
-                    "comment": comment.comment,
-                    "timestamp": comment.datetime.strftime("%d %b %Y"),
-                    "email": "Anonim",
-                }
-                if not comment.is_anonymous:
-                    comment_dict["email"] = comment.email
-                comments_list.append(comment_dict)
+                comments_list.append(
+                    {
+                        "id": comment.id,
+                        "comment": comment.comment,
+                        "timestamp": comment.datetime.strftime("%d %b %Y"),
+                        "email": "Anonim",
+                    }
+                )
 
         if comments_list:
             logger.info(

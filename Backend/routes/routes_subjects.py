@@ -3,6 +3,7 @@ from flask_login import current_user, login_required
 from models.professors import Professor
 from models.programmes import Programme
 from models.subjects import Subject
+from models.ratings import Rating
 from routes.helpers import find_week_type
 from models.courses import Course
 from __init__ import db, limiter
@@ -49,8 +50,8 @@ def create_subject():
 def get_subjects():
     try:
         subjects = db.session.query(Subject).all()
-        subjects_list = []
         if subjects:
+            subjects_list = []
             for subject in subjects:
                 subjects_list.append(
                     {
@@ -113,6 +114,13 @@ def update_subject(subject_id):
             subject = db.session.query(Subject).filter_by(id=subject_id).first()
             if not subject:
                 abort(404, f"No subject with ID={subject_id} to update")
+            if subject.semester != new_semester:
+                db.session.query(Course).filter(Course.subject_id == subject_id).update(
+                    {"semester": new_semester}
+                )
+                db.session.query(Rating).filter_by(subject_id=subject_id).delete()
+            if subject.professor_id != new_professor_id:
+                db.session.query(Rating).filter_by(subject_id=subject_id).delete()
             subject.name = new_name
             subject.abbreviation = new_abbreviation
             subject.professor_id = new_professor_id

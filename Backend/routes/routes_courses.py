@@ -48,7 +48,6 @@ def create_course():
                         >= datetime.strptime(end, "%H:%M").time()
                     ):
                         filtered_courses.append(course)
-
                 if filtered_courses:
                     logger.warning("A course is already scheduled in the given slot.")
                     abort(409, "A course is already scheduled in the given slot.")
@@ -75,8 +74,8 @@ def create_course():
 def get_courses():
     try:
         courses = db.session.query(Course).all()
-        courses_list = []
         if courses:
+            courses_list = []
             for course in courses:
                 courses_list.append(
                     {
@@ -101,6 +100,7 @@ def get_courses():
         abort(500, f"An error occurred while interacting with the database.")
 
 
+#!IS THIS NECESSARY?
 @course_bp.route("/courses/<int:course_id>", methods=["GET"])
 @limiter.limit("50 per minute")
 def get_course_by_id(course_id):

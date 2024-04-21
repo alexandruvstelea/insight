@@ -96,8 +96,8 @@ def get_professor_average(professor_id):
         professor_subjects = (
             db.session.query(Subject).filter_by(professor_id=professor_id).all()
         )
-        ratings_list = []
         if professor_subjects:
+            ratings_list = []
             for subject in professor_subjects:
                 ratings_average = (
                     db.session.query(func.avg(Rating.rating_overall))

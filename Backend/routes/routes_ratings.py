@@ -16,7 +16,7 @@ rating_bp = Blueprint("ratings", __name__)
 
 @rating_bp.route("/rating", methods=["POST"])
 @login_required
-@limiter.limit("50 per minute")
+@limiter.limit("1 per hour")
 def insert_rating():
     try:
         date_time = datetime.strptime(

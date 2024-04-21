@@ -33,8 +33,8 @@ def create_room():
 def get_rooms():
     try:
         rooms = db.session.query(Room).all()
-        rooms_list = []
         if rooms:
+            rooms_list = []
             for room in rooms:
                 rooms_list.append({"id": room.id, "name": room.name})
             logger.info(f"Retrieved rooms list.{rooms_list}")

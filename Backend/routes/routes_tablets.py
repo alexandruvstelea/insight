@@ -22,8 +22,8 @@ def get_tablets():
     if current_user.user_type == 0:
         try:
             tablets = db.session.query(Tablet).all()
-            tablets_list = []
             if tablets:
+                tablets_list = []
                 for tablet in tablets:
                     tablets_list.append(
                         {

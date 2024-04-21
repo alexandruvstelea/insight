@@ -34,8 +34,8 @@ def create_programme():
 def get_programmes():
     try:
         programmes = db.session.query(Programme).all()
-        programmes_list = []
         if programmes:
+            programmes_list = []
             for programme in programmes:
                 programmes_list.append(
                     {
@@ -54,6 +54,7 @@ def get_programmes():
         abort(500, f"An error occurred while interacting with the database.")
 
 
+#!IS THIS NECESSARY?
 @programme_bp.route("/programmes/<int:programme_id>", methods=["GET"])
 @limiter.limit("50 per minute")
 def get_programme_by_id(programme_id):
@@ -77,7 +78,7 @@ def get_programme_by_id(programme_id):
 @programme_bp.route("/programmes/<int:programme_id>", methods=["PUT"])
 @login_required
 @limiter.limit("50 per minute")
-def update_room(programme_id):
+def update_programme(programme_id):
     if current_user.user_type == 0:
         try:
             new_name = clean(request.form.get("new_name"))
@@ -106,7 +107,7 @@ def update_room(programme_id):
 @programme_bp.route("/programmes/<int:programme_id>", methods=["DELETE"])
 @login_required
 @limiter.limit("50 per minute")
-def delete_room(programme_id):
+def delete_programme(programme_id):
     if current_user.user_type == 0:
         try:
             affected_rows = (

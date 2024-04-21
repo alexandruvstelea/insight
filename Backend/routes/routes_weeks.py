@@ -58,8 +58,8 @@ def generate_weeks():
 def get_weeks():
     try:
         weeks = db.session.query(Week).all()
-        weeks_list = []
         if weeks:
+            weeks_list = []
             for week in weeks:
                 weeks_list.append(
                     {

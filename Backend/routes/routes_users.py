@@ -28,8 +28,8 @@ def get_users():
     if current_user.user_type == 0:
         try:
             users = db.session.query(User).all()
-            users_list = []
             if users:
+                users_list = []
                 for user in users:
                     users_list.append(
                         {
@@ -54,7 +54,7 @@ def get_users():
 
 
 @user_bp.route("/register", methods=["POST"])
-@limiter.limit("10 per minute")
+@limiter.limit("1 per minute")
 def register():
     try:
         email = clean(request.form.get("email"))
@@ -132,7 +132,7 @@ def login():
 
 
 @user_bp.route("/request-reset", methods=["POST"])
-@limiter.limit("10 per minute")
+@limiter.limit("1 per minute")
 def request_reset_password():
     try:
         email = clean(request.form.get("email"))
@@ -149,14 +149,17 @@ def request_reset_password():
             send_password_email(code, email)
             return {"message": "Password reset code sent."}
         else:
-            abort(400, "Invalid credentials or account already inactive.")
+            if not user:
+                abort(400, f"No user with email {email} found.")
+            if user.active == 0:
+                abort(400, f"User with email {email} not active.")
     except exc.SQLAlchemyError as e:
         logger.error(f"An error occurred while interacting with the database.\n{e}")
         abort(500, f"An error occurred while interacting with the database.")
 
 
 @user_bp.route("/reset", methods=["POST"])
-@limiter.limit("10 per minute")
+@limiter.limit("1 per minute")
 def reset_password():
     try:
         email = clean(request.form.get("email"))
@@ -177,14 +180,19 @@ def reset_password():
             send_password_email(code, email)
             return {"message": "Password reset."}
         else:
-            abort(400, "Invalid credentials.")
+            if not user:
+                abort(400, f"No user with email {email} found.")
+            if user.active == 0:
+                abort(400, f"User with email {email} not active.")
+            if user.registration_code != code:
+                abort(400, "The provided code is not valid.")
     except exc.SQLAlchemyError as e:
         logger.error(f"An error occurred while interacting with the database.\n{e}")
         abort(500, f"An error occurred while interacting with the database.")
 
 
 @user_bp.route("/resend", methods=["PUT"])
-@limiter.limit("10 per minute")
+@limiter.limit("1 per minute")
 def resend_activation_code():
     try:
         email = clean(request.form.get("email"))
@@ -202,7 +210,12 @@ def resend_activation_code():
             send_registration_email(code, email)
             return {"message": "New registration code sent."}
         else:
-            abort(400, "Invalid credentials or account already active.")
+            if not user:
+                abort(400, f"No user with email {email} found.")
+            if user.active == 1:
+                abort(400, f"User with email {email} already active.")
+            if not check_password_hash(user.password, password):
+                abort(400, "Invalid current password.")
     except exc.SQLAlchemyError as e:
         logger.error(f"An error occurred while interacting with the database.\n{e}")
         abort(500, f"An error occurred while interacting with the database.")
@@ -229,7 +242,14 @@ def activate_account():
                 db.session.commit()
             return {"message": "Account activated."}
         else:
-            abort(400, "Invalid credentials or account already active.")
+            if not user:
+                abort(400, f"No user with email {email} found.")
+            if user.active == 1:
+                abort(400, f"User with email {email} already active.")
+            if not check_password_hash(user.password, password):
+                abort(400, "Invalid password.")
+            if user.registration_code != code:
+                abort(400, "The provided code is not valid.")
     except (ValueError, TypeError) as e:
         logger.error(f"An error has occured: request parameters not ok.\n{e}")
         abort(400, f"An error has occured: request parameters not ok.")
