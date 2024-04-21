@@ -59,15 +59,28 @@ def update_foreign_keys(
 
 copied_weeks_table = create_table_copy("Weeks")
 copied_professors_table = create_table_copy("Professors")
+copied_programmes_table = create_table_copy("Programmes")
 copied_subjects_table = create_table_copy("Subjects")
+copied_subjects_programmes_table = create_table_copy("Subjects_Programmes")
 copied_rooms_table = create_table_copy("Rooms")
 copied_courses_table = create_table_copy("Courses")
 copied_comments_table = create_table_copy("Comments")
 copied_ratings_table = create_table_copy("Ratings")
 
-
 update_foreign_keys(
     "Subjects", copied_subjects_table, "professor_id", copied_professors_table
+)
+update_foreign_keys(
+    "Subjects_Programmes",
+    copied_subjects_programmes_table,
+    "subject_id",
+    copied_subjects_table,
+)
+update_foreign_keys(
+    "Subjects_Programmes",
+    copied_subjects_programmes_table,
+    "programme_id",
+    copied_programmes_table,
 )
 update_foreign_keys(
     "Courses", copied_courses_table, "subject_id", copied_subjects_table
