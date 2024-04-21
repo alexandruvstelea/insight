@@ -1,15 +1,19 @@
 "use client";
-import React ,{ useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./searchBar.module.css";
 import TextField from "@mui/material/TextField";
-export default function SearchBar() {
+export default function SearchBar({ archive = false, year = false }) {
   const router = useRouter();
   const [text, setText] = useState("");
 
   useEffect(() => {
     if (!text) {
-      router.push(`/professors`);
+      if (archive && year) {
+        router.push(`/professors/archive/${year}`);
+      } else {
+        router.push(`/professors`);
+      }
     } else {
       router.push(`/professors?search=${text}`);
     }

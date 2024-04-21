@@ -33,8 +33,12 @@ export default async function Professors({ searchParams, params }) {
           <div className={styles.professorsPageContainer}>
             <Header showArchive={true} />
             <div className={styles.contentContainer}>
-              <SearchBar />
-              <CustomSlider professors={filteredProfessors} />
+              <SearchBar archive={true} year={params.archiveYear} />
+              <CustomSlider
+                professors={filteredProfessors}
+                archive={true}
+                year={params.archiveYear}
+              />
             </div>
 
             <Footer />

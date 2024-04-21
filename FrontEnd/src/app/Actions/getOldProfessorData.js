@@ -2,7 +2,7 @@
 
 const fetchOldProfessorSubjects = async (professorId, selectedYear) => {
   const response = await fetch(
-    `${process.env.REACT_APP_API_URL}/subjects/professors_archive/${selectedYear}/${professorId}`,
+    `${process.env.REACT_APP_API_URL}/subjects_archive/professor/${selectedYear}/${professorId}`,
     { cache: "no-store" }
   );
   if (!response.ok) return [];
@@ -12,7 +12,7 @@ const fetchOldProfessorSubjects = async (professorId, selectedYear) => {
 
 const fetchOldProfessorAverage = async (professorId, selectedYear) => {
   const response = await fetch(
-    `${process.env.REACT_APP_API_URL}/professors/average_archive/${selectedYear}/${professorId}`,
+    `${process.env.REACT_APP_API_URL}/professors_archive/average/${selectedYear}/${professorId}`,
     { cache: "no-store" }
   );
   if (!response.ok) return "N/A";
@@ -32,8 +32,8 @@ export const fetchOldProfessorsData = async (selectedYear) => {
 
   const fetchPromises = professors.map(async (professor) => {
     const [subjects, average] = await Promise.all([
-      fetchOldProfessorSubjects(professor.id),
-      fetchOldProfessorAverage(professor.id),
+      fetchOldProfessorSubjects(professor.id, selectedYear),
+      fetchOldProfessorAverage(professor.id, selectedYear),
     ]);
     return { ...professor, subjects, average };
   });

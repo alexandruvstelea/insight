@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Box, Typography } from "@mui/material";
 import GradeRoundedIcon from "@mui/icons-material/GradeRounded";
 import SubjectsList from "@/components/professors/SubjectsList";
-export default function Card({ professor }) {
+export default function Card({ professor, archive = false, year = false }) {
   const [isFlipped, setIsFlipped] = useState(false);
   const imagePath =
     professor.gender === "male"
@@ -72,6 +72,8 @@ export default function Card({ professor }) {
               subjects={professor.subjects}
               first_name={professor.first_name}
               last_name={professor.last_name}
+              archive={archive}
+              year={year}
             />
             <button
               className={`${styles.buttonCard} ${styles.backButton}`}

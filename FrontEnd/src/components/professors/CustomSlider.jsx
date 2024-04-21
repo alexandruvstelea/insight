@@ -9,7 +9,11 @@ import "swiper/css/pagination";
 import "swiper/css/a11y";
 import Card from "@/components/professors/Card";
 
-export default function CustomSlider({ professors }) {
+export default function CustomSlider({
+  professors,
+  archive = false,
+  year = false,
+}) {
   const swiperSettings = {
     modules: [Navigation, Pagination, A11y],
     speed: 500,
@@ -52,7 +56,7 @@ export default function CustomSlider({ professors }) {
           {professors.map((professor) => (
             <SwiperSlide key={professor.id}>
               <div className={styles.cardContainer}>
-                <Card professor={professor} />
+                <Card professor={professor} archive={archive} year={year} />
               </div>
             </SwiperSlide>
           ))}

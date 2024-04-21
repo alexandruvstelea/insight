@@ -2,7 +2,13 @@ import React from "react";
 import styles from "./subjectsList.module.css";
 import Link from "next/link";
 
-export default function SubjectsList({ subjects, first_name, last_name }) {
+export default function SubjectsList({
+  subjects,
+  first_name,
+  last_name,
+  archive = false,
+  year = false,
+}) {
   return (
     <>
       <h1 className={styles.titleCurs}>Cursuri</h1>
@@ -13,9 +19,13 @@ export default function SubjectsList({ subjects, first_name, last_name }) {
               <li key={subject.id}>
                 <Link
                   className={styles.buttonCourses}
-                  href={{
-                    pathname: `/professors/${subject.id}`,
-                  }}
+                  href={
+                    archive && year
+                      ? {
+                          pathname: `/professors/${subject.id}/archive`,
+                        }
+                      : { pathname: `/professors/${subject.id}` }
+                  }
                   onClick={() => {
                     sessionStorage.setItem(
                       "name",
