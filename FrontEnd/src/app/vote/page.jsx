@@ -113,9 +113,13 @@ export default function Vote() {
     } else if (code.length !== 6) {
       setErrorMessage("Codul este incorect.");
       return;
-    } else if (comment.length !== 0 || comment.length >= 20) {
+    } else if (
+      comment.length !== 0 &&
+      comment.length < 20 &&
+      comment.length >= 200
+    ) {
       setErrorMessage(
-        "Comentariul trebuie să contină între 1 și 20 de caractere."
+        "Comentariul trebuie să contină între 1 și 200 de caractere."
       );
       return;
     } else {

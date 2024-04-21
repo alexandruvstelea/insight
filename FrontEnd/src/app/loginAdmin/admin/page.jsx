@@ -227,13 +227,14 @@ export default function Admin() {
         </Button>
         <Weeks weeks={weeks} fetchWeeks={fetchWeeks} />
         <Professors professors={professors} fetchProfessors={fetchProfessors} />
+        <Programmes programmes={programmes} fetchProgrammes={fetchProgrammes} />
         <Subjects
           professors={professors}
           subjects={subjects}
           fetchSubjects={fetchSubjects}
         />
         <Rooms rooms={rooms} fetchRooms={fetchRooms} />
-        <Programmes programmes={programmes} fetchProgrammes={fetchProgrammes} />
+
         <Courses
           courses={courses}
           rooms={rooms}

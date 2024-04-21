@@ -164,7 +164,11 @@ export default function UserRegister() {
                     onChange={(e) => setProgrammeId(e.target.value)}
                     required
                   >
-                    <option value="" hidden></option>
+                    {programmes.length === 0 && (
+                      <option value="" disabled>
+                        Nu există programe disponibile
+                      </option>
+                    )}
                     {programmes.map((programme) => (
                       <option key={programme.id} value={programme.id}>
                         {programme.name}

@@ -35,15 +35,15 @@ export default function DropdownArchive() {
             </Link>
             <Link
               className={styles.buttonArchive}
-              href={`/professors/archive/2024-2025`}
+              href={`/professors/archive/2023`}
             >
-              2024-2025
+              2023-2024
             </Link>
             <Link
               className={styles.buttonArchive}
-              href={`/professors/archive/2025-2026`}
+              href={`/professors/archive/2022`}
             >
-              2025-2026
+              2022-2023
             </Link>
           </div>
         )}
