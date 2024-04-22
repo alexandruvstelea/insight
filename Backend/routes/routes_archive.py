@@ -809,19 +809,39 @@ def get_old_graph_data(year):
         if ratings and weeks:
             week_ratings = {}
             for week in weeks:
-                week_ratings[f"week_{week[0]}"] = []
-                for rating in ratings:
-                    if week[1] <= rating[3].date() <= week[2]:
-                        week_ratings[f"week_{week[0]}"].append(rating[1])
+                week_key = f"week_{week[0]}"
+                week_ratings[week_key] = {
+                    "clarity": [],
+                    "interactivity": [],
+                    "relevance": [],
+                    "comprehension": [],
+                    "overall": [],
+                }
 
-                if week_ratings[f"week_{week[0]}"]:
-                    week_ratings[f"week_{week[0]}"] = round(
-                        sum(week_ratings[f"week_{week[0]}"])
-                        / len(week_ratings[f"week_{week[0]}"]),
-                        1,
-                    )
-                else:
-                    week_ratings[f"week_{week[0]}"] = 0
+                for rating in ratings:
+                    if week[1] <= rating[7].date() <= week[2]:
+                        week_ratings[week_key]["clarity"].append(rating[1])
+                        week_ratings[week_key]["interactivity"].append(rating[2])
+                        week_ratings[week_key]["relevance"].append(rating[3])
+                        week_ratings[week_key]["comprehension"].append(rating[4])
+                        week_ratings[week_key]["overall"].append(rating[5])
+                for category in [
+                    "clarity",
+                    "interactivity",
+                    "relevance",
+                    "comprehension",
+                    "overall",
+                ]:
+                    if week_ratings[week_key][category]:
+                        average = sum(week_ratings[week_key][category]) / len(
+                            week_ratings[week_key][category]
+                        )
+                        week_ratings[week_key][category] = round(average, 1)
+                    else:
+                        week_ratings[week_key][category] = 0
+
+            logger.info(f"Retrieved week ratings for subject with ID={subject_id}")
+            return jsonify(week_ratings), 200
             logger.info(f"Retrieved week ratings for subject with ID={subject_id}")
             return jsonify(week_ratings), 200
         else:
