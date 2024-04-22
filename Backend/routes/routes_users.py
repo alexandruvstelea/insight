@@ -277,13 +277,6 @@ def check_login_status():
         return {"logged_in": False}, 200
 
 
-@user_bp.route("/loggedin", methods=["GET"])
-@limiter.limit("10 per minute")
-def loggedin_users():
-    active_sessions = sum(1 for key in session.keys() if key.startswith("_user_id"))
-    return jsonify({"loggedin_users": active_sessions}), 200
-
-
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
