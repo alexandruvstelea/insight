@@ -22,7 +22,7 @@ export default function SubjectsList({
                   href={
                     archive && year
                       ? {
-                          pathname: `/professors/${subject.id}/archive`,
+                          pathname: `/professors/archive/${year}/${subject.id}`,
                         }
                       : { pathname: `/professors/${subject.id}` }
                   }

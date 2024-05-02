@@ -3,12 +3,26 @@ import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 import styles from "./page.module.css";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { extractTextFromHTML } from "@/app/Actions/functions";
 import { fetchCheckLogin, fetchLogoutUser } from "@/app/Actions/getUserData";
+
 export default function UserLogin() {
   const router = useRouter();
+
+  useEffect(() => {
+    const checkLoggedInUser = async () => {
+      const loggedInC = await fetchCheckLogin();
+      if (loggedInC.type === 0) {
+        router.push("/loginAdmin/admin");
+      } else if (loggedInC.type === 1) {
+        router.push("/professors");
+      }
+    };
+
+    checkLoggedInUser();
+  }, []);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

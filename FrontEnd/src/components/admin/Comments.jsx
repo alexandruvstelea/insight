@@ -30,8 +30,6 @@ export default function Comments({ comments, fetchCommnets }) {
   const columns = useMemo(
     () => [
       columnOption("id", "ID", 40, 40, false),
-      columnOption("sentiment", "Procentaj", 100, 60, true),
-
       columnOption("comment", "Comentariu", 900, 800, true),
     ],
     []

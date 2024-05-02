@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Box, Typography } from "@mui/material";
 import GradeRoundedIcon from "@mui/icons-material/GradeRounded";
 import SubjectsList from "@/components/professors/SubjectsList";
+
 export default function Card({ professor, archive = false, year = false }) {
   const [isFlipped, setIsFlipped] = useState(false);
   const imagePath =

@@ -18,6 +18,26 @@ export const defSelectColumnOption = (editSelectOptions) => ({
   },
 });
 
+export const defSelectColumnOptionMultiple = (editSelectOptions) => ({
+  editVariant: "multipleSelect",
+  editSelectOptions,
+  muiEditTextFieldProps: {
+    select: true,
+    SelectProps: {
+      multiple: true,
+      renderValue: (selected) =>
+        selected
+          .map((value) => {
+            const selectedOption = editSelectOptions.find(
+              (option) => option.value === value
+            );
+            return selectedOption ? selectedOption.label : "";
+          })
+          .join(", "),
+    },
+  },
+});
+
 export const columnOption = (
   accessorKey,
   header,

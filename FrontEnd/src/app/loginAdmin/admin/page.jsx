@@ -21,6 +21,7 @@ export default function Admin() {
     const checkLoggedIn = async () => {
       try {
         const user = await fetchCheckLogin();
+
         if (!user.logged_in || user.type != 0) {
           router.push("/login");
         }
@@ -232,6 +233,7 @@ export default function Admin() {
           professors={professors}
           subjects={subjects}
           fetchSubjects={fetchSubjects}
+          programmes={programmes}
         />
         <Rooms rooms={rooms} fetchRooms={fetchRooms} />
 

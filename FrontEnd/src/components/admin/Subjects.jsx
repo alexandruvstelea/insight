@@ -3,6 +3,7 @@ import {
   tableConfig,
   columnOption,
   defSelectColumnOption,
+  defSelectColumnOptionMultiple,
 } from "./getTableConfig";
 import React, { useMemo } from "react";
 import {
@@ -11,7 +12,12 @@ import {
 } from "material-react-table";
 import { DialogTitle } from "@mui/material";
 
-export default function Subjects({ professors, subjects, fetchSubjects }) {
+export default function Subjects({
+  professors,
+  subjects,
+  fetchSubjects,
+  programmes,
+}) {
   const addSubject = async (subject) => {
     const formData = new FormData();
     formData.append("name", subject.name);
@@ -76,10 +82,14 @@ export default function Subjects({ professors, subjects, fetchSubjects }) {
     { value: "1", label: "1" },
     { value: "2", label: "2" },
   ];
-
+  console.log(subjects);
   const professorOptions = professors.map((professor) => ({
     value: professor.id,
     label: `${professor.first_name} ${professor.last_name}`,
+  }));
+  const programmeOptions = programmes.map((programme) => ({
+    value: programme.id,
+    label: `${programme.name}`,
   }));
 
   const columns = useMemo(
@@ -87,6 +97,25 @@ export default function Subjects({ professors, subjects, fetchSubjects }) {
       columnOption("id", "ID", 80, 40, false),
       columnOption("name", "Nume materie", 120, 80, true),
       columnOption("abbreviation", "Abreviere", 120, 80, true),
+      columnOption("programmes", "Specializare", 120, 300, true, {
+        ...defSelectColumnOptionMultiple(programmeOptions),
+        Cell: ({ cell }) => {
+          const subject_programmes = [];
+          try {
+            const programmeIds = cell.getValue().map((item) => item.id);
+            programmeIds.forEach((programmeId) => {
+              const programme = programmes.find((p) => p.id === programmeId);
+              if (programme) {
+                subject_programmes.push(programme.name);
+              }
+            });
+          } catch (error) {
+            console.log("Error:", error.message);
+          }
+
+          return subject_programmes.join(", ");
+        },
+      }),
       columnOption("professor_id", "Profesor", 120, 80, true, {
         ...defSelectColumnOption(professorOptions),
         Cell: ({ cell }) => {
@@ -100,7 +129,7 @@ export default function Subjects({ professors, subjects, fetchSubjects }) {
         ...defSelectColumnOption(semesterOptions),
       }),
     ],
-    [professors]
+    [professors, programmes]
   );
 
   const table = useMaterialReactTable(
