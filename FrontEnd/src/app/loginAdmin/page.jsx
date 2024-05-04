@@ -1,7 +1,7 @@
 "use client";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
-import styles from "./page.module.css";
+import styles from "@/app/login/page.module.css";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
