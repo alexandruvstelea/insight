@@ -3,8 +3,8 @@ backend/__pycache__
 backend/.env
 deprecated-code/sentiment-analysis/.env
 deprecated-code/sentiment-analysis/sentiment_venv
-archive_System/.env
-archive_System/archive_venv
+archive-system/.env
+archive-system/archive_venv
 backend/models/__pycache__
 backend/routes/__pycache__
 backend/app.log
