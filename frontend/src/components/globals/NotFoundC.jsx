@@ -13,7 +13,7 @@ export default function NotFoundC() {
           <div class={styles.errorContainer}>
             <h1 className={styles.text}> 404 </h1>
             <p className={styles.paragraph}>
-              Oops! The page you're looking can't be found.
+              Oops! The page you&apos;re looking can&apos;t be found.
             </p>
             <Link className={styles.link} href="/">
               Go Back to Home

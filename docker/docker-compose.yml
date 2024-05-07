@@ -1,0 +1,73 @@
+services:
+  postgres:
+    restart: on-failure:2
+    image: postgres:latest
+    container_name: fiesc-postgres
+    env_file:
+      - .env
+    volumes:
+      - volume_postgres:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5433:5432"
+    networks:
+      - fiesc-network
+  backend:
+    container_name: fiesc-backend
+    restart: on-failure:2
+    image: fiesc-backend-image:1.0
+    build:
+      context: ../backend
+      dockerfile: ../docker/Dockerfile.backend
+    networks:
+      - fiesc-network
+    expose:
+      - "5000"
+    depends_on:
+      - postgres
+  frontend:
+    container_name: fiesc-frontend
+    restart: on-failure:2
+    build:
+      context: ../frontend
+      dockerfile: ../docker/Dockerfile.frontend
+    image: fiesc-frontend-image:1.0
+    networks:
+      - fiesc-network
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+  mongodb:
+    image: mongo:4.2.17
+    restart: on-failure:2
+    container_name: fiesc-mongodb
+    env_file:
+      - .env
+    volumes:
+      - volume_mongodb:/data/db
+    expose:
+      - "27017"
+    networks:
+      - fiesc-network
+  #nginx:
+  #  image: nginx:latest
+  #  container_name: fiesc-nginx
+  #  restart: on-failure:2
+  #  build:
+  #    context: ../nginx
+  #    dockerfile: ../docker/Dockerfile.nginx
+  #  ports:
+  #    - "80:80"
+  #    - "443:443"
+  #  volumes:
+  #    - /etc/letsencrypt:/etc/letsencrypt:ro
+  #  networks:
+  #    - fiesc-network
+  #  depends_on:
+  #    - frontend
+  #    - backend
+volumes:
+  volume_postgres:
+  volume_mongodb:
+networks:
+  fiesc-network:

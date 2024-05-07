@@ -11,14 +11,13 @@ load_dotenv(".env")
 MONGO_USER = getenv("MONGODB_INITDB_ROOT_USERNAME")
 MONGO_PASSWORD = getenv("MONGODB_INITDB_ROOT_PASSWORD")
 MONGO_HOST = getenv("MONGO_HOST")
-MONGO_PORT = getenv("MONGO_PORT")
+MONGO_PORT = int(getenv("MONGO_PORT"))
 
 db = SQLAlchemy()
 limiter = Limiter(
     key_func=get_remote_address,
     default_limits=["50 per minute"],
-    # storage_uri=f"mongodb://{MONGO_USER}:{MONGO_PASSWORD}@localhost:27017",
-    storage_uri=f"mongodb://localhost:27017",
+    storage_uri=f"mongodb://{MONGO_USER}:{MONGO_PASSWORD}@{MONGO_HOST}:{MONGO_PORT}",
     strategy="fixed-window",
 )
 login_manager = LoginManager()
