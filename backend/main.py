@@ -1,8 +1,21 @@
-from __init__ import init_app
-from flask_cors import CORS
+from fastapi import FastAPI
+from routers import faculties, buildings
+from sqlmodel import SQLModel
+from databse import engine
+import uvicorn
+from contextlib import asynccontextmanager
 
-app = init_app()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    SQLModel.metadata.create_all(engine)
+    yield
+
+
+app = FastAPI(title="feedback-iesc-api", lifespan=lifespan)
+app.include_router(faculties.router)
+app.include_router(buildings.router)
+
 
 if __name__ == "__main__":
-    CORS(app,supports_credentials=True)
-    app.run(host="0.0.0.0")
+    uvicorn.run("main:app", reload=True)

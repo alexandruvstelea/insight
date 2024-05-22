@@ -6,11 +6,12 @@ deprecated-code/sentiment-analysis/sentiment_venv
 archive-system/.env
 archive-system/archive_venv
 backend/models/__pycache__
-backend/routes/__pycache__
+backend/routers/__pycache__
 backend/app.log
 crud_functions_deprecated.py
-feedback_venv
+feedback-env
 fiesc-build/.env
 gmailSecret.txt
 nginx
 auto-deploy.sh
+deprecated-code/backend-old/.env
