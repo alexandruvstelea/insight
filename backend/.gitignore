@@ -1,3 +1,4 @@
 .env
 fiesc-api-env
 __pycache__
+reset-database.sh
