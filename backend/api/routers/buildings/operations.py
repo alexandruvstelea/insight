@@ -31,14 +31,15 @@ class BuildingsOperations:
         building = await self.session.get(Building, id)
         try:
             if building:
-                return building_to_out(building)
+                return await building_to_out(building)
             raise HTTPException(status_code=404, detail=f"No building with id={id}.")
         except Exception as e:
             raise e
 
     async def add_building(self, building_data: BuildingIn) -> BuildingOut:
         try:
-            new_building = Building(name=building_data.name, faculties=[])
+            print(building_data)
+            new_building = Building(name=building_data.name, rooms=[], faculties=[])
             if building_data.faculties:
                 new_building.faculties = await ids_to_faculties(
                     self.session, building_data.faculties
@@ -46,7 +47,8 @@ class BuildingsOperations:
             self.session.add(new_building)
             await self.session.commit()
             await self.session.refresh(new_building)
-            return building_to_out(new_building)
+            print(new_building)
+            return await building_to_out(new_building)
         except IntegrityError as e:
             error = format_integrity_error(e)
             raise HTTPException(
@@ -69,7 +71,7 @@ class BuildingsOperations:
                 else:
                     building.faculties = []
                 await self.session.commit()
-                return building_to_out(building)
+                return await building_to_out(building)
             raise HTTPException(status_code=404, detail=f"No building with id={id}.")
         except IntegrityError as e:
             error = format_integrity_error(e)

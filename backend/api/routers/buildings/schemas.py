@@ -20,9 +20,11 @@ class BuildingOutMinimal(BuildingBase):
 
 class BuildingOut(BuildingBase):
     id: int
+    rooms: Optional[List["RoomOutMinimal"]]
     faculties: Optional[List["FacultyOutMinimal"]]
 
 
+from ..rooms.schemas import RoomOutMinimal
 from ..faculties.schemas import FacultyOutMinimal
 
 BuildingOut.model_rebuild()

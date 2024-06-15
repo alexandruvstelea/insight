@@ -21,6 +21,7 @@ async def init_db():
         from .models.faculty import Faculty
         from .models.building import Building
         from .models.faculties_buildings import faculties_buildings
+        from .models.room import Room
 
         await conn.run_sync(AlchemyAsyncBase.metadata.create_all)
 

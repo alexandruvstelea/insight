@@ -18,7 +18,7 @@ async def get_faculties(
 
 
 @faculties_router.get("/{id}", response_model=FacultyOut, status_code=HTTPStatus.OK)
-async def get_faculties_by_id(
+async def get_faculty_by_id(
     id: int, session: AsyncSession = Depends(get_session)
 ) -> FacultyOut:
     response = await FacultyOperations(session).get_faculty_by_id(id)
