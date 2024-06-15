@@ -8,7 +8,8 @@ from fastapi import HTTPException
 from fastapi.responses import JSONResponse
 from typing import List
 from ...utility.error_parsing import format_integrity_error
-from .service import room_to_out, id_to_building
+from .utils import room_to_out
+from ..buildings.utils import id_to_building
 
 
 class RoomOperations:
@@ -86,6 +87,6 @@ class RoomOperations:
                 await self.session.commit()
                 return JSONResponse(f"Room with ID={id} deleted.")
             else:
-                raise HTTPException(status_code=404, detail=f"No room with id={id}")
+                raise HTTPException(status_code=404, detail=f"No room with id={id}.")
         except Exception as e:
             raise e

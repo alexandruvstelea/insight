@@ -8,7 +8,8 @@ from fastapi import HTTPException
 from fastapi.responses import JSONResponse
 from typing import List
 from ...utility.error_parsing import format_integrity_error
-from .service import building_to_out, ids_to_faculties
+from .utils import building_to_out
+from ..faculties.utils import ids_to_faculties
 
 
 class BuildingsOperations:
@@ -38,7 +39,6 @@ class BuildingsOperations:
 
     async def add_building(self, building_data: BuildingIn) -> BuildingOut:
         try:
-            print(building_data)
             new_building = Building(name=building_data.name, rooms=[], faculties=[])
             if building_data.faculties:
                 new_building.faculties = await ids_to_faculties(

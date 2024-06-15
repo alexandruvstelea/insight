@@ -11,9 +11,6 @@ class FacultyBase(BaseModel):
 class FacultyIn(FacultyBase):
     buildings: List[int]
 
-    class Config:
-        from_attributes = True
-
 
 class FacultyOutMinimal(FacultyBase):
     id: int

@@ -1,18 +1,14 @@
 from __future__ import annotations
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import Optional
 
 
 class RoomBase(BaseModel):
     name: str
-    building_id: int
 
 
 class RoomIn(RoomBase):
-    building_id: Optional[int]
-
-    class Config:
-        from_attributes = True
+    building_id: int
 
 
 class RoomOutMinimal(RoomBase):

@@ -1,16 +1,15 @@
 from sqlalchemy import select
 from sqlalchemy.orm import joinedload
-from ...database.models.building import Building
 from ...database.models.faculty import Faculty
 from .schemas import FacultyOut, FacultyIn
-from ..buildings.schemas import BuildingOutMinimal
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
 from fastapi import HTTPException
 from fastapi.responses import JSONResponse
 from typing import List
 from ...utility.error_parsing import format_integrity_error
-from .service import faculty_to_out, ids_to_buildings
+from .utils import faculty_to_out
+from ..buildings.utils import ids_to_buildings
 
 
 class FacultyOperations:
@@ -66,6 +65,7 @@ class FacultyOperations:
             faculty = await self.session.get(Faculty, id)
             if faculty:
                 faculty.name = new_faculty_data.name
+                faculty.abbreviation = new_faculty_data.abbreviation
                 if new_faculty_data.buildings:
                     faculty.buildings = await ids_to_buildings(
                         self.session, new_faculty_data.buildings

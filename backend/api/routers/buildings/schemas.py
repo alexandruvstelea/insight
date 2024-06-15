@@ -10,9 +10,6 @@ class BuildingBase(BaseModel):
 class BuildingIn(BuildingBase):
     faculties: List[int]
 
-    class Config:
-        from_attributes = True
-
 
 class BuildingOutMinimal(BuildingBase):
     id: int
