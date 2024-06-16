@@ -23,7 +23,10 @@ class BuildingsOperations:
             result = await self.session.execute(query)
             buildings = result.scalars().unique().all()
             if buildings:
-                return sorted(list(buildings), key=lambda x: x.name)
+                return [
+                    building_to_out(building)
+                    for building in sorted(list(buildings), key=lambda x: x.name)
+                ]
             raise HTTPException(status_code=404, detail="No buildings found.")
         except Exception as e:
             raise e

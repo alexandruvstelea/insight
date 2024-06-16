@@ -23,6 +23,8 @@ async def init_db():
         from .models.faculties_buildings import faculties_buildings
         from .models.room import Room
         from .models.programme import Programme
+        from .models.professor import Professor
+        from .models.faculties_professors import faculties_professors
 
         await conn.run_sync(AlchemyAsyncBase.metadata.create_all)
 

@@ -1,6 +1,6 @@
 from __future__ import annotations
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 
 
 class ProgrammeBase(BaseModel):
@@ -11,6 +11,7 @@ class ProgrammeBase(BaseModel):
 
 class ProgrammeIn(ProgrammeBase):
     faculty_id: int
+    subjects: List["SubjectOutMinimal"]
 
 
 class ProgrammeOutMinimal(ProgrammeBase):
@@ -20,8 +21,10 @@ class ProgrammeOutMinimal(ProgrammeBase):
 class ProgrammeOut(ProgrammeBase):
     id: int
     faculty: Optional["FacultyOutMinimal"]
+    subjects: Optional[List["SubjectOutMinimal"]]
 
 
 from ..faculties.schemas import FacultyOutMinimal
+from ..subjects.schemas import SubjectOutMinimal
 
 ProgrammeOut.model_rebuild()

@@ -10,6 +10,7 @@ from typing import List
 from ...utility.error_parsing import format_integrity_error
 from .utils import faculty_to_out
 from ..buildings.utils import ids_to_buildings
+from ..professors.utils import ids_to_professors
 
 
 class FacultyOperations:
@@ -23,7 +24,10 @@ class FacultyOperations:
             result = await self.session.execute(query)
             faculties = result.scalars().unique().all()
             if faculties:
-                return sorted(list(faculties), key=lambda x: x.name)
+                return [
+                    faculty_to_out(faculty)
+                    for faculty in sorted(list(faculties), key=lambda x: x.name)
+                ]
             raise HTTPException(status_code=404, detail="No faculties found.")
         except Exception as e:
             raise e
@@ -43,10 +47,15 @@ class FacultyOperations:
                 name=faculty_data.name,
                 abbreviation=faculty_data.abbreviation,
                 buildings=[],
+                professors=[],
             )
             if faculty_data.buildings:
                 new_faculty.buildings = await ids_to_buildings(
                     self.session, faculty_data.buildings
+                )
+            if faculty_data.professors:
+                new_faculty.professors = await ids_to_professors(
+                    self.session, faculty_data.professors
                 )
             self.session.add(new_faculty)
             await self.session.commit()
@@ -72,6 +81,12 @@ class FacultyOperations:
                     )
                 else:
                     faculty.buildings = []
+                if new_faculty_data.professors:
+                    faculty.professors = await ids_to_professors(
+                        self.session, new_faculty_data.professors
+                    )
+                else:
+                    faculty.professors = []
                 await self.session.commit()
                 return faculty_to_out(faculty)
             raise HTTPException(status_code=404, detail=f"No faculty with id={id}.")

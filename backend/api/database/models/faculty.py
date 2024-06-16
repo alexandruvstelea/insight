@@ -5,6 +5,7 @@ from typing import List, TYPE_CHECKING
 if TYPE_CHECKING:
     from building import Building
     from programme import Programme
+    from professor import Professor
 
 
 class Faculty(AlchemyAsyncBase):
@@ -19,6 +20,12 @@ class Faculty(AlchemyAsyncBase):
     buildings: Mapped[List["Building"]] = relationship(
         "Building",
         secondary="faculties_buildings",
+        lazy="subquery",
+        back_populates="faculties",
+    )
+    professors: Mapped[List["Professor"]] = relationship(
+        "Professor",
+        secondary="faculties_professors",
         lazy="subquery",
         back_populates="faculties",
     )

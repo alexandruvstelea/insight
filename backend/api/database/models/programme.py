@@ -1,10 +1,11 @@
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from ..main import AlchemyAsyncBase
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 from sqlalchemy import ForeignKey
 
 if TYPE_CHECKING:
     from faculty import Faculty
+    from subject import Subject
 
 
 class Programme(AlchemyAsyncBase):
@@ -17,4 +18,10 @@ class Programme(AlchemyAsyncBase):
     faculty_id: Mapped[int] = mapped_column(ForeignKey("faculties.id"))
     faculty: Mapped["Faculty"] = relationship(
         "Faculty", lazy="subquery", back_populates="programmes"
+    )
+    subjects: Mapped[List["Subject"]] = relationship(
+        "Subject",
+        secondary="programmes_subjects",
+        lazy="subquery",
+        back_populates="programmes",
     )

@@ -16,7 +16,11 @@ async def building_to_out(building: Building) -> BuildingOut:
         rooms=(
             [room_to_minimal(room) for room in building.rooms] if building.rooms else []
         ),
-        faculties=[faculty_to_minimal(faculty) for faculty in building.faculties],
+        faculties=(
+            [faculty_to_minimal(faculty) for faculty in building.faculties]
+            if building.faculties
+            else []
+        ),
     )
 
 
