@@ -1,4 +1,4 @@
-from sqlalchemy import select
+from sqlalchemy import select, or_, and_
 from sqlalchemy.orm import joinedload
 from ...database.models.subject import Subject
 from .schemas import SubjectOut, SubjectIn
@@ -19,9 +19,47 @@ class SubjectOperations:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def get_subjects(self) -> List[SubjectOut]:
+    async def get_subjects(
+        self, faculty_id: int, professor_id: int
+    ) -> List[SubjectOut]:
         try:
-            query = select(Subject).options(joinedload(Subject.programmes))
+            if faculty_id and not professor_id:
+                query = (
+                    select(Subject)
+                    .options(joinedload(Subject.programmes))
+                    .where(Subject.faculties_ids.contains([faculty_id]))
+                )
+            elif professor_id and not faculty_id:
+                query = (
+                    select(Subject)
+                    .options(joinedload(Subject.programmes))
+                    .where(
+                        or_(
+                            Subject.course_professor_id == professor_id,
+                            Subject.laboratory_professor_id == professor_id,
+                            Subject.project_professor_id == professor_id,
+                            Subject.seminar_professor_id == professor_id,
+                        ),
+                    )
+                )
+            elif professor_id and faculty_id:
+                query = (
+                    select(Subject)
+                    .options(joinedload(Subject.programmes))
+                    .where(
+                        and_(
+                            or_(
+                                Subject.course_professor_id == professor_id,
+                                Subject.laboratory_professor_id == professor_id,
+                                Subject.project_professor_id == professor_id,
+                                Subject.seminar_professor_id == professor_id,
+                            ),
+                            Subject.faculties_ids.contains([faculty_id]),
+                        )
+                    )
+                )
+            else:
+                query = select(Subject).options(joinedload(Subject.programmes))
             result = await self.session.execute(query)
             subjects = result.scalars().unique().all()
             if subjects:

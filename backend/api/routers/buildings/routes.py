@@ -11,9 +11,10 @@ buildings_router = APIRouter(prefix="/api/buildings")
 
 @buildings_router.get("/", response_model=List[BuildingOut], status_code=HTTPStatus.OK)
 async def get_buildings(
+    faculty_id: int = None,
     session: AsyncSession = Depends(get_session),
 ) -> List[BuildingOut]:
-    buildings = await BuildingsOperations(session).get_buildings()
+    buildings = await BuildingsOperations(session).get_buildings(faculty_id)
     return buildings
 
 

@@ -18,9 +18,16 @@ class BuildingsOperations:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def get_buildings(self) -> List[BuildingOut]:
+    async def get_buildings(self, faculty_id: int) -> List[BuildingOut]:
         try:
-            query = select(Building).options(joinedload(Building.faculties))
+            if faculty_id:
+                query = (
+                    select(Building)
+                    .options(joinedload(Building.faculties))
+                    .where(Building.faculties_ids.contains([faculty_id]))
+                )
+            else:
+                query = select(Building).options(joinedload(Building.faculties))
             result = await self.session.execute(query)
             buildings = result.scalars().unique().all()
             if buildings:

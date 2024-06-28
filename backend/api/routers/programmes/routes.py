@@ -13,9 +13,10 @@ programmes_router = APIRouter(prefix="/api/programmes")
     "/", response_model=List[ProgrammeOut], status_code=HTTPStatus.OK
 )
 async def get_programmes(
+    faculty_id: int = None,
     session: AsyncSession = Depends(get_session),
 ) -> List[ProgrammeOut]:
-    response = await ProgrammeOperations(session).get_programmes()
+    response = await ProgrammeOperations(session).get_programmes(faculty_id)
     return response
 
 

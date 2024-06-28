@@ -18,11 +18,20 @@ class ProgrammeOperations:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def get_programmes(self) -> List[ProgrammeOut]:
+    async def get_programmes(self, faculty_id: int) -> List[ProgrammeOut]:
         try:
-            query = select(Programme).options(
-                joinedload(Programme.faculty), joinedload(Programme.subjects)
-            )
+            if faculty_id:
+                query = (
+                    select(Programme)
+                    .options(
+                        joinedload(Programme.faculty), joinedload(Programme.subjects)
+                    )
+                    .where(Programme.faculty_id == faculty_id)
+                )
+            else:
+                query = select(Programme).options(
+                    joinedload(Programme.faculty), joinedload(Programme.subjects)
+                )
             result = await self.session.execute(query)
             programmes = result.scalars().unique().all()
             if programmes:

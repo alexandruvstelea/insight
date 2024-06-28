@@ -13,9 +13,10 @@ professors_router = APIRouter(prefix="/api/professors")
     "/", response_model=List[ProfessorOut], status_code=HTTPStatus.OK
 )
 async def get_professors(
+    faculty_id: int = None,
     session: AsyncSession = Depends(get_session),
 ) -> List[ProfessorOut]:
-    response = await ProfessorOperations(session).get_professors()
+    response = await ProfessorOperations(session).get_professors(faculty_id)
     return response
 
 

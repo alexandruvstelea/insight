@@ -18,9 +18,16 @@ class RoomOperations:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def get_rooms(self) -> List[RoomOut]:
+    async def get_rooms(self, faculty_id: int) -> List[RoomOut]:
         try:
-            query = select(Room).options(joinedload(Room.building))
+            if faculty_id:
+                query = (
+                    select(Room)
+                    .options(joinedload(Room.building))
+                    .where(Room.faculties_ids.contains([faculty_id]))
+                )
+            else:
+                query = select(Room).options(joinedload(Room.building))
             result = await self.session.execute(query)
             rooms = result.scalars().unique().all()
             if rooms:

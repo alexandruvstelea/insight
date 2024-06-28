@@ -18,11 +18,18 @@ class SessionOperations:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def get_sessions(self) -> List[SessionOut]:
+    async def get_sessions(self, faculty_id: int) -> List[SessionOut]:
         try:
-            query = select(Session).options(
-                joinedload(Session.room), joinedload(Session.subject)
-            )
+            if faculty_id:
+                query = (
+                    select(Session)
+                    .options(joinedload(Session.room), joinedload(Session.subject))
+                    .where(Session.faculties_ids.contains([faculty_id]))
+                )
+            else:
+                query = select(Session).options(
+                    joinedload(Session.room), joinedload(Session.subject)
+                )
             result = await self.session.execute(query)
             sessions = result.scalars().unique().all()
             if sessions:

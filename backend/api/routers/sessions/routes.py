@@ -11,9 +11,10 @@ sessions_router = APIRouter(prefix="/api/sessions")
 
 @sessions_router.get("/", response_model=List[SessionOut], status_code=HTTPStatus.OK)
 async def get_sessions(
+    faculty_id: int = None,
     session: AsyncSession = Depends(get_session),
 ) -> List[SessionOut]:
-    response = await SessionOperations(session).get_sessions()
+    response = await SessionOperations(session).get_sessions(faculty_id)
     return response
 
 

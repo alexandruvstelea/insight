@@ -11,9 +11,11 @@ subjects_router = APIRouter(prefix="/api/subjects")
 
 @subjects_router.get("/", response_model=List[SubjectOut], status_code=HTTPStatus.OK)
 async def get_subjects(
+    faculty_id: int = None,
+    professor_id: int = None,
     session: AsyncSession = Depends(get_session),
 ) -> List[SubjectOut]:
-    response = await SubjectOperations(session).get_subjects()
+    response = await SubjectOperations(session).get_subjects(faculty_id, professor_id)
     return response
 
 

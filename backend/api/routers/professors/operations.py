@@ -17,9 +17,16 @@ class ProfessorOperations:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def get_professors(self) -> List[ProfessorOut]:
+    async def get_professors(self, faculty_id: int) -> List[ProfessorOut]:
         try:
-            query = select(Professor).options(joinedload(Professor.faculties))
+            if faculty_id:
+                query = (
+                    select(Professor)
+                    .options(joinedload(Professor.faculties))
+                    .where(Professor.faculties_ids.contains([faculty_id]))
+                )
+            else:
+                query = select(Professor).options(joinedload(Professor.faculties))
             result = await self.session.execute(query)
             professors = result.scalars().unique().all()
             if professors:

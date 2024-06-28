@@ -11,9 +11,10 @@ rooms_router = APIRouter(prefix="/api/rooms")
 
 @rooms_router.get("/", response_model=List[RoomOut], status_code=HTTPStatus.OK)
 async def get_rooms(
+    faculty_id: int = None,
     session: AsyncSession = Depends(get_session),
 ) -> List[RoomOut]:
-    response = await RoomOperations(session).get_rooms()
+    response = await RoomOperations(session).get_rooms(faculty_id)
     return response
 
 
