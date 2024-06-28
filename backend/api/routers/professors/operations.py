@@ -47,11 +47,16 @@ class ProfessorOperations:
                 last_name=professor_data.last_name,
                 gender=professor_data.gender,
                 faculties=[],
+                courses=[],
+                laboratories=[],
+                seminars=[],
+                projects=[],
             )
             if professor_data.faculties:
                 new_professor.faculties = await ids_to_faculties(
                     self.session, professor_data.faculties
                 )
+                new_professor.faculties_ids = professor_data.faculties
             self.session.add(new_professor)
             await self.session.commit()
             await self.session.refresh(new_professor)
@@ -77,8 +82,10 @@ class ProfessorOperations:
                     professor.faculties = await ids_to_faculties(
                         self.session, new_professor_data.faculties
                     )
+                    professor.faculties_ids = new_professor_data.faculties
                 else:
                     professor.faculties = []
+                    professor.faculties_ids = []
                 await self.session.commit()
                 return professor_to_out(professor)
             raise HTTPException(status_code=404, detail=f"No professor with id={id}.")

@@ -1,17 +1,17 @@
 from __future__ import annotations
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import Optional, List, Literal
 
 
 class ProgrammeBase(BaseModel):
     name: str
     abbreviation: str
-    type: int
+    type: Literal["bachelor", "master", "phd"]
 
 
 class ProgrammeIn(ProgrammeBase):
     faculty_id: int
-    subjects: List["SubjectOutMinimal"]
+    subjects: Optional[List[int]]
 
 
 class ProgrammeOutMinimal(ProgrammeBase):

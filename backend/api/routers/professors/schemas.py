@@ -1,16 +1,16 @@
 from __future__ import annotations
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import Optional, List, Literal
 
 
 class ProfessorBase(BaseModel):
     first_name: str
     last_name: str
-    gender: int
+    gender: Literal["male", "female"]
 
 
 class ProfessorIn(ProfessorBase):
-    faculties: List[int]
+    faculties: Optional[List[int]]
 
 
 class ProfessorOutMinimal(ProfessorBase):
@@ -20,8 +20,13 @@ class ProfessorOutMinimal(ProfessorBase):
 class ProfessorOut(ProfessorBase):
     id: int
     faculties: Optional[List["FacultyOutMinimal"]]
+    courses: Optional[List["SubjectOutMinimal"]]
+    laboratories: Optional[List["SubjectOutMinimal"]]
+    seminars: Optional[List["SubjectOutMinimal"]]
+    projects: Optional[List["SubjectOutMinimal"]]
 
 
 from ..faculties.schemas import FacultyOutMinimal
+from ..subjects.schemas import SubjectOutMinimal
 
 ProfessorOut.model_rebuild()

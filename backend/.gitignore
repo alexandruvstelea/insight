@@ -1,5 +1,4 @@
 .env
 funitbv-api-env
 __pycache__
-reset-database.sh
-populate-database.sh
+shell_scripts

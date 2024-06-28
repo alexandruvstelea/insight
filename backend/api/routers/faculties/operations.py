@@ -11,6 +11,7 @@ from ...utility.error_parsing import format_integrity_error
 from .utils import faculty_to_out
 from ..buildings.utils import ids_to_buildings
 from ..professors.utils import ids_to_professors
+from ..programmes.utils import ids_to_programmes
 
 
 class FacultyOperations:
@@ -45,7 +46,7 @@ class FacultyOperations:
         try:
             new_faculty = Faculty(
                 name=faculty_data.name,
-                abbreviation=faculty_data.abbreviation,
+                abbreviation=faculty_data.abbreviation.upper(),
                 buildings=[],
                 professors=[],
             )
@@ -56,6 +57,10 @@ class FacultyOperations:
             if faculty_data.professors:
                 new_faculty.professors = await ids_to_professors(
                     self.session, faculty_data.professors
+                )
+            if faculty_data.programmes:
+                new_faculty.programmes = await ids_to_programmes(
+                    self.session, faculty_data.programmes
                 )
             self.session.add(new_faculty)
             await self.session.commit()
@@ -74,7 +79,7 @@ class FacultyOperations:
             faculty = await self.session.get(Faculty, id)
             if faculty:
                 faculty.name = new_faculty_data.name
-                faculty.abbreviation = new_faculty_data.abbreviation
+                faculty.abbreviation = new_faculty_data.abbreviation.upper()
                 if new_faculty_data.buildings:
                     faculty.buildings = await ids_to_buildings(
                         self.session, new_faculty_data.buildings
@@ -87,6 +92,12 @@ class FacultyOperations:
                     )
                 else:
                     faculty.professors = []
+                if new_faculty_data.programmes:
+                    faculty.programmes = await ids_to_programmes(
+                        self.session, new_faculty_data.programmes
+                    )
+                else:
+                    faculty.programmes = []
                 await self.session.commit()
                 return faculty_to_out(faculty)
             raise HTTPException(status_code=404, detail=f"No faculty with id={id}.")

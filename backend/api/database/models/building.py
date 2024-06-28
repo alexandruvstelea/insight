@@ -1,5 +1,7 @@
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from ..main import AlchemyAsyncBase
+from sqlalchemy.dialects.postgresql import ARRAY
+from sqlalchemy import Integer
 from typing import List, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -12,6 +14,7 @@ class Building(AlchemyAsyncBase):
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(unique=True, index=True)
+    faculties_ids: Mapped[List[int]] = mapped_column(ARRAY(Integer))
     rooms: Mapped[List["Room"]] = relationship(
         "Room", lazy="subquery", back_populates="building"
     )

@@ -9,6 +9,7 @@ from sqlalchemy import select
 def faculty_to_out(faculty: Faculty) -> FacultyOut:
     from ..buildings.utils import building_to_minimal
     from ..professors.utils import professor_to_minimal
+    from ..programmes.utils import programme_to_minimal
 
     return FacultyOut(
         id=faculty.id,
@@ -22,6 +23,11 @@ def faculty_to_out(faculty: Faculty) -> FacultyOut:
         professors=(
             [professor_to_minimal(professor) for professor in faculty.professors]
             if faculty.professors
+            else []
+        ),
+        programmes=(
+            [programme_to_minimal(programme) for programme in faculty.programmes]
+            if faculty.programmes
             else []
         ),
     )

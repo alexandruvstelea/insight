@@ -8,6 +8,7 @@ from sqlalchemy import select
 
 def professor_to_out(professor: Professor) -> ProfessorOut:
     from ..faculties.utils import faculty_to_minimal
+    from ..subjects.utils import subject_to_minimal
 
     return ProfessorOut(
         id=professor.id,
@@ -17,6 +18,26 @@ def professor_to_out(professor: Professor) -> ProfessorOut:
         faculties=(
             [faculty_to_minimal(faculty) for faculty in professor.faculties]
             if professor.faculties
+            else []
+        ),
+        courses=(
+            [subject_to_minimal(course) for course in professor.courses]
+            if professor.courses
+            else []
+        ),
+        laboratories=(
+            [subject_to_minimal(laboratory) for laboratory in professor.laboratories]
+            if professor.laboratories
+            else []
+        ),
+        seminars=(
+            [subject_to_minimal(seminar) for seminar in professor.seminars]
+            if professor.seminars
+            else []
+        ),
+        projects=(
+            [subject_to_minimal(project) for project in professor.projects]
+            if professor.projects
             else []
         ),
     )

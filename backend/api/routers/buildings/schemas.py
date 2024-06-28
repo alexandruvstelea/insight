@@ -8,7 +8,8 @@ class BuildingBase(BaseModel):
 
 
 class BuildingIn(BuildingBase):
-    faculties: List[int]
+    faculties: Optional[List[int]]
+    rooms: Optional[List[int]]
 
 
 class BuildingOutMinimal(BuildingBase):

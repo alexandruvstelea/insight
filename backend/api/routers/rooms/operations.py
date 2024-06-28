@@ -10,6 +10,7 @@ from typing import List
 from ...utility.error_parsing import format_integrity_error
 from .utils import room_to_out
 from ..buildings.utils import id_to_building
+from ..sessions.utils import ids_to_sessions
 
 
 class RoomOperations:
@@ -43,12 +44,19 @@ class RoomOperations:
     async def add_room(self, room_data: RoomIn) -> RoomOut:
         try:
             new_room = Room(
-                name=room_data.name,
+                name=room_data.name.upper(),
                 building_id=room_data.building_id,
             )
             new_room.building = await id_to_building(
                 self.session, room_data.building_id
             )
+            new_room.faculties_ids = [
+                faculty.id for faculty in new_room.building.faculties
+            ]
+            if room_data.sessions:
+                new_room.sessions = await ids_to_sessions(
+                    self.session, room_data.sessions
+                )
             self.session.add(new_room)
             await self.session.commit()
             await self.session.refresh(new_room)
@@ -65,11 +73,18 @@ class RoomOperations:
         try:
             room = await self.session.get(Room, id)
             if room:
-                room.name = new_room_data.name
+                room.name = new_room_data.name.upper()
                 if new_room_data.building_id:
                     room.building_id = new_room_data.building_id
                     room.building = await id_to_building(
                         self.session, new_room_data.building_id
+                    )
+                    room.faculties_ids = [
+                        faculty.id for faculty in room.building.faculties
+                    ]
+                if new_room_data.sessions:
+                    room.sessions = await ids_to_sessions(
+                        self.session, new_room_data.sessions
                     )
                 await self.session.commit()
                 return room_to_out(room)

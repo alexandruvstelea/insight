@@ -9,7 +9,9 @@ from fastapi.responses import JSONResponse
 from typing import List
 from ...utility.error_parsing import format_integrity_error
 from .utils import subject_to_out
-from ..programmes.utils import programme_to_minimal
+from ..programmes.utils import id_to_programme, ids_to_programmes
+from ..sessions.utils import ids_to_sessions
+from ..professors.utils import id_to_professor
 
 
 class SubjectOperations:
@@ -44,18 +46,42 @@ class SubjectOperations:
         try:
             new_subject = Subject(
                 name=subject_data.name,
-                abbreviation=subject_data.abbreviation,
+                abbreviation=subject_data.abbreviation.upper(),
                 semester=subject_data.semester,
                 course_professor_id=subject_data.course_professor_id,
                 laboratory_professor_id=subject_data.laboratory_professor_id,
                 seminar_professor_id=subject_data.seminar_professor_id,
                 project_professor_id=subject_data.project_professor_id,
+                programmes=[],
             )
             if subject_data.programmes:
                 new_subject.programmes = [
-                    programme_to_minimal(programme)
+                    await id_to_programme(self.session, programme)
                     for programme in subject_data.programmes
                 ]
+                new_subject.faculties_ids = list(
+                    set(programme.faculty_id for programme in new_subject.programmes)
+                )
+            if subject_data.sessions:
+                new_subject.sessions = await ids_to_sessions(
+                    self.session, subject_data.sessions
+                )
+            if subject_data.course_professor_id:
+                new_subject.course_professor = await id_to_professor(
+                    self.session, subject_data.course_professor_id
+                )
+            if subject_data.laboratory_professor_id:
+                new_subject.laboratory_professor = await id_to_professor(
+                    self.session, subject_data.laboratory_professor_id
+                )
+            if subject_data.seminar_professor_id:
+                new_subject.seminar_professor = await id_to_professor(
+                    self.session, subject_data.seminar_professor_id
+                )
+            if subject_data.project_professor_id:
+                new_subject.project_professor = await id_to_professor(
+                    self.session, subject_data.project_professor_id
+                )
             self.session.add(new_subject)
             await self.session.commit()
             await self.session.refresh(new_subject)
@@ -68,19 +94,54 @@ class SubjectOperations:
         except Exception as e:
             raise e
 
-    async def update_room(self, id: int, new_room_data: SubjectIn) -> SubjectOut:
+    async def update_subject(self, id: int, new_subject_data: SubjectIn) -> SubjectOut:
         try:
-            room = await self.session.get(Room, id)
-            if room:
-                room.name = new_room_data.name
-                if new_room_data.building_id:
-                    room.building_id = new_room_data.building_id
-                    room.building = await id_to_building(
-                        self.session, new_room_data.building_id
+            subject = await self.session.get(Subject, id)
+            if subject:
+                subject.name = new_subject_data.name
+                subject.abbreviation = new_subject_data.abbreviation.upper()
+                subject.semester = new_subject_data.semester
+                subject.course_professor_id = new_subject_data.course_professor_id
+                subject.laboratory_professor_id = (
+                    new_subject_data.laboratory_professor_id
+                )
+                subject.seminar_professor_id = new_subject_data.seminar_professor_id
+                subject.project_professor_id = new_subject_data.project_professor_id
+                if new_subject_data.programmes:
+                    subject.programmes = await ids_to_programmes(
+                        self.session, new_subject_data.programmes
+                    )
+                    subject.faculties_ids = list(
+                        set(programme.faculty_id for programme in subject.programmes)
+                    )
+                else:
+                    subject.programmes = []
+                    subject.faculties_ids = []
+                if new_subject_data.sessions:
+                    subject.sessions = await ids_to_sessions(
+                        self.session, new_subject_data.sessions
+                    )
+                else:
+                    subject.sessions = []
+                if new_subject_data.course_professor_id:
+                    subject.course_professor = await id_to_professor(
+                        self.session, new_subject_data.course_professor_id
+                    )
+                if new_subject_data.laboratory_professor_id:
+                    subject.laboratory_professor = await id_to_professor(
+                        self.session, new_subject_data.laboratory_professor_id
+                    )
+                if new_subject_data.seminar_professor_id:
+                    subject.seminar_professor = await id_to_professor(
+                        self.session, new_subject_data.seminar_professor_id
+                    )
+                if new_subject_data.project_professor_id:
+                    subject.project_professor = await id_to_professor(
+                        self.session, new_subject_data.project_professor_id
                     )
                 await self.session.commit()
-                return room_to_out(room)
-            raise HTTPException(status_code=404, detail=f"No room with id={id}.")
+                return subject_to_out(subject)
+            raise HTTPException(status_code=404, detail=f"No subject with id={id}.")
         except IntegrityError as e:
             error = format_integrity_error(e)
             raise HTTPException(
@@ -89,14 +150,14 @@ class SubjectOperations:
         except Exception as e:
             raise e
 
-    async def delete_room(self, id: int):
+    async def delete_subject(self, id: int):
         try:
-            room = await self.session.get(Room, id)
-            if room:
-                await self.session.delete(room)
+            subject = await self.session.get(Subject, id)
+            if subject:
+                await self.session.delete(subject)
                 await self.session.commit()
-                return JSONResponse(f"Room with ID={id} deleted.")
+                return JSONResponse(f"Subject with ID={id} deleted.")
             else:
-                raise HTTPException(status_code=404, detail=f"No room with id={id}.")
+                raise HTTPException(status_code=404, detail=f"No subject with id={id}.")
         except Exception as e:
             raise e

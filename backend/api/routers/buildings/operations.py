@@ -10,6 +10,7 @@ from typing import List
 from ...utility.error_parsing import format_integrity_error
 from .utils import building_to_out
 from ..faculties.utils import ids_to_faculties
+from ..rooms.utils import ids_to_rooms
 
 
 class BuildingsOperations:
@@ -24,7 +25,7 @@ class BuildingsOperations:
             buildings = result.scalars().unique().all()
             if buildings:
                 return [
-                    building_to_out(building)
+                    await building_to_out(building)
                     for building in sorted(list(buildings), key=lambda x: x.name)
                 ]
             raise HTTPException(status_code=404, detail="No buildings found.")
@@ -42,10 +43,17 @@ class BuildingsOperations:
 
     async def add_building(self, building_data: BuildingIn) -> BuildingOut:
         try:
-            new_building = Building(name=building_data.name, rooms=[], faculties=[])
+            new_building = Building(
+                name=building_data.name, rooms=[], faculties_ids=[], faculties=[]
+            )
             if building_data.faculties:
                 new_building.faculties = await ids_to_faculties(
                     self.session, building_data.faculties
+                )
+                new_building.faculties_ids = building_data.faculties
+            if building_data.rooms:
+                new_building.rooms = await ids_to_rooms(
+                    self.session, building_data.rooms
                 )
             self.session.add(new_building)
             await self.session.commit()
@@ -71,8 +79,16 @@ class BuildingsOperations:
                     building.faculties = await ids_to_faculties(
                         self.session, new_building_data.faculties
                     )
+                    building.faculties_ids = new_building_data.faculties
                 else:
                     building.faculties = []
+                    building.faculties_ids = []
+                if new_building_data.rooms:
+                    building.rooms = await ids_to_rooms(
+                        self.session, new_building_data.rooms
+                    )
+                else:
+                    building.rooms = []
                 await self.session.commit()
                 return await building_to_out(building)
             raise HTTPException(status_code=404, detail=f"No building with id={id}.")

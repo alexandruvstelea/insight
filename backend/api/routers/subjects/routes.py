@@ -1,47 +1,47 @@
 from ...database.main import get_session
 from fastapi import APIRouter, Depends
-from .schemas import RoomIn, RoomOut
+from .schemas import SubjectIn, SubjectOut
 from sqlalchemy.ext.asyncio import AsyncSession
-from .operations import RoomOperations
+from .operations import SubjectOperations
 from http import HTTPStatus
 from typing import List
 
-rooms_router = APIRouter(prefix="/api/rooms")
+subjects_router = APIRouter(prefix="/api/subjects")
 
 
-@rooms_router.get("/", response_model=List[RoomOut], status_code=HTTPStatus.OK)
-async def get_rooms(
+@subjects_router.get("/", response_model=List[SubjectOut], status_code=HTTPStatus.OK)
+async def get_subjects(
     session: AsyncSession = Depends(get_session),
-) -> List[RoomOut]:
-    response = await RoomOperations(session).get_rooms()
+) -> List[SubjectOut]:
+    response = await SubjectOperations(session).get_subjects()
     return response
 
 
-@rooms_router.get("/{id}", response_model=RoomOut, status_code=HTTPStatus.OK)
-async def get_room_by_id(
+@subjects_router.get("/{id}", response_model=SubjectOut, status_code=HTTPStatus.OK)
+async def get_subject_by_id(
     id: int, session: AsyncSession = Depends(get_session)
-) -> RoomOut:
-    response = await RoomOperations(session).get_room_by_id(id)
+) -> SubjectOut:
+    response = await SubjectOperations(session).get_subject_by_id(id)
     return response
 
 
-@rooms_router.post("/", response_model=RoomOut, status_code=HTTPStatus.CREATED)
-async def add_room(
-    room_data: RoomIn, session: AsyncSession = Depends(get_session)
-) -> RoomOut:
-    response = await RoomOperations(session).add_room(room_data)
+@subjects_router.post("/", response_model=SubjectOut, status_code=HTTPStatus.CREATED)
+async def add_subject(
+    subject_data: SubjectIn, session: AsyncSession = Depends(get_session)
+) -> SubjectOut:
+    response = await SubjectOperations(session).add_subject(subject_data)
     return response
 
 
-@rooms_router.put("/{id}", response_model=RoomOut, status_code=HTTPStatus.OK)
-async def update_room(
-    id: int, new_room_data: RoomIn, session: AsyncSession = Depends(get_session)
-) -> RoomOut:
-    response = await RoomOperations(session).update_room(id, new_room_data)
+@subjects_router.put("/{id}", response_model=SubjectOut, status_code=HTTPStatus.OK)
+async def update_subject(
+    id: int, new_subject_data: SubjectIn, session: AsyncSession = Depends(get_session)
+) -> SubjectOut:
+    response = await SubjectOperations(session).update_subject(id, new_subject_data)
     return response
 
 
-@rooms_router.delete("/{id}", status_code=HTTPStatus.OK)
-async def delete_room(id: int, session: AsyncSession = Depends(get_session)) -> str:
-    response = await RoomOperations(session).delete_room(id)
+@subjects_router.delete("/{id}", status_code=HTTPStatus.OK)
+async def delete_subject(id: int, session: AsyncSession = Depends(get_session)) -> str:
+    response = await SubjectOperations(session).delete_subject(id)
     return response

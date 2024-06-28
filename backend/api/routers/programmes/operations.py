@@ -47,10 +47,11 @@ class ProgrammeOperations:
         try:
             new_programme = Programme(
                 name=programme_data.name,
-                abbreviation=programme_data.abbreviation,
+                abbreviation=programme_data.abbreviation.upper(),
                 type=programme_data.type,
                 faculty_id=programme_data.faculty_id,
                 faculty=await id_to_faculty(self.session, programme_data.faculty_id),
+                subjects=[],
             )
             if programme_data.subjects:
                 new_programme.subjects = await ids_to_subjects(
@@ -75,7 +76,7 @@ class ProgrammeOperations:
             programme = await self.session.get(Programme, id)
             if programme:
                 programme.name = new_programme_data.name
-                programme.abbreviation = new_programme_data.abbreviation
+                programme.abbreviation = new_programme_data.abbreviation.upper()
                 programme.type = new_programme_data.type
                 programme.faculty_id = new_programme_data.faculty_id
                 programme.faculty = await id_to_faculty(
@@ -86,6 +87,8 @@ class ProgrammeOperations:
                         ids_to_subjects(subject)
                         for subject in new_programme_data.subjects
                     ]
+                else:
+                    programme.subjects = []
                 await self.session.commit()
                 return programme_to_out(programme)
             raise HTTPException(status_code=404, detail=f"No programme with id={id}.")

@@ -9,8 +9,9 @@ class FacultyBase(BaseModel):
 
 
 class FacultyIn(FacultyBase):
-    buildings: List[int]
-    professors: List[int]
+    buildings: Optional[List[int]]
+    professors: Optional[List[int]]
+    programmes: Optional[List[int]]
 
 
 class FacultyOutMinimal(FacultyBase):
@@ -21,9 +22,11 @@ class FacultyOut(FacultyBase):
     id: int
     buildings: Optional[List["BuildingOutMinimal"]]
     professors: Optional[List["ProfessorOutMinimal"]]
+    programmes: Optional[List["ProgrammeOutMinimal"]]
 
 
 from ..buildings.schemas import BuildingOutMinimal
 from ..professors.schemas import ProfessorOutMinimal
+from ..programmes.schemas import ProgrammeOutMinimal
 
 FacultyOut.model_rebuild()

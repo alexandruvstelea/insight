@@ -25,6 +25,9 @@ async def init_db():
         from .models.programme import Programme
         from .models.professor import Professor
         from .models.faculties_professors import faculties_professors
+        from .models.subject import Subject
+        from .models.programmes_subjects import programmes_subjects
+        from .models.session import Session
 
         await conn.run_sync(AlchemyAsyncBase.metadata.create_all)
 

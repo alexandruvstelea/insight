@@ -14,7 +14,7 @@ class Programme(AlchemyAsyncBase):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(unique=True, index=True)
     abbreviation: Mapped[str] = mapped_column(unique=True)
-    type: Mapped[int] = mapped_column()
+    type: Mapped[str] = mapped_column()
     faculty_id: Mapped[int] = mapped_column(ForeignKey("faculties.id"))
     faculty: Mapped["Faculty"] = relationship(
         "Faculty", lazy="subquery", back_populates="programmes"
