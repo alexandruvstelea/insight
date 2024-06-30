@@ -28,6 +28,7 @@ async def init_db():
         from .models.subject import Subject
         from .models.programmes_subjects import programmes_subjects
         from .models.session import Session
+        from .models.weeks import Week
 
         await conn.run_sync(AlchemyAsyncBase.metadata.create_all)
 
