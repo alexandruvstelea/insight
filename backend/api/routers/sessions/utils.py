@@ -1,9 +1,12 @@
 from ...database.models.session import Session
+from ...database.models.weeks import Week
 from .schemas import SessionOut, SessionOutMinimal
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 from fastapi import HTTPException
 from sqlalchemy import select, and_, or_
+from datetime import datetime
+from ..weeks.utils import get_week_from_timestamp
 
 
 def session_to_out(session: Session) -> SessionOut:
@@ -35,17 +38,19 @@ def session_to_minimal(session: Session) -> SessionOutMinimal:
     )
 
 
-async def id_to_session(session: AsyncSession, session_id: int) -> Session:
-    session = await session.get(Session, session_id)
+async def id_to_session(db_session: AsyncSession, session_id: int) -> Session:
+    session = await db_session.get(Session, session_id)
     if session:
         return session
     raise HTTPException(status_code=404, detail=f"No session with id={session_id}.")
 
 
 async def ids_to_sessions(
-    session: AsyncSession, session_ids: List[int]
+    db_session: AsyncSession, session_ids: List[int]
 ) -> List[Session]:
-    result = await session.execute(select(Session).where(Session.id.in_(session_ids)))
+    result = await db_session.execute(
+        select(Session).where(Session.id.in_(session_ids))
+    )
     sessions = result.scalars().all()
     if len(sessions) != len(session_ids):
         raise HTTPException(
@@ -55,9 +60,12 @@ async def ids_to_sessions(
     return list(sessions)
 
 
-async def is_session_overlap(session: AsyncSession, new_session: Session) -> bool:
+async def is_session_overlap(
+    db_session: AsyncSession, new_session: Session, current_session_id: int = -1
+) -> bool:
     query = select(Session).where(
         and_(
+            Session.id != current_session_id,
             Session.room_id == new_session.room_id,
             Session.day == new_session.day,
             Session.week_type == new_session.week_type,
@@ -73,8 +81,29 @@ async def is_session_overlap(session: AsyncSession, new_session: Session) -> boo
             ),
         )
     )
-
-    result = await session.execute(query)
+    result = await db_session.execute(query)
     existing_sessions = result.scalars().all()
-
     return len(existing_sessions) > 0
+
+
+async def get_session_from_timestamp(
+    db_session: AsyncSession, timestamp: datetime, room_id: int
+) -> Session:
+    week: Week = await get_week_from_timestamp(db_session, timestamp)
+    result = await db_session.execute(
+        select(Session).where(
+            Session.semester == week.semester,
+            Session.day == timestamp.weekday(),
+            Session.start <= timestamp.time(),
+            Session.end >= timestamp.time(),
+            Session.room_id == room_id,
+            or_(Session.week_type == 0, Session.week_type == week.id % 2),
+        )
+    )
+    current_session = result.scalars().first()
+    if current_session:
+        return current_session
+    raise HTTPException(
+        status_code=404,
+        detail=f"Could not find current session for timestamp {timestamp} and room_id {room_id}.",
+    )

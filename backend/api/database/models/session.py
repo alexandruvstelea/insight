@@ -1,9 +1,8 @@
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from ..main import AlchemyAsyncBase
-from typing import TYPE_CHECKING, List
-from sqlalchemy import ForeignKey, Integer
+from typing import TYPE_CHECKING
+from sqlalchemy import ForeignKey
 from sqlalchemy.sql.sqltypes import Time
-from sqlalchemy.dialects.postgresql import ARRAY
 
 if TYPE_CHECKING:
     from subject import Subject
@@ -22,7 +21,7 @@ class Session(AlchemyAsyncBase):
     day: Mapped[int] = mapped_column()
     room_id: Mapped[int] = mapped_column(ForeignKey("rooms.id"))
     subject_id: Mapped[int] = mapped_column(ForeignKey("subjects.id"))
-    faculties_ids: Mapped[List[int]] = mapped_column(ARRAY(Integer))
+    faculty_id: Mapped[int] = mapped_column()
     subject: Mapped["Subject"] = relationship(
         "Subject", lazy="subquery", back_populates="sessions"
     )

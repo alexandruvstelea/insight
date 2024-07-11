@@ -21,7 +21,7 @@ class WeekIn(BaseModel):
         return v
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "year_start": "2023-10-02",
                 "intervals": [12, 2, 2, 3, 1, 10, 1, 4],

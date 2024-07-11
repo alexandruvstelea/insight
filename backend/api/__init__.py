@@ -7,8 +7,23 @@ from api.routers.professors.routes import professors_router
 from api.routers.subjects.routes import subjects_router
 from api.routers.sessions.routes import sessions_router
 from api.routers.weeks.routes import weeks_routes
+from api.routers.ratings.routes import ratings_routes
 from contextlib import asynccontextmanager
 from .database.main import init_db
+import logging
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    filename="app.log",
+    filemode="a",
+    format="%(asctime)s - %(name)s - %(levelname)s\n-> %(message)s\n",
+)
+logger = logging.getLogger(__name__)
+logger.addHandler(logging.StreamHandler())
+
+logger.info(
+    "Starting FastAPI RESTful API for Transylvania University of Brasov feedback system.\n© Alexandru-Vasile Stelea, Andrei Cristian Sava"
+)
 
 
 @asynccontextmanager
@@ -26,3 +41,4 @@ app.include_router(professors_router)
 app.include_router(subjects_router)
 app.include_router(sessions_router)
 app.include_router(weeks_routes)
+app.include_router(ratings_routes)

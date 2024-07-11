@@ -92,3 +92,23 @@ async def get_subject_semester(session: AsyncSession, subject_id: int) -> int:
     )
     subject_semester = result.scalars().first()
     return subject_semester
+
+
+async def get_subject_session_professor(
+    session: AsyncSession, subject_id: int, type: str
+) -> int:
+    subject: Subject = await id_to_subject(session, subject_id)
+    match type:
+        case "course":
+            return subject.course_professor_id
+        case "laboratory":
+            return subject.laboratory_professor_id
+        case "seminar":
+            return subject.seminar_professor_id
+        case "project":
+            return subject.project_professor_id
+        case _:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Could not find {type} professor for subject {subject.name}.",
+            )

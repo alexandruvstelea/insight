@@ -16,7 +16,9 @@ async def get_ratings(
     session_type: str = None,
     session: AsyncSession = Depends(get_session),
 ) -> List[RatingOut]:
-    response = await RatingOperations(session).get_ratings()
+    response = await RatingOperations(session).get_ratings(
+        professor_id, subject_id, session_type
+    )
     return response
 
 

@@ -21,6 +21,7 @@ class SessionIn(BaseModel):
     day: Literal[0, 1, 2, 3, 4, 5, 6]
     room_id: int
     subject_id: int
+    faculty_id: int
 
 
 class SessionOutMinimal(SessionBase):

@@ -7,7 +7,7 @@ from sqlalchemy.sql.sqltypes import DateTime
 class Rating(AlchemyAsyncBase):
     __tablename__: str = "ratings"
 
-    id: Mapped[int] = mapped_column(primary_key=True, unique=True)
+    id: Mapped[int] = mapped_column(primary_key=True, unique=True, autoincrement=True)
     rating_clarity: Mapped[int] = mapped_column()
     rating_interactivity: Mapped[int] = mapped_column()
     rating_relevance: Mapped[int] = mapped_column()

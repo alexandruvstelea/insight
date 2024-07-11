@@ -4,12 +4,18 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 from fastapi import HTTPException
 from sqlalchemy import select
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def professor_to_out(professor: Professor) -> ProfessorOut:
     from ..faculties.utils import faculty_to_minimal
     from ..subjects.utils import subject_to_minimal
 
+    logger.info(
+        f"Converting professor {professor.first_name} {professor.last_name} to ProfessorOut format."
+    )
     return ProfessorOut(
         id=professor.id,
         first_name=professor.first_name,
@@ -44,6 +50,9 @@ def professor_to_out(professor: Professor) -> ProfessorOut:
 
 
 def professor_to_minimal(professor: Professor) -> ProfessorOutMinimal:
+    logger.info(
+        f"Converting professor {professor.first_name} {professor.last_name} to ProfessorOutMinimal format."
+    )
     return ProfessorOutMinimal(
         id=professor.id,
         first_name=professor.first_name,
@@ -53,22 +62,42 @@ def professor_to_minimal(professor: Professor) -> ProfessorOutMinimal:
 
 
 async def id_to_professor(session: AsyncSession, professor_id: int) -> Professor:
-    professor = await session.get(Professor, professor_id)
-    if professor:
-        return professor
-    raise HTTPException(status_code=404, detail=f"No professor with id={professor_id}.")
+    try:
+        logger.info(f"Retrieving professor for ID {professor_id}.")
+        professor = await session.get(Professor, professor_id)
+        if professor:
+            logger.info(f"Retrieved professor with ID {professor_id}.")
+            return professor
+        logger.error(f"No professor with ID {professor_id}.")
+        raise HTTPException(
+            status_code=404, detail=f"No professor with id={professor_id}."
+        )
+    except Exception as e:
+        logger.error(
+            f"An unexpected error has occured while retrieving professor with ID {professor_id}:\n{e}"
+        )
+        raise e
 
 
 async def ids_to_professors(
     session: AsyncSession, professor_ids: List[int]
 ) -> List[Professor]:
-    result = await session.execute(
-        select(Professor).where(Professor.id.in_(professor_ids))
-    )
-    professors = result.scalars().all()
-    if len(professors) != len(professor_ids):
-        raise HTTPException(
-            status_code=404,
-            detail=f"One or more professors not found for IDs {professor_ids}",
+    try:
+        logger.info(f"Retrieving professors with IDs {professor_ids}.")
+        result = await session.execute(
+            select(Professor).where(Professor.id.in_(professor_ids))
         )
-    return list(professors)
+        professors = result.scalars().all()
+        if len(professors) != len(professor_ids):
+            logger.error(f"One or more professors not found for IDs {professor_ids}.")
+            raise HTTPException(
+                status_code=404,
+                detail=f"One or more professors not found for IDs {professor_ids}",
+            )
+        logger.info(f"Retrieved professors with IDs {professor_ids}.")
+        return list(professors)
+    except Exception as e:
+        logger.error(
+            f"An unexpected error has occured while retrieving professors with IDs {professor_ids}:\n{e}"
+        )
+        raise e

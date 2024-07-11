@@ -8,6 +8,7 @@ from sqlalchemy import select
 
 def rating_to_out(rating: Rating):
     return RatingOut(
+        id=rating.id,
         rating_clarity=rating.rating_clarity,
         rating_interactivity=rating.rating_interactivity,
         rating_relevance=rating.rating_relevance,
@@ -21,19 +22,3 @@ def rating_to_out(rating: Rating):
         professor_id=rating.professor_id,
         faculty_id=rating.faculty_id,
     )
-
-
-async def get_rating_session(session: AsyncSession, room_id: int, timestamp: datetime):
-    query = select(Session).where(
-        Session.room_id == room_id,
-        Session.day == timestamp.weekday(),
-        Session.start <= timestamp.time(),
-        Session.end >= timestamp.time(),
-        (Session.week_type == 0)
-        | ((Session.week_type == 1) & (is_odd_week))
-        | ((Session.week_type == 2) & (~is_odd_week)),
-        Session.semester == timestamp_semester,
-    )
-    result = await session.execute(query)
-    session = result.scalars().first()
-    return session

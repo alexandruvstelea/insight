@@ -29,6 +29,7 @@ async def init_db():
         from .models.programmes_subjects import programmes_subjects
         from .models.session import Session
         from .models.weeks import Week
+        from .models.ratings import Rating
 
         await conn.run_sync(AlchemyAsyncBase.metadata.create_all)
 

@@ -24,7 +24,7 @@ class SessionOperations:
                 query = (
                     select(Session)
                     .options(joinedload(Session.room), joinedload(Session.subject))
-                    .where(Session.faculties_ids.contains([faculty_id]))
+                    .where(Session.faculty_id == faculty_id)
                 )
             else:
                 query = select(Session).options(
@@ -71,8 +71,14 @@ class SessionOperations:
             new_session.subject = await id_to_subject(
                 self.session, session_data.subject_id
             )
-            new_session.faculties_ids = new_session.subject.faculties_ids
-            if is_session_overlap(self.session, new_session):
+            if session_data.faculty_id in new_session.subject.faculties_ids:
+                new_session.faculty_id = session_data.faculty_id
+            else:
+                raise HTTPException(
+                    status_code=422,
+                    detail=f"The given faculty_id={session_data.faculty_id} is not in the list of the session' subject faculties_ids.",
+                )
+            if await is_session_overlap(self.session, new_session):
                 raise HTTPException(
                     status_code=409,
                     detail="The new session interval overlaps with an existing one.",
@@ -107,8 +113,9 @@ class SessionOperations:
                 session.subject = await id_to_subject(
                     self.session, new_session_data.subject_id
                 )
-                session.faculties_ids = session.subject.faculties_ids
-                if is_session_overlap(self.session, session):
+            if new_session_data.faculty_id in session.subject.faculties_ids:
+                session.faculty_id = new_session_data.faculty_id
+                if await is_session_overlap(self.session, session, id):
                     raise HTTPException(
                         status_code=409,
                         detail="The new session interval overlaps with an existing one.",

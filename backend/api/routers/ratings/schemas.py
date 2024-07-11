@@ -12,7 +12,12 @@ class RatingBase(BaseModel):
     session_type: str
 
 
-class RatingIn(RatingBase):
+class RatingIn(BaseModel):
+    rating_clarity: int
+    rating_interactivity: int
+    rating_relevance: int
+    rating_comprehension: int
+    timestamp: datetime
     programme_id: int
     room_id: int
 
