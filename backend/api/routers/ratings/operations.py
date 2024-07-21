@@ -11,6 +11,9 @@ from ...utility.error_parsing import format_integrity_error
 from .utils import rating_to_out
 from ..sessions.utils import get_session_from_timestamp
 from ..subjects.utils import get_subject_session_professor
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class RatingOperations:
@@ -28,6 +31,7 @@ class RatingOperations:
 
     async def add_rating(self, rating_data: RatingIn) -> RatingOut:
         try:
+            logger.info(f"Adding to database rating {rating_data}.")
             rating_session: Session = await get_session_from_timestamp(
                 self.session, rating_data.timestamp, rating_data.room_id
             )
@@ -58,11 +62,18 @@ class RatingOperations:
             print(new_rating.professor_id)
             await self.session.commit()
             await self.session.refresh(new_rating)
+            logger.info("Succesfully added new rating to database.")
             return rating_to_out(new_rating)
         except IntegrityError as e:
             error = format_integrity_error(e)
+            logger.error(
+                f"An integrity error has occured while adding rating to database:\n{e}"
+            )
             raise HTTPException(
                 status_code=error.get("code"), detail=error.get("detail")
             )
         except Exception as e:
+            logger.error(
+                f"An unexpected error has occured while adding rating to databse:\n{e}"
+            )
             raise e

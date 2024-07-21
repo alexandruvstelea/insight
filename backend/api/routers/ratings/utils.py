@@ -4,9 +4,13 @@ from .schemas import RatingOut
 from datetime import datetime
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def rating_to_out(rating: Rating):
+    logger.info(f"Converting rating {rating} to RatingOut format.")
     return RatingOut(
         id=rating.id,
         rating_clarity=rating.rating_clarity,
