@@ -10,7 +10,7 @@ from typing import List
 from ...utility.error_parsing import format_integrity_error
 from .utils import rating_to_out
 from ..sessions.utils import get_session_from_timestamp
-from ..subjects.utils import get_subject_session_professor
+from ..subjects.utils import get_session_professor
 import logging
 from .schemas import (
     RatingOut,
@@ -236,6 +236,24 @@ class RatingOperations:
             rating_session: Session = await get_session_from_timestamp(
                 self.session, rating_data.timestamp, rating_data.room_id
             )
+            if not rating_data.programme_id in [
+                programme.id for programme in rating_session.subject.programmes
+            ]:
+                logger.error(
+                    f"Programme ID {rating_data.programme_id} is not valid for current session."
+                )
+                raise HTTPException(
+                    status_code=422,
+                    detail=f"Programme ID {rating_data.programme_id} is not valid for current session.",
+                )
+            if rating_data.room_id != rating_session.room_id:
+                logger.error(
+                    f"Room ID {rating_data.programme_id} is not valid for current session."
+                )
+                raise HTTPException(
+                    status_code=422,
+                    detail=f"Room ID {rating_data.programme_id} is not valid for current session.",
+                )
             new_rating = Rating(
                 rating_clarity=rating_data.rating_clarity,
                 rating_interactivity=rating_data.rating_interactivity,
@@ -253,14 +271,12 @@ class RatingOperations:
                 subject_id=rating_session.subject_id,
                 programme_id=rating_data.programme_id,
                 room_id=rating_data.room_id,
-                professor_id=await get_subject_session_professor(
+                professor_id=await get_session_professor(
                     self.session, rating_session.subject_id, rating_session.type
                 ),
                 faculty_id=rating_session.faculty_id,
             )
-
             self.session.add(new_rating)
-            print(new_rating.professor_id)
             await self.session.commit()
             await self.session.refresh(new_rating)
             logger.info("Succesfully added new rating to database.")
