@@ -1,6 +1,6 @@
 from ...database.main import get_session
 from fastapi import APIRouter, Depends, Header
-from .schemas import RatingIn, RatingOut
+from .schemas import RatingIn, RatingOut, RatingAverageOut, WeekRatings
 from sqlalchemy.ext.asyncio import AsyncSession
 from .operations import RatingOperations
 from http import HTTPStatus
@@ -21,6 +21,44 @@ async def get_ratings(
 ) -> List[RatingOut]:
     logger.info(f"Received GET request on endpoint /api/ratings from IP {client_ip}.")
     response = await RatingOperations(session).get_ratings(
+        professor_id, subject_id, session_type
+    )
+    return response
+
+
+@ratings_routes.get(
+    "/average", response_model=RatingAverageOut, status_code=HTTPStatus.OK
+)
+async def get_ratings(
+    professor_id: int = None,
+    subject_id: int = None,
+    session_type: str = None,
+    client_ip: str = Header(None, alias="X-Real-IP"),
+    session: AsyncSession = Depends(get_session),
+) -> RatingAverageOut:
+    logger.info(
+        f"Received GET request on endpoint /api/ratings/average from IP {client_ip}."
+    )
+    response = await RatingOperations(session).get_ratings_average(
+        professor_id, subject_id, session_type
+    )
+    return response
+
+
+@ratings_routes.get(
+    "/graph", response_model=dict[str, WeekRatings], status_code=HTTPStatus.OK
+)
+async def get_ratings(
+    professor_id: int = None,
+    subject_id: int = None,
+    session_type: str = None,
+    client_ip: str = Header(None, alias="X-Real-IP"),
+    session: AsyncSession = Depends(get_session),
+) -> dict[str, WeekRatings]:
+    logger.info(
+        f"Received GET request on endpoint /api/ratings/graph from IP {client_ip}."
+    )
+    response = await RatingOperations(session).get_ratings_graph(
         professor_id, subject_id, session_type
     )
     return response

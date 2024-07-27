@@ -1,6 +1,7 @@
 from __future__ import annotations
 from pydantic import BaseModel
 from datetime import datetime
+from typing import Dict, List, Optional
 
 
 class RatingBase(BaseModel):
@@ -30,3 +31,23 @@ class RatingOut(RatingBase):
     professor_id: int
     faculty_id: int
     room_id: int
+
+
+class RatingAverageOut(BaseModel):
+    rating_overall_average: float
+    rating_clarity_average: float
+    rating_interactivity_average: float
+    rating_relevance_average: float
+    rating_comprehension_average: float
+
+
+class WeekRatings(BaseModel):
+    clarity: Optional[float] = None
+    interactivity: Optional[float] = None
+    relevance: Optional[float] = None
+    comprehension: Optional[float] = None
+    overall: Optional[float] = None
+
+
+class GraphDataRatings(BaseModel):
+    week_ratings: Dict[str, WeekRatings]
