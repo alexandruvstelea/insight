@@ -11,6 +11,9 @@ from datetime import timedelta
 from fastapi.responses import JSONResponse
 from sqlalchemy.exc import SQLAlchemyError
 from fastapi import HTTPException
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class WeekOperations:
@@ -20,18 +23,24 @@ class WeekOperations:
 
     async def get_weeks(self) -> List[WeekOut]:
         try:
+            logger.info("Retrieving all weeks from database.")
             query = select(Week)
             result = await self.session.execute(query)
             weeks = result.scalars().unique().all()
-
             if weeks:
+                logger.info("Succesfully retrieved all weeks from database.")
                 return [week_to_out(week) for week in weeks]
+            logger.error("No weeks found.")
             raise HTTPException(status_code=404, detail="No weeks found.")
         except Exception as e:
+            logger.error(
+                f"An unexpected error has occured while retrieving weeks:\n{e}"
+            )
             raise e
 
     async def add_weeks(self, week_data: WeekIn) -> List[WeekOut]:
         try:
+            logger.info(f"Adding to database weeks {week_data}.")
             weeks = []
             counter = 0
             intervals = week_data.intervals
@@ -58,22 +67,34 @@ class WeekOperations:
             await self.session.commit()
             for week in weeks:
                 await self.session.refresh(week)
+            logger.info("Succesfully added new weeks to database.")
             return [week_to_out(week) for week in weeks]
         except IntegrityError as e:
+            logger.error(
+                f"An integrity error has occured while adding weeks to database:\n{e}"
+            )
             error = format_integrity_error(e)
             raise HTTPException(
                 status_code=error.get("code"), detail=error.get("detail")
             )
         except Exception as e:
+            logger.error(
+                f"An unexpected error has occured while adding weeks to databse:\n{e}"
+            )
             raise e
 
     async def delete_weeks(self):
         try:
+            logger.info(f"Deleting weeks from database.")
             reset_sequence_query = text("TRUNCATE TABLE weeks RESTART IDENTITY;")
             await self.session.execute(reset_sequence_query)
             await self.session.commit()
+            logger.info(f"Succesfully deleted weeks from database.")
             return JSONResponse("Weeks table has been reset.")
         except SQLAlchemyError as e:
+            logger.error(
+                f"An unexpected error has occured while deleting weeks from database:\n{e}"
+            )
             raise HTTPException(
                 status_code=500,
                 detail=f"An error occurred while resetting the weeks table.\n{e}",

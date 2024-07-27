@@ -8,6 +8,9 @@ from sqlalchemy.ext.asyncio import (
     AsyncAttrs,
 )
 from ..config import settings
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 SQLALCHEMY_DATABASE_URL = f"postgresql+asyncpg://{settings.POSTGRES_USER}:{settings.POSTGRES_PASSWORD}@{settings.POSTGRES_HOST}/{settings.POSTGRES_DB_NAME}"
@@ -17,6 +20,7 @@ engine = create_async_engine(SQLALCHEMY_DATABASE_URL)
 
 
 async def init_db():
+    logger.info("Initializing database.")
     async with engine.begin() as conn:
         from .models.faculty import Faculty
         from .models.building import Building
@@ -32,9 +36,11 @@ async def init_db():
         from .models.ratings import Rating
 
         await conn.run_sync(AlchemyAsyncBase.metadata.create_all)
+        logger.info("Database initialization complete.")
 
 
 async def get_session() -> AsyncGenerator[AsyncSession, None]:
+    logger.info("Retrieving database session.")
     session_factory = async_sessionmaker(
         engine, expire_on_commit=False, class_=AsyncSession
     )
@@ -42,6 +48,9 @@ async def get_session() -> AsyncGenerator[AsyncSession, None]:
         try:
             yield session
         except IntegrityError as e:
+            logger.error(
+                "An integrity error has occured while retrieving database session."
+            )
             await session.rollback()
             raise e
 
