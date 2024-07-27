@@ -25,7 +25,7 @@ async def get_week_from_timestamp(session: AsyncSession, timestamp: datetime) ->
             return week
         raise HTTPException(
             status_code=404,
-            detail=f"Could not find current week for timestamp={timestamp}.",
+            detail=f"Could not find current week for timestamp {timestamp}.",
         )
     except Exception as e:
         logger.error(

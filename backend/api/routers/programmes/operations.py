@@ -156,9 +156,9 @@ class ProgrammeOperations:
                 await self.session.delete(programme)
                 await self.session.commit()
                 logger.info(f"Succesfully deleted programme with ID {id}.")
-                return JSONResponse(f"Programme with ID={id} deleted.")
+                return JSONResponse(f"Programme with ID {id} deleted.")
             logger.error(f"No programme with ID {id}.")
-            raise HTTPException(status_code=404, detail=f"No programme with id={id}.")
+            raise HTTPException(status_code=404, detail=f"No programme with ID {id}.")
         except Exception as e:
             logger.error(
                 f"An unexpected error has occured while deleting programme with ID {id}:\n{e}"

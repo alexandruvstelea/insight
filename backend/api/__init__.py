@@ -8,6 +8,7 @@ from api.routers.subjects.routes import subjects_router
 from api.routers.sessions.routes import sessions_router
 from api.routers.weeks.routes import weeks_routes
 from api.routers.ratings.routes import ratings_routes
+from api.routers.comments.routes import comments_routes
 from contextlib import asynccontextmanager
 from .database.main import init_db
 import logging
@@ -42,3 +43,4 @@ app.include_router(subjects_router)
 app.include_router(sessions_router)
 app.include_router(weeks_routes)
 app.include_router(ratings_routes)
+app.include_router(comments_routes)

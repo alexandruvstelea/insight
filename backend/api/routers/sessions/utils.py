@@ -150,6 +150,6 @@ async def get_session_from_timestamp(
         )
     except Exception as e:
         logger.error(
-            f"An unexpected error has occured while retrieving session from timestampt {timestamp} and room_id {room_id}:\n{e}"
+            f"An unexpected error has occured while retrieving session from timestamp {timestamp} and room_id {room_id}:\n{e}"
         )
         raise e

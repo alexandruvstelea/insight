@@ -34,6 +34,7 @@ async def init_db():
         from .models.session import Session
         from .models.weeks import Week
         from .models.ratings import Rating
+        from .models.comments import Comment
 
         await conn.run_sync(AlchemyAsyncBase.metadata.create_all)
         logger.info("Database initialization complete.")
