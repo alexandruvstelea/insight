@@ -10,8 +10,12 @@ from api.routers.weeks.routes import weeks_routes
 from api.routers.ratings.routes import ratings_routes
 from api.routers.comments.routes import comments_routes
 from contextlib import asynccontextmanager
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
 from .database.main import init_db
+from .limiter import limiter
 import logging
+
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -34,6 +38,11 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="feedback-unitbv-api", lifespan=lifespan)
+
+
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
 app.include_router(faculties_router)
 app.include_router(buildings_router)
 app.include_router(rooms_router)
