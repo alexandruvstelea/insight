@@ -130,7 +130,7 @@ async def get_subject_semester(session: AsyncSession, subject_id: int) -> int:
         raise e
 
 
-async def get_subject_session_professor(
+async def get_session_professor(
     session: AsyncSession, subject_id: int, type: str
 ) -> int:
     try:
