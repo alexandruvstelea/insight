@@ -1,4 +1,0 @@
-flair
-python-dotenv
-translate
-psycopg2-binary
