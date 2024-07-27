@@ -65,7 +65,7 @@ class ProgrammeOperations:
                 )
                 return programme_to_out(programme)
             logger.error(f"No programme with ID {id} found in database.")
-            raise HTTPException(status_code=404, detail=f"No programme with id={id}.")
+            raise HTTPException(status_code=404, detail=f"No programme with ID {id}.")
         except Exception as e:
             logger.error(
                 f"An unexpected error has occured while retrieving programme with ID {id}:\n{e}"
@@ -133,7 +133,7 @@ class ProgrammeOperations:
                 logger.info(f"Succesfully updated programme with ID {id}.")
                 return programme_to_out(programme)
             logger.error(f"No programme with ID {id}")
-            raise HTTPException(status_code=404, detail=f"No programme with id={id}.")
+            raise HTTPException(status_code=404, detail=f"No programme with ID {id}.")
         except IntegrityError as e:
             logger.error(
                 f"An integrity error has occured while updating programme with ID {id}:\n{e}"

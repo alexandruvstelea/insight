@@ -20,10 +20,10 @@ async def get_comments(
     session: AsyncSession = Depends(get_session),
 ) -> List[CommentOut]:
     logger.info(f"Received GET request on endpoint /api/comments from IP {client_ip}.")
-    response = await CommentOperations(session).get_comments(
+    comments = await CommentOperations(session).get_comments(
         professor_id, subject_id, session_type
     )
-    return response
+    return comments
 
 
 @comments_routes.post("/", response_model=CommentOut, status_code=HTTPStatus.CREATED)

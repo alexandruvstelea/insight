@@ -155,7 +155,7 @@ class FacultyOperations:
                 logger.info(f"Succesfully deleted faculty with ID {id}.")
                 return JSONResponse(f"Faculty with ID={id} deleted.")
             logger.error(f"No faculty with ID {id}.")
-            raise HTTPException(status_code=404, detail=f"No faculty with id={id}")
+            raise HTTPException(status_code=404, detail=f"No faculty with ID {id}")
         except Exception as e:
             logger.error(
                 f"An unexpected error has occured while deleting faculty with ID {id}:\n{e}"

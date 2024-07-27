@@ -19,8 +19,8 @@ async def get_subjects(
     session: AsyncSession = Depends(get_session),
 ) -> List[SubjectOut]:
     logger.info(f"Received GET request on endpoint /api/subjects from IP {client_ip}.")
-    response = await SubjectOperations(session).get_subjects(faculty_id, professor_id)
-    return response
+    subjects = await SubjectOperations(session).get_subjects(faculty_id, professor_id)
+    return subjects
 
 
 @subjects_router.get("/{id}", response_model=SubjectOut, status_code=HTTPStatus.OK)
@@ -32,8 +32,8 @@ async def get_subject_by_id(
     logger.info(
         f"Received GET request on endpoint /api/subjects/id from IP {client_ip}."
     )
-    response = await SubjectOperations(session).get_subject_by_id(id)
-    return response
+    subject = await SubjectOperations(session).get_subject_by_id(id)
+    return subject
 
 
 @subjects_router.post("/", response_model=SubjectOut, status_code=HTTPStatus.CREATED)

@@ -17,8 +17,8 @@ async def get_weeks(
     session: AsyncSession = Depends(get_session),
 ) -> List[WeekOut]:
     logger.info(f"Received GET request on endpoint /api/weeks from IP {client_ip}.")
-    response = await WeekOperations(session).get_weeks()
-    return response
+    weeks = await WeekOperations(session).get_weeks()
+    return weeks
 
 
 @weeks_routes.post("/", response_model=List[WeekOut], status_code=HTTPStatus.CREATED)

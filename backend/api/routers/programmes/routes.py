@@ -22,8 +22,8 @@ async def get_programmes(
     logger.info(
         f"Received GET request on endpoint /api/programmes from IP {client_ip}."
     )
-    response = await ProgrammeOperations(session).get_programmes(faculty_id)
-    return response
+    programmes = await ProgrammeOperations(session).get_programmes(faculty_id)
+    return programmes
 
 
 @programmes_router.get("/{id}", response_model=ProgrammeOut, status_code=HTTPStatus.OK)
@@ -35,8 +35,8 @@ async def get_programme_by_id(
     logger.info(
         f"Received GET request on endpoint /api/programmes/id from IP {client_ip}."
     )
-    response = await ProgrammeOperations(session).get_programme_by_id(id)
-    return response
+    programme = await ProgrammeOperations(session).get_programme_by_id(id)
+    return programme
 
 
 @programmes_router.post(

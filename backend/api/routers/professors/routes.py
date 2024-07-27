@@ -22,8 +22,8 @@ async def get_professors(
     logger.info(
         f"Received GET request on endpoint /api/professors from IP {client_ip}."
     )
-    response = await ProfessorOperations(session).get_professors(faculty_id)
-    return response
+    professors = await ProfessorOperations(session).get_professors(faculty_id)
+    return professors
 
 
 @professors_router.get("/{id}", response_model=ProfessorOut, status_code=HTTPStatus.OK)
@@ -35,8 +35,8 @@ async def get_professor_by_id(
     logger.info(
         f"Received GET request on endpoint /api/professors/id from IP {client_ip}."
     )
-    response = await ProfessorOperations(session).get_professor_by_id(id)
-    return response
+    professor = await ProfessorOperations(session).get_professor_by_id(id)
+    return professor
 
 
 @professors_router.post(

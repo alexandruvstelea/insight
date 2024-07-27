@@ -60,7 +60,7 @@ class ProfessorOperations:
                 )
                 return professor_to_out(professor)
             logger.error(f"No professor with ID {id} found in database.")
-            raise HTTPException(status_code=404, detail=f"No professor with id={id}.")
+            raise HTTPException(status_code=404, detail=f"No professor with ID {id}.")
         except Exception as e:
             logger.error(
                 f"An unexpected error has occured while retrieving professor with ID {id}:\n{e}"
@@ -128,7 +128,7 @@ class ProfessorOperations:
                 logger.info(f"Succesfully updated professor with ID {id}.")
                 return professor_to_out(professor)
             logger.error(f"No professor with ID {id}")
-            raise HTTPException(status_code=404, detail=f"No professor with id={id}.")
+            raise HTTPException(status_code=404, detail=f"No professor with ID {id}.")
         except IntegrityError as e:
             logger.error(
                 f"An integrity error has occured while updating professor with ID {id}:\n{e}"
@@ -153,7 +153,7 @@ class ProfessorOperations:
                 logger.info(f"Succesfully deleted professor with ID {id}.")
                 return JSONResponse(f"Professor with ID={id} deleted.")
             logger.error(f"No professor with ID {id}.")
-            raise HTTPException(status_code=404, detail=f"No professor with id={id}.")
+            raise HTTPException(status_code=404, detail=f"No professor with ID {id}.")
         except Exception as e:
             logger.error(
                 f"An unexpected error has occured while deleting professor with ID {id}:\n{e}"

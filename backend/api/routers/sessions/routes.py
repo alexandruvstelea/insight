@@ -15,24 +15,24 @@ sessions_router = APIRouter(prefix="/api/sessions")
 async def get_sessions(
     faculty_id: int = None,
     client_ip: str = Header(None, alias="X-Real-IP"),
-    session: AsyncSession = Depends(get_session),
+    db_session: AsyncSession = Depends(get_session),
 ) -> List[SessionOut]:
     logger.info(f"Received GET request on endpoint /api/sessions from IP {client_ip}.")
-    response = await SessionOperations(session).get_sessions(faculty_id)
-    return response
+    sessions = await SessionOperations(db_session).get_sessions(faculty_id)
+    return sessions
 
 
 @sessions_router.get("/{id}", response_model=SessionOut, status_code=HTTPStatus.OK)
 async def get_session_by_id(
     id: int,
     client_ip: str = Header(None, alias="X-Real-IP"),
-    session: AsyncSession = Depends(get_session),
+    db_session: AsyncSession = Depends(get_session),
 ) -> SessionOut:
     logger.info(
         f"Received GET request on endpoint /api/sessions/id from IP {client_ip}."
     )
-    response = await SessionOperations(session).get_session_by_id(id)
-    return response
+    session = await SessionOperations(db_session).get_session_by_id(id)
+    return session
 
 
 @sessions_router.post("/", response_model=SessionOut, status_code=HTTPStatus.CREATED)

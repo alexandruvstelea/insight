@@ -20,16 +20,16 @@ async def get_ratings(
     session: AsyncSession = Depends(get_session),
 ) -> List[RatingOut]:
     logger.info(f"Received GET request on endpoint /api/ratings from IP {client_ip}.")
-    response = await RatingOperations(session).get_ratings(
+    ratings = await RatingOperations(session).get_ratings(
         professor_id, subject_id, session_type
     )
-    return response
+    return ratings
 
 
 @ratings_routes.get(
     "/average", response_model=RatingAverageOut, status_code=HTTPStatus.OK
 )
-async def get_ratings(
+async def get_average_ratings(
     professor_id: int = None,
     subject_id: int = None,
     session_type: str = None,
@@ -39,16 +39,16 @@ async def get_ratings(
     logger.info(
         f"Received GET request on endpoint /api/ratings/average from IP {client_ip}."
     )
-    response = await RatingOperations(session).get_ratings_average(
+    ratings = await RatingOperations(session).get_ratings_average(
         professor_id, subject_id, session_type
     )
-    return response
+    return ratings
 
 
 @ratings_routes.get(
     "/graph", response_model=dict[str, WeekRatings], status_code=HTTPStatus.OK
 )
-async def get_ratings(
+async def get_graph_ratings(
     professor_id: int = None,
     subject_id: int = None,
     session_type: str = None,
@@ -58,10 +58,10 @@ async def get_ratings(
     logger.info(
         f"Received GET request on endpoint /api/ratings/graph from IP {client_ip}."
     )
-    response = await RatingOperations(session).get_ratings_graph(
+    ratings = await RatingOperations(session).get_ratings_graph(
         professor_id, subject_id, session_type
     )
-    return response
+    return ratings
 
 
 @ratings_routes.post("/", response_model=RatingOut, status_code=HTTPStatus.CREATED)

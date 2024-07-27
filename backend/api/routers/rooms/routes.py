@@ -18,8 +18,8 @@ async def get_rooms(
     session: AsyncSession = Depends(get_session),
 ) -> List[RoomOut]:
     logger.info(f"Received GET request on endpoint /api/rooms from IP {client_ip}.")
-    response = await RoomOperations(session).get_rooms(faculty_id)
-    return response
+    rooms = await RoomOperations(session).get_rooms(faculty_id)
+    return rooms
 
 
 @rooms_router.get("/{id}", response_model=RoomOut, status_code=HTTPStatus.OK)
@@ -29,8 +29,8 @@ async def get_room_by_id(
     session: AsyncSession = Depends(get_session),
 ) -> RoomOut:
     logger.info(f"Received GET request on endpoint /api/rooms/ip from IP {client_ip}.")
-    response = await RoomOperations(session).get_room_by_id(id)
-    return response
+    room = await RoomOperations(session).get_room_by_id(id)
+    return room
 
 
 @rooms_router.post("/", response_model=RoomOut, status_code=HTTPStatus.CREATED)

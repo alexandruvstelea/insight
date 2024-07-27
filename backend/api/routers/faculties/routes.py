@@ -17,8 +17,8 @@ async def get_faculties(
     session: AsyncSession = Depends(get_session),
 ) -> List[FacultyOut]:
     logger.info(f"Received GET request on endpoint /api/faculties from IP {client_ip}.")
-    response = await FacultyOperations(session).get_faculties()
-    return response
+    faculties = await FacultyOperations(session).get_faculties()
+    return faculties
 
 
 @faculties_router.get("/{id}", response_model=FacultyOut, status_code=HTTPStatus.OK)
@@ -30,8 +30,8 @@ async def get_faculty_by_id(
     logger.info(
         f"Received GET request on endpoint /api/faculties/id from IP {client_ip}."
     )
-    response = await FacultyOperations(session).get_faculty_by_id(id)
-    return response
+    faculty = await FacultyOperations(session).get_faculty_by_id(id)
+    return faculty
 
 
 @faculties_router.post("/", response_model=FacultyOut, status_code=HTTPStatus.CREATED)
