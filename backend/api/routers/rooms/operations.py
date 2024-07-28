@@ -23,10 +23,10 @@ class RoomOperations:
 
     async def get_rooms(self, faculty_id: int) -> List[RoomOut]:
         try:
-            logger.info(
-                f"Retrieving all rooms with faculty ID {faculty_id} from database."
-            )
             if faculty_id:
+                logger.info(
+                    f"Retrieving all rooms with faculty ID {faculty_id} from database."
+                )
                 query = (
                     select(Room)
                     .options(joinedload(Room.building))

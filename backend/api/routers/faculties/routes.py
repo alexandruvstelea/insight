@@ -1,10 +1,12 @@
 from ...database.main import get_session
-from fastapi import APIRouter, Depends, Header, Request
+from fastapi import APIRouter, Depends, Header
 from .schemas import FacultyIn, FacultyOut
 from sqlalchemy.ext.asyncio import AsyncSession
 from .operations import FacultyOperations
 from http import HTTPStatus
-from ...limiter import limiter
+from fastapi_limiter.depends import RateLimiter
+from ...utility.authorizations import authorize
+from ..users.utils import get_current_user
 from typing import List
 import logging
 
@@ -12,10 +14,15 @@ logger = logging.getLogger(__name__)
 faculties_router = APIRouter(prefix="/api/faculties")
 
 
-@faculties_router.get("/", response_model=List[FacultyOut], status_code=HTTPStatus.OK)
-@limiter.limit("50/minute")
+@authorize(role=["admin"])
+@faculties_router.get(
+    "/",
+    response_model=List[FacultyOut],
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
 async def get_faculties(
-    request: Request,
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> List[FacultyOut]:
@@ -24,11 +31,16 @@ async def get_faculties(
     return faculties
 
 
-@faculties_router.get("/{id}", response_model=FacultyOut, status_code=HTTPStatus.OK)
-@limiter.limit("50/minute")
+@authorize(role=["admin"])
+@faculties_router.get(
+    "/{id}",
+    response_model=FacultyOut,
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
 async def get_faculty_by_id(
-    request: Request,
     id: int,
+    current_user: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session),
     client_ip: str = Header(None, alias="X-Real-IP"),
 ) -> FacultyOut:
@@ -39,11 +51,16 @@ async def get_faculty_by_id(
     return faculty
 
 
-@faculties_router.post("/", response_model=FacultyOut, status_code=HTTPStatus.CREATED)
-@limiter.limit("50/minute")
+@authorize(role=["admin"])
+@faculties_router.post(
+    "/",
+    response_model=FacultyOut,
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.CREATED,
+)
 async def add_faculty(
-    request: Request,
     faculty_data: FacultyIn,
+    current_user: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session),
     client_ip: str = Header(None, alias="X-Real-IP"),
 ) -> FacultyOut:
@@ -54,12 +71,17 @@ async def add_faculty(
     return response
 
 
-@faculties_router.put("/{id}", response_model=FacultyOut, status_code=HTTPStatus.OK)
-@limiter.limit("50/minute")
+@authorize(role=["admin"])
+@faculties_router.put(
+    "/{id}",
+    response_model=FacultyOut,
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
 async def update_faculty(
-    request: Request,
     id: int,
     new_faculty_data: FacultyIn,
+    current_user: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session),
     client_ip: str = Header(None, alias="X-Real-IP"),
 ) -> FacultyOut:
@@ -70,11 +92,15 @@ async def update_faculty(
     return response
 
 
-@faculties_router.delete("/{id}", status_code=HTTPStatus.OK)
-@limiter.limit("50/minute")
+@authorize(role=["admin"])
+@faculties_router.delete(
+    "/{id}",
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
 async def delete_faculty(
-    request: Request,
     id: int,
+    current_user: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session),
     client_ip: str = Header(None, alias="X-Real-IP"),
 ) -> str:
