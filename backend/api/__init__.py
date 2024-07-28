@@ -9,11 +9,12 @@ from api.routers.sessions.routes import sessions_router
 from api.routers.weeks.routes import weeks_routes
 from api.routers.ratings.routes import ratings_routes
 from api.routers.comments.routes import comments_routes
+from api.routers.users.routes import users_router
 from contextlib import asynccontextmanager
-from slowapi import _rate_limit_exceeded_handler
-from slowapi.errors import RateLimitExceeded
+from fastapi_limiter import FastAPILimiter
+import redis.asyncio as redis
 from .database.main import init_db
-from .limiter import limiter
+from .config import settings
 import logging
 
 
@@ -34,14 +35,16 @@ logger.info(
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await init_db()
+    redis_connection = redis.from_url(
+        f"redis://{settings.REDIS_HOST}:{settings.REDIS_PORT}", encoding="utf8"
+    )
+    await FastAPILimiter.init(redis_connection)
     yield
+    await FastAPILimiter.close()
 
 
 app = FastAPI(title="feedback-unitbv-api", lifespan=lifespan)
 
-
-app.state.limiter = limiter
-app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 app.include_router(faculties_router)
 app.include_router(buildings_router)
@@ -53,3 +56,4 @@ app.include_router(sessions_router)
 app.include_router(weeks_routes)
 app.include_router(ratings_routes)
 app.include_router(comments_routes)
+app.include_router(users_router)

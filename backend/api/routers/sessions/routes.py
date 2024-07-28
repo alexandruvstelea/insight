@@ -1,10 +1,12 @@
 from ...database.main import get_session
-from fastapi import APIRouter, Depends, Header, Request
+from fastapi import APIRouter, Depends, Header
 from .schemas import SessionIn, SessionOut
 from sqlalchemy.ext.asyncio import AsyncSession
 from .operations import SessionOperations
 from http import HTTPStatus
-from ...limiter import limiter
+from fastapi_limiter.depends import RateLimiter
+from ...utility.authorizations import authorize
+from ..users.utils import get_current_user
 from typing import List
 import logging
 
@@ -12,10 +14,13 @@ logger = logging.getLogger(__name__)
 sessions_router = APIRouter(prefix="/api/sessions")
 
 
-@sessions_router.get("/", response_model=List[SessionOut], status_code=HTTPStatus.OK)
-@limiter.limit("50/minute")
+@sessions_router.get(
+    "/",
+    response_model=List[SessionOut],
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
 async def get_sessions(
-    request: Request,
     faculty_id: int = None,
     client_ip: str = Header(None, alias="X-Real-IP"),
     db_session: AsyncSession = Depends(get_session),
@@ -25,10 +30,13 @@ async def get_sessions(
     return sessions
 
 
-@sessions_router.get("/{id}", response_model=SessionOut, status_code=HTTPStatus.OK)
-@limiter.limit("50/minute")
+@sessions_router.get(
+    "/{id}",
+    response_model=SessionOut,
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
 async def get_session_by_id(
-    request: Request,
     id: int,
     client_ip: str = Header(None, alias="X-Real-IP"),
     db_session: AsyncSession = Depends(get_session),
@@ -40,11 +48,16 @@ async def get_session_by_id(
     return session
 
 
-@sessions_router.post("/", response_model=SessionOut, status_code=HTTPStatus.CREATED)
-@limiter.limit("50/minute")
+@authorize(role=["admin"])
+@sessions_router.post(
+    "/",
+    response_model=SessionOut,
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.CREATED,
+)
 async def add_session(
-    request: Request,
     session_data: SessionIn,
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> SessionOut:
@@ -53,12 +66,17 @@ async def add_session(
     return response
 
 
-@sessions_router.put("/{id}", response_model=SessionOut, status_code=HTTPStatus.OK)
-@limiter.limit("50/minute")
+@authorize(role=["admin"])
+@sessions_router.put(
+    "/{id}",
+    response_model=SessionOut,
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
 async def update_session(
-    request: Request,
     id: int,
     new_session_data: SessionIn,
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> SessionOut:
@@ -69,11 +87,15 @@ async def update_session(
     return response
 
 
-@sessions_router.delete("/{id}", status_code=HTTPStatus.OK)
-@limiter.limit("50/minute")
+@authorize(role=["admin"])
+@sessions_router.delete(
+    "/{id}",
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
 async def delete_session(
-    request: Request,
     id: int,
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> str:

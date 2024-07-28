@@ -1,9 +1,9 @@
 from ...database.main import get_session
-from fastapi import APIRouter, Depends, Header, Request
+from fastapi import APIRouter, Depends, Header
 from .schemas import RatingIn, RatingOut, RatingAverageOut, WeekRatings
 from sqlalchemy.ext.asyncio import AsyncSession
 from .operations import RatingOperations
-from ...limiter import limiter
+from fastapi_limiter.depends import RateLimiter
 from http import HTTPStatus
 from typing import List
 import logging
@@ -12,10 +12,13 @@ logger = logging.getLogger(__name__)
 ratings_routes = APIRouter(prefix="/api/ratings")
 
 
-@ratings_routes.get("/", response_model=List[RatingOut], status_code=HTTPStatus.OK)
-@limiter.limit("50/minute")
+@ratings_routes.get(
+    "/",
+    response_model=List[RatingOut],
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
 async def get_ratings(
-    request: Request,
     professor_id: int = None,
     subject_id: int = None,
     session_type: str = None,
@@ -30,11 +33,12 @@ async def get_ratings(
 
 
 @ratings_routes.get(
-    "/average", response_model=RatingAverageOut, status_code=HTTPStatus.OK
+    "/average",
+    response_model=RatingAverageOut,
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
 )
-@limiter.limit("50/minute")
 async def get_average_ratings(
-    request: Request,
     professor_id: int = None,
     subject_id: int = None,
     session_type: str = None,
@@ -51,11 +55,12 @@ async def get_average_ratings(
 
 
 @ratings_routes.get(
-    "/graph", response_model=dict[str, WeekRatings], status_code=HTTPStatus.OK
+    "/graph",
+    response_model=dict[str, WeekRatings],
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
 )
-@limiter.limit("50/minute")
 async def get_graph_ratings(
-    request: Request,
     professor_id: int = None,
     subject_id: int = None,
     session_type: str = None,
@@ -71,10 +76,13 @@ async def get_graph_ratings(
     return ratings
 
 
-@ratings_routes.post("/", response_model=RatingOut, status_code=HTTPStatus.CREATED)
-@limiter.limit("50/minute")
+@ratings_routes.post(
+    "/",
+    response_model=RatingOut,
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.CREATED,
+)
 async def add_rating(
-    request: Request,
     rating_data: RatingIn,
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),

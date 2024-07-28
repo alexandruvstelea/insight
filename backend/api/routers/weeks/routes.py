@@ -1,21 +1,28 @@
 from ...database.main import get_session
-from fastapi import APIRouter, Depends, Header, Request
+from fastapi import APIRouter, Depends, Header
 from .schemas import WeekIn, WeekOut
 from sqlalchemy.ext.asyncio import AsyncSession
 from .operations import WeekOperations
 from http import HTTPStatus
-from ...limiter import limiter
+from fastapi_limiter.depends import RateLimiter
 from typing import List
+from ...utility.authorizations import authorize
+from ..users.utils import get_current_user
 import logging
 
 logger = logging.getLogger(__name__)
 weeks_routes = APIRouter(prefix="/api/weeks")
 
 
-@weeks_routes.get("/", response_model=List[WeekOut], status_code=HTTPStatus.OK)
-@limiter.limit("50/minute")
+@authorize(role=["admin"])
+@weeks_routes.get(
+    "/",
+    response_model=List[WeekOut],
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
 async def get_weeks(
-    request: Request,
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> List[WeekOut]:
@@ -24,11 +31,16 @@ async def get_weeks(
     return weeks
 
 
-@weeks_routes.post("/", response_model=List[WeekOut], status_code=HTTPStatus.CREATED)
-@limiter.limit("50/minute")
+@authorize(role=["admin"])
+@weeks_routes.post(
+    "/",
+    response_model=List[WeekOut],
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.CREATED,
+)
 async def add_weeks(
-    request: Request,
     week_data: WeekIn,
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> List[WeekOut]:
@@ -37,10 +49,14 @@ async def add_weeks(
     return response
 
 
-@weeks_routes.delete("/", status_code=HTTPStatus.OK)
-@limiter.limit("50/minute")
+@authorize(role=["admin"])
+@weeks_routes.delete(
+    "/",
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
 async def delete_weeks(
-    request: Request,
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> str:

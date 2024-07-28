@@ -1,10 +1,12 @@
 from ...database.main import get_session
-from fastapi import APIRouter, Depends, Header, Request
+from fastapi import APIRouter, Depends, Header
 from .schemas import ProgrammeIn, ProgrammeOut
 from sqlalchemy.ext.asyncio import AsyncSession
 from .operations import ProgrammeOperations
 from http import HTTPStatus
-from ...limiter import limiter
+from fastapi_limiter.depends import RateLimiter
+from ...utility.authorizations import authorize
+from ..users.utils import get_current_user
 from typing import List
 import logging
 
@@ -13,11 +15,12 @@ programmes_router = APIRouter(prefix="/api/programmes")
 
 
 @programmes_router.get(
-    "/", response_model=List[ProgrammeOut], status_code=HTTPStatus.OK
+    "/",
+    response_model=List[ProgrammeOut],
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
 )
-@limiter.limit("50/minute")
 async def get_programmes(
-    request: Request,
     faculty_id: int = None,
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
@@ -29,10 +32,13 @@ async def get_programmes(
     return programmes
 
 
-@programmes_router.get("/{id}", response_model=ProgrammeOut, status_code=HTTPStatus.OK)
-@limiter.limit("50/minute")
+@programmes_router.get(
+    "/{id}",
+    response_model=ProgrammeOut,
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
 async def get_programme_by_id(
-    request: Request,
     id: int,
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
@@ -44,13 +50,16 @@ async def get_programme_by_id(
     return programme
 
 
+@authorize(role=["admin"])
 @programmes_router.post(
-    "/", response_model=ProgrammeOut, status_code=HTTPStatus.CREATED
+    "/",
+    response_model=ProgrammeOut,
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.CREATED,
 )
-@limiter.limit("50/minute")
 async def add_programme(
-    request: Request,
     programme_data: ProgrammeIn,
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> ProgrammeOut:
@@ -61,12 +70,17 @@ async def add_programme(
     return response
 
 
-@programmes_router.put("/{id}", response_model=ProgrammeOut, status_code=HTTPStatus.OK)
-@limiter.limit("50/minute")
+@authorize(role=["admin"])
+@programmes_router.put(
+    "/{id}",
+    response_model=ProgrammeOut,
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
 async def update_programme(
-    request: Request,
     id: int,
     new_programme_data: ProgrammeIn,
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> ProgrammeOut:
@@ -79,11 +93,15 @@ async def update_programme(
     return response
 
 
-@programmes_router.delete("/{id}", status_code=HTTPStatus.OK)
-@limiter.limit("50/minute")
+@authorize(role=["admin"])
+@programmes_router.delete(
+    "/{id}",
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
 async def delete_programme(
-    request: Request,
     id: int,
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> str:

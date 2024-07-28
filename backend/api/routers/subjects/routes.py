@@ -1,10 +1,12 @@
 from ...database.main import get_session
-from fastapi import APIRouter, Depends, Header, Request
+from fastapi import APIRouter, Depends, Header
 from .schemas import SubjectIn, SubjectOut
 from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi_limiter.depends import RateLimiter
 from .operations import SubjectOperations
 from http import HTTPStatus
-from ...limiter import limiter
+from ...utility.authorizations import authorize
+from ..users.utils import get_current_user
 from typing import List
 import logging
 
@@ -12,10 +14,13 @@ logger = logging.getLogger(__name__)
 subjects_router = APIRouter(prefix="/api/subjects")
 
 
-@subjects_router.get("/", response_model=List[SubjectOut], status_code=HTTPStatus.OK)
-@limiter.limit("50/minute")
+@subjects_router.get(
+    "/",
+    response_model=List[SubjectOut],
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
 async def get_subjects(
-    request: Request,
     faculty_id: int = None,
     professor_id: int = None,
     client_ip: str = Header(None, alias="X-Real-IP"),
@@ -26,10 +31,13 @@ async def get_subjects(
     return subjects
 
 
-@subjects_router.get("/{id}", response_model=SubjectOut, status_code=HTTPStatus.OK)
-@limiter.limit("50/minute")
+@subjects_router.get(
+    "/{id}",
+    response_model=SubjectOut,
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
 async def get_subject_by_id(
-    request: Request,
     id: int,
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
@@ -41,11 +49,16 @@ async def get_subject_by_id(
     return subject
 
 
-@subjects_router.post("/", response_model=SubjectOut, status_code=HTTPStatus.CREATED)
-@limiter.limit("50/minute")
+@authorize(role=["admin"])
+@subjects_router.post(
+    "/",
+    response_model=SubjectOut,
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.CREATED,
+)
 async def add_subject(
-    request: Request,
     subject_data: SubjectIn,
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> SubjectOut:
@@ -54,12 +67,17 @@ async def add_subject(
     return response
 
 
-@subjects_router.put("/{id}", response_model=SubjectOut, status_code=HTTPStatus.OK)
-@limiter.limit("50/minute")
+@authorize(role=["admin"])
+@subjects_router.put(
+    "/{id}",
+    response_model=SubjectOut,
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
 async def update_subject(
-    request: Request,
     id: int,
     new_subject_data: SubjectIn,
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> SubjectOut:
@@ -70,11 +88,15 @@ async def update_subject(
     return response
 
 
-@subjects_router.delete("/{id}", status_code=HTTPStatus.OK)
-@limiter.limit("50/minute")
+@authorize(role=["admin"])
+@subjects_router.delete(
+    "/{id}",
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
 async def delete_subject(
-    request: Request,
     id: int,
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> str:

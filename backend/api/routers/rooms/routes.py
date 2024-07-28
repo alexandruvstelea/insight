@@ -1,10 +1,12 @@
 from ...database.main import get_session
-from fastapi import APIRouter, Depends, Header, Request
+from fastapi import APIRouter, Depends, Header
 from .schemas import RoomIn, RoomOut
 from sqlalchemy.ext.asyncio import AsyncSession
 from .operations import RoomOperations
 from http import HTTPStatus
-from ...limiter import limiter
+from fastapi_limiter.depends import RateLimiter
+from ...utility.authorizations import authorize
+from ..users.utils import get_current_user
 from typing import List
 import logging
 
@@ -12,11 +14,16 @@ logger = logging.getLogger(__name__)
 rooms_router = APIRouter(prefix="/api/rooms")
 
 
-@rooms_router.get("/", response_model=List[RoomOut], status_code=HTTPStatus.OK)
-@limiter.limit("50/minute")
+@authorize(role=["admin"])
+@rooms_router.get(
+    "/",
+    response_model=List[RoomOut],
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
 async def get_rooms(
-    request: Request,
     faculty_id: int = None,
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> List[RoomOut]:
@@ -25,11 +32,16 @@ async def get_rooms(
     return rooms
 
 
-@rooms_router.get("/{id}", response_model=RoomOut, status_code=HTTPStatus.OK)
-@limiter.limit("50/minute")
+@authorize(role=["admin"])
+@rooms_router.get(
+    "/{id}",
+    response_model=RoomOut,
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
 async def get_room_by_id(
-    request: Request,
     id: int,
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> RoomOut:
@@ -38,11 +50,16 @@ async def get_room_by_id(
     return room
 
 
-@rooms_router.post("/", response_model=RoomOut, status_code=HTTPStatus.CREATED)
-@limiter.limit("50/minute")
+@authorize(role=["admin"])
+@rooms_router.post(
+    "/",
+    response_model=RoomOut,
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.CREATED,
+)
 async def add_room(
-    request: Request,
     room_data: RoomIn,
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> RoomOut:
@@ -51,12 +68,17 @@ async def add_room(
     return response
 
 
-@rooms_router.put("/{id}", response_model=RoomOut, status_code=HTTPStatus.OK)
-@limiter.limit("50/minute")
+@authorize(role=["admin"])
+@rooms_router.put(
+    "/{id}",
+    response_model=RoomOut,
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
 async def update_room(
-    request: Request,
     id: int,
     new_room_data: RoomIn,
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> RoomOut:
@@ -65,11 +87,15 @@ async def update_room(
     return response
 
 
-@rooms_router.delete("/{id}", status_code=HTTPStatus.OK)
-@limiter.limit("50/minute")
+@authorize(role=["admin"])
+@rooms_router.delete(
+    "/{id}",
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
 async def delete_room(
-    request: Request,
     id: int,
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> str:

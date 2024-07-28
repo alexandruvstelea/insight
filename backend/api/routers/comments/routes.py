@@ -1,10 +1,12 @@
 from ...database.main import get_session
-from fastapi import APIRouter, Depends, Header, Request
+from fastapi import APIRouter, Depends, Header
 from .schemas import CommentIn, CommentOut
 from sqlalchemy.ext.asyncio import AsyncSession
 from .operations import CommentOperations
 from http import HTTPStatus
-from ...limiter import limiter
+from fastapi_limiter.depends import RateLimiter
+from ...utility.authorizations import authorize
+from ..users.utils import get_current_user
 from typing import List
 import logging
 
@@ -12,13 +14,18 @@ logger = logging.getLogger(__name__)
 comments_routes = APIRouter(prefix="/api/comments")
 
 
-@comments_routes.get("/", response_model=List[CommentOut], status_code=HTTPStatus.OK)
-@limiter.limit("50/minute")
+@authorize(role=["admin", "professor"])
+@comments_routes.get(
+    "/",
+    response_model=List[CommentOut],
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
 async def get_comments(
-    request: Request,
     professor_id: int = None,
     subject_id: int = None,
     session_type: str = None,
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> List[CommentOut]:
@@ -29,10 +36,13 @@ async def get_comments(
     return comments
 
 
-@comments_routes.post("/", response_model=CommentOut, status_code=HTTPStatus.CREATED)
-@limiter.limit("50/minute")
+@comments_routes.post(
+    "/",
+    response_model=CommentOut,
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.CREATED,
+)
 async def add_comment(
-    request: Request,
     comment_data: CommentIn,
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
@@ -42,11 +52,15 @@ async def add_comment(
     return response
 
 
-@comments_routes.delete("/{id}", status_code=HTTPStatus.OK)
-@limiter.limit("50/minute")
+@authorize(role=["admin"])
+@comments_routes.delete(
+    "/{id}",
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
 async def delete_comment(
-    request: Request,
     id: int,
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> str:
