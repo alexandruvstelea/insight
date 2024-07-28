@@ -1,9 +1,10 @@
 from ...database.main import get_session
-from fastapi import APIRouter, Depends, Header
+from fastapi import APIRouter, Depends, Header, Request
 from .schemas import CommentIn, CommentOut
 from sqlalchemy.ext.asyncio import AsyncSession
 from .operations import CommentOperations
 from http import HTTPStatus
+from ...limiter import limiter
 from typing import List
 import logging
 
@@ -12,7 +13,9 @@ comments_routes = APIRouter(prefix="/api/comments")
 
 
 @comments_routes.get("/", response_model=List[CommentOut], status_code=HTTPStatus.OK)
+@limiter.limit("50/minute")
 async def get_comments(
+    request: Request,
     professor_id: int = None,
     subject_id: int = None,
     session_type: str = None,
@@ -27,7 +30,9 @@ async def get_comments(
 
 
 @comments_routes.post("/", response_model=CommentOut, status_code=HTTPStatus.CREATED)
+@limiter.limit("50/minute")
 async def add_comment(
+    request: Request,
     comment_data: CommentIn,
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
@@ -38,7 +43,9 @@ async def add_comment(
 
 
 @comments_routes.delete("/{id}", status_code=HTTPStatus.OK)
+@limiter.limit("50/minute")
 async def delete_comment(
+    request: Request,
     id: int,
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),

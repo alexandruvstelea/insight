@@ -1,9 +1,10 @@
 from ...database.main import get_session
-from fastapi import APIRouter, Depends, Header
+from fastapi import APIRouter, Depends, Header, Request
 from .schemas import WeekIn, WeekOut
 from sqlalchemy.ext.asyncio import AsyncSession
 from .operations import WeekOperations
 from http import HTTPStatus
+from ...limiter import limiter
 from typing import List
 import logging
 
@@ -12,7 +13,9 @@ weeks_routes = APIRouter(prefix="/api/weeks")
 
 
 @weeks_routes.get("/", response_model=List[WeekOut], status_code=HTTPStatus.OK)
+@limiter.limit("50/minute")
 async def get_weeks(
+    request: Request,
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> List[WeekOut]:
@@ -22,7 +25,9 @@ async def get_weeks(
 
 
 @weeks_routes.post("/", response_model=List[WeekOut], status_code=HTTPStatus.CREATED)
+@limiter.limit("50/minute")
 async def add_weeks(
+    request: Request,
     week_data: WeekIn,
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
@@ -33,7 +38,9 @@ async def add_weeks(
 
 
 @weeks_routes.delete("/", status_code=HTTPStatus.OK)
+@limiter.limit("50/minute")
 async def delete_weeks(
+    request: Request,
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> str:

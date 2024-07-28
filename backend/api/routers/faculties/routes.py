@@ -1,9 +1,10 @@
 from ...database.main import get_session
-from fastapi import APIRouter, Depends, Header
+from fastapi import APIRouter, Depends, Header, Request
 from .schemas import FacultyIn, FacultyOut
 from sqlalchemy.ext.asyncio import AsyncSession
 from .operations import FacultyOperations
 from http import HTTPStatus
+from ...limiter import limiter
 from typing import List
 import logging
 
@@ -12,7 +13,9 @@ faculties_router = APIRouter(prefix="/api/faculties")
 
 
 @faculties_router.get("/", response_model=List[FacultyOut], status_code=HTTPStatus.OK)
+@limiter.limit("50/minute")
 async def get_faculties(
+    request: Request,
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> List[FacultyOut]:
@@ -22,7 +25,9 @@ async def get_faculties(
 
 
 @faculties_router.get("/{id}", response_model=FacultyOut, status_code=HTTPStatus.OK)
+@limiter.limit("50/minute")
 async def get_faculty_by_id(
+    request: Request,
     id: int,
     session: AsyncSession = Depends(get_session),
     client_ip: str = Header(None, alias="X-Real-IP"),
@@ -35,7 +40,9 @@ async def get_faculty_by_id(
 
 
 @faculties_router.post("/", response_model=FacultyOut, status_code=HTTPStatus.CREATED)
+@limiter.limit("50/minute")
 async def add_faculty(
+    request: Request,
     faculty_data: FacultyIn,
     session: AsyncSession = Depends(get_session),
     client_ip: str = Header(None, alias="X-Real-IP"),
@@ -48,7 +55,9 @@ async def add_faculty(
 
 
 @faculties_router.put("/{id}", response_model=FacultyOut, status_code=HTTPStatus.OK)
+@limiter.limit("50/minute")
 async def update_faculty(
+    request: Request,
     id: int,
     new_faculty_data: FacultyIn,
     session: AsyncSession = Depends(get_session),
@@ -62,7 +71,9 @@ async def update_faculty(
 
 
 @faculties_router.delete("/{id}", status_code=HTTPStatus.OK)
+@limiter.limit("50/minute")
 async def delete_faculty(
+    request: Request,
     id: int,
     session: AsyncSession = Depends(get_session),
     client_ip: str = Header(None, alias="X-Real-IP"),

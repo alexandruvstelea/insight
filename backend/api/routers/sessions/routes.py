@@ -1,9 +1,10 @@
 from ...database.main import get_session
-from fastapi import APIRouter, Depends, Header
+from fastapi import APIRouter, Depends, Header, Request
 from .schemas import SessionIn, SessionOut
 from sqlalchemy.ext.asyncio import AsyncSession
 from .operations import SessionOperations
 from http import HTTPStatus
+from ...limiter import limiter
 from typing import List
 import logging
 
@@ -12,7 +13,9 @@ sessions_router = APIRouter(prefix="/api/sessions")
 
 
 @sessions_router.get("/", response_model=List[SessionOut], status_code=HTTPStatus.OK)
+@limiter.limit("50/minute")
 async def get_sessions(
+    request: Request,
     faculty_id: int = None,
     client_ip: str = Header(None, alias="X-Real-IP"),
     db_session: AsyncSession = Depends(get_session),
@@ -23,7 +26,9 @@ async def get_sessions(
 
 
 @sessions_router.get("/{id}", response_model=SessionOut, status_code=HTTPStatus.OK)
+@limiter.limit("50/minute")
 async def get_session_by_id(
+    request: Request,
     id: int,
     client_ip: str = Header(None, alias="X-Real-IP"),
     db_session: AsyncSession = Depends(get_session),
@@ -36,7 +41,9 @@ async def get_session_by_id(
 
 
 @sessions_router.post("/", response_model=SessionOut, status_code=HTTPStatus.CREATED)
+@limiter.limit("50/minute")
 async def add_session(
+    request: Request,
     session_data: SessionIn,
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
@@ -47,7 +54,9 @@ async def add_session(
 
 
 @sessions_router.put("/{id}", response_model=SessionOut, status_code=HTTPStatus.OK)
+@limiter.limit("50/minute")
 async def update_session(
+    request: Request,
     id: int,
     new_session_data: SessionIn,
     client_ip: str = Header(None, alias="X-Real-IP"),
@@ -61,7 +70,9 @@ async def update_session(
 
 
 @sessions_router.delete("/{id}", status_code=HTTPStatus.OK)
+@limiter.limit("50/minute")
 async def delete_session(
+    request: Request,
     id: int,
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
