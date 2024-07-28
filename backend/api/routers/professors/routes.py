@@ -1,9 +1,10 @@
 from ...database.main import get_session
-from fastapi import APIRouter, Depends, Header
+from fastapi import APIRouter, Depends, Header, Request
 from .schemas import ProfessorIn, ProfessorOut
 from sqlalchemy.ext.asyncio import AsyncSession
 from .operations import ProfessorOperations
 from http import HTTPStatus
+from ...limiter import limiter
 from typing import List
 import logging
 
@@ -14,7 +15,9 @@ professors_router = APIRouter(prefix="/api/professors")
 @professors_router.get(
     "/", response_model=List[ProfessorOut], status_code=HTTPStatus.OK
 )
+@limiter.limit("50/minute")
 async def get_professors(
+    request: Request,
     faculty_id: int = None,
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
@@ -27,7 +30,9 @@ async def get_professors(
 
 
 @professors_router.get("/{id}", response_model=ProfessorOut, status_code=HTTPStatus.OK)
+@limiter.limit("50/minute")
 async def get_professor_by_id(
+    request: Request,
     id: int,
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
@@ -42,7 +47,9 @@ async def get_professor_by_id(
 @professors_router.post(
     "/", response_model=ProfessorOut, status_code=HTTPStatus.CREATED
 )
+@limiter.limit("50/minute")
 async def add_professor(
+    request: Request,
     professor_data: ProfessorIn,
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
@@ -55,7 +62,9 @@ async def add_professor(
 
 
 @professors_router.put("/{id}", response_model=ProfessorOut, status_code=HTTPStatus.OK)
+@limiter.limit("50/minute")
 async def update_professor(
+    request: Request,
     id: int,
     new_professor_data: ProfessorIn,
     client_ip: str = Header(None, alias="X-Real-IP"),
@@ -71,7 +80,9 @@ async def update_professor(
 
 
 @professors_router.delete("/{id}", status_code=HTTPStatus.OK)
+@limiter.limit("50/minute")
 async def delete_professor(
+    request: Request,
     id: int,
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
