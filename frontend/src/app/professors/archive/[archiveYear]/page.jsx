@@ -3,8 +3,8 @@ import styles from "@/app/professors/page.module.css";
 import { fetchOldProfessorsData } from "@/app/Actions/getOldProfessorData";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
-import CustomSlider from "@/components/professors/CustomSlider";
-import SearchBar from "@/components/professors/SearchBar";
+import CustomSlider from "@/components/professors/customSlider/CustomSlider";
+import SearchBar from "@/components/professors/searchBar/SearchBar";
 export default async function ArchiveProfessors({ searchParams, params }) {
   const search = searchParams.search;
 

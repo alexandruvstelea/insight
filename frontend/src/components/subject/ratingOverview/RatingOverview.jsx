@@ -1,8 +1,8 @@
 "use server";
 import React from "react";
 import styles from "./ratingOverview.module.css";
-import ProgressContainer from "./ProgressContainer";
-import StarRating from "./StarRating";
+import ProgressContainer from "../progressContainer/ProgressContainer";
+import StarRating from "../starRating/StarRating";
 
 export default async function RatingOverview({ ratingsAverage, colors }) {
   const { clarity, comprehension, interactivity, relevance, overall } =

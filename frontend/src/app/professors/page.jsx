@@ -3,8 +3,8 @@ import styles from "./page.module.css";
 import { fetchProfessorsData } from "../Actions/getProfessorData";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
-import CustomSlider from "@/components/professors/CustomSlider";
-import SearchBar from "@/components/professors/SearchBar";
+import CustomSlider from "@/components/professors/customSlider/CustomSlider";
+import SearchBar from "@/components/professors/searchBar/SearchBar";
 
 export default async function Professors({ searchParams }) {
   const search = searchParams.search;

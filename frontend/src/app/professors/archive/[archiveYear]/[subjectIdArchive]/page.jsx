@@ -2,8 +2,8 @@
 import styles from "@/app/professors/[subjectId]/page.module.css";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
-import Chart from "@/components/subject/Chart";
-import DegreeChart from "@/components/subject/DegreeChart";
+import Chart from "@/components/subject/chart/Chart";
+import DegreeChart from "@/components/subject/degreeChart/DegreeChart";
 import RatingOverview from "@/components/subject/RatingOverview";
 import Comments from "@/components/subject/Comments";
 import {

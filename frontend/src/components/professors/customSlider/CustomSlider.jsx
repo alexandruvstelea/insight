@@ -7,7 +7,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/a11y";
-import Card from "@/components/professors/Card";
+import Card from "@/components/professors/card/Card";
 
 export default function CustomSlider({
   professors,

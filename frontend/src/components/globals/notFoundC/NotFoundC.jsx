@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./notFoundC.module.css";
-import Footer from "../footer/Footer";
-import Header from "../header/Header";
+import Footer from "../../footer/Footer";
+import Header from "../../header/Header";
 import Link from "next/link";
 
 export default function NotFoundC() {

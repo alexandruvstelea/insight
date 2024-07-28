@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import styles from "./header.module.css";
-import DropdownArchive from "@/components/header/DropdownArchive";
+import DropdownArchive from "@/components/dropdownArchive/DropdownArchive";
 
 export default function Header({ showArchive }) {
   return (

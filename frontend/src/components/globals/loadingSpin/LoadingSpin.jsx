@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./loadingSpin.module.css";
-import Footer from "../footer/Footer";
-import Header from "../header/Header";
+import Footer from "../../footer/Footer";
+import Header from "../../header/Header";
 
 export default function Loading() {
   return (
