@@ -1,6 +1,6 @@
 .vscode
 archive-system/.env
 archive-system/archive_venv
-fiesc-build/.env
+feedback-unitbv-build/.env
 gmailSecret.txt
-nginx
+nginx/nginx.conf
