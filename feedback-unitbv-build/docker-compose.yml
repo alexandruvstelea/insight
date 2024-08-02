@@ -2,7 +2,7 @@ services:
   postgres:
     restart: on-failure:2
     image: postgres:latest
-    container_name: funitbv-postgres
+    container_name: funitbv-postgresql
     env_file:
       - .env
     volumes:
@@ -21,8 +21,8 @@ services:
       dockerfile: ../backend/docker/dockerfile
     networks:
       - funitbv-network
-    ports:
-      - "8000:8000"
+    # ports:
+    #   - "8000:8000"
     depends_on:
       - postgres
 
@@ -76,22 +76,20 @@ services:
         - .env
 
 
-  #nginx:
-  #  image: nginx:latest
-  #  container_name: funitbv-nginx
-  #  restart: on-failure:2
-  #  build:
-  #    context: ../nginx
-  #    dockerfile: ../nginx/docker/dockerfile
-  #  ports:
-  #    - "80:80"
-  #    - "443:443"
+  nginx:
+   image: nginx:latest
+   container_name: funitbv-nginx
+   restart: on-failure:2
+   build:
+     context: ../nginx
+     dockerfile: ./docker/dockerfile
+   ports:
+     - "80:80"
+     - "443:443"
   #  volumes:
   #    - /etc/letsencrypt:/etc/letsencrypt:ro
-  #  networks:
-  #    - funitbv-network
-  #  depends_on:
-  #    - frontend
+   networks:
+     - funitbv-network
 
 volumes:
   volume_postgres:
