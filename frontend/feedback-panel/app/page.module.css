@@ -118,10 +118,6 @@
   transition: all 0.15s ease-in-out;
 }
 
-.aboutZoneItem:nth-child(even) {
-  text-align: right;
-}
-
 .aboutZone h2 {
   margin: 0;
   width: 100%;
