@@ -8,6 +8,7 @@
   min-height: 200px;
   border: 6px double var(--main-blue-dark);
   border-radius: 8px;
+  padding: 4px;
   box-shadow: 0px 4px 4px #00000030, 0px 12px 12px #00000015;
 }
 
@@ -52,6 +53,7 @@
 @media screen and (min-width: 1400px) {
   .facultySelector:hover {
     transform: scale(1.02);
+    box-shadow: 0 0 24px var(--main-blue-dark);
   }
 
   .facultySelector:hover a {

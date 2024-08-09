@@ -32,7 +32,10 @@ export default function Home() {
         </div>
         <div></div>
       </div>
-
+      <div className={styles.externalsZone}>
+        <a href="#">Cum ofer feedback?</a>
+        <a href="#">Dashboard profesori</a>
+      </div>
       <div className={styles.aboutZone}>
         <div className={styles.aboutZoneItem}>
           <h2>Ce?</h2>
@@ -62,15 +65,6 @@ export default function Home() {
             și așteptările studenților.
           </p>
         </div>
-      </div>
-      <div className={styles.howZone}>
-        <h2>Cum ofer feedback?</h2>
-        <ol>
-          <li>Participă la un curs</li>
-          <li>Scanează codul QR</li>
-          <li>Spune-ne părerea ta</li>
-          <li>Vizualizează în aplicație</li>
-        </ol>
       </div>
       <Footer />
     </>
