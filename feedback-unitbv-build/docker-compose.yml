@@ -50,13 +50,13 @@ services:
       ports:
         - "3010:3000"
 
-  frontend:
-      container_name: funitbv-frontend
+  feedback-panel:
+      container_name: funitbv-feedback-panel
       restart: on-failure:2
       build:
-        context: ../frontend/feedback-unitbv
+        context: ../frontend/feedback-panel
         dockerfile: ./docker/dockerfile
-      image: funitbv-frontend-image:1.0
+      image: funitbv-feedback-panel-image:1.0
       networks:
         - funitbv-network
       ports:
