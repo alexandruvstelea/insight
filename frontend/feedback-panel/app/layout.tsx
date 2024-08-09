@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Montserrat({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Feedback UnitBV",
-  description: "Project designed to facilitate the collection of feedback for courses at Transilvania University of Brașov.",
+  description:
+    "This is the feedback panel of the Feedback UnitBV project. Here you can see the ratings that each professors has received from their students.",
 };
 
 export default function RootLayout({

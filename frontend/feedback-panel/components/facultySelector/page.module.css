@@ -1,0 +1,63 @@
+.facultySelector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 200px;
+  min-height: 200px;
+  border: 6px double var(--main-blue-dark);
+  border-radius: 8px;
+  padding: 4px;
+  box-shadow: 0px 4px 4px #00000030, 0px 12px 12px #00000015;
+}
+
+.facultySelector h1 {
+  margin: 0;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.facultySelector a {
+  margin: 0;
+  font-size: 3rem;
+  text-decoration: none;
+  color: var(--main-blue-dark);
+  font-weight: bold;
+  line-height: 1;
+}
+
+@media screen and (min-width: 768px) {
+  .facultySelector {
+    gap: 2px;
+    min-width: 280px;
+    min-height: 280px;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .facultySelector .facultyLogo {
+    width: 124px;
+    height: 124px;
+  }
+
+  .facultySelector h1 {
+    font-size: 2rem;
+  }
+
+  .facultySelector a {
+    font-size: 4rem;
+    transition: all 0.2s ease-in-out;
+  }
+}
+
+@media screen and (min-width: 1400px) {
+  .facultySelector:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 24px var(--main-blue-dark);
+  }
+
+  .facultySelector:hover a {
+    color: black;
+    font-size: 4.5rem;
+  }
+}
