@@ -29,8 +29,9 @@
 @media screen and (min-width: 768px) {
   .facultySelector {
     gap: 2px;
-    min-width: 256px;
-    min-height: 256px;
+    min-width: 280px;
+    min-height: 280px;
+    transition: all 0.2s ease-in-out;
   }
 
   .facultySelector .facultyLogo {
@@ -44,5 +45,17 @@
 
   .facultySelector a {
     font-size: 4rem;
+    transition: all 0.2s ease-in-out;
+  }
+}
+
+@media screen and (min-width: 1400px) {
+  .facultySelector:hover {
+    transform: scale(1.02);
+  }
+
+  .facultySelector:hover a {
+    color: black;
+    font-size: 4.5rem;
   }
 }

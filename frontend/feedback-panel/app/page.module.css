@@ -78,7 +78,7 @@
   padding: 32px 0 32px 0;
   gap: 40px;
   width: 100%;
-  background: var(--main-radial-gradient);
+
   border-radius: 16px;
   color: white;
 }
@@ -89,6 +89,11 @@
   gap: 16px;
   text-align: left;
   height: fit-content;
+  background: var(--main-radial-gradient);
+  padding: 16px;
+  border-radius: 16px;
+  box-shadow: 0px 4px 4px #00000030, 0px 12px 12px #00000015;
+  transition: all 0.15s ease-in-out;
 }
 
 .aboutZoneItem:nth-child(even) {
@@ -113,7 +118,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 24px 0 24px 0;
+  padding: 24px 0 40px 0;
   gap: 24px;
   text-align: left;
   width: 100%;
@@ -184,7 +189,7 @@
 
 @media screen and (min-width: 1200px) {
   .facultiesZone {
-    min-height: 60vh;
+    min-height: 50vh;
   }
 
   .facultiesList {
@@ -196,6 +201,7 @@
     flex-direction: row;
     align-items: center;
     height: 45vh;
+    padding: 0;
   }
 
   .aboutZoneItem {
@@ -214,6 +220,13 @@
 
   .howZone ol {
     font-size: 2rem;
+  }
+}
+
+@media screen and (min-width: 1400px) {
+  .aboutZoneItem:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 6px 6px #00000030, 0px 14px 14px #00000015;
   }
 }
 
@@ -239,6 +252,7 @@
 
   .facultiesZone h1 {
     font-size: 2.5rem;
+    margin-bottom: 16px;
   }
 
   .aboutZone p {

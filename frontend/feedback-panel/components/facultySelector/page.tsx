@@ -19,7 +19,11 @@ export default function FacultySelector({
         alt="Faculty logo"
         className={styles.facultyLogo}
       />
-      <h1>{facultyName}</h1>
+      <h1>
+        Feedback
+        <br />
+        {facultyName}
+      </h1>
       <a href="#">&#x2192;</a>
     </div>
   );
