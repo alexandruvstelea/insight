@@ -1,12 +1,17 @@
 @import "normalize.css";
 
 :root {
-  --main-blue-dark: rgb(7, 91, 173);
+  --main-blue-dark: #075bad;
+  --main-blue-light: #3b95ed;
   --main-radial-gradient: radial-gradient(
     circle at 10% 20%,
     rgb(59, 149, 237) 0%,
     rgb(7, 91, 173) 90%
   );
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 ::-webkit-scrollbar-track {

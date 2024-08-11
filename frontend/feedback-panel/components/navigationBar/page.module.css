@@ -1,0 +1,13 @@
+.navBar {
+  text-align: center;
+  width: 100%;
+  padding: 8px 0 8px 0;
+  height: fit-content;
+  background: var(--main-radial-gradient);
+  color: white;
+}
+
+.navBar h1 {
+  font-size: 3rem;
+  margin: 0;
+}
