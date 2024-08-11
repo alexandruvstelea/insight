@@ -15,7 +15,7 @@ buildings_router = APIRouter(prefix="/api/buildings")
 logger = logging.getLogger(__name__)
 
 
-@authorize(role=["admin"])
+# @authorize(role=["admin"])
 @buildings_router.get(
     "/",
     response_model=List[BuildingOut],
@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 )
 async def get_buildings(
     faculty_id: int = None,
-    current_user: dict = Depends(get_current_user),
+    # current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> List[BuildingOut]:
@@ -33,7 +33,7 @@ async def get_buildings(
     return buildings
 
 
-@authorize(role=["admin"])
+# @authorize(role=["admin"])
 @buildings_router.get(
     "/{id}",
     response_model=BuildingOut,
@@ -42,7 +42,7 @@ async def get_buildings(
 )
 async def get_building_by_id(
     id: int,
-    current_user: dict = Depends(get_current_user),
+    # current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> BuildingOut:
@@ -53,7 +53,7 @@ async def get_building_by_id(
     return building
 
 
-@authorize(role=["admin"])
+# @authorize(role=["admin"])
 @buildings_router.post(
     "/",
     response_model=BuildingOut,
@@ -62,7 +62,7 @@ async def get_building_by_id(
 )
 async def add_building(
     building_data: BuildingIn,
-    current_user: dict = Depends(get_current_user),
+    # current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> BuildingOut:
@@ -73,7 +73,7 @@ async def add_building(
     return response
 
 
-@authorize(role=["admin"])
+# @authorize(role=["admin"])
 @buildings_router.put(
     "/{id}",
     response_model=BuildingOut,
@@ -83,7 +83,7 @@ async def add_building(
 async def update_building(
     id: int,
     new_building_data: BuildingIn,
-    current_user: dict = Depends(get_current_user),
+    # current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> BuildingOut:
@@ -94,7 +94,7 @@ async def update_building(
     return response
 
 
-@authorize(role=["admin"])
+# @authorize(role=["admin"])
 @buildings_router.delete(
     "/{id}",
     dependencies=[Depends(RateLimiter(times=50, minutes=1))],
@@ -102,7 +102,7 @@ async def update_building(
 )
 async def delete_building(
     id: int,
-    current_user: dict = Depends(get_current_user),
+    # current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> str:
