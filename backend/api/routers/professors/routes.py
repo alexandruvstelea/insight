@@ -50,7 +50,7 @@ async def get_professor_by_id(
     return professor
 
 
-@authorize(role=["admin"])
+# @authorize(role=["admin"])
 @professors_router.post(
     "/",
     response_model=ProfessorOut,
@@ -59,7 +59,7 @@ async def get_professor_by_id(
 )
 async def add_professor(
     professor_data: ProfessorIn,
-    current_user: dict = Depends(get_current_user),
+    # current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> ProfessorOut:
@@ -70,7 +70,7 @@ async def add_professor(
     return response
 
 
-@authorize(role=["admin"])
+# @authorize(role=["admin"])
 @professors_router.put(
     "/{id}",
     response_model=ProfessorOut,
@@ -80,7 +80,7 @@ async def add_professor(
 async def update_professor(
     id: int,
     new_professor_data: ProfessorIn,
-    current_user: dict = Depends(get_current_user),
+    # current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> ProfessorOut:
@@ -93,7 +93,7 @@ async def update_professor(
     return response
 
 
-@authorize(role=["admin"])
+# @authorize(role=["admin"])
 @professors_router.delete(
     "/{id}",
     dependencies=[Depends(RateLimiter(times=50, minutes=1))],
@@ -101,7 +101,7 @@ async def update_professor(
 )
 async def delete_professor(
     id: int,
-    current_user: dict = Depends(get_current_user),
+    # current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> str:

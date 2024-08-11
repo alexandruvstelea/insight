@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 faculties_router = APIRouter(prefix="/api/faculties")
 
 
-@authorize(role=["admin"])
+# @authorize(role=["admin"])
 @faculties_router.get(
     "/",
     response_model=List[FacultyOut],
@@ -22,7 +22,7 @@ faculties_router = APIRouter(prefix="/api/faculties")
     status_code=HTTPStatus.OK,
 )
 async def get_faculties(
-    current_user: dict = Depends(get_current_user),
+    # current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> List[FacultyOut]:
@@ -31,7 +31,7 @@ async def get_faculties(
     return faculties
 
 
-@authorize(role=["admin"])
+# @authorize(role=["admin"])
 @faculties_router.get(
     "/{id}",
     response_model=FacultyOut,
@@ -40,7 +40,7 @@ async def get_faculties(
 )
 async def get_faculty_by_id(
     id: int,
-    current_user: dict = Depends(get_current_user),
+    # current_user: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session),
     client_ip: str = Header(None, alias="X-Real-IP"),
 ) -> FacultyOut:
@@ -51,7 +51,7 @@ async def get_faculty_by_id(
     return faculty
 
 
-@authorize(role=["admin"])
+# @authorize(role=["admin"])
 @faculties_router.post(
     "/",
     response_model=FacultyOut,
@@ -60,7 +60,7 @@ async def get_faculty_by_id(
 )
 async def add_faculty(
     faculty_data: FacultyIn,
-    current_user: dict = Depends(get_current_user),
+    # current_user: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session),
     client_ip: str = Header(None, alias="X-Real-IP"),
 ) -> FacultyOut:
@@ -71,7 +71,7 @@ async def add_faculty(
     return response
 
 
-@authorize(role=["admin"])
+# @authorize(role=["admin"])
 @faculties_router.put(
     "/{id}",
     response_model=FacultyOut,
@@ -81,7 +81,7 @@ async def add_faculty(
 async def update_faculty(
     id: int,
     new_faculty_data: FacultyIn,
-    current_user: dict = Depends(get_current_user),
+    # current_user: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session),
     client_ip: str = Header(None, alias="X-Real-IP"),
 ) -> FacultyOut:
@@ -92,7 +92,7 @@ async def update_faculty(
     return response
 
 
-@authorize(role=["admin"])
+# @authorize(role=["admin"])
 @faculties_router.delete(
     "/{id}",
     dependencies=[Depends(RateLimiter(times=50, minutes=1))],
@@ -100,7 +100,7 @@ async def update_faculty(
 )
 async def delete_faculty(
     id: int,
-    current_user: dict = Depends(get_current_user),
+    # current_user: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session),
     client_ip: str = Header(None, alias="X-Real-IP"),
 ) -> str:

@@ -49,7 +49,7 @@ async def get_subject_by_id(
     return subject
 
 
-@authorize(role=["admin"])
+# @authorize(role=["admin"])
 @subjects_router.post(
     "/",
     response_model=SubjectOut,
@@ -58,7 +58,7 @@ async def get_subject_by_id(
 )
 async def add_subject(
     subject_data: SubjectIn,
-    current_user: dict = Depends(get_current_user),
+    # current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> SubjectOut:
@@ -67,7 +67,7 @@ async def add_subject(
     return response
 
 
-@authorize(role=["admin"])
+# @authorize(role=["admin"])
 @subjects_router.put(
     "/{id}",
     response_model=SubjectOut,
@@ -77,7 +77,7 @@ async def add_subject(
 async def update_subject(
     id: int,
     new_subject_data: SubjectIn,
-    current_user: dict = Depends(get_current_user),
+    # current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> SubjectOut:
@@ -88,7 +88,7 @@ async def update_subject(
     return response
 
 
-@authorize(role=["admin"])
+# @authorize(role=["admin"])
 @subjects_router.delete(
     "/{id}",
     dependencies=[Depends(RateLimiter(times=50, minutes=1))],
@@ -96,7 +96,7 @@ async def update_subject(
 )
 async def delete_subject(
     id: int,
-    current_user: dict = Depends(get_current_user),
+    # current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> str:
