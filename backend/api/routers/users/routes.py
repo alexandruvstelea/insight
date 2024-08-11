@@ -23,7 +23,7 @@ users_router = APIRouter(prefix="/api/users")
 )
 async def get_users(
     professor_id: int = None,
-    current_user: dict = Depends(get_current_user),
+    # current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> List[UserOut]:
@@ -41,7 +41,7 @@ async def get_users(
 )
 async def get_current(
     client_ip: str = Header(None, alias="X-Real-IP"),
-    current_user: dict = Depends(get_current_user),
+    # current_user: dict = Depends(get_current_user),
 ) -> dict:
     logger.info(
         f"Received GET request on endpoint /api/users/current from IP {client_ip}."
@@ -71,7 +71,7 @@ async def login_for_access_token(
     return token
 
 
-@authorize(role=["admin"])
+# @authorize(role=["admin"])
 @users_router.post(
     "/register",
     response_model=UserOut,
@@ -80,7 +80,7 @@ async def login_for_access_token(
 )
 async def register_user(
     user_data: UserIn,
-    current_user: dict = Depends(get_current_user),
+    # current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> UserOut:
@@ -91,7 +91,7 @@ async def register_user(
     return user
 
 
-@authorize(role=["admin"])
+# @authorize(role=["admin"])
 @users_router.delete(
     "/{id}",
     dependencies=[Depends(RateLimiter(times=50, minutes=1))],
@@ -100,7 +100,7 @@ async def register_user(
 async def delete_user(
     id: int,
     client_ip: str = Header(None, alias="X-Real-IP"),
-    current_user: dict = Depends(get_current_user),
+    # current_user: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session),
 ) -> str:
     logger.info(
