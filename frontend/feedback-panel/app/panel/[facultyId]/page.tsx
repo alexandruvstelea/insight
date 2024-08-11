@@ -12,7 +12,7 @@ export default function Panel({ searchParams }: PanelProps) {
   const facultyName = searchParams.facultyName || "";
   return (
     <>
-      <NavigationBar facultyName={facultyName} />
+      <NavigationBar />
     </>
   );
 }
