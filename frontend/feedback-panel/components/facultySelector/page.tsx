@@ -3,11 +3,13 @@ import Image from "next/image";
 import Link from "next/link";
 
 interface FacultySelector {
+  facultyID: number;
   facultyName: string;
   svgPath: string;
 }
 
 export default function FacultySelector({
+  facultyID,
   facultyName,
   svgPath,
 }: FacultySelector) {
@@ -23,10 +25,7 @@ export default function FacultySelector({
       <h1>{facultyName}</h1>
       <Link
         href={{
-          pathname: "/panel/1",
-          query: {
-            facultyName: facultyName,
-          },
+          pathname: `/panel/${facultyID}`,
         }}
         className={styles.arrowButton}
       >

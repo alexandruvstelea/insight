@@ -6,3 +6,12 @@ export const fetchFaculties = async () => {
   const faculties = await response.json();
   return faculties;
 };
+
+export const fetchFaculty = async (facultyID: number) => {
+  const response = await fetch(`${API_URL}/faculties/${facultyID}`, {
+    cache: "no-store",
+  });
+  if (!response.ok) return false;
+  const faculty = await response.json();
+  return faculty;
+};
