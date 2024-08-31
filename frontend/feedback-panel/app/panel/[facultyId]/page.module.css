@@ -1,0 +1,21 @@
+.html {
+  width: 100%;
+  height: fit-content;
+}
+
+.facultyName {
+  margin: 16px 0 16px 0;
+  font-size: 1.5rem;
+  text-align: center;
+  text-decoration: underline;
+  text-decoration-color: var(--main-blue-dark);
+}
+
+.professorsList {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  margin-bottom: 56px;
+}
