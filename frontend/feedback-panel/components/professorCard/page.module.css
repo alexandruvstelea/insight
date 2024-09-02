@@ -1,32 +1,21 @@
 .card {
-  border-radius: 24px;
-  width: 280px;
-  height: 360px;
+  border-radius: 12px;
+  width: 262px;
+  height: 372px;
 }
 
-.content {
-  background-color: #f2f2f2;
-  border-radius: 24px;
+.cardContent {
+  background-color: #f0f0f0;
+  border-radius: 12px;
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
-  -webkit-transform-style: preserve-3d;
-  -moz-transform-style: preserve-3d;
-  -ms-transform-style: preserve-3d;
-  -o-transform-style: preserve-3d;
   transition: transform 1s;
-  -webkit-transition: -webkit-transform 1s;
-  -moz-transition: -moz-transform 1s;
-  -o-transition: -o-transform 1s;
-  -ms-transition: -ms-transform 1s;
 }
 
-.card.flipped .content {
-  transform: rotateX(180deg);
-  -webkit-transform: rotateX(180deg);
-  -moz-transform: rotateX(180deg);
-  -ms-transform: rotateX(180deg);
-  -o-transform: rotateX(180deg);
+.card.flipped .cardContent {
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
 }
 
 .front,
@@ -36,117 +25,103 @@
   width: 100%;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  -moz-backface-visibility: hidden;
-  -ms-backface-visibility: hidden;
-  -o-backface-visibility: hidden;
-  transform: rotateX(0deg);
-  -webkit-transform: rotateX(0deg);
-  -moz-transform: rotateX(0deg);
-  -ms-transform: rotateX(0deg);
-  -o-transform: rotateX(0deg);
-}
-
-.front {
-  display: flex;
-  flex-direction: column;
+  transform: rotateY(0deg);
+  -webkit-transform: rotateY(0deg);
 }
 
 .back {
   display: flex;
   flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  transform: rotateY(180deg);
+}
+
+.back h1 {
+  font-size: 1.5rem;
+  text-decoration: underline;
+  text-decoration-color: var(--main-blue-dark);
+}
+
+.front {
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  transform: rotateX(180deg);
-  -webkit-transform: rotateX(180deg);
-  -moz-transform: rotateX(180deg);
-  -ms-transform: rotateX(180deg);
-  -o-transform: rotateX(180deg);
 }
 
-.flipButton {
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  background-color: #0040c1;
-  color: white;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+.cardImageContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background-color: var(--main-blue-dark);
+  border-radius: 12px;
+  height: 45%;
 }
 
-.imageContent,
-.cardContent {
+.cardInfo {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 14px;
+  width: 100%;
 }
 
-.imageContent {
-  position: relative;
-  row-gap: 5px;
-  padding: 25px 0;
-  background-color: var(--main-blue-dark);
-  border-radius: 24px;
-  height: 40%;
+.cardInfo {
+  height: 55%;
+  padding: 16px;
 }
 
-.cardContent {
-  height: 60%;
-}
-
-.cardImage {
+.cardAvatar {
   border-radius: 50%;
-  background: #fff;
+  background: white;
   padding: 2px;
-  -webkit-box-shadow: -10px 10px 20px -10px rgba(0, 0, 0, 0.5);
-  -moz-box-shadow: -10px 10px 20px -10px rgba(0, 0, 0, 0.5);
   box-shadow: -10px 10px 20px -10px rgba(0, 0, 0, 0.5);
 }
 
-.cardImage .professorAvatar {
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-}
-
 .name {
-  font-size: 24px;
-  font-weight: 600;
-  color: #333;
-  padding: 10px;
-  height: 40px;
+  margin: 0;
+  padding: 8px 0 0 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: black;
   text-align: center;
-  margin-right: 14px;
-  margin-left: 14px;
 }
 
-.buttonCard {
+.cardRating {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+}
+
+.cardRatingImage {
+  rotate: -20deg;
+}
+
+.cardRating h2 {
+  margin: 0;
+  font-size: 2.25rem;
+}
+
+.cardRating h3 {
+  margin: 0;
+}
+
+.cardButton {
   border: none;
   font-size: 1.25rem;
   color: white;
+  font-weight: 600;
   padding: 8px 16px;
   background-color: var(--main-blue-dark);
-  border-radius: 6px;
-  margin: 14px;
+  border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s ease;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  -ms-transition: all 0.3s ease;
-  font-family: inherit;
 }
 
-.buttonCard:hover {
-  background: #007fff;
-}
-
-.backButton {
-  font-size: 20px;
-  align-self: center;
-  height: 10%;
+.cardButton:hover {
+  background: var(--main-blue-light);
 }

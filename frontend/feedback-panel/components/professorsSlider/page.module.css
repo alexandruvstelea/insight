@@ -1,0 +1,10 @@
+.swiperContainer {
+  width: 100%;
+}
+
+.cardContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
