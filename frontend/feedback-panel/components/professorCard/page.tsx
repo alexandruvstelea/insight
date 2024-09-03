@@ -1,7 +1,8 @@
 "use client";
 import styles from "./page.module.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
+import { fetchSubjectsByProfessor } from "@/utils/fetchers/subjects";
 
 interface ProfessorCardProps {
   professorID: number;
@@ -12,14 +13,29 @@ interface ProfessorCardProps {
 }
 
 export default function ProfessorCard({
+  professorID,
   firstName,
   lastName,
   gender,
   avgRating,
 }: ProfessorCardProps) {
+  const [subjects, setSubjects] = useState<any[]>([]);
   const [isFlipped, setIsFlipped] = useState(false);
   const avatarPath =
     gender === "male" ? "/png/maleAvatar.png" : "/png/femaleAvatar.png";
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const fetchedSubjects = await fetchSubjectsByProfessor(professorID);
+        setSubjects(fetchedSubjects);
+      } catch (error) {
+        console.error("Error fetching subjects:", error);
+      }
+    };
+
+    fetchData();
+  }, [professorID]);
 
   const flipCard = () => setIsFlipped(!isFlipped);
 
@@ -59,11 +75,41 @@ export default function ProfessorCard({
           </div>
         </div>
         <div className={styles.back}>
-          <div className={styles.professorCourses}>
-            <h1>Cursuri</h1>
-          </div>
-          <div className={styles.professorLaboratories}>
-            <h1>Laboratoare</h1>
+          <div className={styles.professorSubjects}>
+            {subjects.courses && subjects.courses.length > 0 ? (
+              <div className={styles.professorCourses}>
+                <h1>Cursuri</h1>
+                {subjects.courses.map((course: string, index: number) => (
+                  <h2 key={index}>{course}</h2>
+                ))}
+              </div>
+            ) : null}
+            {subjects.laboratories && subjects.laboratories.length > 0 ? (
+              <div className={styles.professorLaboratories}>
+                <h1>Laboratoare</h1>
+                {subjects.laboratories.map(
+                  (laboratory: string, index: number) => (
+                    <h2 key={index}>{laboratory}</h2>
+                  )
+                )}
+              </div>
+            ) : null}
+            {subjects.seminars && subjects.seminars.length > 0 ? (
+              <div className={styles.professorSeminars}>
+                <h1>Seminare</h1>
+                {subjects.seminars.map((seminar: string, index: number) => (
+                  <h2 key={index}>{seminar}</h2>
+                ))}
+              </div>
+            ) : null}
+            {subjects.projects && subjects.projects.length > 0 ? (
+              <div className={styles.professorLaboratories}>
+                <h1>Proiecte</h1>
+                {subjects.projects.map((project: string, index: number) => (
+                  <h2 key={index}>{project}</h2>
+                ))}
+              </div>
+            ) : null}
           </div>
           <button
             className={`${styles.cardButton} ${styles.backButton}`}
