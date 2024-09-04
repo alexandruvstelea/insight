@@ -12,6 +12,13 @@ interface ProfessorCardProps {
   avgRating: number;
 }
 
+interface ProfessorSubjects {
+  courses: string[];
+  laboratories: string[];
+  seminars: string[];
+  projects: string[];
+}
+
 export default function ProfessorCard({
   professorID,
   firstName,
@@ -19,7 +26,12 @@ export default function ProfessorCard({
   gender,
   avgRating,
 }: ProfessorCardProps) {
-  const [subjects, setSubjects] = useState<any[]>([]);
+  const [subjects, setSubjects] = useState<ProfessorSubjects>({
+    courses: [],
+    laboratories: [],
+    seminars: [],
+    projects: [],
+  });
   const [isFlipped, setIsFlipped] = useState(false);
   const avatarPath =
     gender === "male" ? "/png/maleAvatar.png" : "/png/femaleAvatar.png";
@@ -27,7 +39,9 @@ export default function ProfessorCard({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const fetchedSubjects = await fetchSubjectsByProfessor(professorID);
+        const fetchedSubjects: any = await fetchSubjectsByProfessor(
+          professorID
+        );
         setSubjects(fetchedSubjects);
       } catch (error) {
         console.error("Error fetching subjects:", error);

@@ -127,6 +127,7 @@
   gap: 40px;
   background: var(--main-radial-gradient);
   margin: 24px 0 0 0;
+  width: 100%;
 }
 
 .aboutZone h1 {
