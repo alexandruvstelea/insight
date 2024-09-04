@@ -1,5 +1,23 @@
 const API_URL = process.env.API_URL;
 
+interface Subject {
+  id: number;
+  name: string;
+  abbreviation: string;
+  semester: 1 | 2;
+  course_professor_id?: number | null;
+  laboratory_professor_id?: number | null;
+  seminar_professor_id?: number | null;
+  project_professor_id?: number | null;
+}
+
+interface ProfessorSubjects {
+  courses: string[];
+  laboratories: string[];
+  seminars: string[];
+  projects: string[];
+}
+
 export const fetchSubjectsByProfessor = async (professorId: number) => {
   const response = await fetch(
     `${API_URL}/subjects/?` +
@@ -16,14 +34,14 @@ export const fetchSubjectsByProfessor = async (professorId: number) => {
   );
   if (!response.ok) return false;
   const result = await response.json();
-  let professorSubjects = {
+  let professorSubjects: ProfessorSubjects = {
     courses: [],
     laboratories: [],
     seminars: [],
     projects: [],
   };
   if (Array.isArray(result))
-    result.forEach((subject: any) => {
+    result.forEach((subject: Subject) => {
       if (subject.course_professor_id === professorId)
         if (subject.name.length < 25)
           professorSubjects.courses.push(subject.name);
