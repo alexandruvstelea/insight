@@ -1,5 +1,7 @@
 import styles from "./page.module.css";
 import Image from "next/image";
+import { InfoBox } from "@/components/infoBox/page";
+import { TutorialBox } from "@/components/tutorialBox/page";
 import FacultySelector from "@/components/facultySelector/page";
 import { fetchFaculties } from "@/utils/fetchers/faculties";
 
@@ -7,129 +9,85 @@ export default async function Home() {
   const faculties = await fetchFaculties();
   return (
     <>
-      <div className={styles.pageContainer}>
-        <div className={styles.landingZone}>
-          <h1>inSight</h1>
-          <Image
-            src={"/svg/hurricane-solid.svg"}
-            width={100}
-            height={100}
-            alt="Faculty logo"
-            className={styles.landingImage}
-            quality={100}
-          />
+      <div className={styles.landing}>
+        <h1 className={styles.landingTitle}>inSight</h1>
+        <div className={styles.landingText}>
           <h2>
-            Îți place? Spune-ne!
-            <br /> Nu-ți place? Schimbăm!
+            Progresul incepe cu feedback-ul
+            <br />
+            pe care nu vrei să-l auzi
           </h2>
-          <a className={styles.facultiesButton} href="#facultiesZone">
-            Explorează
-          </a>
+          <h3>
+            Ajută-ne să le oferim profesorilor acel feedback valoros care poate
+            aduce schimbări reale în modul în care sunt predate cursurile tale.
+          </h3>
         </div>
-        <div className={styles.mockup}>
-          <div className={styles.mockupItem}>
-            <div className={styles.backsplash}></div>
-            <Image
-              src={"/png/feedback-ss-portrait.png"}
-              width={100}
-              height={100}
-              alt="Faculty logo"
-              className={styles.screenshot}
-            />
-            <h1>
-              Oferi feedback <br /> simplu și rapid
-            </h1>
-          </div>
-          <div className={styles.mockupItem}>
-            <div className={styles.backsplash}></div>
-            <Image
-              src={"/png/feedback-ss-portrait.png"}
-              width={100}
-              height={100}
-              alt="Faculty logo"
-              className={styles.screenshot}
-            />
-            <h1>
-              Vezi ce cred și
-              <br /> alți studenți
-            </h1>
-          </div>
+        <a className={styles.facultiesButton} href="#faculties">
+          Explorează
+        </a>
+        <div className={styles.landingImageContainer}>
+          <Image
+            width={80}
+            height={80}
+            src={"/svg/analytics.svg"}
+            alt="Landing Page Image"
+            className={styles.landingImage}
+          />
         </div>
-        <div className={styles.aboutZone}>
-          <h1>Despre noi</h1>
-          <div className={styles.aboutZoneItems}>
-            <div className={styles.item}>
-              <h1>Ce este inSight?</h1>
-              <h2>
-                Un proiect creat cu scopul de a facilita comunicarea dintre
-                studenți și profesori, pentru a oferi un feedback constructiv
-                asupra cursurilor lor.
-              </h2>
-            </div>
-            <div className={styles.item}>
-              <h1>De ce?</h1>
-              <h2>
-                Suntem de părere că metodele actuale de colectare a
-                feedback-ului din cadrul universității nu sunt destul de
-                eficiente și nu avantajează studenții.
-              </h2>
-            </div>
-            <div className={styles.item}>
-              <h1>Cum facem asta?</h1>
-              <h2>
-                Prin această platformă, studenții își pot exprima liber opiniile
-                și sugestiile lor cu privire la cursuri, fără repercusiuni,
-                datele fiind 100% anonime.
-              </h2>
-            </div>
-          </div>
+      </div>
+      <div className={styles.about}>
+        <h1>Despre noi</h1>
+        <div className={styles.infoBoxes}>
+          <InfoBox
+            title="Ce este inSight?"
+            content="InSight este un proiect creat cu scopul de a facilita comunicarea
+              dintre studenți și profesori, pentru a oferi un feedback
+              constructiv asupra cursurilor lor."
+          />
+          <Image
+            width={80}
+            height={80}
+            src={"/svg/social-network.svg"}
+            alt="Landing Page Image"
+            className={styles.decorativeImage}
+          />
+          <InfoBox
+            title="De ce există inSight?"
+            content="Suntem de părere că metodele actuale de colectare a feedback-ului
+              din cadrul universității nu sunt destul de eficiente."
+          />
+          <Image
+            width={80}
+            height={80}
+            src={"/svg/anonymous.svg"}
+            alt="Landing Page Image"
+            className={styles.decorativeImage}
+          />
+          <InfoBox
+            title="Cum facem asta?"
+            content="Prin această platformă, studenții își pot exprima liber opiniile
+              și sugestiile lor cu privire la cursuri, fără teama de 
+              repercusiuni, datele fiind 100% anonime."
+          />
         </div>
-        <div className={styles.howZone}>
-          <h1>Cum oferi feedback?</h1>
-          <div className={styles.howZoneList}>
-            <div className={styles.howZoneCard}>
-              <h1>1</h1>
-              <h2>
-                Participi la cursuri într-o sală în care există o tabletă
-                inSight activă
-              </h2>
-            </div>
-            <div className={styles.howZoneCard}>
-              <h1>2</h1>
-              <h2>
-                La sfârșitul cursului, scanezi codul QR de pe tableta inSight
-              </h2>
-            </div>
-            <div className={styles.howZoneCard}>
-              <h1>3</h1>
-              <h2>
-                Acorzi calificative cursului și transmiți un mesaj profesorului
-                cu părerea ta
-              </h2>
-            </div>
-            <div className={styles.howZoneCard}>
-              <h1>4</h1>
-              <h2>
-                Vizualizezi rezultatele pe site-ul nostru și te bucuri de
-                cursuri îmbunătățite
-              </h2>
-            </div>
-          </div>
-        </div>
-        <div className={styles.facultiesZone} id="facultiesZone">
-          <h1>FACULTĂȚI</h1>
-          <h2 className={styles.universityName}>UnitBV</h2>
-          <div className={styles.facultiesList}>
-            {faculties.map((faculty: any) => (
-              <FacultySelector
-                key={faculty.id}
-                facultyID={faculty.id}
-                facultyName={faculty.abbreviation}
-                svgPath={`/svg/${faculty.abbreviation.toLowerCase()}.svg`}
-              />
-            ))}
-          </div>
-          <div></div>
+      </div>
+      <div className={styles.tutorial}>
+        <h1>Cum votez?</h1>
+        <div className={styles.infoBoxes}>
+          <TutorialBox
+            step="1"
+            content="Participi la cursuri într-o sală în care este prezentă o tabletă
+            inSight activă."
+          />
+          <TutorialBox
+            step="2"
+            content="La sfârșitul cursului, scanezi codul QR de pe tabletă și acorzi calificative cursului. Dacă vrei, transmiți și un mesaj către
+            profesor pentru a-l ajuta."
+          />
+          <TutorialBox
+            step="3"
+            content="Vizualizezi rezultatele pe site-ul noastru și te bucuri de cursuri mai bune."
+          />
         </div>
       </div>
     </>
