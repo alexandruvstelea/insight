@@ -1,0 +1,54 @@
+.gradientBox {
+  height: 176px;
+  width: 300px;
+  background: var(--main-gradient);
+  border-radius: 16px;
+  box-shadow: 0px 4px 4px #00000030, 0px 12px 12px #00000015;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tutorialBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  height: 86%;
+  width: 92%;
+  background-color: white;
+  border-radius: 16px;
+  padding: 8px;
+}
+
+.tutorialBox h1 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0;
+  font-size: 2rem;
+  color: #005bea;
+  text-align: left;
+  height: 20%;
+  width: 95%;
+
+  background: var(--main-gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.tutorialBox h2 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0;
+  font-size: 1rem;
+  color: black;
+  text-align: left;
+  height: 80%;
+  font-weight: normal;
+  width: 95%;
+  line-height: 1.3;
+}

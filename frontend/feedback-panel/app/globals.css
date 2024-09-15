@@ -1,12 +1,12 @@
 @import "normalize.css";
 
 :root {
-  --main-blue-dark: #075bad;
-  --main-blue-light: #3b95ed;
-  --main-radial-gradient: radial-gradient(
-    circle at 10% 20%,
-    rgb(59, 149, 237) 0%,
-    rgb(7, 91, 173) 90%
+  --main-blue-dark: #005bea;
+  --main-blue-light: #00c6fb;
+  --main-gradient: linear-gradient(
+    45deg,
+    rgba(0, 198, 251, 1) 0%,
+    rgba(0, 91, 234, 1) 100%
   );
 }
 
@@ -17,6 +17,7 @@ body {
   min-height: 100dvh;
   margin: 0;
   padding: 0;
+  background-color: var(--main-blue-dark);
 }
 
 .layoutBody {
