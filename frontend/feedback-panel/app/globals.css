@@ -14,10 +14,11 @@ html,
 body {
   scroll-behavior: smooth;
   max-width: 100vw;
-  min-height: 100dvh;
+  min-height: 100vh;
+  height: fit-content;
   margin: 0;
   padding: 0;
-  background-color: var(--main-blue-dark);
+  background: var(--main-blue-light);
 }
 
 .layoutBody {

@@ -76,18 +76,30 @@ export default async function Home() {
         <div className={styles.infoBoxes}>
           <TutorialBox
             step="1"
-            content="Participi la cursuri într-o sală în care este prezentă o tabletă
-            inSight activă."
+            content="Participi la cursuri într-o sală echipată cu o tabletă activă inSight. Va fi marcată cu un poster aferent platformei."
           />
           <TutorialBox
             step="2"
-            content="La sfârșitul cursului, scanezi codul QR de pe tabletă și acorzi calificative cursului. Dacă vrei, transmiți și un mesaj către
-            profesor pentru a-l ajuta."
+            content="La finalul cursului, scanezi codul QR de pe tabletă și oferi feedback. Dacă dorești, poți trimite și un mesaj profesorului pentru a-l ajuta să îmbunătățească cursul."
           />
           <TutorialBox
             step="3"
-            content="Vizualizezi rezultatele pe site-ul noastru și te bucuri de cursuri mai bune."
+            content="Urmărești rezultatele pe platforma noastră și te bucuri de cursuri mai bine organizate."
           />
+        </div>
+      </div>
+      <div className={styles.faculties} id="faculties">
+        <h1>Facultăți</h1>
+        <div className={styles.facultiesList}>
+          <h1>Universitatea Transilvania</h1>
+          {faculties.map((faculty: any) => (
+            <FacultySelector
+              key={faculty.id}
+              facultyID={faculty.id}
+              facultyName={faculty.name}
+              svgPath={`/svg/${faculty.abbreviation.toLowerCase()}.svg`}
+            />
+          ))}
         </div>
       </div>
     </>

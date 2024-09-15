@@ -27,9 +27,15 @@ export default function FacultySelector({
         href={{
           pathname: `/panel/${facultyID}`,
         }}
-        className={styles.arrowButton}
+        className={styles.arrowLink}
       >
-        &#x27F6;
+        <Image
+          height={40}
+          width={40}
+          alt="Arrow symbol"
+          src={"/svg/arrow-forward.svg"}
+          className={styles.arrowButton}
+        ></Image>
       </Link>
     </div>
   );
