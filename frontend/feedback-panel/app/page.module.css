@@ -3,12 +3,18 @@
   height: fit-content;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   padding: 4px 0 16px 0;
   gap: 32px;
   border-radius: 0 0 12px 12px;
   background-color: white;
+}
+
+@media screen and (min-height: 580px) {
+  .landing {
+    min-height: 90vh;
+  }
 }
 
 .landingTitle {
