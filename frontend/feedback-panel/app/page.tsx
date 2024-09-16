@@ -80,11 +80,11 @@ export default async function Home() {
           />
           <TutorialBox
             step="2"
-            content="La finalul cursului, scanezi codul QR de pe tabletă și oferi feedback. Dacă dorești, poți trimite și un mesaj profesorului pentru a-l ajuta să îmbunătățească cursul."
+            content="La finalul cursului, scanezi codul QR afișat și oferi feedback. Dacă dorești, poți trimite și un mesaj profesorului pentru a-l ajuta să îmbunătățească cursul."
           />
           <TutorialBox
             step="3"
-            content="Urmărești rezultatele pe platforma noastră și te bucuri de cursuri mai bine organizate."
+            content="Urmărești rezultatele pe site-ul nostru și te bucuri de cursuri mai bine organizate."
           />
         </div>
       </div>
