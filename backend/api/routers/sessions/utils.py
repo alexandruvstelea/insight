@@ -15,43 +15,46 @@ logger = logging.getLogger(__name__)
 def session_to_out(session: Session) -> SessionOut:
     from ..rooms.utils import room_to_minimal
     from ..subjects.utils import subject_to_minimal
-
-    logger.info(f"Converting session {session} to SessionOut format.")
-    return SessionOut(
-        id=session.id,
-        type=session.type,
-        semester=session.semester,
-        week_type=session.week_type,
-        start=session.start,
-        end=session.end,
-        day=session.day,
-        room=room_to_minimal(session.room),
-        subject=subject_to_minimal(session.subject),
-    )
-
+    if session:
+        logger.info(f"Converting session {session} to SessionOut format.")
+        return SessionOut(
+            id=session.id,
+            type=session.type,
+            semester=session.semester,
+            week_type=session.week_type,
+            start=session.start,
+            end=session.end,
+            day=session.day,
+            room=room_to_minimal(session.room),
+            subject=subject_to_minimal(session.subject),
+        )
+    return None
 
 def session_to_minimal(session: Session) -> SessionOutMinimal:
-    logger.info(f"Converting session {session} to SessionOutMinimal format.")
-    return SessionOutMinimal(
-        id=session.id,
-        type=session.type,
-        semester=session.semester,
-        week_type=session.week_type,
-        start=session.start,
-        end=session.end,
-        day=session.day,
-    )
-
+    if session:
+        logger.info(f"Converting session {session} to SessionOutMinimal format.")
+        return SessionOutMinimal(
+            id=session.id,
+            type=session.type,
+            semester=session.semester,
+            week_type=session.week_type,
+            start=session.start,
+            end=session.end,
+            day=session.day,
+        )
+    return None
 
 async def id_to_session(db_session: AsyncSession, session_id: int) -> Session:
     try:
-        logger.info(f"Retrieving session for ID {session_id}.")
-        session = await db_session.get(Session, session_id)
-        if session:
-            logger.info(f"Retrieved session with ID {session_id}.")
-            return session
-        logger.error(f"No session with ID {session_id}.")
-        raise HTTPException(status_code=404, detail=f"No session with ID {session_id}.")
+        if session_id:
+            logger.info(f"Retrieving session for ID {session_id}.")
+            session = await db_session.get(Session, session_id)
+            if session:
+                logger.info(f"Retrieved session with ID {session_id}.")
+                return session
+            logger.error(f"No session with ID {session_id}.")
+            raise HTTPException(status_code=404, detail=f"No session with ID {session_id}.")
+        return None
     except Exception as e:
         logger.error(
             f"An unexpected error has occured while retrieving session with ID {session_id}:\n{e}"
@@ -63,19 +66,21 @@ async def ids_to_sessions(
     db_session: AsyncSession, session_ids: List[int]
 ) -> List[Session]:
     try:
-        logger.info(f"Retrieving sessions with IDs {session_ids}.")
-        result = await db_session.execute(
-            select(Session).where(Session.id.in_(session_ids))
-        )
-        sessions = result.scalars().all()
-        if len(sessions) != len(session_ids):
-            logger.error(f"One or more sessions not found for IDs {session_ids}.")
-            raise HTTPException(
-                status_code=404,
-                detail=f"One or more sessions not found for IDs {session_ids}",
+        if session_ids:
+            logger.info(f"Retrieving sessions with IDs {session_ids}.")
+            result = await db_session.execute(
+                select(Session).where(Session.id.in_(session_ids))
             )
-        logger.info(f"Retrieved sessions with IDs {session_ids}.")
-        return list(sessions)
+            sessions = result.scalars().all()
+            if len(sessions) != len(session_ids):
+                logger.error(f"One or more sessions not found for IDs {session_ids}.")
+                raise HTTPException(
+                    status_code=404,
+                    detail=f"One or more sessions not found for IDs {session_ids}",
+                )
+            logger.info(f"Retrieved sessions with IDs {session_ids}.")
+            return list(sessions)
+        return None
     except Exception as e:
         logger.error(
             f"An unexpected error has occured while retrieving sessions with IDs {session_ids}:\n{e}"
