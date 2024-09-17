@@ -120,6 +120,8 @@ class RoomOperations:
                     room.sessions = await ids_to_sessions(
                         self.session, new_room_data.sessions
                     )
+                else:
+                    room.sessions = []
                 await self.session.commit()
                 logger.info(f"Succesfully updated room with ID {id}.")
                 return room_to_out(room)
