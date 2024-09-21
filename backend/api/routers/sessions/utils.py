@@ -17,9 +17,14 @@ def session_to_out(session: Session) -> SessionOut:
     from ..subjects.utils import subject_to_minimal
     if session:
         logger.info(f"Converting session with ID {session.id} to SessionOut format.")
-        for programme in session.subject.programmes:
-            print("HERE1",programme.name)
-            print("HERE2",programme.faculty_id) 
+        
+        faculty_ids = []
+        if session.subject:
+            for programme in session.subject.programmes:
+                print("HERE1", programme.name)
+                print("HERE2", programme.faculty_id)
+                faculty_ids.append(programme.faculty_id)
+        
         return SessionOut(
             id=session.id,
             type=session.type,
@@ -29,8 +34,8 @@ def session_to_out(session: Session) -> SessionOut:
             end=session.end,
             day=session.day,
             room=room_to_minimal(session.room),
-            subject=subject_to_minimal(session.subject),
-            faculty_id=list(set([programme.faculty_id for programme in session.subject.programmes]))
+            subject=subject_to_minimal(session.subject) if session.subject else None,
+            faculty_id=list(set(faculty_ids)) 
         )
     return None
 
