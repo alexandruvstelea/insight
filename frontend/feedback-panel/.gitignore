@@ -26,19 +26,8 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
-<<<<<<< HEAD
 .env.*
 
-=======
-<<<<<<< HEAD
-.env*.local
-.env*.development
-.env*.production
-=======
-.env.*
-
->>>>>>> 0576445 (Modified gitignore)
->>>>>>> 90226b3 (Modified gitignore)
 # vercel
 .vercel
 
