@@ -10,21 +10,24 @@ export default async function Home() {
   return (
     <>
       <div className={styles.landing}>
-        <h1 className={styles.landingTitle}>inSight</h1>
-        <div className={styles.landingText}>
-          <h2>
-            Progresul incepe cu feedback-ul
-            <br />
-            pe care nu vrei să-l auzi
-          </h2>
-          <h3>
-            Ajută-ne să le oferim profesorilor acel feedback valoros care poate
-            aduce schimbări reale în modul în care sunt predate cursurile tale.
-          </h3>
+        <div className={styles.landingTextContainer}>
+          <h1 className={styles.landingTitle}>inSight</h1>
+          <div className={styles.landingText}>
+            <h2>
+              Progresul incepe cu feedback-ul
+              <br />
+              pe care nu vrei să-l auzi
+            </h2>
+            <h3>
+              Ajută-ne să le oferim profesorilor acel feedback valoros care
+              poate aduce schimbări reale în modul în care sunt predate
+              cursurile tale.
+            </h3>
+          </div>
+          <a className={styles.facultiesButton} href="#faculties">
+            Explorează
+          </a>
         </div>
-        <a className={styles.facultiesButton} href="#faculties">
-          Explorează
-        </a>
         <div className={styles.landingImageContainer}>
           <Image
             width={80}
@@ -91,7 +94,10 @@ export default async function Home() {
       <div className={styles.faculties} id="faculties">
         <h1>Facultăți</h1>
         <div className={styles.facultiesList}>
-          <h1>Universitatea Transilvania</h1>
+          <h1>
+            Universitatea <br />
+            Transilvania
+          </h1>
           {faculties.map((faculty: any) => (
             <FacultySelector
               key={faculty.id}

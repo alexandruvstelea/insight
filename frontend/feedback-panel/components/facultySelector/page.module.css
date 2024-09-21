@@ -46,3 +46,51 @@
   width: auto;
   height: 48px;
 }
+
+@media screen and (min-width: 400px) {
+  .gradientBox {
+    height: 280px;
+    width: 280px;
+  }
+
+  .facultySelector {
+    height: 264px;
+    width: 264px;
+  }
+
+  .facultyLogo {
+    height: 104px;
+  }
+
+  .facultySelector h1 {
+    font-size: 1.25rem;
+  }
+
+  .arrowButton {
+    height: 56px;
+  }
+}
+
+@media screen and (min-width: 760px) and (min-height: 880px) {
+  .gradientBox {
+    height: 368px;
+    width: 368px;
+  }
+
+  .facultySelector {
+    height: 344px;
+    width: 344px;
+  }
+
+  .facultyLogo {
+    height: 128px;
+  }
+
+  .facultySelector h1 {
+    font-size: 1.5rem;
+  }
+
+  .arrowButton {
+    height: 72px;
+  }
+}

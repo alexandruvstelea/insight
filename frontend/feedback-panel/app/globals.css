@@ -8,10 +8,12 @@
     rgba(0, 198, 251, 1) 0%,
     rgba(0, 91, 234, 1) 100%
   );
+  color-scheme: only light;
 }
 
 html,
 body {
+  color-scheme: light;
   scroll-behavior: smooth;
   max-width: 100vw;
   min-height: 100vh;

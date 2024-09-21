@@ -38,3 +38,33 @@
   width: 95%;
   line-height: 1.3;
 }
+
+@media screen and (min-width: 400px) {
+  .infoBox {
+    height: 176px;
+    width: 364px;
+  }
+
+  .infoBox h1 {
+    font-size: 1.5rem;
+  }
+
+  .infoBox h2 {
+    font-size: 1.25rem;
+  }
+}
+
+@media screen and (min-width: 760px) and (min-height: 880px) {
+  .infoBox {
+    height: 256px;
+    width: 512px;
+  }
+
+  .infoBox h1 {
+    font-size: 2.25rem;
+  }
+
+  .infoBox h2 {
+    font-size: 1.75rem;
+  }
+}
