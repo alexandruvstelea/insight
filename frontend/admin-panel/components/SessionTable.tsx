@@ -71,6 +71,9 @@ const SessionTable: FC<SessionTableProps> = ({
                 Acțiuni
               </th>
               <th scope="col" className="px-6 py-3">
+                Curs
+              </th>
+              <th scope="col" className="px-6 py-3">
                 Tip
               </th>
               <th scope="col" className="px-6 py-3">
@@ -91,9 +94,7 @@ const SessionTable: FC<SessionTableProps> = ({
               <th scope="col" className="px-6 py-3">
                 Sală
               </th>
-              <th scope="col" className="px-6 py-3">
-                Curs
-              </th>
+
               <th scope="col" className="px-6 py-3">
                 Facultate
               </th>
@@ -115,6 +116,14 @@ const SessionTable: FC<SessionTableProps> = ({
                         <DeleteSVG />
                       </button>
                     </div>
+                  </td>
+                  <td
+                    scope="row"
+                    className="px-6 py-4 font-medium   text-white"
+                  >
+                    {session.subject
+                      ? `${session.subject.name} (${session.subject.abbreviation})`
+                      : ""}
                   </td>
                   <td
                     scope="row"
@@ -159,14 +168,7 @@ const SessionTable: FC<SessionTableProps> = ({
                   >
                     {session.room ? session.room.name : ""}
                   </td>
-                  <td
-                    scope="row"
-                    className="px-6 py-4 font-medium   text-white"
-                  >
-                    {session.subject
-                      ? `${session.subject.name} (${session.subject.abbreviation})`
-                      : ""}
-                  </td>
+
                   <td
                     scope="row"
                     className="px-6 py-4 font-medium   text-white"
