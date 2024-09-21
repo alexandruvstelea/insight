@@ -10,7 +10,7 @@ from typing import List
 from ...utility.error_parsing import format_integrity_error
 from .utils import subject_to_out
 from ..programmes.utils import id_to_programme, ids_to_programmes
-from ..sessions.utils import ids_to_sessions
+from ..sessions.utils import ids_to_sessions, update_session_semester
 from ..professors.utils import id_to_professor
 import logging
 
@@ -195,6 +195,11 @@ class SubjectOperations:
                 if new_subject_data.sessions:
                     subject.sessions = await ids_to_sessions(
                         self.session, new_subject_data.sessions
+                    )
+                    await update_session_semester(
+                        self.session,
+                        [session.id for session in subject.sessions],
+                        subject.semester,
                     )
                 else:
                     subject.sessions = []

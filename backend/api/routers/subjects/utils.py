@@ -13,8 +13,9 @@ def subject_to_out(subject: Subject) -> SubjectOut:
     from ..programmes.utils import programme_to_minimal
     from ..sessions.utils import session_to_minimal
     from ..professors.utils import professor_to_minimal
+
     if subject:
-        logger.info(f"Converting subject {subject} to SubjectOut format.")
+        logger.info(f"Converting subject {subject.name} to SubjectOut format.")
         return SubjectOut(
             id=subject.id,
             name=subject.name,
@@ -60,7 +61,7 @@ def subject_to_out(subject: Subject) -> SubjectOut:
 
 def subject_to_minimal(subject: Subject) -> SubjectOutMinimal:
     if subject:
-        logger.info(f"Converting subject {subject} to SessionOutMinimal format.")
+        logger.info(f"Converting subject {subject.name} to SessionOutMinimal format.")
         return SubjectOutMinimal(
             id=subject.id,
             name=subject.name,
@@ -83,7 +84,9 @@ async def id_to_subject(session: AsyncSession, subject_id: int) -> Subject:
                 logger.info(f"Retrieved subject with ID {subject_id}.")
                 return subject
             logger.error(f"No subject with ID {subject_id}.")
-            raise HTTPException(status_code=404, detail=f"No subject with id={subject_id}.")
+            raise HTTPException(
+                status_code=404, detail=f"No subject with id={subject_id}."
+            )
         return None
     except Exception as e:
         logger.error(
@@ -144,7 +147,9 @@ async def get_session_professor(
 ) -> int:
     try:
         if subject_id and type:
-            logger.info(f"Retrieving {type} professor for subject with ID {subject_id}.")
+            logger.info(
+                f"Retrieving {type} professor for subject with ID {subject_id}."
+            )
             subject: Subject = await id_to_subject(session, subject_id)
             match type:
                 case "course":
