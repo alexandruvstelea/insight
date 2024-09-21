@@ -36,7 +36,10 @@ const CommentTable: FC<CommentTableProps> = ({
 
   useEffect(() => {
     const fetchRelatedData = async () => {
-      if (!comments) return;
+      if (!Array.isArray(comments) || comments.length === 0) {
+        setCommentData([]);
+        return;
+      }
 
       const updatedComments = await Promise.all(
         comments.map(async (comment) => {
