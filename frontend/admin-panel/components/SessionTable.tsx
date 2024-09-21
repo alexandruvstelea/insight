@@ -17,7 +17,7 @@ const SessionTable: FC<SessionTableProps> = ({
   sessions = [],
   rooms,
   faculties,
-  fetchRooms,
+
   fetchSessions,
 }) => {
   const [isAddSessionModalOpen, setIsAddSessionModalOpen] = useState(false);
@@ -45,7 +45,6 @@ const SessionTable: FC<SessionTableProps> = ({
         }
 
         fetchSessions();
-        fetchRooms();
       } catch (error) {
         alert("A apărut o eroare la ștergerea orei");
       }
@@ -204,7 +203,6 @@ const SessionTable: FC<SessionTableProps> = ({
             setIsAddSessionModalOpen(false);
           }}
           onSubmit={fetchSessions}
-          onFetchRooms={fetchRooms}
         />
       )}
     </>

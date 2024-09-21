@@ -16,7 +16,6 @@ const SessionForm: React.FC<{
   rooms: Room[];
   onClose: () => void;
   onSubmit: () => void;
-  onFetchRooms: () => void;
 }> = ({
   isEditMode,
   session,
@@ -24,7 +23,7 @@ const SessionForm: React.FC<{
   faculties,
   onClose,
   onSubmit,
-  onFetchRooms,
+
 }) => {
   const [type, setType] = useState<string | null>(session?.type || null);
   const [selectedRoom, setSelectedRoom] = useState<number | null>(null);
@@ -136,7 +135,6 @@ const SessionForm: React.FC<{
         );
 
       onSubmit();
-      onFetchRooms();
       onClose();
     } catch (error) {
       console.error("Error submitting session:", error);
