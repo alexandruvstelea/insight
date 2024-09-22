@@ -83,7 +83,7 @@ const FacultyTable: FC<FacultyTableProps> = ({
               onClick: () => setIsAddFacultyModalOpen(true),
             },
           ]}
-          count={faculties.length}
+          count={faculties?.length || 0}
         />
 
         <table className="w-full text-md text-left text-gray-400">
@@ -190,8 +190,11 @@ const FacultyTable: FC<FacultyTableProps> = ({
               ))
             ) : (
               <tr>
-                <td colSpan={6} className="text-center">
-                  Nu există facultăți disponibile.
+                <td
+                  colSpan={6}
+                  className="p-6 text-2xl text-center text-gray-500"
+                >
+                  Nu există facultăți
                 </td>
               </tr>
             )}

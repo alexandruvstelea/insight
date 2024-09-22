@@ -10,9 +10,9 @@ import {
 const SubjectForm: React.FC<{
   isEditMode: boolean;
   subject?: Subject | null;
-  programmes: Programme[];
-  sessions: Session[];
-  professors: Professor[];
+  programmes: Programme[] | null | undefined;
+  sessions: Session[] | null | undefined;
+  professors: Professor[] | null | undefined;
   onClose: () => void;
   onSubmit: () => void;
 }> = ({
@@ -90,24 +90,30 @@ const SubjectForm: React.FC<{
     }
   };
 
-  const programmeOptions = programmes.map((programme) => ({
-    value: programme.id,
-    label: `${programme.name} (${programme.abbreviation})`,
-  }));
+  const programmeOptions = Array.isArray(programmes)
+    ? programmes.map((programme) => ({
+        value: programme.id,
+        label: programme.name,
+      }))
+    : [];
 
-  const sessionOptions = sessions.map((session) => ({
-    value: session.id,
-    label: `${session.start.slice(0, 5)} - ${session.end.slice(0, 5)} - ${
-      sessionTypeMapping[session.type]
-    } - Sem: ${session.semester} - ${weekTypeMapping[session.week_type]} - ${
-      dayMapping[session.day]
-    }`,
-  }));
+  const sessionOptions = Array.isArray(sessions)
+    ? sessions.map((session) => ({
+        value: session.id,
+        label: `${session.start.slice(0, 5)} - ${session.end.slice(0, 5)} - ${
+          sessionTypeMapping[session.type]
+        } - Sem: ${session.semester} - ${
+          weekTypeMapping[session.week_type]
+        } - ${dayMapping[session.day]}`,
+      }))
+    : [];
 
-  const professorOptions = professors.map((professor) => ({
-    value: professor.id,
-    label: `${professor.first_name} ${professor.last_name}`,
-  }));
+  const professorOptions = Array.isArray(professors)
+    ? professors.map((professor) => ({
+        value: professor.id,
+        label: `${professor.first_name} ${professor.last_name}`,
+      }))
+    : [];
 
   return (
     <div className="fixed z-50 inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">
@@ -143,9 +149,11 @@ const SubjectForm: React.FC<{
               value={semesterOptions.find(
                 (option) => option.value === semester
               )}
-              onChange={(selectedOption) =>
-                setSemester(selectedOption?.value || "")
-              }
+              onChange={(selectedOption) => {
+                if (selectedOption) {
+                  setSemester(String(selectedOption.value));
+                }
+              }}
               isSearchable={false}
               className="w-full"
             />

@@ -26,7 +26,7 @@ export type Programme = {
   id: number;
   name: string;
   abbreviation: string;
-  type: "bachelor" | "master";
+  type: "bachelor" | "master" | "phd";
   faculty: Faculty;
   subjects: Subject[];
 };
@@ -58,7 +58,7 @@ export type Subject = {
   id: number;
   name: string;
   abbreviation: string;
-  semester: number;
+  semester: 1 | 2;
   course_professor_id: number;
   laboratory_professor_id: number;
   seminar_professor_id: number;
@@ -77,11 +77,11 @@ export type Subject = {
 export type Session = {
   id: number;
   type: "course" | "laboratory" | "seminar" | "project";
-  semester: number;
-  week_type: number;
+  semester: 1 | 2;
+  week_type: 0 | 1 | 2 ;
   start: string;
   end: string;
-  day: number;
+  day: 0 | 1 | 2 | 3 | 4 | 5 | 6;
   faculty_id: number[]; 
   room: Room;
   subject: Subject;
@@ -92,22 +92,6 @@ export type Week = {
   start: string;
   end: string;
   semester: number;
-};
-
-export type Rating = {
-  id: number;
-  rating_clarity: number;
-  rating_interactivity: number;
-  rating_relevance: number;
-  rating_comprehension: number;
-  rating_overall: number;
-  timestamp: string;
-  session_type: string;
-  subject_id: number;
-  programme_id: number;
-  professor_id: number;
-  faculty_id: number;
-  room_id: number;
 };
 
 export type Comment = {
@@ -125,4 +109,20 @@ export type Comment = {
   subjectName:string;
   professorName:string;
   facultyName:string;
+};
+
+export type Rating = {
+  id: number;
+  rating_clarity: number;
+  rating_interactivity: number;
+  rating_relevance: number;
+  rating_comprehension: number;
+  rating_overall: number;
+  timestamp: string;
+  session_type: string;
+  subject_id: number;
+  programme_id: number;
+  professor_id: number;
+  faculty_id: number;
+  room_id: number;
 };

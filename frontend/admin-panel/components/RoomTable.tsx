@@ -71,7 +71,7 @@ const RoomTable: FC<RoomTableProps> = ({
               onClick: () => setIsAddRoomModalOpen(true),
             },
           ]}
-          count={rooms.length}
+          count={rooms?.length || 0}
         />
         <table className="w-full text-md text-left text-gray-400">
           <thead className="text-lg  uppercase  bg-gray-700 text-gray-400">
@@ -118,7 +118,7 @@ const RoomTable: FC<RoomTableProps> = ({
                     scope="row"
                     className="px-6 py-4 font-medium   text-white"
                   >
-                    {room.building ? room.building.name : "N/A"}
+                    {room.building ? room.building.name : "-"}
                   </td>
                   <td scope="row" className="px-6 py-4">
                     <button
@@ -140,8 +140,11 @@ const RoomTable: FC<RoomTableProps> = ({
               ))
             ) : (
               <tr>
-                <td colSpan={6} className="text-center">
-                  Nu există sali disponibile.
+                <td
+                  colSpan={4}
+                  className="p-6 text-2xl text-center text-gray-500"
+                >
+                  Nu există săli
                 </td>
               </tr>
             )}

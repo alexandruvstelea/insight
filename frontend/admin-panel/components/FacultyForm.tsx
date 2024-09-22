@@ -5,9 +5,9 @@ import { Building, Professor, Programme, Faculty } from "@/utils/types";
 const FacultyForm: React.FC<{
   isEditMode: boolean;
   faculty?: Faculty | null;
-  buildings: Building[];
-  professors: Professor[];
-  programmes: Programme[];
+  buildings: Building[] | null | undefined;
+  professors: Professor[] | null | undefined;
+  programmes: Programme[] | null | undefined;
   onClose: () => void;
   onSubmit: () => void;
 }> = ({
@@ -75,20 +75,25 @@ const FacultyForm: React.FC<{
     }
   };
 
-  const buildingOptions = buildings.map((building) => ({
-    value: building.id,
-    label: building.name,
-  }));
+  const buildingOptions = Array.isArray(buildings)
+    ? buildings.map((building) => ({
+        value: building.id,
+        label: building.name,
+      }))
+    : [];
 
-  const professorOptions = professors.map((professor) => ({
-    value: professor.id,
-    label: `${professor.first_name} ${professor.last_name}`,
-  }));
-
-  const programmeOptions = programmes.map((programme) => ({
-    value: programme.id,
-    label: programme.name,
-  }));
+  const professorOptions = Array.isArray(professors)
+    ? professors.map((professor) => ({
+        value: professor.id,
+        label: `${professor.first_name} ${professor.last_name}`,
+      }))
+    : [];
+  const programmeOptions = Array.isArray(programmes)
+    ? programmes.map((programme) => ({
+        value: programme.id,
+        label: programme.name,
+      }))
+    : [];
 
   return (
     <div className="fixed z-50 inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">

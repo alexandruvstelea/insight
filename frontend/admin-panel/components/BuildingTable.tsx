@@ -70,7 +70,7 @@ const BuildingTable: FC<BuildingTableProps> = ({
               onClick: () => setIsAddBuildingModalOpen(true),
             },
           ]}
-          count={buildings.length}
+          count={buildings?.length || 0}
         />
 
         <table className="w-full text-md text-left text-gray-400">
@@ -150,8 +150,11 @@ const BuildingTable: FC<BuildingTableProps> = ({
               ))
             ) : (
               <tr>
-                <td colSpan={6} className="text-center">
-                  Nu există cladiri disponibile.
+                <td
+                  colSpan={4}
+                  className="p-6 text-2xl text-center text-gray-500"
+                >
+                  Nu există clădiri
                 </td>
               </tr>
             )}

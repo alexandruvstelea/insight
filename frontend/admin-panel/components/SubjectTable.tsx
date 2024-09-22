@@ -77,7 +77,7 @@ const SubjectTable: FC<SubjectTableProps> = ({
               onClick: () => setIsAddSubjectModalOpen(true),
             },
           ]}
-          count={subjects.length}
+          count={subjects?.length || 0}
         />
         <table className="w-full text-md text-left text-gray-400">
           <thead className="text-lg  uppercase  bg-gray-700 text-gray-400">
@@ -156,7 +156,7 @@ const SubjectTable: FC<SubjectTableProps> = ({
                   >
                     {subject.course_professor
                       ? `${subject.course_professor.last_name} ${subject.course_professor.first_name}`
-                      : ""}
+                      : "-"}
                   </td>
                   <td
                     scope="row"
@@ -164,7 +164,7 @@ const SubjectTable: FC<SubjectTableProps> = ({
                   >
                     {subject.laboratory_professor
                       ? `${subject.laboratory_professor.last_name} ${subject.laboratory_professor.first_name}`
-                      : ""}
+                      : "-"}
                   </td>
                   <td
                     scope="row"
@@ -172,7 +172,7 @@ const SubjectTable: FC<SubjectTableProps> = ({
                   >
                     {subject.seminar_professor
                       ? `${subject.seminar_professor.last_name} ${subject.seminar_professor.first_name}`
-                      : ""}
+                      : "-"}
                   </td>
                   <td
                     scope="row"
@@ -180,7 +180,7 @@ const SubjectTable: FC<SubjectTableProps> = ({
                   >
                     {subject.project_professor
                       ? `${subject.project_professor.last_name} ${subject.project_professor.first_name}`
-                      : ""}
+                      : "-"}
                   </td>
 
                   <td scope="row" className="px-6 py-4">
@@ -219,8 +219,11 @@ const SubjectTable: FC<SubjectTableProps> = ({
               ))
             ) : (
               <tr>
-                <td colSpan={9} className="text-center">
-                  Nu exista materii disponibili
+                <td
+                  colSpan={10}
+                  className="p-6 text-2xl text-center text-gray-500"
+                >
+                  Nu există materii
                 </td>
               </tr>
             )}

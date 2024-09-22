@@ -5,7 +5,7 @@ import { genderOptions } from "@/utils/functions";
 const ProfessorForm: React.FC<{
   isEditMode: boolean;
   professor?: Professor | null;
-  faculties: Faculty[];
+  faculties: Faculty[] | null | undefined;
   onClose: () => void;
   onSubmit: () => void;
 }> = ({ isEditMode, professor, faculties, onClose, onSubmit }) => {
@@ -56,10 +56,12 @@ const ProfessorForm: React.FC<{
     }
   };
 
-  const facultyOptions = faculties.map((faculty) => ({
-    value: faculty.id,
-    label: faculty.name,
-  }));
+  const facultyOptions = Array.isArray(faculties)
+    ? faculties.map((faculty) => ({
+        value: faculty.id,
+        label: faculty.name,
+      }))
+    : [];
 
   return (
     <div className="fixed z-50 inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">

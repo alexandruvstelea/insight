@@ -90,8 +90,11 @@ const WeekTable: FC<WeekTableProps> = ({ weeks = [], fetchWeeks }) => {
               ))
             ) : (
               <tr>
-                <td colSpan={4} className="p-2 text-center text-gray-500">
-                  Nu sunt săptămâni disponibile
+                <td
+                  colSpan={4}
+                  className="p-6 text-2xl text-center text-gray-500"
+                >
+                  Nu există săptămâni
                 </td>
               </tr>
             )}

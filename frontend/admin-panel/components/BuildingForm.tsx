@@ -5,8 +5,8 @@ import { Building, Room, Faculty } from "@/utils/types";
 const BuildingForm: React.FC<{
   isEditMode: boolean;
   building?: Building | null;
-  rooms: Room[];
-  faculties: Faculty[];
+  rooms: Room[] | null | undefined;
+  faculties: Faculty[] | null | undefined;
   onClose: () => void;
   onSubmit: () => void;
 }> = ({ isEditMode, building, rooms, faculties, onClose, onSubmit }) => {
@@ -58,15 +58,19 @@ const BuildingForm: React.FC<{
     }
   };
 
-  const roomOptions = rooms.map((room) => ({
-    value: room.id,
-    label: room.name,
-  }));
+  const roomOptions = Array.isArray(rooms)
+    ? rooms.map((room) => ({
+        value: room.id,
+        label: room.name,
+      }))
+    : [];
 
-  const facultyOptions = faculties.map((faculty) => ({
-    value: faculty.id,
-    label: faculty.name,
-  }));
+  const facultyOptions = Array.isArray(faculties)
+    ? faculties.map((faculty) => ({
+        value: faculty.id,
+        label: faculty.name,
+      }))
+    : [];
 
   return (
     <div className="fixed z-50 inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">

@@ -125,7 +125,7 @@ const CommentTable: FC<CommentTableProps> = ({
           </tr>
         </thead>
         <tbody>
-          {Array.isArray(commentData) ? (
+          {Array.isArray(comments) ? (
             commentData.map((comment) => (
               <tr
                 key={comment.id}
@@ -164,8 +164,11 @@ const CommentTable: FC<CommentTableProps> = ({
             ))
           ) : (
             <tr>
-              <td colSpan={3} className="text-center p-4">
-                Nu există comentarii.
+              <td
+                colSpan={8}
+                className="p-6 text-2xl text-center text-gray-500"
+              >
+                Nu există comentarii
               </td>
             </tr>
           )}

@@ -6,8 +6,8 @@ import { programmeTypeMapping } from "@/utils/functions";
 const ProgrammeForm: React.FC<{
   isEditMode: boolean;
   programme?: Programme | null;
-  faculties: Faculty[];
-  subjects: Subject[];
+  faculties: Faculty[] | null | undefined;
+  subjects: Subject[] | null | undefined;
   onClose: () => void;
   onSubmit: () => void;
 }> = ({ isEditMode, programme, faculties, subjects, onClose, onSubmit }) => {
@@ -73,23 +73,18 @@ const ProgrammeForm: React.FC<{
     label: programmeTypeMapping[key],
   }));
 
-  const facultyOptions = faculties.map((faculty) => ({
-    value: faculty.id,
-    label: faculty.name,
-  }));
-
-  const subjectOptions = subjects.map((subject) => ({
-    value: subject.id,
-    label: subject.name,
-  }));
-
-  function setSelectedBuilding(arg0: number | null): void {
-    throw new Error("Function not implemented.");
-  }
-
-  function setSelectedSessions(arg0: number[]): void {
-    throw new Error("Function not implemented.");
-  }
+  const facultyOptions = Array.isArray(faculties)
+    ? faculties.map((faculty) => ({
+        value: faculty.id,
+        label: faculty.name,
+      }))
+    : [];
+  const subjectOptions = Array.isArray(subjects)
+    ? subjects.map((subject) => ({
+        value: subject.id,
+        label: subject.name,
+      }))
+    : [];
 
   return (
     <div className="fixed z-50 inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">

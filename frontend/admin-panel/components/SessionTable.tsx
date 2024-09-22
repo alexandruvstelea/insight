@@ -62,7 +62,7 @@ const SessionTable: FC<SessionTableProps> = ({
               onClick: () => setIsAddSessionModalOpen(true),
             },
           ]}
-          count={sessions.length}
+          count={sessions?.length || 0}
         />
         <table className="w-full text-md text-left text-gray-400">
           <thead className="text-lg  uppercase  bg-gray-700 text-gray-400">
@@ -178,15 +178,18 @@ const SessionTable: FC<SessionTableProps> = ({
                     session.faculty_id.length > 0
                       ? faculties.find(
                           (faculty) => faculty.id === session.faculty_id[0]
-                        )?.abbreviation || "N/A"
-                      : "N/A"}
+                        )?.abbreviation || "-"
+                      : "-"}
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan={9} className="text-center">
-                  Nu exista sesuni disponibili
+                <td
+                  colSpan={10}
+                  className="p-6 text-2xl text-center text-gray-500"
+                >
+                  Nu există ore
                 </td>
               </tr>
             )}

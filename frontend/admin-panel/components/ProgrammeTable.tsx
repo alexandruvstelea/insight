@@ -71,7 +71,7 @@ const ProgrammeTable: FC<ProgrammeTableProps> = ({
               onClick: () => setIsAddProgrammeModalOpen(true),
             },
           ]}
-          count={programmes.length}
+          count={programmes?.length || 0}
         />
         <table className="w-full text-md text-left text-gray-400">
           <thead className="text-lg  uppercase  bg-gray-700 text-gray-400">
@@ -136,7 +136,7 @@ const ProgrammeTable: FC<ProgrammeTableProps> = ({
                     scope="row"
                     className="px-6 py-4 font-medium   text-white"
                   >
-                    {programme.faculty ? programme.faculty.abbreviation : "N/A"}
+                    {programme.faculty ? programme.faculty.abbreviation : "-"}
                   </td>
                   <td scope="row" className="px-6 py-4">
                     <button
@@ -158,8 +158,11 @@ const ProgrammeTable: FC<ProgrammeTableProps> = ({
               ))
             ) : (
               <tr>
-                <td colSpan={6} className="text-center">
-                  Nu există specializari disponibile.
+                <td
+                  colSpan={6}
+                  className="p-6 text-2xl text-center text-gray-500"
+                >
+                  Nu există specializări
                 </td>
               </tr>
             )}

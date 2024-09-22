@@ -12,19 +12,11 @@ import {
 const SessionForm: React.FC<{
   isEditMode: boolean;
   session?: Session | null;
-  faculties: Faculty[];
-  rooms: Room[];
+  faculties: Faculty[] | null | undefined;
+  rooms: Room[] | null | undefined;
   onClose: () => void;
   onSubmit: () => void;
-}> = ({
-  isEditMode,
-  session,
-  rooms,
-  faculties,
-  onClose,
-  onSubmit,
-
-}) => {
+}> = ({ isEditMode, session, rooms, faculties, onClose, onSubmit }) => {
   const [type, setType] = useState<string | null>(session?.type || null);
   const [selectedRoom, setSelectedRoom] = useState<number | null>(null);
   const [selectedFaculty, setSelectedFaculty] = useState<number | null>(null);
@@ -162,15 +154,19 @@ const SessionForm: React.FC<{
     label: day,
   }));
 
-  const roomOptions = rooms.map((room) => ({
-    value: room.id,
-    label: room.name,
-  }));
+  const roomOptions = Array.isArray(rooms)
+    ? rooms.map((room) => ({
+        value: room.id,
+        label: room.name,
+      }))
+    : [];
 
-  const facultyOptions = faculties.map((faculty) => ({
-    value: faculty.id,
-    label: faculty.name,
-  }));
+  const facultyOptions = Array.isArray(faculties)
+    ? faculties.map((faculty) => ({
+        value: faculty.id,
+        label: faculty.name,
+      }))
+    : [];
 
   return (
     <div className="fixed z-50 inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">

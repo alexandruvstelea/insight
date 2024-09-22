@@ -102,7 +102,7 @@ const ProfessorTable: FC<ProfessorTableProps> = ({
               onClick: () => setIsAddProfessorModalOpen(true),
             },
           ]}
-          count={professors.length}
+          count={professors?.length || 0}
         />
         <table className="w-full text-md text-left text-gray-400">
           <thead className="text-lg  uppercase  bg-gray-700 text-gray-400">
@@ -255,8 +255,11 @@ const ProfessorTable: FC<ProfessorTableProps> = ({
               ))
             ) : (
               <tr>
-                <td colSpan={9} className="text-center">
-                  Nu exista profesori disponibili
+                <td
+                  colSpan={8}
+                  className="p-6 text-2xl text-center text-gray-500"
+                >
+                  Nu există profesori 
                 </td>
               </tr>
             )}

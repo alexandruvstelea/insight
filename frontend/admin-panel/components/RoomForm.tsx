@@ -9,8 +9,8 @@ import {
 const RoomForm: React.FC<{
   isEditMode: boolean;
   room?: Room | null;
-  buildings: Building[];
-  sessions: Session[];
+  buildings: Building[] | null | undefined;
+  sessions: Session[] | null | undefined;
   onClose: () => void;
   onSubmit: () => void;
 }> = ({ isEditMode, room, buildings, sessions, onClose, onSubmit }) => {
@@ -60,19 +60,23 @@ const RoomForm: React.FC<{
     }
   };
 
-  const buildingOptions = buildings.map((building) => ({
-    value: building.id,
-    label: building.name,
-  }));
+  const buildingOptions = Array.isArray(buildings)
+    ? buildings.map((building) => ({
+        value: building.id,
+        label: building.name,
+      }))
+    : [];
 
-  const sessionOptions = sessions.map((session) => ({
-    value: session.id,
-    label: `${session.start.slice(0, 5)} - ${session.end.slice(0, 5)} - ${
-      sessionTypeMapping[session.type]
-    } - Sem: ${session.semester} - ${weekTypeMapping[session.week_type]} - ${
-      dayMapping[session.day]
-    }`,
-  }));
+  const sessionOptions = Array.isArray(sessions)
+    ? sessions.map((session) => ({
+        value: session.id,
+        label: `${session.start.slice(0, 5)} - ${session.end.slice(0, 5)} - ${
+          sessionTypeMapping[session.type]
+        } - Sem: ${session.semester} - ${
+          weekTypeMapping[session.week_type]
+        } - ${dayMapping[session.day]}`,
+      }))
+    : [];
 
   return (
     <div className="fixed z-50 inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">
