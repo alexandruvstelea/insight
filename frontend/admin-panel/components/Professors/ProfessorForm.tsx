@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import { Professor, Faculty } from "@/utils/types";
 import { genderOptions } from "@/utils/functions";
+import ButtonGroup from "../ButtonGroup";
+import { customSelectStyle } from "@/utils/customSelectStyle";
 const ProfessorForm: React.FC<{
   isEditMode: boolean;
   professor?: Professor | null;
@@ -64,34 +66,40 @@ const ProfessorForm: React.FC<{
     : [];
 
   return (
-    <div className="fixed z-50 inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">
-      <div className="bg-white p-4 rounded shadow-lg max-w-xl w-full">
-        <h3 className="text-lg font-semibold mb-2">
+    <div className="fixed z-50 inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center">
+      <div className="bg-slate-700 p-4 rounded shadow-lg max-w-xl w-full max-h-[90vh] overflow-y-auto">
+        <h3 className="text-xl font-semibold text-center mb-2 text-white">
           {isEditMode ? "Editează profesorul" : "Adaugă profesorul"}
         </h3>
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block mb-1">Prenume</label>
+          <div className="mb-5">
+            <label htmlFor="firstName" className="label">
+              Prenume
+            </label>
             <input
+              id="firstName"
               type="text"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
-              className="w-full p-2 border rounded"
+              className="input"
               required
             />
           </div>
-          <div className="mb-4">
-            <label className="block mb-1">Numele de familie</label>
+          <div className="mb-5">
+            <label htmlFor="lastName" className="label">
+              Numele de familie
+            </label>
             <input
+              id="lastName"
               type="text"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
-              className="w-full p-2 border rounded"
+              className="input"
               required
             />
           </div>
-          <div className="mb-4">
-            <label className="block mb-1">Gen</label>
+          <div className="mb-5">
+            <label className="label">Gen</label>
             <Select
               options={genderOptions}
               value={genderOptions.find((option) => option.value === gender)}
@@ -99,12 +107,12 @@ const ProfessorForm: React.FC<{
                 setGender(selectedOption?.value || "")
               }
               isSearchable={false}
-              className="w-full"
+              styles={customSelectStyle}
             />
           </div>
 
-          <div className="mb-4">
-            <label className="block mb-1">Facultăți</label>
+          <div className="mb-5">
+            <label className="label">Facultăți</label>
             <Select
               options={facultyOptions}
               isMulti
@@ -119,25 +127,11 @@ const ProfessorForm: React.FC<{
                   )
                 )
               }
-              className="w-full"
+              styles={customSelectStyle}
             />
           </div>
 
-          <div className="flex justify-between mt-6">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 bg-gray-500 text-white rounded"
-            >
-              Închide
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-blue-500 text-white rounded"
-            >
-              {isEditMode ? "Editează" : "Adaugă"}
-            </button>
-          </div>
+          <ButtonGroup onClose={onClose} isEditMode={isEditMode} />
         </form>
       </div>
     </div>

@@ -2,15 +2,15 @@
 
 import MenuSVG from "@/components/svgs/MenuSVG";
 import InfoSVG from "@/components/svgs/InfoSVG";
-import FacultyTable from "@/components/FacultyTable";
-import RoomTable from "@/components/RoomTable";
-import BuildingTable from "@/components/BuildingTable";
-import ProgrammeTable from "@/components/ProgrammeTable";
-import SessionTable from "@/components/SessionTable";
-import ProfessorTable from "@/components/ProfessorTable";
-import SubjectTable from "@/components/SubjectTable";
-import WeekTable from "@/components/WeekTable";
-import CommentTable from "@/components/CommentTable";
+import FacultyTable from "@/components/Faculties/FacultyTable";
+import RoomTable from "@/components/Rooms/RoomTable";
+import BuildingTable from "@/components/Buildings/BuildingTable";
+import ProgrammeTable from "@/components/Programmes/ProgrammeTable";
+import SessionTable from "@/components/Sessions/SessionTable";
+import ProfessorTable from "@/components/Professors/ProfessorTable";
+import SubjectTable from "@/components/Subjects/SubjectTable";
+import WeekTable from "@/components/Weeks/WeekTable";
+import CommentTable from "@/components/Comments/CommentTable";
 import { useEffect, useState } from "react";
 import {
   Faculty,

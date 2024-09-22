@@ -2,7 +2,7 @@ import React, { FC, useState, useEffect } from "react";
 import { Comment } from "@/utils/types";
 import DeleteSVG from "@/components/svgs/DeleteSVG";
 import { CommentTableProps } from "@/utils/interfaces";
-import HeaderSection from "./HeaderSection";
+import HeaderSection from "../HeaderSection";
 
 const CommentTable: FC<CommentTableProps> = ({
   comments = [],

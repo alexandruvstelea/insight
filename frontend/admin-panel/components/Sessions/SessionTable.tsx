@@ -2,7 +2,7 @@
 
 import DeleteSVG from "@/components/svgs/DeleteSVG";
 import EditSVG from "@/components/svgs/EditSVG";
-import SessionForm from "@/components/SessionForm";
+import SessionForm from "@/components/Sessions/SessionForm";
 import { useState, FC } from "react";
 import { Session } from "@/utils/types";
 import { SessionTableProps } from "@/utils/interfaces";
@@ -11,7 +11,7 @@ import {
   dayMapping,
   sessionTypeMapping,
 } from "@/utils/functions";
-import HeaderSection from "./HeaderSection";
+import HeaderSection from "../HeaderSection";
 
 const SessionTable: FC<SessionTableProps> = ({
   sessions = [],

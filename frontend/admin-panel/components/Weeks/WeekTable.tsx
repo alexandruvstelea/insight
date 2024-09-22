@@ -2,8 +2,8 @@
 
 import { FC, useState } from "react";
 import { Week } from "@/utils/types";
-import WeekForm from "@/components/WeekForm";
-import HeaderSection from "./HeaderSection";
+import WeekForm from "@/components/Weeks/WeekForm";
+import HeaderSection from "../HeaderSection";
 
 interface WeekTableProps {
   weeks: Week[];
@@ -48,7 +48,7 @@ const WeekTable: FC<WeekTableProps> = ({ weeks = [], fetchWeeks }) => {
               className: "button-red",
             },
           ]}
-          count={weeks.length}
+          count={weeks?.length || 0}
         />
         <table className="w-full text-md text-left text-gray-400">
           <thead className="text-lg  uppercase  bg-gray-700 text-gray-400">

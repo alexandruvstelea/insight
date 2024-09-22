@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+import ButtonGroup from "../ButtonGroup";
 
 const WeekForm: React.FC<{
   onClose: () => void;
   onSubmit: () => void;
 }> = ({ onClose, onSubmit }) => {
-  const [intervals, setIntervals] = useState<number[]>(new Array(8).fill(0));
+  const [intervals, setIntervals] = useState<number[]>(new Array(8).fill(""));
   const [yearStart, setYearStart] = useState<string>("");
 
   const handleIntervalChange = (index: number, value: string) => {
@@ -42,49 +43,42 @@ const WeekForm: React.FC<{
   };
 
   return (
-    <div className="fixed z-50 inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">
-      <div className="bg-white p-4 rounded shadow-lg max-w-xl w-full">
-        <h3 className="text-lg font-semibold mb-2">Adaugă săptămâni</h3>
+    <div className="fixed z-50 inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center">
+      <div className="bg-slate-700 p-4 rounded shadow-lg max-w-xl w-full max-h-[90vh] overflow-y-auto">
+        <h3 className="text-xl font-semibold text-center mb-2 text-white">
+          Adaugă săptămâni
+        </h3>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block mb-1">Data inceperii anului</label>
+            <label htmlFor="yearStart" className="label">
+              Data inceperii anului
+            </label>
             <input
+              id="yearStart"
               type="date"
               value={yearStart}
               onChange={(e) => setYearStart(e.target.value)}
-              className="w-full p-2 border rounded"
+              className="input"
               required
             />
           </div>
-          <div className="mb-4">
-            <label className="block mb-1">Intervale</label>
-            {intervals.map((interval, index) => (
+          {intervals.map((interval, index) => (
+            <div className="mb-4">
+              <label className="label">
+                Numar saptamani interval {index + 1}
+              </label>
+
               <input
                 key={index}
                 type="number"
                 value={interval}
                 onChange={(e) => handleIntervalChange(index, e.target.value)}
-                className="w-full p-2 border rounded mb-2"
+                className="input"
                 required
               />
-            ))}
-          </div>
-
-          <div className="flex justify-between mt-6">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 bg-gray-500 text-white rounded"
-            >
-              Închide
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-blue-500 text-white rounded"
-            >
-              Adaugă
-            </button>
-          </div>
+            </div>
+          ))}
+          <ButtonGroup onClose={onClose} />
         </form>
       </div>
     </div>

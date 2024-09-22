@@ -2,7 +2,7 @@
 
 import DeleteSVG from "@/components/svgs/DeleteSVG";
 import EditSVG from "@/components/svgs/EditSVG";
-import RoomForm from "@/components/RoomForm";
+import RoomForm from "@/components/Rooms/RoomForm";
 import { useState, FC } from "react";
 import { Room, Session } from "@/utils/types";
 import Modal from "@/components/Modal";
@@ -13,7 +13,7 @@ import {
   dayMapping,
   sessionTypeMapping,
 } from "@/utils/functions";
-import HeaderSection from "./HeaderSection";
+import HeaderSection from "../HeaderSection";
 
 const RoomTable: FC<RoomTableProps> = ({
   rooms = [],

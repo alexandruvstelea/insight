@@ -7,8 +7,8 @@ import { Faculty, Professor, SessionType } from "@/utils/types";
 import { ProfessorTableProps } from "@/utils/interfaces";
 import Modal from "@/components/Modal";
 import { genderTypeMapping } from "@/utils/functions";
-import ProfessorForm from "@/components/ProfessorForm";
-import HeaderSection from "./HeaderSection";
+import ProfessorForm from "@/components/Professors/ProfessorForm";
+import HeaderSection from "../HeaderSection";
 
 const ProfessorTable: FC<ProfessorTableProps> = ({
   professors = [],
@@ -259,7 +259,7 @@ const ProfessorTable: FC<ProfessorTableProps> = ({
                   colSpan={8}
                   className="p-6 text-2xl text-center text-gray-500"
                 >
-                  Nu există profesori 
+                  Nu există profesori
                 </td>
               </tr>
             )}

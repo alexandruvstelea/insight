@@ -6,7 +6,7 @@ import HeaderSection from "@/components/HeaderSection";
 import { useState, FC } from "react";
 import { Faculty, Room, Building } from "@/utils/types";
 import Modal from "@/components/Modal";
-import BuildingForm from "@/components/BuildingForm";
+import BuildingForm from "@/components/Buildings/BuildingForm";
 import { BuildingTableProps } from "@/utils/interfaces";
 
 const BuildingTable: FC<BuildingTableProps> = ({

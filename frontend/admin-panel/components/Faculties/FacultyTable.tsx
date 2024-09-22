@@ -6,8 +6,8 @@ import { useState, FC } from "react";
 import { Faculty, Building, Professor, Programme } from "@/utils/types";
 import { FacultyTableProps } from "@/utils/interfaces";
 import Modal from "@/components/Modal";
-import FacultyForm from "@/components/FacultyForm";
-import HeaderSection from "./HeaderSection";
+import FacultyForm from "@/components/Faculties/FacultyForm";
+import HeaderSection from "../HeaderSection";
 
 const FacultyTable: FC<FacultyTableProps> = ({
   faculties = [],

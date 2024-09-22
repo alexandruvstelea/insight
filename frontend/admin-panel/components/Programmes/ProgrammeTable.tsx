@@ -2,13 +2,13 @@
 
 import DeleteSVG from "@/components/svgs/DeleteSVG";
 import EditSVG from "@/components/svgs/EditSVG";
-import ProgrammeForm from "@/components/ProgrammeForm";
+import ProgrammeForm from "@/components/Programmes/ProgrammeForm";
 import { useState, FC } from "react";
 import { Programme, Subject } from "@/utils/types";
 import Modal from "@/components/Modal";
 import { ProgrammeTableProps } from "@/utils/interfaces";
 import { programmeTypeMapping } from "@/utils/functions";
-import HeaderSection from "./HeaderSection";
+import HeaderSection from "../HeaderSection";
 const ProgrammeTable: FC<ProgrammeTableProps> = ({
   programmes = [],
   faculties,

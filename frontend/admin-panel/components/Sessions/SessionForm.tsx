@@ -9,6 +9,8 @@ import {
   sessionTypeMapping,
   startEndTimeOptions,
 } from "@/utils/functions";
+import ButtonGroup from "../ButtonGroup";
+import { customSelectStyle } from "@/utils/customSelectStyle";
 const SessionForm: React.FC<{
   isEditMode: boolean;
   session?: Session | null;
@@ -169,93 +171,14 @@ const SessionForm: React.FC<{
     : [];
 
   return (
-    <div className="fixed z-50 inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">
-      <div className="bg-white p-4 rounded shadow-lg max-w-xl w-full">
-        <h3 className="text-lg font-semibold mb-2">
+    <div className="fixed z-50 inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center">
+      <div className="bg-slate-700 p-4 rounded shadow-lg max-w-xl w-full max-h-[90vh] overflow-y-auto">
+        <h3 className="text-xl font-semibold text-center mb-2 text-white">
           {isEditMode ? "Editează sesiune" : "Adaugă sesiune"}
         </h3>
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="block mb-1">Tip</label>
-            <Select
-              options={typeOptions}
-              value={typeOptions.find((option) => option.value === type)}
-              onChange={(selectedOption) =>
-                setType(selectedOption?.value || "")
-              }
-              isSearchable={false}
-              className="w-full"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block mb-1">Tipul săptămânii</label>
-            <Select
-              options={weekTypeOptions}
-              value={weekTypeOptions.find(
-                (option) => option.value === weekType
-              )}
-              onChange={(selectedOption) =>
-                setWeekType(selectedOption?.value || 0)
-              }
-              isSearchable={false}
-              className="w-full"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block mb-1">Zi</label>
-            <Select
-              options={dayOptions}
-              value={dayOptions.find((option) => option.value === day)}
-              onChange={(selectedOption) => setDay(selectedOption?.value || 0)}
-              isSearchable={false}
-              className="w-full"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block mb-1">Ora de început</label>
-            <Select
-              options={startEndTimeOptions}
-              value={startEndTimeOptions.find(
-                (option) => option.value === start
-              )}
-              onChange={(selectedOption) =>
-                setStart(selectedOption?.value || "08:00")
-              }
-              className="w-full"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block mb-1">Ora de sfârșit</label>
-            <Select
-              options={filteredEndTimeOptions}
-              value={startEndTimeOptions.find((option) => option.value === end)}
-              onChange={(selectedOption) =>
-                setEnd(selectedOption?.value || "10:00")
-              }
-              className="w-full"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block mb-1">Sală</label>
-            <Select
-              options={roomOptions}
-              value={roomOptions.find(
-                (option) => option.value === selectedRoom
-              )}
-              isSearchable
-              onChange={(selectedOption) =>
-                setSelectedRoom(selectedOption?.value || null)
-              }
-              className="w-full"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block mb-1">Facultate</label>
+          <div className="mb-5">
+            <label className="label">Facultate</label>
             <Select
               options={facultyOptions}
               value={facultyOptions.find(
@@ -265,11 +188,11 @@ const SessionForm: React.FC<{
               onChange={(selectedOption) =>
                 setSelectedFaculty(selectedOption?.value || null)
               }
-              className="w-full"
+              styles={customSelectStyle}
             />
           </div>
-          <div className="mb-4">
-            <label className="block mb-1">Curs</label>
+          <div className="mb-5">
+            <label className="label">Curs</label>
             <Select
               options={subjectOptions}
               value={
@@ -281,25 +204,89 @@ const SessionForm: React.FC<{
               onChange={(selectedOption) =>
                 setSelectedSubject(selectedOption?.value || null)
               }
-              className="w-full"
+              styles={customSelectStyle}
+            />
+          </div>
+          <div className="mb-5">
+            <label className="label">Sală</label>
+            <Select
+              options={roomOptions}
+              value={roomOptions.find(
+                (option) => option.value === selectedRoom
+              )}
+              isSearchable
+              onChange={(selectedOption) =>
+                setSelectedRoom(selectedOption?.value || null)
+              }
+              styles={customSelectStyle}
+            />
+          </div>
+          <div className="mb-5">
+            <label className="label">Tip</label>
+            <Select
+              options={typeOptions}
+              value={typeOptions.find((option) => option.value === type)}
+              onChange={(selectedOption) =>
+                setType(selectedOption?.value || "")
+              }
+              isSearchable={false}
+              styles={customSelectStyle}
             />
           </div>
 
-          <div className="flex justify-between mt-6">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 bg-gray-500 text-white rounded"
-            >
-              Închide
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-blue-500 text-white rounded"
-            >
-              {isEditMode ? "Editează" : "Adaugă"}
-            </button>
+          <div className="mb-5">
+            <label className="label">Tipul săptămânii</label>
+            <Select
+              options={weekTypeOptions}
+              value={weekTypeOptions.find(
+                (option) => option.value === weekType
+              )}
+              onChange={(selectedOption) =>
+                setWeekType(selectedOption?.value || 0)
+              }
+              isSearchable={false}
+              styles={customSelectStyle}
+            />
           </div>
+
+          <div className="mb-5">
+            <label className="label">Zi</label>
+            <Select
+              options={dayOptions}
+              value={dayOptions.find((option) => option.value === day)}
+              onChange={(selectedOption) => setDay(selectedOption?.value || 0)}
+              isSearchable={false}
+              styles={customSelectStyle}
+            />
+          </div>
+
+          <div className="mb-5">
+            <label className="label">Ora de început</label>
+            <Select
+              options={startEndTimeOptions}
+              value={startEndTimeOptions.find(
+                (option) => option.value === start
+              )}
+              onChange={(selectedOption) =>
+                setStart(selectedOption?.value || "08:00")
+              }
+              styles={customSelectStyle}
+            />
+          </div>
+
+          <div className="mb-5">
+            <label className="label">Ora de sfârșit</label>
+            <Select
+              options={filteredEndTimeOptions}
+              value={startEndTimeOptions.find((option) => option.value === end)}
+              onChange={(selectedOption) =>
+                setEnd(selectedOption?.value || "10:00")
+              }
+              styles={customSelectStyle}
+            />
+          </div>
+
+          <ButtonGroup onClose={onClose} isEditMode={isEditMode} />
         </form>
       </div>
     </div>

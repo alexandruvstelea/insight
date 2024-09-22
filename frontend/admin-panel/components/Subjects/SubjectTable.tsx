@@ -6,13 +6,13 @@ import { useState, FC } from "react";
 import { Programme, Session, Subject } from "@/utils/types";
 import { SubjectTableProps } from "@/utils/interfaces";
 import Modal from "@/components/Modal";
-import SubjectForm from "@/components/SubjectForm";
+import SubjectForm from "@/components/Subjects/SubjectForm";
 import {
   weekTypeMapping,
   dayMapping,
   sessionTypeMapping,
 } from "@/utils/functions";
-import HeaderSection from "./HeaderSection";
+import HeaderSection from "../HeaderSection";
 const SubjectTable: FC<SubjectTableProps> = ({
   subjects = [],
   professors,
@@ -65,7 +65,7 @@ const SubjectTable: FC<SubjectTableProps> = ({
     setSelectedProgrammes(programmes);
     setIsProgrammesModalOpen(true);
   };
-
+  console.log(subjects);
   return (
     <>
       <div className="p-4 flex flex-col items-center justify-center glass-background">
@@ -257,7 +257,7 @@ const SubjectTable: FC<SubjectTableProps> = ({
                   <div className="w-1/4 ">
                     {session.start.slice(0, 5)}-{session.end.slice(0, 5)}
                   </div>
-
+                  <div className="w-1/4">{dayMapping[session.day]}</div>
                   <div className="w-1/4 ">
                     {sessionTypeMapping[session.type]}
                   </div>
@@ -266,7 +266,6 @@ const SubjectTable: FC<SubjectTableProps> = ({
                   <div className="w-1/4">
                     {weekTypeMapping[session.week_type]}
                   </div>
-                  <div className="w-1/4">{dayMapping[session.day]}</div>
                 </div>
               </>
             );
