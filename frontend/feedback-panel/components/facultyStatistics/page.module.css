@@ -1,0 +1,23 @@
+.facultyStatistic {
+  width: 88px;
+  height: 88px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 16px;
+  gap: 8px;
+}
+
+.facultyStatistic h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin: 0;
+  color: var(--main-blue-dark);
+}
+
+.facultyStatistic h2 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin: 0;
+}
