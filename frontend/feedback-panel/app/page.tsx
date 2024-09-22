@@ -32,7 +32,7 @@ export default async function Home() {
           <Image
             width={80}
             height={80}
-            src={"/svg/analytics.svg"}
+            src={"/svg/feedback.svg"}
             alt="Landing Page Image"
             className={styles.landingImage}
           />
@@ -46,37 +46,29 @@ export default async function Home() {
             content="InSight este un proiect creat cu scopul de a facilita comunicarea
               dintre studenți și profesori, pentru a oferi un feedback
               constructiv asupra cursurilor lor."
-          />
-          <Image
-            width={80}
-            height={80}
-            src={"/svg/social-network.svg"}
-            alt="Landing Page Image"
-            className={styles.decorativeImage}
+            imagePath="/svg/social-network.svg"
+            reversable={false}
           />
           <InfoBox
             title="De ce există inSight?"
             content="Suntem de părere că metodele actuale de colectare a feedback-ului
               din cadrul universității nu sunt destul de eficiente."
-          />
-          <Image
-            width={80}
-            height={80}
-            src={"/svg/anonymous.svg"}
-            alt="Landing Page Image"
-            className={styles.decorativeImage}
+            imagePath="/svg/analytics.svg"
+            reversable={true}
           />
           <InfoBox
             title="Cum facem asta?"
             content="Prin această platformă, studenții își pot exprima liber opiniile
               și sugestiile lor cu privire la cursuri, fără teama de 
               repercusiuni, datele fiind 100% anonime."
+            imagePath="svg/anonymous.svg"
+            reversable={false}
           />
         </div>
       </div>
       <div className={styles.tutorial}>
         <h1>Cum votez?</h1>
-        <div className={styles.infoBoxes}>
+        <div className={styles.tutorialBoxes}>
           <TutorialBox
             step="1"
             content="Participi la cursuri într-o sală echipată cu o tabletă activă inSight. Va fi marcată cu un poster aferent platformei."

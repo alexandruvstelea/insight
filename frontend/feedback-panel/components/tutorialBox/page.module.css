@@ -7,6 +7,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: all 0.2s ease-in-out;
 }
 
 .tutorialBox {
@@ -90,5 +91,12 @@
 
   .tutorialBox h2 {
     font-size: 1.75rem;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .gradientBox:hover {
+    transform: scale(1.02);
+    background-image: linear-gradient(to right, #79d882 0%, #00c9ff 100%);
   }
 }
