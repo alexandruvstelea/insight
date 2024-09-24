@@ -1,5 +1,5 @@
 export const weekTypeMapping: Record<number, string> = {
-  0: "Ambele",
+  0: "Par și impar",
   1: "Impar",
   2: "Par",
 };

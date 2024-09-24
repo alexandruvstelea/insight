@@ -14,7 +14,6 @@ export default async function PanelPage({ params }: PanelPageProps) {
   const { facultyId } = params;
   const faculty = await fetchFaculty(Number(facultyId));
   const professors = faculty.professors;
-
   return (
     <>
       <NavigationBar />

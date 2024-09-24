@@ -13,6 +13,16 @@
   .button-red {
     @apply bg-red-700 hover:bg-red-800;
   }
+
+  .menuButton {
+    @apply flex w-full items-center p-2 text-base font-medium rounded-lg hover:bg-gray-700;
+  }
+  .input {
+    @apply border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white hover:border-gray-500 focus:border-gray-500;
+  }
+  .label {
+    @apply block mb-2 text-sm font-medium  text-white;
+  }
 }
 
 ::-webkit-scrollbar-track {

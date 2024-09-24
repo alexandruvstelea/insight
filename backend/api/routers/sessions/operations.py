@@ -73,6 +73,11 @@ class SessionOperations:
     async def add_session(self, session_data: SessionIn) -> SessionOut:
         try:
             logger.info(f"Adding to database session {session_data}.")
+            if session_data.start > session_data.end:
+                raise HTTPException(
+                    status_code=422,
+                    detail=f"Given session start time and end time are incorrect. Start time can't be later than end time.",
+                )
             new_session = Session(
                 type=session_data.type,
                 semester=await get_subject_semester(

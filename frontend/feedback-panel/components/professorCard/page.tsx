@@ -4,11 +4,20 @@ import styles from "./page.module.css";
 import Image from "next/image";
 import Link from "next/link";
 
+
 interface ProfessorCardProps {
   professorID: number;
   firstName: string;
   lastName: string;
   gender: "male" | "female";
+  avgRating: number;
+}
+
+interface ProfessorSubjects {
+  courses: string[];
+  laboratories: string[];
+  seminars: string[];
+  projects: string[];
 }
 
 export default function ProfessorCard({
@@ -60,5 +69,7 @@ export default function ProfessorCard({
         </div>
       </div>
     </>
+
+  
   );
 }
