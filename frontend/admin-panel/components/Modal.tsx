@@ -1,5 +1,4 @@
 import { ModalProps } from "@/utils/interfaces";
-
 const Modal = <T,>({
   items,
   title,

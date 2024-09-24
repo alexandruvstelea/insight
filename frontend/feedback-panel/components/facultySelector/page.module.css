@@ -8,6 +8,8 @@
   justify-content: center;
   align-items: center;
   rotate: 5deg;
+  transition: all 0.2s ease-in-out;
+
 }
 
 .facultySelector {
@@ -23,6 +25,8 @@
   background-color: white;
   color: black;
   rotate: -7deg;
+  transition: all 0.2s ease-in-out;
+
 }
 
 .facultyLogo {
@@ -33,8 +37,11 @@
 .facultySelector h1 {
   padding: 8px 0 8px 0;
   margin: 0;
-  text-align: center;
   font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: fit-content;
 }
 
 .arrowLink {
@@ -45,4 +52,67 @@
 .arrowButton {
   width: auto;
   height: 48px;
+  transition: all 0.2s ease-in-out;
+}
+
+@media screen and (min-width: 400px) {
+  .gradientBox {
+    height: 280px;
+    width: 280px;
+  }
+
+  .facultySelector {
+    height: 264px;
+    width: 264px;
+  }
+
+  .facultyLogo {
+    height: 104px;
+  }
+
+  .facultySelector h1 {
+    font-size: 1.25rem;
+  }
+
+  .arrowButton {
+    height: 56px;
+  }
+}
+
+@media screen and (min-width: 760px) and (min-height: 880px) {
+  .gradientBox {
+    height: 368px;
+    width: 368px;
+  }
+
+  .facultySelector {
+    height: 344px;
+    width: 344px;
+  }
+
+  .facultyLogo {
+    height: 128px;
+  }
+
+  .facultySelector h1 {
+    font-size: 1.5rem;
+  }
+
+  .arrowButton {
+    height: 72px;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .facultySelector:hover {
+    transform: rotate(-2deg);
+  }
+
+  .gradientBox:hover {
+    transform: rotate(4deg);
+  }
+
+  .arrowButton:hover {
+    transform: scale(1.05);
+  }
 }

@@ -3,7 +3,7 @@
   width: 100%;
   padding: 8px 0 8px 0;
   height: fit-content;
-  background: var(--main-radial-gradient);
+  background: var(--main-gradient);
   color: white;
 }
 

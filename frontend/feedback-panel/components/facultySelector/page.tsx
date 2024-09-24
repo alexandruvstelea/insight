@@ -36,7 +36,7 @@ export default function FacultySelector({
             alt="Arrow symbol"
             src={"/svg/arrow-forward.svg"}
             className={styles.arrowButton}
-          ></Image>
+          />
         </Link>
       </div>
     </div>

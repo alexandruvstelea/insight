@@ -11,9 +11,28 @@
   background-color: white;
 }
 
+.landingTextContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  max-height: 60%;
+}
+
 @media screen and (min-height: 580px) {
   .landing {
-    min-height: 90vh;
+    min-height: 85svh;
+  }
+  .landingTextContainer {
+    gap: 48px;
+  }
+}
+
+@media screen and (min-height: 700px) {
+  .landing {
+    min-height: 90svh;
+
   }
 }
 
@@ -58,6 +77,10 @@
   width: fit-content;
   height: fit-content;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-height: 40%;
 }
 
 .landingImage {
@@ -74,6 +97,7 @@
   font-weight: bold;
   border-radius: 8px;
   animation: pulse-shadow 2s infinite alternate-reverse ease-in-out;
+  transition: transform 0.2s ease-in-out;
 }
 
 @keyframes pulse-shadow {
@@ -103,11 +127,7 @@
   font-weight: 800;
 }
 
-.decorativeImage {
-  height: 176px;
-  width: auto;
-}
-
+.tutorialBoxes,
 .infoBoxes {
   width: 100%;
   height: fit-content;
@@ -168,4 +188,130 @@
 .facultiesList h1 {
   text-align: center;
   font-size: 1.5rem;
+}
+
+@media screen and (min-width: 400px) and (min-height: 700px) {
+  .landingTitle {
+    font-size: 3rem;
+  }
+
+  .landingText h2,
+  .landingText h3 {
+    font-size: 1.2rem;
+    width: 330px;
+  }
+
+  .facultiesButton {
+    font-size: 1.75rem;
+  }
+
+  .landingImage {
+    height: 216px;
+  }
+
+  .about h1,
+  .tutorial h1,
+  .faculties h1 {
+    font-size: 2.25rem;
+  }
+
+  .facultiesList {
+    gap: 64px;
+  }
+}
+
+@media screen and (min-width: 760px) and (min-height: 880px) {
+  .landingTitle {
+    font-size: 4.5rem;
+  }
+
+  .landingText h2,
+  .landingText h3 {
+    font-size: 2rem;
+    width: 572px;
+  }
+
+  .facultiesButton {
+    font-size: 2.5rem;
+  }
+
+  .landingImage {
+    height: 304px;
+  }
+}
+@media screen and (min-width: 760px) {
+  .about,
+  .tutorial {
+    gap: 64px;
+    padding: 32px 0 64px 0;
+  }
+
+  .tutorialBoxes,
+  .infoBoxes {
+    gap: 64px;
+  }
+
+  .about h1,
+  .tutorial h1,
+  .faculties h1 {
+    font-size: 3.5rem;
+  }
+
+  .faculties {
+    padding: 32px 0 64px 0;
+  }
+
+  .facultiesList {
+    gap: 64px;
+  }
+}
+
+@media screen and (min-width: 1024px) and (min-height: 700px) {
+  .landing {
+    flex-direction: row;
+  }
+
+  .landingTextContainer,
+  .landingImageContainer {
+    width: 50%;
+    height: 100%;
+  }
+
+  .landingTextContainer {
+    gap: 64px;
+  }
+
+  .landingText {
+    gap: 24px;
+  }
+
+  .landingImage {
+    height: auto;
+    width: 80%;
+  }
+  .tutorialBoxes,
+  .infoBoxes {
+    gap: 96px;
+  }
+
+  .tutorialBoxes {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .facultiesList {
+    gap: 96px;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .facultiesList h1 {
+    flex-basis: 100%;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .facultiesButton:hover {
+    transform: scale(1.025);
+  }
 }

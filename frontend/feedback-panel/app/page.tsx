@@ -10,26 +10,29 @@ export default async function Home() {
   return (
     <>
       <div className={styles.landing}>
-        <h1 className={styles.landingTitle}>inSight</h1>
-        <div className={styles.landingText}>
-          <h2>
-            Progresul incepe cu feedback-ul
-            <br />
-            pe care nu vrei să-l auzi
-          </h2>
-          <h3>
-            Ajută-ne să le oferim profesorilor acel feedback valoros care poate
-            aduce schimbări reale în modul în care sunt predate cursurile tale.
-          </h3>
+        <div className={styles.landingTextContainer}>
+          <h1 className={styles.landingTitle}>inSight</h1>
+          <div className={styles.landingText}>
+            <h2>
+              Progresul incepe cu feedback-ul
+              <br />
+              pe care nu vrei să-l auzi
+            </h2>
+            <h3>
+              Ajută-ne să le oferim profesorilor acel feedback valoros care
+              poate aduce schimbări reale în modul în care sunt predate
+              cursurile tale.
+            </h3>
+          </div>
+          <a className={styles.facultiesButton} href="#faculties">
+            Explorează
+          </a>
         </div>
-        <a className={styles.facultiesButton} href="#faculties">
-          Explorează
-        </a>
         <div className={styles.landingImageContainer}>
           <Image
             width={80}
             height={80}
-            src={"/svg/analytics.svg"}
+            src={"/svg/feedback.svg"}
             alt="Landing Page Image"
             className={styles.landingImage}
           />
@@ -43,37 +46,30 @@ export default async function Home() {
             content="InSight este un proiect creat cu scopul de a facilita comunicarea
               dintre studenți și profesori, pentru a oferi un feedback
               constructiv asupra cursurilor lor."
-          />
-          <Image
-            width={80}
-            height={80}
-            src={"/svg/social-network.svg"}
-            alt="Landing Page Image"
-            className={styles.decorativeImage}
+            imagePath="/svg/social-network.svg"
+            reversable={false}
+
           />
           <InfoBox
             title="De ce există inSight?"
             content="Suntem de părere că metodele actuale de colectare a feedback-ului
               din cadrul universității nu sunt destul de eficiente."
-          />
-          <Image
-            width={80}
-            height={80}
-            src={"/svg/anonymous.svg"}
-            alt="Landing Page Image"
-            className={styles.decorativeImage}
+            imagePath="/svg/analytics.svg"
+            reversable={true}
           />
           <InfoBox
             title="Cum facem asta?"
             content="Prin această platformă, studenții își pot exprima liber opiniile
               și sugestiile lor cu privire la cursuri, fără teama de 
               repercusiuni, datele fiind 100% anonime."
+            imagePath="svg/anonymous.svg"
+            reversable={false}
           />
         </div>
       </div>
       <div className={styles.tutorial}>
         <h1>Cum votez?</h1>
-        <div className={styles.infoBoxes}>
+        <div className={styles.tutorialBoxes}>
           <TutorialBox
             step="1"
             content="Participi la cursuri într-o sală echipată cu o tabletă activă inSight. Va fi marcată cu un poster aferent platformei."
@@ -91,7 +87,10 @@ export default async function Home() {
       <div className={styles.faculties} id="faculties">
         <h1>Facultăți</h1>
         <div className={styles.facultiesList}>
-          <h1>Universitatea Transilvania</h1>
+          <h1>
+            Universitatea <br />
+            Transilvania
+          </h1>
           {faculties.map((faculty: any) => (
             <FacultySelector
               key={faculty.id}

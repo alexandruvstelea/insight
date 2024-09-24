@@ -134,4 +134,3 @@ export type User = {
   role: "admin" | "tablet" ;
 };
 
-
