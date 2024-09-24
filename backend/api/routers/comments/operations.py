@@ -75,10 +75,12 @@ class CommentOperations:
                     status_code=422,
                     detail=f"Room ID {comment_data.programme_id} is not valid for current session.",
                 )
+            naive_timestamp = comment_data.timestamp.replace(tzinfo=None)
+
             new_comment = Comment(
                 text=comment_data.text,
                 subject_id=comment_session.subject_id,
-                timestamp=comment_data.timestamp,
+                timestamp=naive_timestamp,
                 programme_id=comment_data.programme_id,
                 room_id=comment_data.room_id,
                 professor_id=await get_session_professor(

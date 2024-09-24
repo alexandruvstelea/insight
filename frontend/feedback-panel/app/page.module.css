@@ -1,60 +1,73 @@
-.html {
+.landing {
   width: 100%;
   height: fit-content;
-  background-color: var(--main-blue-dark);
-}
-
-.landingZone {
   display: flex;
   flex-direction: column;
+  justify-content: space-around;
   align-items: center;
-  justify-content: center;
+  padding: 4px 0 16px 0;
+  gap: 32px;
+  border-radius: 0 0 12px 12px;
+  background-color: white;
+}
+
+@media screen and (min-height: 580px) {
+  .landing {
+    min-height: 90vh;
+  }
+}
+
+.landingTitle {
+  margin: 0;
+  font-size: 2.5rem;
+  background: var(--main-gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   text-align: center;
+  font-weight: 800;
+}
+
+.landingText {
   width: 100%;
   height: fit-content;
-  background: var(--main-radial-gradient);
-  color: white;
-  gap: 32px;
-  padding: 40px 0 40px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  gap: 8px;
 }
 
-.landingZone h1 {
-  font-size: 4rem;
+.landingText h2 {
   margin: 0;
-}
-
-.landingZone h2 {
-  margin: 0;
+  text-align: center;
   font-size: 1rem;
+  width: 300px;
+  font-weight: 700;
+}
+
+.landingText h3 {
+  margin: 0;
+  text-align: center;
+  font-size: 1rem;
+  width: 300px;
+  font-weight: 500;
+}
+
+.landingImageContainer {
+  width: fit-content;
+  height: fit-content;
+  text-align: center;
 }
 
 .landingImage {
-  width: 64px;
-  height: auto;
-  animation: rotation 5s infinite ease-in-out;
-}
-
-@keyframes rotation {
-  0% {
-    rotate: 0deg;
-  }
-  25% {
-    rotate: -55deg;
-  }
-  50% {
-    rotate: 0deg;
-  }
-  75% {
-    rotate: 55deg;
-  }
-  100% {
-    rotate: 0deg;
-  }
+  height: 176px;
+  width: auto;
 }
 
 .facultiesButton {
   text-decoration: none;
-  background-color: var(--main-blue-light);
+  background: var(--main-blue-dark);
   color: white;
   padding: 12px;
   font-size: 1.5rem;
@@ -68,337 +81,91 @@
     box-shadow: 0;
   }
   100% {
-    box-shadow: 0 0 32px var(--main-blue-light);
+    box-shadow: 0 0 16px var(--main-blue-dark);
   }
 }
 
-.mockup {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+.about {
   width: 100%;
   height: fit-content;
-  flex-wrap: wrap;
-  gap: 32px;
-}
-
-.mockupItem {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: fit-content;
-  flex-wrap: wrap;
-}
-
-.mockup h1 {
-  margin: 0;
-  text-align: center;
-}
-
-.mockupItem .backsplash {
-  position: absolute;
-  transform: translateY(20%);
-  width: 90%;
-  max-width: 500px;
-  height: 200px;
-  background: var(--main-radial-gradient);
-  border-radius: 20px;
-}
-
-.mockupItem .screenshot {
-  height: auto;
-  width: 80vw;
-  z-index: 1;
-  max-width: 400px;
-}
-
-.aboutZone {
-  padding: 40px 0 32px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.aboutZone h1 {
-  margin: 0;
-  font-size: 0.75;
-  padding-left: 16px;
-}
-
-.aboutZoneItems {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  gap: 32px;
-}
-
-.aboutZoneItems .item:nth-child(even) {
-  text-align: right;
-  border-radius: 12px 0 0 12px;
-  background-color: var(--main-blue-light);
-  align-self: flex-end;
-}
-
-.item {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 8px;
-  text-align: left;
-  width: 280px;
-  height: 128px;
-  background: var(--main-blue-dark);
-  padding: 12px 16px 12px 16px;
-  box-shadow: 0px 4px 4px #00000030, 0px 12px 12px #00000015;
+  padding: 16px 0 48px 0;
   color: white;
-  border-radius: 0 12px 12px 0;
-  transition: all 0.15s ease-in-out;
+  gap: 32px;
 }
 
-.aboutZoneItems .item h1 {
-  padding-left: 0;
+.about h1 {
   margin: 0;
-  font-size: 1.25rem;
-}
-
-.aboutZoneItems .item h2 {
-  margin: 0;
-  font-size: 0.8rem;
-  line-height: 1.25;
-}
-
-.howZone {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  height: fit-content;
-  width: 100%;
-  padding: 16px 0 0 0;
-}
-
-.howZone h1 {
-  margin: 0;
-  font-size: 0.75;
-  padding-left: 16px;
-  text-align: left;
-}
-
-.howZoneList {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  text-align: left;
-}
-
-.howZoneList h1 {
-  margin: 0;
-  font-weight: 900;
-  color: var(--main-blue-dark);
-  text-align: left;
-  padding: 8px 16px;
-  font-size: 2.25rem;
-}
-
-.howZoneList h2 {
-  padding: 8px 16px;
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: 500;
-}
-
-.roomsList {
-  color: var(--main-blue-dark);
-}
-
-.facultiesZone {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  height: fit-content;
-  padding: 24px 0 24px 0;
-}
-
-.universityName {
-  margin: 32px 0 16px 0;
   font-size: 2rem;
+  font-weight: 800;
 }
 
-.facultiesZone h1 {
+.decorativeImage {
+  height: 176px;
+  width: auto;
+}
+
+.infoBoxes {
   width: 100%;
-  text-align: center;
-  font-size: 2.25rem;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+}
+
+.tutorial {
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 0 32px 0;
+  gap: 32px;
+  background-color: white;
+  border-radius: 12px;
+}
+
+.tutorial h1 {
   margin: 0;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.faculties {
+  height: fit-content;
+  width: 100%;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 0 32px 0;
+  gap: 32px;
+}
+
+.faculties h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 800;
 }
 
 .facultiesList {
+  width: 100%;
+  height: fit-content;
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  align-items: center;
   justify-content: center;
-  margin-bottom: 24px;
+  align-items: center;
+  gap: 32px;
 }
 
-/* Media Queries */
-
-@media screen and (min-width: 520px) {
-  .landingZone h1 {
-    font-size: 5.5rem;
-  }
-  .landingImage {
-    height: 152px;
-    width: auto;
-  }
-  .landingZone h2 {
-    font-size: 2rem;
-  }
-  .facultiesButton {
-    font-size: 2rem;
-  }
-
-  .mockupItem .backsplash {
-    height: 250px;
-    transform: translateY(35%);
-  }
-
-  .aboutZone h1 {
-    font-size: 2.25rem;
-    text-align: center;
-  }
-  .aboutZoneItems .item:nth-child(even) {
-    text-align: center;
-    border-radius: 12px;
-    align-self: center;
-  }
-
-  .item {
-    justify-content: center;
-    align-items: center;
-    align-self: center;
-    gap: 8px;
-    text-align: center;
-    width: 320px;
-    height: 160px;
-    border-radius: 12px;
-  }
-
-  .aboutZoneItems .item h1 {
-    font-size: 1.5rem;
-  }
-
-  .aboutZoneItems .item h2 {
-    font-size: 1rem;
-    line-height: 1.35;
-  }
-}
-
-@media screen and (min-width: 768px) {
-  .landingZone h1 {
-    font-size: 6.5rem;
-  }
-  .landingImage {
-    height: 160px;
-    width: auto;
-  }
-  .landingZone h2 {
-    font-size: 2.25rem;
-  }
-  .facultiesButton {
-    font-size: 2.25rem;
-  }
-
-  .aboutZone {
-    gap: 40px;
-  }
-
-  .aboutZoneItems {
-    gap: 40px;
-  }
-
-  .aboutZone h1 {
-    font-size: 2.5rem;
-  }
-
-  .item {
-    gap: 16px;
-    width: 352px;
-    height: 200px;
-  }
-
-  .aboutZoneItems .item h1 {
-    font-size: 1.75rem;
-  }
-
-  .aboutZoneItems .item h2 {
-    font-size: 1.25rem;
-  }
-}
-
-@media screen and (min-width: 1200px) {
-  .landingZone h1 {
-    font-size: 7rem;
-  }
-
-  .landingImage {
-    height: 160px;
-    width: auto;
-  }
-
-  .landingZone h2 {
-    font-size: 2.25rem;
-  }
-
-  .facultiesButton {
-    font-size: 2.25rem;
-  }
-
-  .mockup {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-evenly;
-    padding-top: 32px;
-  }
-
-  .mockupItem {
-    width: fit-content;
-  }
-
-  .aboutZone {
-    padding: 64px 0 48px 0;
-  }
-
-  .aboutZoneItems {
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .howZone {
-    align-items: center;
-    padding: 32px 0 32px 0;
-  }
-
-  .howZoneList h1,
-  .howZoneList h2 {
-    width: 100%;
-    text-align: center;
-  }
-
-  .facultiesList {
-    flex-direction: row;
-    gap: 64px;
-  }
-
-  .universityName {
-    margin-bottom: 24px;
-  }
-}
-
-@media screen and (min-width: 1400px) {
+.facultiesList h1 {
+  text-align: center;
+  font-size: 1.5rem;
 }

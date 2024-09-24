@@ -6,7 +6,7 @@ from typing import Literal, Optional
 class UserBase(BaseModel):
     email: str
     password: str
-    role: Literal["admin", "professor", "student"]
+    role: Literal["admin", "professor", "student", "tablet"]
     professor_id: Optional[int] = None
 
 
@@ -17,5 +17,5 @@ class UserIn(UserBase):
 class UserOut(BaseModel):
     id: int
     email: str
-    role: Literal["admin", "professor", "student"]
+    role: Literal["admin", "professor", "student", "tablet"]
     professor_id: Optional[int] = None

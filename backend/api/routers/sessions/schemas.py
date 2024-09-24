@@ -32,7 +32,7 @@ class SessionOut(SessionBase):
     id: int
     room: Optional["RoomOutMinimal"]
     subject: Optional["SubjectOutMinimal"]
-
+    faculty_id: Optional[List[int]]
 
 from ..rooms.schemas import RoomOutMinimal
 from ..subjects.schemas import SubjectOutMinimal

@@ -1,17 +1,38 @@
 @import "normalize.css";
 
 :root {
-  --main-blue-dark: #075bad;
-  --main-blue-light: #3b95ed;
-  --main-radial-gradient: radial-gradient(
-    circle at 10% 20%,
-    rgb(59, 149, 237) 0%,
-    rgb(7, 91, 173) 90%
+  --main-blue-dark: #005bea;
+  --main-blue-light: #00c6fb;
+  --main-gradient: linear-gradient(
+    45deg,
+    rgba(0, 198, 251, 1) 0%,
+    rgba(0, 91, 234, 1) 100%
   );
 }
 
-html {
+html,
+body {
   scroll-behavior: smooth;
+  max-width: 100vw;
+  min-height: 100vh;
+  height: fit-content;
+  margin: 0;
+  padding: 0;
+  background: var(--main-blue-light);
+}
+
+.layoutBody {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  margin: 0;
+}
+
+.layoutContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  justify-content: space-between;
 }
 
 ::-webkit-scrollbar-track {
@@ -19,7 +40,7 @@ html {
 }
 
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-thumb {

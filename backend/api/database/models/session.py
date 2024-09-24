@@ -19,8 +19,8 @@ class Session(AlchemyAsyncBase):
     start: Mapped[Time] = mapped_column(Time)
     end: Mapped[Time] = mapped_column(Time)
     day: Mapped[int] = mapped_column()
-    room_id: Mapped[int] = mapped_column(ForeignKey("rooms.id"))
-    subject_id: Mapped[int] = mapped_column(ForeignKey("subjects.id"))
+    room_id: Mapped[int] = mapped_column(ForeignKey("rooms.id"),nullable=True)
+    subject_id: Mapped[int] = mapped_column(ForeignKey("subjects.id"),nullable=True)
     faculty_id: Mapped[int] = mapped_column()
     subject: Mapped["Subject"] = relationship(
         "Subject", lazy="subquery", back_populates="sessions"
