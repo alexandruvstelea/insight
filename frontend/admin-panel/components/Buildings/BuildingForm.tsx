@@ -83,7 +83,7 @@ const BuildingForm: React.FC<{
         <form onSubmit={handleSubmit}>
           <div className="mb-5">
             <label htmlFor="name" className="label">
-              Nume
+              Nume *
             </label>
             <input
               id="name"

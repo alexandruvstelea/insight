@@ -79,7 +79,7 @@ const SubjectTable: FC<SubjectTableProps> = ({
           ]}
           count={subjects?.length || 0}
         />
-        <table className="w-full text-md text-left text-gray-400">
+        <table className="w-full text-left text-gray-400">
           <thead className="text-lg  uppercase  bg-gray-700 text-gray-400">
             <tr>
               <th scope="col" className="px-6 py-3">
@@ -246,30 +246,48 @@ const SubjectTable: FC<SubjectTableProps> = ({
         />
       )}
       {isSessionsModalOpen && (
+        // <Modal
+        //   items={selectedSessions}
+        //   title="Ore"
+        //   onClose={() => setIsSessionsModalOpen(false)}
+        //   renderItem={(session) => {
+        //     return (
+        //       <>
+        //         <div className="flex gap-2 justify-between text-center">
+        //           <div className="w-1/4 ">
+        //             {session.start.slice(0, 5)}-{session.end.slice(0, 5)}
+        //           </div>
+        //           <div className="w-1/4">{dayMapping[session.day]}</div>
+        //           <div className="w-1/4 ">
+        //             {sessionTypeMapping[session.type]}
+        //           </div>
+
+        //           <div className="w-1/4">Sem : {session.semester}</div>
+        //           <div className="w-1/4">
+        //             {weekTypeMapping[session.week_type]}
+        //           </div>
+        //         </div>
+        //       </>
+        //     );
+        //   }}
+        // />
         <Modal
           items={selectedSessions}
           title="Ore"
           onClose={() => setIsSessionsModalOpen(false)}
-          renderItem={(session) => {
-            return (
-              <>
-                <div className="flex gap-2 justify-between text-center">
-                  <div className="w-1/4 ">
-                    {session.start.slice(0, 5)}-{session.end.slice(0, 5)}
-                  </div>
-                  <div className="w-1/4">{dayMapping[session.day]}</div>
-                  <div className="w-1/4 ">
-                    {sessionTypeMapping[session.type]}
-                  </div>
-
-                  <div className="w-1/4">Sem : {session.semester}</div>
-                  <div className="w-1/4">
-                    {weekTypeMapping[session.week_type]}
-                  </div>
-                </div>
-              </>
-            );
-          }}
+          isTable={true} // Folosește tabel pentru sesiuni
+          renderItem={(session) => (
+            <>
+              <td>{`${session.start.slice(0, 5)}-${session.end.slice(
+                0,
+                5
+              )}`}</td>
+              <td>{dayMapping[session.day]}</td>
+              <td>{sessionTypeMapping[session.type]}</td>
+              <td>{session.semester}</td>
+              <td>{weekTypeMapping[session.week_type]}</td>
+            </>
+          )}
         />
       )}
       {isProgrammesModalOpen && (

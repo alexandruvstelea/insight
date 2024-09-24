@@ -126,3 +126,12 @@ export type Rating = {
   faculty_id: number;
   room_id: number;
 };
+
+export type User = {
+
+  id: number;
+  email: string;
+  role: "admin" | "tablet" ;
+};
+
+

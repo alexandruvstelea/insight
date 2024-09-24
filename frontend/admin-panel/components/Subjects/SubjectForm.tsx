@@ -28,7 +28,10 @@ const SubjectForm: React.FC<{
 }) => {
   const [name, setName] = useState(subject?.name || "");
   const [abbreviation, setAbbreviation] = useState(subject?.abbreviation || "");
-  const [semester, setSemester] = useState(subject?.semester || "");
+
+  const [semester, setSemester] = useState<number | null>(
+    subject?.semester ?? null
+  );
   const [courseProfessor, setCourseProfessor] = useState<number | null>(null);
   const [laboratoryProfessor, setLaboratoryProfessor] = useState<number | null>(
     null
@@ -57,13 +60,13 @@ const SubjectForm: React.FC<{
     const payload = {
       name,
       abbreviation,
-      semester,
+      semester: Number(semester),
       course_professor_id: courseProfessor,
       laboratory_professor_id: laboratoryProfessor,
       seminar_professor_id: seminarProfessor,
       project_professor_id: projectProfessor,
-      programmes: selectedProgrammes.map(String),
-      sessions: selectedSessions.map(String),
+      programmes: selectedProgrammes,
+      sessions: selectedSessions,
     };
     console.log(payload);
     try {
@@ -126,7 +129,7 @@ const SubjectForm: React.FC<{
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="name" className="label">
-              Nume
+              Nume *
             </label>
             <input
               id="name"
@@ -139,7 +142,7 @@ const SubjectForm: React.FC<{
           </div>
           <div className="mb-4">
             <label htmlFor="abbreviation" className="label">
-              Abreviere
+              Abreviere *
             </label>
             <input
               id="abbreviation"
@@ -151,7 +154,7 @@ const SubjectForm: React.FC<{
             />
           </div>
           <div className="mb-4">
-            <label className="label">Semestru</label>
+            <label className="label">Semestru *</label>
             <Select
               options={semesterOptions}
               value={semesterOptions.find(
@@ -159,11 +162,12 @@ const SubjectForm: React.FC<{
               )}
               onChange={(selectedOption) => {
                 if (selectedOption) {
-                  setSemester(String(selectedOption.value));
+                  setSemester(selectedOption.value);
                 }
               }}
               isSearchable={false}
               styles={customSelectStyle}
+              required
             />
           </div>
 

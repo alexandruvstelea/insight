@@ -89,7 +89,7 @@ const RoomForm: React.FC<{
         <form onSubmit={handleSubmit}>
           <div className="mb-5">
             <label htmlFor="name" className="label">
-              Nume
+              Nume *
             </label>
             <input
               id="name"
@@ -102,7 +102,7 @@ const RoomForm: React.FC<{
           </div>
 
           <div className="mb-5">
-            <label className="label">Clădire</label>
+            <label className="label">Clădire *</label>
             <Select
               options={buildingOptions}
               value={buildingOptions.find(
@@ -113,6 +113,7 @@ const RoomForm: React.FC<{
                 setSelectedBuilding(selectedOption?.value || null)
               }
               styles={customSelectStyle}
+              required
             />
           </div>
 

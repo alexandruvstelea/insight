@@ -74,7 +74,7 @@ const ProfessorForm: React.FC<{
         <form onSubmit={handleSubmit}>
           <div className="mb-5">
             <label htmlFor="firstName" className="label">
-              Prenume
+              Prenume *
             </label>
             <input
               id="firstName"
@@ -87,7 +87,7 @@ const ProfessorForm: React.FC<{
           </div>
           <div className="mb-5">
             <label htmlFor="lastName" className="label">
-              Numele de familie
+              Numele de familie *
             </label>
             <input
               id="lastName"
@@ -99,7 +99,7 @@ const ProfessorForm: React.FC<{
             />
           </div>
           <div className="mb-5">
-            <label className="label">Gen</label>
+            <label className="label">Gen *</label>
             <Select
               options={genderOptions}
               value={genderOptions.find((option) => option.value === gender)}
@@ -108,6 +108,7 @@ const ProfessorForm: React.FC<{
               }
               isSearchable={false}
               styles={customSelectStyle}
+              required
             />
           </div>
 

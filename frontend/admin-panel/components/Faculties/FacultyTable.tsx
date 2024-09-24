@@ -86,7 +86,7 @@ const FacultyTable: FC<FacultyTableProps> = ({
           count={faculties?.length || 0}
         />
 
-        <table className="w-full text-md text-left text-gray-400">
+        <table className="w-full text-base text-left text-gray-400">
           <thead className="text-lg  uppercase  bg-gray-700 text-gray-400">
             <tr className="py-2">
               <th scope="col" className="px-6 py-3">

@@ -64,7 +64,7 @@ const SessionTable: FC<SessionTableProps> = ({
           ]}
           count={sessions?.length || 0}
         />
-        <table className="w-full text-md text-left text-gray-400">
+        <table className="w-full text-base text-left text-gray-400">
           <thead className="text-lg  uppercase  bg-gray-700 text-gray-400">
             <tr>
               <th scope="col" className="px-6 py-3">

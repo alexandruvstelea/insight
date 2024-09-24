@@ -51,7 +51,7 @@ const WeekForm: React.FC<{
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="yearStart" className="label">
-              Data inceperii anului
+              Data inceperii anului *
             </label>
             <input
               id="yearStart"
@@ -63,9 +63,9 @@ const WeekForm: React.FC<{
             />
           </div>
           {intervals.map((interval, index) => (
-            <div className="mb-4">
+            <div key={index} className="mb-4">
               <label className="label">
-                Numar saptamani interval {index + 1}
+                Numar saptamani interval {index + 1} *
               </label>
 
               <input

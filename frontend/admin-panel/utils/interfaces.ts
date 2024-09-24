@@ -1,4 +1,4 @@
-import { Faculty, Building, Room, Session, Comment, Professor, Programme, Week, Subject } from "@/utils/types";
+import { Faculty, Building, Room, Session, Comment, Professor, Programme, Week, Subject, User } from "@/utils/types";
 
 export interface FacultyTableProps {
   faculties: Faculty[] | null | undefined;
@@ -57,6 +57,10 @@ export interface CommentTableProps {
   comments: Comment[] | null | undefined;
   fetchComments: () => void;
 }
+export interface UserTableProps {
+  users: User[] | null | undefined;
+  fetchUsers: () => void;
+}
 
 
 
@@ -64,4 +68,17 @@ export interface HeaderSectionProps {
   title: string;
   buttons?: { text: string; onClick: () => void; className?: string }[];
   count: number;
+}
+
+export interface ModalProps<T> {
+  items: T[];
+  title: string;
+  onClose: () => void;
+  renderItem: (item: T) => React.ReactNode;
+  isTable?: boolean;
+}
+
+export interface ButtonGroupProps {
+  onClose: () => void;
+  isEditMode?: boolean;
 }

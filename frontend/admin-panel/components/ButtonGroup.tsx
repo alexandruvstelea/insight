@@ -1,9 +1,5 @@
+import { ButtonGroupProps } from "@/utils/interfaces";
 import React from "react";
-
-interface ButtonGroupProps {
-  onClose: () => void;
-  isEditMode?: boolean;
-}
 
 const ButtonGroup: React.FC<ButtonGroupProps> = ({ onClose, isEditMode }) => {
   return (

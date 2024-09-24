@@ -90,14 +90,14 @@ const ProgrammeForm: React.FC<{
 
   return (
     <div className="fixed z-50 inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center">
-     <div className="bg-slate-700 p-4 rounded shadow-lg max-w-xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-slate-700 p-4 rounded shadow-lg max-w-xl w-full max-h-[90vh] overflow-y-auto">
         <h3 className="text-xl font-semibold text-center mb-2 text-white">
           {isEditMode ? "Editează specializare" : "Adaugă specializare"}
         </h3>
         <form onSubmit={handleSubmit}>
           <div className="mb-5">
             <label htmlFor="name" className="label">
-              Nume
+              Nume *
             </label>
             <input
               id="name"
@@ -110,7 +110,7 @@ const ProgrammeForm: React.FC<{
           </div>
           <div className="mb-5">
             <label htmlFor="abbreviation" className="label">
-              Abreviere
+              Abreviere *
             </label>
             <input
               id="abbreviation"
@@ -123,7 +123,7 @@ const ProgrammeForm: React.FC<{
           </div>
 
           <div className="mb-5">
-            <label className="label">Tip Program</label>
+            <label className="label">Tip Program *</label>
             <Select
               options={typeOptions}
               value={typeOptions.find((option) => option.value === type)}
@@ -132,11 +132,12 @@ const ProgrammeForm: React.FC<{
               }
               isSearchable={false}
               styles={customSelectStyle}
+              required
             />
           </div>
 
           <div className="mb-5">
-            <label className="label">Facultate</label>
+            <label className="label">Facultate *</label>
             <Select
               options={facultyOptions}
               value={facultyOptions.find(
@@ -146,6 +147,7 @@ const ProgrammeForm: React.FC<{
               onChange={(selectedOption) =>
                 setSelectedFaculty(selectedOption?.value || null)
               }
+              required
               styles={customSelectStyle}
             />
           </div>

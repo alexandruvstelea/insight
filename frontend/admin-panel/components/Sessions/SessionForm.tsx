@@ -267,9 +267,11 @@ const SessionForm: React.FC<{
               value={startEndTimeOptions.find(
                 (option) => option.value === start
               )}
-              onChange={(selectedOption) =>
-                setStart(selectedOption?.value || "08:00")
-              }
+              onChange={(selectedOption) => {
+                setStart(selectedOption?.value || null);
+                setEnd(null);
+              }}
+              required
               styles={customSelectStyle}
             />
           </div>
@@ -278,10 +280,14 @@ const SessionForm: React.FC<{
             <label className="label">Ora de sfârșit</label>
             <Select
               options={filteredEndTimeOptions}
-              value={startEndTimeOptions.find((option) => option.value === end)}
-              onChange={(selectedOption) =>
-                setEnd(selectedOption?.value || "10:00")
+              value={
+                filteredEndTimeOptions.find((option) => option.value === end) ||
+                null
               }
+              onChange={(selectedOption) =>
+                setEnd(selectedOption?.value || null)
+              }
+              required
               styles={customSelectStyle}
             />
           </div>
