@@ -1,7 +1,7 @@
 "use client";
 
-import DeleteSVG from "@/components/svgs/DeleteSVG";
-import EditSVG from "@/components/svgs/EditSVG";
+import DeleteSVG from "@/public/svgs/DeleteSVG";
+import EditSVG from "@/public/svgs/EditSVG";
 import { useState, FC } from "react";
 import { Faculty, Professor, SessionType } from "@/utils/types";
 import { ProfessorTableProps } from "@/utils/interfaces";

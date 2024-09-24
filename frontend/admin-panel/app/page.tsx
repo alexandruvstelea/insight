@@ -1,7 +1,7 @@
 "use client";
 
-import MenuSVG from "@/components/svgs/MenuSVG";
-import InfoSVG from "@/components/svgs/InfoSVG";
+import MenuSVG from "@/public/svgs/MenuSVG";
+import InfoSVG from "@/public/svgs/InfoSVG";
 import FacultyTable from "@/components/Faculties/FacultyTable";
 import RoomTable from "@/components/Rooms/RoomTable";
 import BuildingTable from "@/components/Buildings/BuildingTable";
@@ -12,6 +12,7 @@ import SubjectTable from "@/components/Subjects/SubjectTable";
 import WeekTable from "@/components/Weeks/WeekTable";
 import CommentTable from "@/components/Comments/CommentTable";
 import UserTable from "@/components/Users/UserTabel";
+
 import { useEffect, useState } from "react";
 import {
   Faculty,
@@ -37,7 +38,6 @@ export default function Home(): JSX.Element {
   const [weeks, setWeeks] = useState<Week[]>([]);
   const [comments, setComments] = useState<Comment[]>([]);
   const [users, setUsers] = useState<User[]>([]);
-
 
   const [isOpen, setIsOpen] = useState(true);
   const [showList, setShowList] = useState(true);

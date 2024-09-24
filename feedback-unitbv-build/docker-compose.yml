@@ -8,9 +8,11 @@ services:
     volumes:
       - volume_postgres:/var/lib/postgresql/data
     ports:
-        - ${POSTGRES_PORT}:5432
+      - ${POSTGRES_PORT}:5432
     networks:
       - funitbv-network
+    # expose:
+    #   - "5432"
 
   backend:
     container_name: funitbv-backend
@@ -21,10 +23,10 @@ services:
       dockerfile: ../backend/docker/dockerfile
     networks:
       - funitbv-network
-    # ports:
-    #   - "8000:8000"
     depends_on:
       - postgres
+    expose:
+      - "8000"
 
   admin-panel:
     container_name: funitbv-admin-panel
@@ -35,61 +37,48 @@ services:
     image: funitbv-admin-panel-image:1.0
     networks:
       - funitbv-network
-    ports:
-      - "3020:3000"
-
-  professor-panel:
-      container_name: funitbv-professor-panel
-      restart: on-failure:2
-      build:
-        context: ../frontend/professor-panel
-        dockerfile: ./docker/dockerfile
-      image: funitbv-professor-panel-image:1.0
-      networks:
-        - funitbv-network
-      ports:
-        - "3010:3000"
+    expose:
+      - "3000"
 
   feedback-panel:
-      container_name: funitbv-feedback-panel
-      restart: on-failure:2
-      build:
-        context: ../frontend/feedback-panel
-        dockerfile: ./docker/dockerfile
-      image: funitbv-feedback-panel-image:1.0
-      networks:
-        - funitbv-network
-      ports:
-        - "3000:3000"
+    container_name: funitbv-feedback-panel
+    restart: on-failure:2
+    build:
+      context: ../frontend/feedback-panel
+      dockerfile: ./docker/dockerfile
+    image: funitbv-feedback-panel-image:1.0
+    networks:
+      - funitbv-network
+    expose:
+      - "3000"
 
   redis:
-      image: redis:latest
-      container_name: funitbv-redis
-      restart: on-failure:2
-      ports:
-        - "${REDIS_PORT}:6379"
-      networks:
-        - funitbv-network
-      volumes:
-        - volume_redis:/data
-      env_file:
-        - .env
-
+    image: redis:latest
+    container_name: funitbv-redis
+    restart: on-failure:2
+    ports:
+      - "${REDIS_PORT}:6379"
+    networks:
+      - funitbv-network
+    volumes:
+      - volume_redis:/data
+    env_file:
+      - .env
 
   nginx:
-   image: nginx:latest
-   container_name: funitbv-nginx
-   restart: on-failure:2
-   build:
-     context: ../nginx
-     dockerfile: ./docker/dockerfile
-   ports:
-     - "80:80"
-     - "443:443"
-  #  volumes:
-  #    - /etc/letsencrypt:/etc/letsencrypt:ro
-   networks:
-     - funitbv-network
+    image: nginx:latest
+    container_name: funitbv-nginx
+    restart: on-failure:2
+    build:
+      context: ../nginx
+      dockerfile: ./docker/dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+    #  volumes:
+    #    - /etc/letsencrypt:/etc/letsencrypt:ro
+    networks:
+      - funitbv-network
 
 volumes:
   volume_postgres:

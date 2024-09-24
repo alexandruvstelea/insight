@@ -1,6 +1,6 @@
 "use client";
 
-import DeleteSVG from "@/components/svgs/DeleteSVG";
+import DeleteSVG from "@/public/svgs/DeleteSVG";
 import { useState, FC } from "react";
 import { UserTableProps } from "@/utils/interfaces";
 import HeaderSection from "../HeaderSection";

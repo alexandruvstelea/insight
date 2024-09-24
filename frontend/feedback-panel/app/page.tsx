@@ -48,7 +48,6 @@ export default async function Home() {
               constructiv asupra cursurilor lor."
             imagePath="/svg/social-network.svg"
             reversable={false}
-
           />
           <InfoBox
             title="De ce există inSight?"

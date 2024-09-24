@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from "react";
 import { Comment } from "@/utils/types";
-import DeleteSVG from "@/components/svgs/DeleteSVG";
+import DeleteSVG from "@/public/svgs/DeleteSVG";
 import { CommentTableProps } from "@/utils/interfaces";
 import HeaderSection from "../HeaderSection";
 
