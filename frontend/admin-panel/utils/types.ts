@@ -26,11 +26,7 @@ export type Programme = {
   id: number;
   name: string;
   abbreviation: string;
-<<<<<<< HEAD
   type: "bachelor" | "master" | "phd";
-=======
-  type: "bachelor" | "master";
->>>>>>> 2f8964e (Almost finished the admin page.)
   faculty: Faculty;
   subjects: Subject[];
 };
@@ -62,11 +58,7 @@ export type Subject = {
   id: number;
   name: string;
   abbreviation: string;
-<<<<<<< HEAD
   semester: 1 | 2;
-=======
-  semester: number;
->>>>>>> 2f8964e (Almost finished the admin page.)
   course_professor_id: number;
   laboratory_professor_id: number;
   seminar_professor_id: number;
@@ -85,19 +77,11 @@ export type Subject = {
 export type Session = {
   id: number;
   type: "course" | "laboratory" | "seminar" | "project";
-<<<<<<< HEAD
   semester: 1 | 2;
   week_type: 0 | 1 | 2 ;
   start: string;
   end: string;
   day: 0 | 1 | 2 | 3 | 4 | 5 | 6;
-=======
-  semester: number;
-  week_type: number;
-  start: string;
-  end: string;
-  day: number;
->>>>>>> 2f8964e (Almost finished the admin page.)
   faculty_id: number[]; 
   room: Room;
   subject: Subject;
@@ -110,7 +94,6 @@ export type Week = {
   semester: number;
 };
 
-<<<<<<< HEAD
 export type Comment = {
 
   id: number;
@@ -128,8 +111,6 @@ export type Comment = {
   facultyName:string;
 };
 
-=======
->>>>>>> 2f8964e (Almost finished the admin page.)
 export type Rating = {
   id: number;
   rating_clarity: number;
@@ -146,7 +127,6 @@ export type Rating = {
   room_id: number;
 };
 
-<<<<<<< HEAD
 export type User = {
 
   id: number;
@@ -155,21 +135,3 @@ export type User = {
 };
 
 
-=======
-export type Comment = {
-
-  id: number;
-  text: string;
-  timestamp: string;
-  room_id: Room[];
-  programme_id: Programme[];
-  subject_id: Subject[];
-  professor_id: Professor[];
-  faculty_id: Faculty[];
-  roomName: string;
-  programmeName:string;
-  subjectName:string;
-  professorName:string;
-  facultyName:string;
-};
->>>>>>> 2f8964e (Almost finished the admin page.)

@@ -1,9 +1,5 @@
 export const weekTypeMapping: Record<number, string> = {
-<<<<<<< HEAD
   0: "Par și impar",
-=======
-  0: "Ambele",
->>>>>>> 2f8964e (Almost finished the admin page.)
   1: "Impar",
   2: "Par",
 };

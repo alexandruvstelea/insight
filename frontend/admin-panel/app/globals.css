@@ -6,17 +6,12 @@
   .glass-background {
     @apply isolate rounded-xl bg-white/10 shadow-lg ring-1 ring-black/5;
   }
-<<<<<<< HEAD
-=======
-
->>>>>>> 2f8964e (Almost finished the admin page.)
   .button {
     @apply bg-blue-700 hover:bg-blue-800 text-gray-300 text-base font-bold p-2 rounded transition-colors duration-300 whitespace-nowrap uppercase;
   }
   .button-red {
     @apply bg-red-700 hover:bg-red-800;
   }
-<<<<<<< HEAD
   .menuButton {
     @apply flex w-full items-center p-2 text-base font-medium rounded-lg hover:bg-gray-700;
   }
@@ -26,8 +21,6 @@
   .label {
     @apply block mb-2 text-sm font-medium  text-white;
   }
-=======
->>>>>>> 2f8964e (Almost finished the admin page.)
 }
 
 ::-webkit-scrollbar-track {

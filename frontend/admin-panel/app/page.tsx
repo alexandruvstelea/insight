@@ -2,7 +2,6 @@
 
 import MenuSVG from "@/components/svgs/MenuSVG";
 import InfoSVG from "@/components/svgs/InfoSVG";
-<<<<<<< HEAD
 import FacultyTable from "@/components/Faculties/FacultyTable";
 import RoomTable from "@/components/Rooms/RoomTable";
 import BuildingTable from "@/components/Buildings/BuildingTable";
@@ -14,17 +13,6 @@ import WeekTable from "@/components/Weeks/WeekTable";
 import CommentTable from "@/components/Comments/CommentTable";
 import UserTable from "@/components/Users/UserTabel";
 
-=======
-import FacultyTable from "@/components/FacultyTable";
-import RoomTable from "@/components/RoomTable";
-import BuildingTable from "@/components/BuildingTable";
-import ProgrammeTable from "@/components/ProgrammeTable";
-import SessionTable from "@/components/SessionTable";
-import ProfessorTable from "@/components/ProfessorTable";
-import SubjectTable from "@/components/SubjectTable";
-import WeekTable from "@/components/WeekTable";
-import CommentTable from "@/components/CommentTable";
->>>>>>> 2f8964e (Almost finished the admin page.)
 import { useEffect, useState } from "react";
 import {
   Faculty,
@@ -36,10 +24,7 @@ import {
   Subject,
   Week,
   Comment,
-<<<<<<< HEAD
   User,
-=======
->>>>>>> 2f8964e (Almost finished the admin page.)
 } from "@/utils/types";
 
 export default function Home(): JSX.Element {
@@ -52,10 +37,7 @@ export default function Home(): JSX.Element {
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [weeks, setWeeks] = useState<Week[]>([]);
   const [comments, setComments] = useState<Comment[]>([]);
-<<<<<<< HEAD
   const [users, setUsers] = useState<User[]>([]);
-=======
->>>>>>> 2f8964e (Almost finished the admin page.)
 
   const [isOpen, setIsOpen] = useState(true);
   const [showList, setShowList] = useState(true);
@@ -63,11 +45,6 @@ export default function Home(): JSX.Element {
   const [openTable, setOpenTable] = useState<string | null>("info");
   const [activeTable, setActiveTable] = useState<string | null>(null);
 
-<<<<<<< HEAD
-=======
-  const [isLoading, setIsLoading] = useState(false);
-
->>>>>>> 2f8964e (Almost finished the admin page.)
   const fetchWeeks = async () => {
     try {
       const response = await fetch(`${process.env.API_URL}/weeks`, {
@@ -238,7 +215,6 @@ export default function Home(): JSX.Element {
       console.error("Error fetching comments:", error);
     }
   };
-<<<<<<< HEAD
   const fetchUsers = async () => {
     try {
       const response = await fetch(`${process.env.API_URL}/users`, {
@@ -266,12 +242,6 @@ export default function Home(): JSX.Element {
       setOpenTable(tableName);
       setActiveTable(tableName);
     }
-=======
-
-  const handleTableToggle = (tableName: string) => {
-    setOpenTable(openTable === tableName ? null : tableName);
-    setActiveTable(openTable === tableName ? null : tableName);
->>>>>>> 2f8964e (Almost finished the admin page.)
   };
 
   const toggleDrawer = () => setIsOpen(!isOpen);
@@ -286,10 +256,7 @@ export default function Home(): JSX.Element {
     fetchSubjects();
     fetchSessions();
     fetchComments();
-<<<<<<< HEAD
     fetchUsers();
-=======
->>>>>>> 2f8964e (Almost finished the admin page.)
   }, []);
 
   useEffect(() => {
@@ -342,11 +309,7 @@ export default function Home(): JSX.Element {
             <li>
               <button
                 onClick={() => handleTableToggle("weeks")}
-<<<<<<< HEAD
                 className={`menuButton ${
-=======
-                className={`flex w-full items-center p-2 text-base font-medium rounded-lg hover:bg-gray-700 ${
->>>>>>> 2f8964e (Almost finished the admin page.)
                   activeTable === "weeks"
                     ? "bg-gray-600 text-white"
                     : "text-white"
@@ -358,11 +321,7 @@ export default function Home(): JSX.Element {
             <li>
               <button
                 onClick={() => handleTableToggle("faculties")}
-<<<<<<< HEAD
                 className={`menuButton ${
-=======
-                className={`flex w-full items-center p-2 text-base font-medium rounded-lg hover:bg-gray-700 ${
->>>>>>> 2f8964e (Almost finished the admin page.)
                   activeTable === "faculties"
                     ? "bg-gray-600 text-white"
                     : "text-white"
@@ -374,11 +333,7 @@ export default function Home(): JSX.Element {
             <li>
               <button
                 onClick={() => handleTableToggle("buildings")}
-<<<<<<< HEAD
                 className={`menuButton ${
-=======
-                className={`flex w-full items-center p-2 text-base font-medium rounded-lg hover:bg-gray-700 ${
->>>>>>> 2f8964e (Almost finished the admin page.)
                   activeTable === "buildings"
                     ? "bg-gray-600 text-white"
                     : "text-white"
@@ -390,11 +345,7 @@ export default function Home(): JSX.Element {
             <li>
               <button
                 onClick={() => handleTableToggle("rooms")}
-<<<<<<< HEAD
                 className={`menuButton ${
-=======
-                className={`flex w-full items-center p-2 text-base font-medium rounded-lg hover:bg-gray-700 ${
->>>>>>> 2f8964e (Almost finished the admin page.)
                   activeTable === "rooms"
                     ? "bg-gray-600 text-white"
                     : "text-white"
@@ -406,11 +357,7 @@ export default function Home(): JSX.Element {
             <li>
               <button
                 onClick={() => handleTableToggle("programmes")}
-<<<<<<< HEAD
                 className={`menuButton ${
-=======
-                className={`flex w-full items-center p-2 text-base font-medium rounded-lg hover:bg-gray-700 ${
->>>>>>> 2f8964e (Almost finished the admin page.)
                   activeTable === "programmes"
                     ? "bg-gray-600 text-white"
                     : "text-white"
@@ -422,11 +369,7 @@ export default function Home(): JSX.Element {
             <li>
               <button
                 onClick={() => handleTableToggle("professors")}
-<<<<<<< HEAD
                 className={`menuButton ${
-=======
-                className={`flex w-full items-center p-2 text-base font-medium rounded-lg hover:bg-gray-700 ${
->>>>>>> 2f8964e (Almost finished the admin page.)
                   activeTable === "professors"
                     ? "bg-gray-600 text-white"
                     : "text-white"
@@ -438,11 +381,7 @@ export default function Home(): JSX.Element {
             <li>
               <button
                 onClick={() => handleTableToggle("subjects")}
-<<<<<<< HEAD
                 className={`menuButton ${
-=======
-                className={`flex w-full items-center p-2 text-base font-medium rounded-lg hover:bg-gray-700 ${
->>>>>>> 2f8964e (Almost finished the admin page.)
                   activeTable === "subjects"
                     ? "bg-gray-600 text-white"
                     : "text-white"
@@ -454,11 +393,7 @@ export default function Home(): JSX.Element {
             <li>
               <button
                 onClick={() => handleTableToggle("sessions")}
-<<<<<<< HEAD
                 className={`menuButton ${
-=======
-                className={`flex w-full items-center p-2 text-base font-medium rounded-lg hover:bg-gray-700 ${
->>>>>>> 2f8964e (Almost finished the admin page.)
                   activeTable === "sessions"
                     ? "bg-gray-600 text-white"
                     : "text-white"
@@ -470,11 +405,7 @@ export default function Home(): JSX.Element {
             <li>
               <button
                 onClick={() => handleTableToggle("comments")}
-<<<<<<< HEAD
                 className={`menuButton ${
-=======
-                className={`flex w-full items-center p-2 text-base font-medium rounded-lg hover:bg-gray-700 ${
->>>>>>> 2f8964e (Almost finished the admin page.)
                   activeTable === "comments"
                     ? "bg-gray-600 text-white"
                     : "text-white"
@@ -483,7 +414,6 @@ export default function Home(): JSX.Element {
                 Comentarii
               </button>
             </li>
-<<<<<<< HEAD
             <li>
               <button
                 onClick={() => handleTableToggle("users")}
@@ -496,8 +426,6 @@ export default function Home(): JSX.Element {
                 Users
               </button>
             </li>
-=======
->>>>>>> 2f8964e (Almost finished the admin page.)
           </ul>
         </div>
         <button
@@ -516,14 +444,9 @@ export default function Home(): JSX.Element {
           isOpen ? "ml-64" : "ml-12"
         } p-4`}
       >
-<<<<<<< HEAD
         {openTable === "info" && (
           <div className="text-white">Here goes the info content.</div>
         )}
-=======
-        {openTable === "info" && <div>Here goes the info content.</div>}
-
->>>>>>> 2f8964e (Almost finished the admin page.)
         {openTable === "weeks" && (
           <WeekTable weeks={weeks} fetchWeeks={fetchWeeks} />
         )}
@@ -588,12 +511,9 @@ export default function Home(): JSX.Element {
         {openTable === "comments" && (
           <CommentTable comments={comments} fetchComments={fetchComments} />
         )}
-<<<<<<< HEAD
         {openTable === "users" && (
           <UserTable users={users} fetchUsers={fetchUsers} />
         )}
-=======
->>>>>>> 2f8964e (Almost finished the admin page.)
       </div>
     </>
   );
