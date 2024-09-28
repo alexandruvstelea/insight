@@ -48,7 +48,7 @@ async def get_session_by_id(
     return session
 
 
-# @authorize(role=["admin"])
+@authorize(role=["admin"])
 @sessions_router.post(
     "/",
     response_model=SessionOut,
@@ -57,7 +57,7 @@ async def get_session_by_id(
 )
 async def add_session(
     session_data: SessionIn,
-    # current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> SessionOut:
@@ -66,7 +66,7 @@ async def add_session(
     return response
 
 
-# @authorize(role=["admin"])
+@authorize(role=["admin"])
 @sessions_router.put(
     "/{id}",
     response_model=SessionOut,
@@ -76,7 +76,7 @@ async def add_session(
 async def update_session(
     id: int,
     new_session_data: SessionIn,
-    # current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> SessionOut:
@@ -87,7 +87,7 @@ async def update_session(
     return response
 
 
-# @authorize(role=["admin"])
+@authorize(role=["admin"])
 @sessions_router.delete(
     "/{id}",
     dependencies=[Depends(RateLimiter(times=50, minutes=1))],
@@ -95,7 +95,7 @@ async def update_session(
 )
 async def delete_session(
     id: int,
-    # current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> str:

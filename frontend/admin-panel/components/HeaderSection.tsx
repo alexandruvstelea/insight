@@ -13,7 +13,7 @@ const HeaderSection: FC<HeaderSectionProps> = ({
           {buttons.map((button, index) => (
             <button
               key={index}
-              className={` button  ${button.className || ""}`}
+              className={`button  ${button.className || ""}`}
               onClick={button.onClick}
             >
               {button.text}

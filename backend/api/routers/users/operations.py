@@ -37,7 +37,7 @@ class UserOperations:
             if users:
                 logger.info("Succesfully retrieved all users from database.")
                 return [
-                    user_to_out(users)
+                    user_to_out(user)
                     for user in sorted(list(users), key=lambda x: x.email)
                 ]
             logger.error("No users found.")

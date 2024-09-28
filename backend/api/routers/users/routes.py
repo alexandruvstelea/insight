@@ -1,5 +1,5 @@
 from ...database.main import get_session
-from fastapi import APIRouter, Depends, Header
+from fastapi import APIRouter, Depends, Header, Response
 from fastapi.security import OAuth2PasswordRequestForm
 from .schemas import UserIn, UserOut
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -7,10 +7,12 @@ from .operations import UserOperations
 from http import HTTPStatus
 from ...utility.authorizations import authorize
 from typing import Dict, List
-from .utils import get_current_user
+from .utils import get_current_user ,get_current_user_no_cookie
+
 from fastapi_limiter.depends import RateLimiter
 import logging
 
+from ...config import settings
 logger = logging.getLogger(__name__)
 users_router = APIRouter(prefix="/api/users")
 
@@ -23,7 +25,7 @@ users_router = APIRouter(prefix="/api/users")
 )
 async def get_users(
     professor_id: int = None,
-    # current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> List[UserOut]:
@@ -41,7 +43,7 @@ async def get_users(
 )
 async def get_current(
     client_ip: str = Header(None, alias="X-Real-IP"),
-    # current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user_no_cookie),
 ) -> dict:
     logger.info(
         f"Received GET request on endpoint /api/users/current from IP {client_ip}."
@@ -58,6 +60,7 @@ async def get_current(
     status_code=HTTPStatus.OK,
 )
 async def login_for_access_token(
+    response: Response,
     form_data: OAuth2PasswordRequestForm = Depends(),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
@@ -68,10 +71,19 @@ async def login_for_access_token(
     token = await UserOperations(session).authenticate_user(
         form_data.username, form_data.password
     )
-    return token
+    response.set_cookie(
+        key="access_token",  
+        value=token["access_token"], 
+        httponly=True, 
+        secure=False, 
+        samesite="Strict",
+        max_age=60 * settings.AUTH_ACCESS_TOKEN_EXPIRE_MINUTES, 
+    )
+
+    return {"message": "Login successful"}
 
 
-# @authorize(role=["admin"])
+@authorize(role=["admin"])
 @users_router.post(
     "/register",
     response_model=UserOut,
@@ -80,7 +92,7 @@ async def login_for_access_token(
 )
 async def register_user(
     user_data: UserIn,
-    # current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> UserOut:
@@ -91,7 +103,7 @@ async def register_user(
     return user
 
 
-# @authorize(role=["admin"])
+@authorize(role=["admin"])
 @users_router.delete(
     "/{id}",
     dependencies=[Depends(RateLimiter(times=50, minutes=1))],
@@ -100,7 +112,7 @@ async def register_user(
 async def delete_user(
     id: int,
     client_ip: str = Header(None, alias="X-Real-IP"),
-    # current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session),
 ) -> str:
     logger.info(

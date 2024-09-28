@@ -50,7 +50,7 @@ async def get_programme_by_id(
     return programme
 
 
-# @authorize(role=["admin"])
+@authorize(role=["admin"])
 @programmes_router.post(
     "/",
     response_model=ProgrammeOut,
@@ -59,7 +59,7 @@ async def get_programme_by_id(
 )
 async def add_programme(
     programme_data: ProgrammeIn,
-    # current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> ProgrammeOut:
@@ -70,7 +70,7 @@ async def add_programme(
     return response
 
 
-# @authorize(role=["admin"])
+@authorize(role=["admin"])
 @programmes_router.put(
     "/{id}",
     response_model=ProgrammeOut,
@@ -80,7 +80,7 @@ async def add_programme(
 async def update_programme(
     id: int,
     new_programme_data: ProgrammeIn,
-    # current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> ProgrammeOut:
@@ -93,7 +93,7 @@ async def update_programme(
     return response
 
 
-# @authorize(role=["admin"])
+@authorize(role=["admin"])
 @programmes_router.delete(
     "/{id}",
     dependencies=[Depends(RateLimiter(times=50, minutes=1))],
@@ -101,7 +101,7 @@ async def update_programme(
 )
 async def delete_programme(
     id: int,
-    # current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> str:

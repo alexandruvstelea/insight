@@ -82,3 +82,15 @@ export interface ButtonGroupProps {
   onClose: () => void;
   isEditMode?: boolean;
 }
+
+export interface TableActionsProps {
+  onDelete: () => void;
+  onEdit?: () => void;
+  showEdit?: boolean;
+}
+
+export interface MenuItemProps {
+  label: string;
+  isActive: boolean;
+  onClick: () => void;
+}

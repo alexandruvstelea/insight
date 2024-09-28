@@ -4,7 +4,7 @@ from ...config import settings
 from ...database.main import get_session
 from ...database.models.user import User
 from .schemas import UserOut
-from fastapi import HTTPException
+from fastapi import Cookie, HTTPException
 from passlib.context import CryptContext
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
@@ -82,11 +82,59 @@ def decode_jwt(token: str = Depends(oauth2_scheme)):
 
 
 async def get_current_user(
-    session: AsyncSession = Depends(get_session), token: str = Depends(oauth2_scheme)
+    session: AsyncSession = Depends(get_session),
+    access_token: str = Cookie(None)
+
 ) -> UserOut:
     try:
         logger.info("Retrieving current user.")
-        payload = decode_jwt(token)
+        if not access_token:
+            logger.error("No token found in cookies.")
+            raise HTTPException(
+                status_code=HTTPStatus.UNAUTHORIZED,
+                detail="No valid token provided.",
+            )
+
+        payload = decode_jwt(access_token)
+        user_email: str = payload.get("sub")
+        if not user_email:
+            logger.error("Invalid token provided.")
+            raise HTTPException(
+                status_code=HTTPStatus.UNAUTHORIZED,
+                detail="Invalid token provided.",
+            )
+        query = select(User).where(User.email == user_email)
+        result = await session.execute(query)
+        user = result.scalars().first()
+        if not user:
+            logger.error("Invalid token provided.")
+            raise HTTPException(
+                status_code=HTTPStatus.UNAUTHORIZED,
+                detail="Invalid token provided.",
+            )
+        logger.info(f"Successfully retrieved current user with email {user.email}.")
+        return user_to_out(user)
+    except Exception as e:
+        logger.error(
+            f"An unexpected error has occured while getting current user:\n{e}"
+        )
+        raise e
+    
+async def get_current_user_no_cookie(
+    session: AsyncSession = Depends(get_session),
+    access_token: str = Depends(oauth2_scheme)
+
+) -> UserOut:
+    try:
+        logger.info("Retrieving current user.")
+        if not access_token:
+            logger.error("No token found in cookies.")
+            raise HTTPException(
+                status_code=HTTPStatus.UNAUTHORIZED,
+                detail="No valid token provided.",
+            )
+
+        payload = decode_jwt(access_token)
         user_email: str = payload.get("sub")
         if not user_email:
             logger.error("Invalid token provided.")

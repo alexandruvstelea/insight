@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 rooms_router = APIRouter(prefix="/api/rooms")
 
 
-# @authorize(role=["admin"])
+@authorize(role=["admin"])
 @rooms_router.get(
     "/",
     response_model=List[RoomOut],
@@ -23,7 +23,7 @@ rooms_router = APIRouter(prefix="/api/rooms")
 )
 async def get_rooms(
     faculty_id: int = None,
-    # current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> List[RoomOut]:
@@ -32,7 +32,7 @@ async def get_rooms(
     return rooms
 
 
-# @authorize(role=["admin"])
+@authorize(role=["admin"])
 @rooms_router.get(
     "/{id}",
     response_model=RoomOut,
@@ -41,7 +41,7 @@ async def get_rooms(
 )
 async def get_room_by_id(
     id: int,
-    # current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> RoomOut:
@@ -50,7 +50,7 @@ async def get_room_by_id(
     return room
 
 
-# @authorize(role=["admin"])
+@authorize(role=["admin"])
 @rooms_router.post(
     "/",
     response_model=RoomOut,
@@ -59,7 +59,7 @@ async def get_room_by_id(
 )
 async def add_room(
     room_data: RoomIn,
-    # current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> RoomOut:
@@ -68,7 +68,7 @@ async def add_room(
     return response
 
 
-# @authorize(role=["admin"])
+@authorize(role=["admin"])
 @rooms_router.put(
     "/{id}",
     response_model=RoomOut,
@@ -78,7 +78,7 @@ async def add_room(
 async def update_room(
     id: int,
     new_room_data: RoomIn,
-    # current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> RoomOut:
@@ -87,7 +87,7 @@ async def update_room(
     return response
 
 
-# @authorize(role=["admin"])
+@authorize(role=["admin"])
 @rooms_router.delete(
     "/{id}",
     dependencies=[Depends(RateLimiter(times=50, minutes=1))],
@@ -95,7 +95,7 @@ async def update_room(
 )
 async def delete_room(
     id: int,
-    # current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> str:

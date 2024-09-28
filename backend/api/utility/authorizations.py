@@ -9,10 +9,10 @@ def authorize(role: list):
     def decorator(func):
         @wraps(func)
         async def wrapper(*args, **kwargs):
-            # user = kwargs.get("current_user")
-            # if user.role not in role:
-            #     logger.error("User not authorized to perform this action.")
-            #     raise HTTPException(status_code=403, detail="User not authorized.")
+            user = kwargs.get("current_user")
+            if user.role not in role:
+                logger.error("User not authorized to perform this action.")
+                raise HTTPException(status_code=403, detail="User not authorized.")
             return await func(*args, **kwargs)
 
         return wrapper

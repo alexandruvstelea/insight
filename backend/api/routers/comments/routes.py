@@ -25,7 +25,7 @@ async def get_comments(
     professor_id: int = None,
     subject_id: int = None,
     session_type: str = None,
-    # current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> List[CommentOut]:
@@ -52,7 +52,7 @@ async def add_comment(
     return response
 
 
-# @authorize(role=["admin"])
+@authorize(role=["admin"])
 @comments_routes.delete(
     "/{id}",
     dependencies=[Depends(RateLimiter(times=50, minutes=1))],
@@ -60,7 +60,7 @@ async def add_comment(
 )
 async def delete_comment(
     id: int,
-    # current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> str:
