@@ -1,0 +1,39 @@
+.searchBar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: fit-content;
+}
+
+.searchBar input {
+  text-align: left;
+  border: 2px solid black;
+  border-radius: 4px;
+  padding: 4px;
+}
+
+.searchBar input:focus {
+  outline: none;
+  border-color: var(--main-blue-dark);
+}
+
+@media screen and (min-width: 400px) {
+  .searchBar input {
+    width: 264px;
+    height: 24px;
+    font-size: 1.1rem;
+    padding: 8px;
+    margin-top: 8px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .searchBar input {
+    width: 504px;
+    height: 32px;
+    font-size: 1.6rem;
+    padding: 8px;
+  }
+}

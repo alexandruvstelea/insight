@@ -89,14 +89,14 @@
   }
 
   .decorativeImage {
-    height: 304px;
+    height: 328px;
   }
 }
 
 @media screen and (min-width: 1024px) and (min-height: 700px) {
   .infoBoxContainer {
     flex-direction: row;
-    gap: 64px;
+    gap: 128px;
   }
 }
 

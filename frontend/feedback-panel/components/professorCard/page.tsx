@@ -9,6 +9,7 @@ interface ProfessorCardProps {
   firstName: string;
   lastName: string;
   gender: "male" | "female";
+  facultyId: number;
 }
 
 export default function ProfessorCard({
@@ -16,6 +17,7 @@ export default function ProfessorCard({
   firstName,
   lastName,
   gender,
+  facultyId,
 }: ProfessorCardProps) {
   const defaultImageSrc =
     gender === "male"
@@ -45,7 +47,7 @@ export default function ProfessorCard({
           </h1>
           <Link
             href={{
-              pathname: `/panel/${professorID}`,
+              pathname: `/panel/${facultyId}/${professorID}`,
             }}
             className={styles.arrowLink}
           >
