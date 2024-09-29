@@ -153,7 +153,7 @@ export default function Desboard(): JSX.Element {
         <button
           type="button"
           onClick={toggleDrawer}
-          className="rounded-lg pt-1.5 pb-1.5 pl-1.5 pr-[0.22rem] absolute top-2.5 end-2.5 transition duration-300 hover:bg-gray-600 "
+          className="rounded-lg p-1.5 absolute top-2.5 end-2.5 transition duration-300 hover:bg-gray-600 "
         >
           <img src="/svgs/menu.svg" className="w-auto  h-6" alt="Menu" />
         </button>
