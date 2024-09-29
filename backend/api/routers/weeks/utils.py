@@ -11,9 +11,12 @@ logger = logging.getLogger(__name__)
 
 def week_to_out(week: Week):
     if week:
-        logger.info(f"Converting week {week} to WeekOut format.")
-        return WeekOut(id=week.id, start=week.start, end=week.end, semester=week.semester)
+        logger.info(f"Converting week {week.id} to WeekOut format.")
+        return WeekOut(
+            id=week.id, start=week.start, end=week.end, semester=week.semester
+        )
     return None
+
 
 async def get_week_from_timestamp(session: AsyncSession, timestamp: datetime) -> Week:
     try:

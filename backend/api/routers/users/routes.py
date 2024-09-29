@@ -7,12 +7,13 @@ from .operations import UserOperations
 from http import HTTPStatus
 from ...utility.authorizations import authorize
 from typing import Dict, List
-from .utils import get_current_user ,get_current_user_no_cookie
+from .utils import get_current_user, get_current_user_no_cookie
 
 from fastapi_limiter.depends import RateLimiter
 import logging
 
 from ...config import settings
+
 logger = logging.getLogger(__name__)
 users_router = APIRouter(prefix="/api/users")
 
@@ -72,12 +73,12 @@ async def login_for_access_token(
         form_data.username, form_data.password
     )
     response.set_cookie(
-        key="access_token",  
-        value=token["access_token"], 
-        httponly=True, 
-        secure=False, 
+        key="access_token",
+        value=token["access_token"],
+        httponly=True,
+        secure=False,
         samesite="Strict",
-        max_age=60 * settings.AUTH_ACCESS_TOKEN_EXPIRE_MINUTES, 
+        max_age=60 * settings.AUTH_ACCESS_TOKEN_EXPIRE_MINUTES,
     )
 
     return {"message": "Login successful"}

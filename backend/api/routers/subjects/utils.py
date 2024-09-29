@@ -61,7 +61,7 @@ def subject_to_out(subject: Subject) -> SubjectOut:
 
 def subject_to_minimal(subject: Subject) -> SubjectOutMinimal:
     if subject:
-        logger.info(f"Converting subject {subject.name} to SessionOutMinimal format.")
+        logger.info(f"Converting subject {subject.name} to SubjectOutMinimal format.")
         return SubjectOutMinimal(
             id=subject.id,
             name=subject.name,

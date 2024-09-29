@@ -22,7 +22,11 @@ def session_to_out(session: Session) -> SessionOut:
         faculty_ids = []
         if session.subject:
             for programme in session.subject.programmes:
-                faculty_ids.append(programme.faculty_id)
+                if (
+                    programme.faculty_id not in faculty_ids
+                    and programme.faculty_id != None
+                ):
+                    faculty_ids.append(programme.faculty_id)
 
         return SessionOut(
             id=session.id,
@@ -34,7 +38,7 @@ def session_to_out(session: Session) -> SessionOut:
             day=session.day,
             room=room_to_minimal(session.room),
             subject=subject_to_minimal(session.subject) if session.subject else None,
-            faculty_id=list(set(faculty_ids)),
+            faculty_ids=faculty_ids,
         )
     return None
 

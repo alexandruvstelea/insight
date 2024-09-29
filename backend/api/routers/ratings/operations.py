@@ -91,7 +91,7 @@ class RatingOperations:
                 )
             result = await self.session.execute(query)
             averages = result.fetchone()
-            if averages:
+            if averages.avg_overall != None:
                 logger.info("Succesfully retrieved all average ratings from database.")
                 return RatingAverageOut(
                     rating_overall_average=round(averages.avg_overall, 2),
