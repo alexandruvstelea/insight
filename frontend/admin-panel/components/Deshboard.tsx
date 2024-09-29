@@ -26,6 +26,7 @@ import {
 } from "@/utils/types";
 import MenuItem from "./MenuItem";
 import ReportForm from "./Forms/ReportForm";
+import InfoTab from "./InfoTab";
 
 export default function Desboard(): JSX.Element {
   const [faculties, setFaculties] = useState<Faculty[]>([]);
@@ -240,9 +241,7 @@ export default function Desboard(): JSX.Element {
           isOpen ? "ml-64" : "ml-12"
         } p-4`}
       >
-        {openTable === "info" && (
-          <div className="text-white">Here goes the info content.</div>
-        )}
+        {openTable === "info" && <InfoTab />}
         {openTable === "bugReport" && <ReportForm />}
 
         {openTable === "weeks" && (
@@ -271,7 +270,7 @@ export default function Desboard(): JSX.Element {
             rooms={rooms}
             faculties={faculties}
             fetchBuildings={() =>
-              fetchData(`${process.env.API_URL}/faculties`, setBuildings)
+              fetchData(`${process.env.API_URL}/buildings`, setBuildings)
             }
           />
         )}

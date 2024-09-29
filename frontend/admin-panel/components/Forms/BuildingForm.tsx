@@ -30,8 +30,8 @@ const BuildingForm: React.FC<{
 
     const payload = {
       name,
-      rooms: selectedRooms.map(String),
-      faculties: selectedFaculties.map(String),
+      rooms: selectedRooms,
+      faculties: selectedFaculties,
     };
 
     try {

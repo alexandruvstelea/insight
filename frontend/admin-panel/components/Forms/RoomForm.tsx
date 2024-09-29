@@ -33,7 +33,7 @@ const RoomForm: React.FC<{
     const payload = {
       name,
       building_id: selectedBuilding,
-      sessions: selectedSessions.map(String),
+      sessions: selectedSessions,
     };
 
     try {

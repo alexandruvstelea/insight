@@ -28,6 +28,8 @@ const SessionForm: React.FC<{
   const [end, setEnd] = useState<string | null>(null);
   const [day, setDay] = useState<number | null>(null);
 
+  const [manualFacultyChange, setManualFacultyChange] = useState(false);
+
   const [subjectOptions, setSubjectOptions] = useState<
     { value: number; label: string }[]
   >([]);
@@ -71,7 +73,7 @@ const SessionForm: React.FC<{
   }, [selectedFaculty]);
 
   useEffect(() => {
-    if (session) {
+    if (session && !manualFacultyChange) {
       setType(session.type);
       setWeekType(session.week_type);
       setStart(formatTimeForDisplay(session.start));
@@ -79,16 +81,23 @@ const SessionForm: React.FC<{
       setDay(session.day);
       setSelectedRoom(session.room ? session.room.id : null);
       setSelectedFaculty(session.faculty_ids[0]);
+
       const matchedSubject = session.subject
         ? subjectOptions.find((option) => option.value === session.subject.id)
         : null;
+
       if (matchedSubject) {
         setSelectedSubject(matchedSubject.value);
       } else {
         setSelectedSubject(null);
       }
     }
-  }, [session, subjectOptions]);
+  }, [session, subjectOptions, manualFacultyChange]);
+
+  const handleFacultyChange = (selectedOption: { value: number } | null) => {
+    setSelectedFaculty(selectedOption?.value || null);
+    setManualFacultyChange(true);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -103,7 +112,7 @@ const SessionForm: React.FC<{
       end: end ? formatTimeForBackend(end) : null,
       day,
     };
-    console.log(payload);
+
     try {
       const url = isEditMode
         ? `${process.env.API_URL}/sessions/${session?.id}`
@@ -186,9 +195,7 @@ const SessionForm: React.FC<{
                 (option) => option.value === selectedFaculty
               )}
               isSearchable
-              onChange={(selectedOption) =>
-                setSelectedFaculty(selectedOption?.value || null)
-              }
+              onChange={handleFacultyChange}
               styles={customSelectStyle}
               required
             />

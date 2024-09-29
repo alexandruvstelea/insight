@@ -18,6 +18,7 @@ const FacultyTable: FC<FacultyTableProps> = ({
   const [isProfessorsModalOpen, setIsProfessorsModalOpen] = useState(false);
   const [isBuildingsModalOpen, setIsBuildingsModalOpen] = useState(false);
   const [isProgrammesModalOpen, setIsProgrammesModalOpen] = useState(false);
+
   const [selectedProfessors, setSelectedProfessors] = useState<Professor[]>([]);
   const [selectedBuildings, setSelectedBuildings] = useState<Building[]>([]);
   const [selectedProgrammes, setSelectedProgrammes] = useState<Programme[]>([]);

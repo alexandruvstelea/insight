@@ -36,8 +36,9 @@ const ProgrammeForm: React.FC<{
       abbreviation,
       type,
       faculty_id: selectedFaculty,
-      subjects: selectedSubjects.map(String),
+      subjects: selectedSubjects,
     };
+    console.log(payload);
     try {
       const url = isEditMode
         ? `${process.env.API_URL}/programmes/${programme?.id}`

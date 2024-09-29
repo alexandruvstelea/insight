@@ -60,7 +60,7 @@ const SubjectForm: React.FC<{
     const payload = {
       name,
       abbreviation,
-      semester: Number(semester),
+      semester: semester,
       course_professor_id: courseProfessor,
       laboratory_professor_id: laboratoryProfessor,
       seminar_professor_id: seminarProfessor,

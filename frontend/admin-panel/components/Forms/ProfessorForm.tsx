@@ -30,7 +30,7 @@ const ProfessorForm: React.FC<{
       first_name: firstName,
       last_name: lastName,
       gender,
-      faculties: selectedFaculties.map(String),
+      faculties: selectedFaculties,
     };
     try {
       const url = isEditMode

@@ -45,9 +45,9 @@ const FacultyForm: React.FC<{
     const payload = {
       name,
       abbreviation,
-      buildings: selectedBuildings.map(String),
-      professors: selectedProfessors.map(String),
-      programmes: selectedProgrammes.map(String),
+      buildings: selectedBuildings,
+      professors: selectedProfessors,
+      programmes: selectedProgrammes,
     };
 
     try {

@@ -16,7 +16,6 @@ const SessionTable: FC<SessionTableProps> = ({
   sessions = [],
   rooms,
   faculties,
-
   fetchSessions,
 }) => {
   const [isAddSessionModalOpen, setIsAddSessionModalOpen] = useState(false);
@@ -169,10 +168,10 @@ const SessionTable: FC<SessionTableProps> = ({
                     className="px-6 py-4 font-medium   text-white"
                   >
                     {Array.isArray(faculties) &&
-                    Array.isArray(session.faculty_id) &&
-                    session.faculty_id.length > 0
+                    Array.isArray(session.faculty_ids) &&
+                    session.faculty_ids.length > 0
                       ? faculties.find(
-                          (faculty) => faculty.id === session.faculty_id[0]
+                          (faculty) => faculty.id === session.faculty_ids[0]
                         )?.abbreviation || "-"
                       : "-"}
                   </td>
