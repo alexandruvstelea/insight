@@ -7,7 +7,21 @@
   color: white;
 }
 
+.link {
+  color: white;
+  text-decoration: none;
+}
+
 .navBar h1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 2.5rem;
   margin: 0;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.navBar h1 span {
+  font-size: 1rem;
 }

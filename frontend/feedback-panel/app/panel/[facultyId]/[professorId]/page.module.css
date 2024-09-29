@@ -1,0 +1,22 @@
+.pageContainer {
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  flex: 1;
+  background-color: white;
+}
+
+.professorName {
+  color: black;
+  margin: 0;
+  font-size: 1.25rem;
+  margin: 16px 0 4px 0;
+}
+
+.professorAvatar {
+  height: 104px;
+  width: auto;
+}

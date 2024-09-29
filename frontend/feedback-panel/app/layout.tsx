@@ -3,7 +3,7 @@ import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { Footer } from "@/components/footer/page";
 
-const inter = Montserrat({ subsets: ["latin"] });
+const montserrat = Montserrat({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "inSight",
@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <>
       <html lang="en">
-        <body className={`${inter.className} layoutBody`}>
+        <body className={`${montserrat.className} layoutBody`}>
           <div className="layoutContainer">
             {children}
             <Footer />

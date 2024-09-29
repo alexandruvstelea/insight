@@ -5,7 +5,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-radius: 16px;
   gap: 8px;
 }
 
@@ -20,4 +19,24 @@
   font-size: 1.1rem;
   font-weight: 800;
   margin: 0;
+}
+
+@media screen and (min-width: 400px) {
+  .facultyStatistic h1 {
+    font-size: 2rem;
+  }
+
+  .facultyStatistic h2 {
+    font-size: 1.25rem;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .facultyStatistic h1 {
+    font-size: 3rem;
+  }
+
+  .facultyStatistic h2 {
+    font-size: 2rem;
+  }
 }

@@ -16,20 +16,20 @@ export default function FacultySelector({
   return (
     <div className={styles.gradientBox}>
       <div className={styles.facultySelector}>
-        <Image
-          src={svgPath}
-          width={88}
-          height={88}
-          alt="Faculty logo"
-          className={styles.facultyLogo}
-        />
-        <h1>{facultyName}</h1>
         <Link
           href={{
             pathname: `/panel/${facultyID}`,
           }}
-          className={styles.arrowLink}
+          className={styles.selectorLink}
         >
+          <Image
+            src={svgPath}
+            width={88}
+            height={88}
+            alt="Faculty logo"
+            className={styles.facultyLogo}
+          />
+          <h1>{facultyName}</h1>
           <Image
             height={40}
             width={40}

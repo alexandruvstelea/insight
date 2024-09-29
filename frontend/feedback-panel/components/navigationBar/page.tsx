@@ -1,10 +1,34 @@
 import styles from "./page.module.css";
-import Image from "next/image";
+import Link from "next/link";
 
-export function NavigationBar() {
+interface NavigationBar {
+  facultyAbbreviation?: string;
+}
+
+export function NavigationBar({ facultyAbbreviation }: NavigationBar) {
   return (
     <div className={styles.navBar}>
-      <h1>inSight</h1>
+      {facultyAbbreviation ? (
+        <Link
+          href={{
+            pathname: "/",
+          }}
+          className={styles.link}
+        >
+          <h1>
+            inSight <span>{` ${facultyAbbreviation}`}</span>
+          </h1>
+        </Link>
+      ) : (
+        <Link
+          href={{
+            pathname: "/",
+          }}
+          className={styles.link}
+        >
+          <h1>inSight</h1>
+        </Link>
+      )}
     </div>
   );
 }

@@ -39,7 +39,7 @@
 .infoBox h2 {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   margin: 0;
   font-size: 1rem;
   color: black;
@@ -89,14 +89,14 @@
   }
 
   .decorativeImage {
-    height: 304px;
+    height: 328px;
   }
 }
 
 @media screen and (min-width: 1024px) and (min-height: 700px) {
   .infoBoxContainer {
     flex-direction: row;
-    gap: 64px;
+    gap: 128px;
   }
 }
 

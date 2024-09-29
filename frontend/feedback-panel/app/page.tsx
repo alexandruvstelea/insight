@@ -71,7 +71,7 @@ export default async function Home() {
         <div className={styles.tutorialBoxes}>
           <TutorialBox
             step="1"
-            content="Participi la cursuri într-o sală echipată cu o tabletă activă inSight. Va fi marcată cu un poster aferent platformei."
+            content="Participi la cursuri într-o sală în care este prezent un poster dedicat platoformei inSight. Îl vei recunoaste cand îl vei vedea."
           />
           <TutorialBox
             step="2"
@@ -90,14 +90,18 @@ export default async function Home() {
             Universitatea <br />
             Transilvania
           </h1>
-          {faculties.map((faculty: any) => (
-            <FacultySelector
-              key={faculty.id}
-              facultyID={faculty.id}
-              facultyName={faculty.name}
-              svgPath={`/svg/${faculty.abbreviation.toLowerCase()}.svg`}
-            />
-          ))}
+          {faculties && faculties.length > 0 ? (
+            faculties.map((faculty: any) => (
+              <FacultySelector
+                key={faculty.id}
+                facultyID={faculty.id}
+                facultyName={faculty.name}
+                svgPath={`/svg/${faculty.abbreviation.toLowerCase()}.svg`}
+              />
+            ))
+          ) : (
+            <h1>Nu s-au gasit facultati</h1>
+          )}
         </div>
       </div>
     </>

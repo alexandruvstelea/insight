@@ -1,64 +1,78 @@
+"use server";
 import { NavigationBar } from "@/components/navigationBar/page";
 import { fetchFaculty } from "@/utils/fetchers/faculties";
 import ProfessorCard from "@/components/professorCard/page";
 import FacultyStatistics from "@/components/facultyStatistics/page";
+import SearchBar from "@/components/searchBar/page";
 import styles from "./page.module.css";
 
 interface PanelPageProps {
   params: {
-    facultyId: string;
+    facultyId: number;
+  };
+  searchParams: {
+    search?: string;
   };
 }
 
-export default async function PanelPage({ params }: PanelPageProps) {
-  const { facultyId } = params;
-  const faculty = await fetchFaculty(Number(facultyId));
+export default async function PanelPage({
+  params,
+  searchParams,
+}: PanelPageProps) {
+  const facultyId: number = params.facultyId;
+  const searchText: string = searchParams.search || "";
+  const faculty = await fetchFaculty(facultyId);
   const professors = faculty.professors;
+  const filteredProfessors = searchText
+    ? [
+        ...professors.filter(
+          (professor: any) =>
+            professor.first_name
+              .toLowerCase()
+              .includes(searchText.toLowerCase()) ||
+            professor.last_name.toLowerCase().includes(searchText.toLowerCase())
+        ),
+      ]
+    : professors;
+
+  console.log(searchText);
 
   return (
     <>
-      <NavigationBar />
+      <NavigationBar facultyAbbreviation={faculty.abbreviation} />
       <div className={styles.pageContainer}>
         <div className={styles.statistics}>
-          <h1 className={styles.facultyName}>{faculty.name}</h1>
           <FacultyStatistics statistic={6} name="Profesori" />
           <FacultyStatistics statistic={2} name="Săli" />
           <FacultyStatistics statistic={3760} name="Recenzii" />
         </div>
         <div className={styles.professorsList}>
-          <h1 className={styles.listName}>Listă profesori</h1>
-          {professors && professors.length > 0 ? (
+          <SearchBar facultyId={Number(facultyId)} />
+          {filteredProfessors && filteredProfessors.length > 0 ? (
             <>
-              {professors.map((professor: any) => (
+              {filteredProfessors.map((professor: any) => (
                 <ProfessorCard
                   key={professor.id}
                   professorID={professor.id}
                   firstName={professor.first_name}
                   lastName={professor.last_name}
                   gender={professor.gender}
+                  facultyId={facultyId}
                 />
               ))}
-              {professors.map((professor: any) => (
+              {filteredProfessors.map((professor: any) => (
                 <ProfessorCard
                   key={professor.id}
                   professorID={professor.id}
                   firstName={professor.first_name}
                   lastName={professor.last_name}
                   gender={professor.gender}
-                />
-              ))}
-              {professors.map((professor: any) => (
-                <ProfessorCard
-                  key={professor.id}
-                  professorID={professor.id}
-                  firstName={professor.first_name}
-                  lastName={professor.last_name}
-                  gender={professor.gender}
+                  facultyId={facultyId}
                 />
               ))}
             </>
           ) : (
-            <p>No professors available.</p>
+            <h1 className={styles.notFound}>Nu s-au găsit profesori.</h1>
           )}
         </div>
       </div>
