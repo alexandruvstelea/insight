@@ -100,7 +100,7 @@ export default async function Home() {
               />
             ))
           ) : (
-            <h1>Nu s-au gasit facultati</h1>
+            <h1>Nu s-au găsit facultăți.</h1>
           )}
         </div>
       </div>

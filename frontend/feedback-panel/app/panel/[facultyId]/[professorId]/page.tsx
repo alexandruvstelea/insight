@@ -6,7 +6,7 @@ import {
 } from "@/utils/fetchers/professors";
 import { NavigationBar } from "@/components/navigationBar/page";
 import Image from "next/image";
-
+import StarRating from "@/components/starRating/page";
 interface ProfessorPageProps {
   params: {
     facultyId: number;
@@ -19,9 +19,7 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
   const professorId: number = params.professorId;
   const faculty = await fetchFaculty(facultyId);
   const professor = await fetchProfessor(professorId);
-  const professorAverageRating: number = await fetchProfessorAvgRating(
-    professorId
-  );
+  const professorAverageRating = await fetchProfessorAvgRating(professorId);
 
   console.log(professorAverageRating);
   return (
@@ -38,7 +36,23 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
           alt="Professor Avatar"
           className={styles.professorAvatar}
         />
-        <h1>{professorAverageRating}</h1>
+        <div className={styles.starRatings}>
+          <StarRating
+            rating={professorAverageRating.rating_overall_average}
+            ratingName=""
+            color="blue"
+          />
+          <StarRating
+            rating={professorAverageRating.rating_interactivity_average}
+            ratingName="Interactivitate"
+            color="red"
+          />
+          <StarRating
+            rating={professorAverageRating.rating_relevance_average}
+            ratingName="Relevanta"
+            color="green"
+          />
+        </div>
       </div>
     </>
   );

@@ -1,0 +1,29 @@
+.starRating {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 4px;
+}
+.rating {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+}
+
+.starRating h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.starRating .starImage {
+  height: 28px;
+  width: auto;
+}
+
+.starRating h2 {
+  margin: 0;
+  font-size: 2rem;
+  line-height: 1;
+}
