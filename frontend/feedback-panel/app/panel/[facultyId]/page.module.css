@@ -29,6 +29,11 @@
   margin: 0 0 16px 0;
 }
 
+.notFound {
+  margin: 0;
+  text-align: center;
+}
+
 @media screen and (min-width: 400px) {
   .statistics {
     width: 400px;

@@ -72,7 +72,7 @@ export default async function PanelPage({
               ))}
             </>
           ) : (
-            <p>Nu s-au gasit profesori.</p>
+            <h1 className={styles.notFound}>Nu s-au găsit profesori.</h1>
           )}
         </div>
       </div>
