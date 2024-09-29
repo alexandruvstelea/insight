@@ -27,7 +27,14 @@ const HeaderSection: FC<HeaderSectionProps> = ({
       <div className="w-1/2 text-center text-gray-400 uppercase text-2xl font-bold">
         {title}
       </div>
-      <h2 className="text-lg font-medium text-gray-400 w-1/4 lowercase text-right">{`${count} ${title}`}</h2>
+
+      {count !== false ? (
+        <h2 className="text-lg font-medium text-gray-400 w-1/4 lowercase text-right">
+          {`${count} ${title}`}
+        </h2>
+      ) : (
+        <div className="w-1/4" />
+      )}
     </div>
   );
 };

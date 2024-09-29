@@ -67,7 +67,7 @@ export interface UserTableProps {
 export interface HeaderSectionProps {
   title: string;
   buttons?: { text: string; onClick: () => void; className?: string }[];
-  count: number;
+  count: number | false;
 }
 
 export interface ModalProps<T> {

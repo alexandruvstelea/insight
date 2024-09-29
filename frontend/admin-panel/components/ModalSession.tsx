@@ -7,10 +7,15 @@ interface ModalProps<T> {
   renderItem: (item: T) => React.ReactNode;
 }
 
-const ModalSession = <T,>({ items, title, onClose, renderItem }: ModalProps<T>) => {
+const ModalSession = <T,>({
+  items,
+  title,
+  onClose,
+  renderItem,
+}: ModalProps<T>) => {
   return (
     <div className="fixed z-50 inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center">
-      <div className="bg-slate-700 p-4 rounded shadow-lg max-w-xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-slate-700 p-4 rounded  max-w-xl w-full max-h-[90vh] overflow-y-auto">
         <div className="flex flex-col gap-5">
           <h3 className="text-xl font-semibold text-center text-white">
             {title}

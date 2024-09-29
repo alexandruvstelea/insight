@@ -25,6 +25,7 @@ import {
   User,
 } from "@/utils/types";
 import MenuItem from "./MenuItem";
+import ReportForm from "./Forms/ReportForm";
 
 export default function Desboard(): JSX.Element {
   const [faculties, setFaculties] = useState<Faculty[]>([]);
@@ -210,7 +211,19 @@ export default function Desboard(): JSX.Element {
               onClick={() => handleTableToggle("users")}
             />
           </ul>
+          <button
+            type="button"
+            onClick={() => handleTableToggle("bugReport")}
+            className={`rounded-lg p-1.5 absolute bottom-2.5 start-2 transition duration-300 hover:bg-gray-600 ${
+              activeTable === "bugReport"
+                ? "bg-gray-600 text-white"
+                : "text-white"
+            }`}
+          >
+            <img src="/svgs/flag.svg" className="w-auto h-6" alt="Bag report" />
+          </button>
         </div>
+
         <button
           type="button"
           onClick={() => handleTableToggle("info")}
@@ -230,6 +243,8 @@ export default function Desboard(): JSX.Element {
         {openTable === "info" && (
           <div className="text-white">Here goes the info content.</div>
         )}
+        {openTable === "bugReport" && <ReportForm />}
+
         {openTable === "weeks" && (
           <WeekTable
             weeks={weeks}
