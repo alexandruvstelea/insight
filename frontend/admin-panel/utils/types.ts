@@ -1,4 +1,3 @@
-
 export type Faculty = {
   id: number;
   name: string;
@@ -52,7 +51,7 @@ export type SessionType = {
   laboratory_professor_id: number;
   seminar_professor_id: number;
   project_professor_id: number;
-}
+};
 
 export type Subject = {
   id: number;
@@ -71,18 +70,15 @@ export type Subject = {
   project_professor: Professor;
 };
 
-
-
-
 export type Session = {
   id: number;
   type: "course" | "laboratory" | "seminar" | "project";
   semester: 1 | 2;
-  week_type: 0 | 1 | 2 ;
+  week_type: 0 | 1 | 2;
   start: string;
   end: string;
   day: 0 | 1 | 2 | 3 | 4 | 5 | 6;
-  faculty_id: number[]; 
+  faculty_ids: number[];
   room: Room;
   subject: Subject;
 };
@@ -95,7 +91,6 @@ export type Week = {
 };
 
 export type Comment = {
-
   id: number;
   text: string;
   timestamp: string;
@@ -105,10 +100,10 @@ export type Comment = {
   professor_id: Professor[];
   faculty_id: Faculty[];
   roomName: string;
-  programmeName:string;
-  subjectName:string;
-  professorName:string;
-  facultyName:string;
+  programmeName: string;
+  subjectName: string;
+  professorName: string;
+  facultyName: string;
 };
 
 export type Rating = {
@@ -128,10 +123,7 @@ export type Rating = {
 };
 
 export type User = {
-
   id: number;
   email: string;
-  role: "admin" | "tablet" ;
+  role: "admin" | "tablet";
 };
-
-

@@ -78,7 +78,7 @@ const SessionForm: React.FC<{
       setEnd(formatTimeForDisplay(session.end));
       setDay(session.day);
       setSelectedRoom(session.room ? session.room.id : null);
-      setSelectedFaculty(session.faculty_id[0]);
+      setSelectedFaculty(session.faculty_ids[0]);
       const matchedSubject = session.subject
         ? subjectOptions.find((option) => option.value === session.subject.id)
         : null;
