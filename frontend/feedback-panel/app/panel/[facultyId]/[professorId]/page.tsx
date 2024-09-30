@@ -4,9 +4,14 @@ import {
   fetchProfessor,
   fetchProfessorAvgRating,
 } from "@/utils/fetchers/professors";
+import {
+  ProfessorSubjects,
+  fetchSubjectsByProfessor,
+} from "@/utils/fetchers/subjects";
 import { NavigationBar } from "@/components/navigationBar/page";
-import Image from "next/image";
-import StarRating from "@/components/starRating/page";
+import PolarAreaChart from "@/components/polarAreaChart/page";
+import Link from "next/link";
+
 interface ProfessorPageProps {
   params: {
     facultyId: number;
@@ -20,8 +25,9 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
   const faculty = await fetchFaculty(facultyId);
   const professor = await fetchProfessor(professorId);
   const professorAverageRating = await fetchProfessorAvgRating(professorId);
-
-  console.log(professorAverageRating);
+  const subjects: ProfessorSubjects | false = await fetchSubjectsByProfessor(
+    professorId
+  );
   return (
     <>
       <NavigationBar facultyAbbreviation={faculty.abbreviation} />
@@ -29,29 +35,28 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
         <h1 className={styles.professorName}>
           {professor.last_name} {professor.first_name}
         </h1>
-        <Image
-          width={80}
-          height={80}
-          src={`/svg/professors/${professor.last_name.toLowerCase()}.svg`}
-          alt="Professor Avatar"
-          className={styles.professorAvatar}
+        <PolarAreaChart
+          clarity={professorAverageRating.rating_clarity_average}
+          relevance={professorAverageRating.rating_relevance_average}
+          interactivity={professorAverageRating.rating_interactivity_average}
+          comprehension={professorAverageRating.rating_comprehension_average}
+          average={professorAverageRating.rating_overall_average}
         />
-        <div className={styles.starRatings}>
-          <StarRating
-            rating={professorAverageRating.rating_overall_average}
-            ratingName=""
-            color="blue"
-          />
-          <StarRating
-            rating={professorAverageRating.rating_interactivity_average}
-            ratingName="Interactivitate"
-            color="red"
-          />
-          <StarRating
-            rating={professorAverageRating.rating_relevance_average}
-            ratingName="Relevanta"
-            color="green"
-          />
+        <div className={styles.professorClasses}>
+          <h1>Cursuri</h1>
+
+          {subjects &&
+            subjects.courses.map((course: any, index: number) => (
+              <Link
+                key={index}
+                href={{
+                  pathname: `/panel`,
+                }}
+                className={styles.courseButton}
+              >
+                {course}
+              </Link>
+            ))}
         </div>
       </div>
     </>

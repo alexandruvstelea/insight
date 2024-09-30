@@ -11,7 +11,7 @@ interface Subject {
   project_professor_id?: number | null;
 }
 
-interface ProfessorSubjects {
+export interface ProfessorSubjects {
   courses: string[];
   laboratories: string[];
   seminars: string[];
@@ -42,22 +42,14 @@ export const fetchSubjectsByProfessor = async (professorId: number) => {
   };
   if (Array.isArray(result))
     result.forEach((subject: Subject) => {
-      if (subject.course_professor_id === professorId)
-        if (subject.name.length < 25)
-          professorSubjects.courses.push(subject.name);
-        else professorSubjects.courses.push(subject.abbreviation);
-      if (subject.laboratory_professor_id === professorId)
-        if (subject.name.length < 25)
-          professorSubjects.laboratories.push(subject.name);
-        else professorSubjects.laboratories.push(subject.abbreviation);
-      if (subject.seminar_professor_id === professorId)
-        if (subject.name.length < 25)
-          professorSubjects.seminars.push(subject.name);
-        else professorSubjects.seminars.push(subject.abbreviation);
-      if (subject.project_professor_id === professorId)
-        if (subject.name.length < 25)
-          professorSubjects.projects.push(subject.name);
-        else professorSubjects.projects.push(subject.abbreviation);
+      if (subject.course_professor_id == professorId)
+        professorSubjects.courses.push(subject.name);
+      if (subject.laboratory_professor_id == professorId)
+        professorSubjects.laboratories.push(subject.name);
+      if (subject.seminar_professor_id == professorId)
+        professorSubjects.seminars.push(subject.name);
+      if (subject.project_professor_id == professorId)
+        professorSubjects.projects.push(subject.name);
     });
   else
     console.error(

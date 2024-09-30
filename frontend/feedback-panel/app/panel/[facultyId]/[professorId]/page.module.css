@@ -7,20 +7,38 @@
   justify-content: flex-start;
   flex: 1;
   background-color: white;
+  gap: 24px;
 }
 
 .professorName {
   color: black;
   margin: 0;
   font-size: 1.25rem;
-  margin: 16px 0 4px 0;
+  margin: 16px 0 0 0;
 }
 
-.professorAvatar {
-  height: 104px;
-  width: auto;
+.professorClasses {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
 }
 
-.starRatings {
-  margin-top: 16px;
+.professorClasses h1 {
+  margin: 0;
+}
+
+.courseButton {
+  color: black;
+  text-decoration: none;
+  border: 2px solid var(--main-blue-dark);
+  padding: 8px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  border-radius: 8px;
+  box-shadow: 0px 4px 4px #00000030, 0px 12px 12px #00000015;
+  width: 264px;
+  text-align: center;
 }

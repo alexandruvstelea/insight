@@ -1,0 +1,13 @@
+.polarChartContainer {
+  width: 100%;
+  max-width: 500px;
+  height: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.polarChart {
+  width: 100% !important;
+  height: auto !important;
+}
