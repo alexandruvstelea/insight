@@ -129,7 +129,7 @@ const SessionForm: React.FC<{
       });
 
       if (response.status === 409) {
-        alert(`Intervalul noii sesiuni se suprapune cu unul existent.`);
+        alert(`Intervalul noii ore de curs se suprapune cu unul existent.`);
         return;
       }
 
@@ -184,7 +184,7 @@ const SessionForm: React.FC<{
     <div className="fixed z-50 inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center">
       <div className="bg-slate-700 p-4 rounded max-w-xl w-full max-h-[90vh] overflow-y-auto">
         <h3 className="text-xl font-semibold text-center mb-2 text-white">
-          {isEditMode ? "Editează sesiune" : "Adaugă sesiune"}
+          {isEditMode ? "Editează ora" : "Adaugă ora"}
         </h3>
         <form onSubmit={handleSubmit}>
           <div className="mb-5">
