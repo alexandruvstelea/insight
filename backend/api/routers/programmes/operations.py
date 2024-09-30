@@ -9,7 +9,7 @@ from fastapi.responses import JSONResponse
 from typing import List
 from ...utility.error_parsing import format_integrity_error
 from ..faculties.utils import id_to_faculty
-from ..subjects.utils import ids_to_subjects
+from ..subjects.utils import id_to_subject, ids_to_subjects
 from .utils import programme_to_out
 import logging
 
@@ -124,7 +124,7 @@ class ProgrammeOperations:
                 )
                 if new_programme_data.subjects:
                     programme.subjects = [
-                        ids_to_subjects(subject)
+                        await id_to_subject(self.session,subject)
                         for subject in new_programme_data.subjects
                     ]
                 else:

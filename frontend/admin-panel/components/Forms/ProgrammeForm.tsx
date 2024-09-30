@@ -21,9 +21,13 @@ const ProgrammeForm: React.FC<{
   const [selectedFaculty, setSelectedFaculty] = useState<number | null>(null);
   const [selectedSubjects, setSelectedSubjects] = useState<number[]>([]);
 
+  console.log(programme);
+
   useEffect(() => {
     if (programme) {
-      setSelectedFaculty(programme.faculty.id);
+      if (programme.faculty) {
+        setSelectedFaculty(programme.faculty.id);
+      }
       setSelectedSubjects(programme.subjects.map((subject) => subject.id));
     }
   }, [programme]);
