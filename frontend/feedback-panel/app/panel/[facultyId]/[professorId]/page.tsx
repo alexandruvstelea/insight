@@ -10,7 +10,7 @@ import {
 } from "@/utils/fetchers/subjects";
 import { NavigationBar } from "@/components/navigationBar/page";
 import PolarAreaChart from "@/components/polarAreaChart/page";
-import Link from "next/link";
+import ClassButton from "@/components/classButton/page";
 
 interface ProfessorPageProps {
   params: {
@@ -25,9 +25,29 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
   const faculty = await fetchFaculty(facultyId);
   const professor = await fetchProfessor(professorId);
   const professorAverageRating = await fetchProfessorAvgRating(professorId);
-  const subjects: ProfessorSubjects | false = await fetchSubjectsByProfessor(
-    professorId
-  );
+  const subjects: ProfessorSubjects | false | undefined =
+    await fetchSubjectsByProfessor(professorId);
+
+  const renderClasses = (courses: any, title: string, type: string) => {
+    return (
+      courses?.length > 0 && (
+        <>
+          <h1>{title}</h1>
+          {courses.map((course: any) => (
+            <ClassButton
+              key={course.id}
+              classId={course.id}
+              className={course.name}
+              classType={type}
+              facultyId={facultyId}
+              professorId={professorId}
+            />
+          ))}
+        </>
+      )
+    );
+  };
+
   return (
     <>
       <NavigationBar facultyAbbreviation={faculty.abbreviation} />
@@ -43,20 +63,11 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
           average={professorAverageRating.rating_overall_average}
         />
         <div className={styles.professorClasses}>
-          <h1>Cursuri</h1>
-
+          {subjects && renderClasses(subjects.courses, "Cursuri", "course")}
           {subjects &&
-            subjects.courses.map((course: any, index: number) => (
-              <Link
-                key={index}
-                href={{
-                  pathname: `/panel`,
-                }}
-                className={styles.courseButton}
-              >
-                {course}
-              </Link>
-            ))}
+            renderClasses(subjects.laboratories, "Laboratoare", "laboratory")}
+          {subjects && renderClasses(subjects.seminars, "Seminare", "seminar")}
+          {subjects && renderClasses(subjects.projects, "Proiecte", "project")}
         </div>
       </div>
     </>

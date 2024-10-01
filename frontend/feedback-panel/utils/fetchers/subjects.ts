@@ -12,10 +12,10 @@ interface Subject {
 }
 
 export interface ProfessorSubjects {
-  courses: string[];
-  laboratories: string[];
-  seminars: string[];
-  projects: string[];
+  courses: { id: number; name: string; abbreviation: string }[];
+  laboratories: { id: number; name: string; abbreviation: string }[];
+  seminars: { id: number; name: string; abbreviation: string }[];
+  projects: { id: number; name: string; abbreviation: string }[];
 }
 
 export const fetchSubjectsByProfessor = async (professorId: number) => {
@@ -32,29 +32,36 @@ export const fetchSubjectsByProfessor = async (professorId: number) => {
       },
     }
   );
+
   if (!response.ok) return false;
   const result = await response.json();
+
   let professorSubjects: ProfessorSubjects = {
     courses: [],
     laboratories: [],
     seminars: [],
     projects: [],
   };
-  if (Array.isArray(result))
-    result.forEach((subject: Subject) => {
-      if (subject.course_professor_id == professorId)
-        professorSubjects.courses.push(subject.name);
-      if (subject.laboratory_professor_id == professorId)
-        professorSubjects.laboratories.push(subject.name);
-      if (subject.seminar_professor_id == professorId)
-        professorSubjects.seminars.push(subject.name);
-      if (subject.project_professor_id == professorId)
-        professorSubjects.projects.push(subject.name);
-    });
-  else
-    console.error(
-      "Invalid input data: result.array should be an array and professorSubjects.courses should be an array."
-    );
 
+  if (Array.isArray(result)) {
+    result.forEach((subject: Subject) => {
+      const subjectInfo = {
+        id: subject.id,
+        name: subject.name,
+        abbreviation: subject.abbreviation,
+      };
+
+      if (subject.course_professor_id == professorId)
+        professorSubjects.courses.push(subjectInfo);
+      if (subject.laboratory_professor_id == professorId)
+        professorSubjects.laboratories.push(subjectInfo);
+      if (subject.seminar_professor_id == professorId)
+        professorSubjects.seminars.push(subjectInfo);
+      if (subject.project_professor_id == professorId)
+        professorSubjects.projects.push(subjectInfo);
+    });
+  } else {
+    console.error("Invalid input data: result should be an array.");
+  }
   return professorSubjects;
 };
