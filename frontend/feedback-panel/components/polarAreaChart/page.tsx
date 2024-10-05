@@ -17,7 +17,7 @@ interface PolarAreaChart {
   relevance: number;
   interactivity: number;
   comprehension: number;
-  average: number;
+  title: string;
 }
 
 export default function PolarAreaChart({
@@ -25,33 +25,25 @@ export default function PolarAreaChart({
   relevance,
   interactivity,
   comprehension,
-  average,
+  title,
 }: PolarAreaChart) {
   const chartData = {
-    labels: [
-      "Claritate",
-      "Relevanta",
-      "Interactivitate",
-      "Intelegere",
-      "Medie",
-    ],
+    labels: ["Claritate", "Relevanta", "Interactivitate", "Intelegere"],
     datasets: [
       {
         label: "Recenzii profesor",
-        data: [clarity, relevance, interactivity, comprehension, average],
+        data: [clarity, relevance, interactivity, comprehension],
         backgroundColor: [
           "rgba(0, 255, 255, 0.5)", // Claritate
           "rgba(31, 81, 255, 0.5)", //Relevanta
           "rgba(64, 224, 208,0.5)", //Interactivitate
           "rgba(63, 0, 255, 0.5)", //Intelegere
-          "rgba(0, 91, 234, 0.75)", //Medie
         ],
         borderColor: [
           "rgba(0, 255, 255, 0.8)",
           "rgba(31, 81, 255, 0.8)",
           "rgba(64, 224, 208,0.8)",
           "rgba(63, 0, 255, 0.8)",
-          "rgba(0, 91, 234, 0.8)",
         ],
         borderWidth: 1,
       },
@@ -81,6 +73,7 @@ export default function PolarAreaChart({
 
   return (
     <div className={styles.polarChartContainer}>
+      <h1>{title}</h1>
       <PolarArea
         data={chartData}
         options={chartOptions}

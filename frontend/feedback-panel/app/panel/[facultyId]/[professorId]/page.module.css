@@ -7,13 +7,13 @@
   justify-content: flex-start;
   flex: 1;
   background-color: white;
-  gap: 24px;
+  gap: 16px;
 }
 
 .professorName {
   color: black;
   margin: 0;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   margin: 16px 0 0 0;
 }
 
@@ -28,4 +28,36 @@
 
 .professorClasses h1 {
   margin: 0;
+  text-align: center;
+}
+
+@media screen and (min-width: 400px) {
+  .professorClasses {
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+}
+
+@media screen and (min-width: 760px) {
+  .professorName {
+    font-size: 2rem;
+  }
+
+  .professorClasses h1 {
+    flex-basis: 100%;
+    font-size: 2.75rem;
+  }
+
+  .professorClasses {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+}
+
+@media screen and (min-width: 1280px) {
 }

@@ -4,6 +4,7 @@
   align-items: center;
   flex-direction: column;
   gap: 4px;
+  margin: 4px 0;
 }
 .rating {
   display: flex;
@@ -14,7 +15,7 @@
 
 .starRating h1 {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1rem;
 }
 
 .starRating .starImage {
@@ -25,5 +26,32 @@
 .starRating h2 {
   margin: 0;
   font-size: 2rem;
-  line-height: 1;
+}
+
+@media screen and (min-width: 400px) {
+  .starRating h1 {
+    font-size: 1.25rem;
+  }
+  .starRating h2 {
+    font-size: 2.25rem;
+  }
+
+  .starRating .starImage {
+    height: 36px;
+    width: auto;
+  }
+}
+
+@media screen and (min-width: 760px) {
+  .starRating h1 {
+    font-size: 1.5rem;
+  }
+  .starRating h2 {
+    font-size: 2.5rem;
+  }
+
+  .starRating .starImage {
+    height: 40px;
+    width: auto;
+  }
 }

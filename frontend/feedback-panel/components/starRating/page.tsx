@@ -4,14 +4,10 @@ import Image from "next/image";
 interface StarRating {
   rating: number;
   ratingName: string;
-  color: string;
 }
 
-export default function StarRating({ rating, ratingName, color }: StarRating) {
-  let starSvgPath: string = "/svg/star.svg";
-  if (color === "blue") starSvgPath = "/svg/star-blue.svg";
-  else if (color === "red") starSvgPath = "/svg/star-red.svg";
-  else if (color === "green") starSvgPath = "/svg/star-green.svg";
+export default function StarRating({ rating, ratingName }: StarRating) {
+  let starSvgPath: string = "/svg/star-blue.svg";
 
   return (
     <>

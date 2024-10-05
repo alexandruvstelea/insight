@@ -11,11 +11,14 @@ interface Subject {
   project_professor_id?: number | null;
 }
 
-export interface ProfessorSubjects {
-  courses: { id: number; name: string; abbreviation: string }[];
-  laboratories: { id: number; name: string; abbreviation: string }[];
-  seminars: { id: number; name: string; abbreviation: string }[];
-  projects: { id: number; name: string; abbreviation: string }[];
+export interface SubjectWithAssociation {
+  id: number;
+  name: string;
+  abbreviation: string;
+  isCourse: boolean;
+  isLaboratory: boolean;
+  isSeminar: boolean;
+  isProject: boolean;
 }
 
 export const fetchSubjectsByProfessor = async (professorId: number) => {
@@ -36,29 +39,20 @@ export const fetchSubjectsByProfessor = async (professorId: number) => {
   if (!response.ok) return false;
   const result = await response.json();
 
-  let professorSubjects: ProfessorSubjects = {
-    courses: [],
-    laboratories: [],
-    seminars: [],
-    projects: [],
-  };
+  const professorSubjects: SubjectWithAssociation[] = [];
 
   if (Array.isArray(result)) {
     result.forEach((subject: Subject) => {
-      const subjectInfo = {
+      const subjectInfo: SubjectWithAssociation = {
         id: subject.id,
         name: subject.name,
         abbreviation: subject.abbreviation,
+        isCourse: subject.course_professor_id == professorId,
+        isLaboratory: subject.laboratory_professor_id == professorId,
+        isSeminar: subject.seminar_professor_id == professorId,
+        isProject: subject.project_professor_id == professorId,
       };
-
-      if (subject.course_professor_id == professorId)
-        professorSubjects.courses.push(subjectInfo);
-      if (subject.laboratory_professor_id == professorId)
-        professorSubjects.laboratories.push(subjectInfo);
-      if (subject.seminar_professor_id == professorId)
-        professorSubjects.seminars.push(subjectInfo);
-      if (subject.project_professor_id == professorId)
-        professorSubjects.projects.push(subjectInfo);
+      professorSubjects.push(subjectInfo);
     });
   } else {
     console.error("Invalid input data: result should be an array.");

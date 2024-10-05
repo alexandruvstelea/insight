@@ -5,12 +5,13 @@ import {
   fetchProfessorAvgRating,
 } from "@/utils/fetchers/professors";
 import {
-  ProfessorSubjects,
+  SubjectWithAssociation,
   fetchSubjectsByProfessor,
 } from "@/utils/fetchers/subjects";
 import { NavigationBar } from "@/components/navigationBar/page";
 import PolarAreaChart from "@/components/polarAreaChart/page";
-import ClassButton from "@/components/classButton/page";
+import StarRating from "@/components/starRating/page";
+import SubjectDropdown from "@/components/subjectDropdown/page";
 
 interface ProfessorPageProps {
   params: {
@@ -25,28 +26,8 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
   const faculty = await fetchFaculty(facultyId);
   const professor = await fetchProfessor(professorId);
   const professorAverageRating = await fetchProfessorAvgRating(professorId);
-  const subjects: ProfessorSubjects | false | undefined =
+  const subjects: SubjectWithAssociation[] | false =
     await fetchSubjectsByProfessor(professorId);
-
-  const renderClasses = (courses: any, title: string, type: string) => {
-    return (
-      courses?.length > 0 && (
-        <>
-          <h1>{title}</h1>
-          {courses.map((course: any) => (
-            <ClassButton
-              key={course.id}
-              classId={course.id}
-              className={course.name}
-              classType={type}
-              facultyId={facultyId}
-              professorId={professorId}
-            />
-          ))}
-        </>
-      )
-    );
-  };
 
   return (
     <>
@@ -60,14 +41,34 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
           relevance={professorAverageRating.rating_relevance_average}
           interactivity={professorAverageRating.rating_interactivity_average}
           comprehension={professorAverageRating.rating_comprehension_average}
-          average={professorAverageRating.rating_overall_average}
+          title="Recenzii"
+        />
+        <StarRating
+          rating={professorAverageRating.rating_overall_average}
+          ratingName="Medie Recenzii"
         />
         <div className={styles.professorClasses}>
-          {subjects && renderClasses(subjects.courses, "Cursuri", "course")}
+          <h1>Ore</h1>
           {subjects &&
-            renderClasses(subjects.laboratories, "Laboratoare", "laboratory")}
-          {subjects && renderClasses(subjects.seminars, "Seminare", "seminar")}
-          {subjects && renderClasses(subjects.projects, "Proiecte", "project")}
+            subjects.map((subject: any) => (
+              <div key={subject.id}>
+                <SubjectDropdown
+                  subject={subject}
+                  facultyId={facultyId}
+                  professorId={professorId}
+                />
+              </div>
+            ))}
+          {subjects &&
+            subjects.map((subject: any) => (
+              <div key={subject.id}>
+                <SubjectDropdown
+                  subject={subject}
+                  facultyId={facultyId}
+                  professorId={professorId}
+                />
+              </div>
+            ))}
         </div>
       </div>
     </>
