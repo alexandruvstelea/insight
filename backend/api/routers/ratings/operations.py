@@ -254,6 +254,9 @@ class RatingOperations:
                     status_code=422,
                     detail=f"Room ID {rating_data.programme_id} is not valid for current session.",
                 )
+            
+            naive_timestamp = rating_data.timestamp.replace(tzinfo=None)
+
             new_rating = Rating(
                 rating_clarity=rating_data.rating_clarity,
                 rating_interactivity=rating_data.rating_interactivity,
@@ -266,7 +269,7 @@ class RatingOperations:
                     + rating_data.rating_comprehension
                 )
                 / 4,
-                timestamp=rating_data.timestamp,
+                timestamp=naive_timestamp,
                 session_type=rating_session.type,
                 subject_id=rating_session.subject_id,
                 programme_id=rating_data.programme_id,

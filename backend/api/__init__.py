@@ -43,10 +43,9 @@ async def lifespan(app: FastAPI):
     yield
     await FastAPILimiter.close()
 
-
 app = FastAPI(title="feedback-unitbv-api", lifespan=lifespan)
 
-origins = ["http://localhost:3000"]
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
