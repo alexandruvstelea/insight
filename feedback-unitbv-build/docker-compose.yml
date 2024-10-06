@@ -80,6 +80,20 @@ services:
     networks:
       - funitbv-network
 
+  voting-panel:
+    image: funitbv-voting-panel-image:1.0
+    container_name: funitbv-voting-panel
+    restart: on-failure:2
+    build:
+      context: ../frontend/voting-panel
+      dockerfile: ./docker/dockerfile
+    expose:
+      - "8080"  
+    networks:
+      - funitbv-network
+    depends_on:
+      - backend
+
 volumes:
   volume_postgres:
   volume_redis:
