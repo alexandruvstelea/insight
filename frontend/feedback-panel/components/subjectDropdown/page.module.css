@@ -56,10 +56,11 @@
 
 @media screen and (min-width: 400px) {
   .dropdownButton {
-    width: 328px;
+    width: 330px;
     height: 80px;
     font-size: 1.25rem;
   }
+
   .dropdownMenu {
     max-width: 328px;
   }
@@ -68,3 +69,33 @@
     font-size: 1.25rem;
   }
 }
+
+/* @media screen and (min-width: 1024px) {
+  .dropdownButton {
+    width: 400px;
+    height: 96px;
+    font-size: 1.75rem;
+  }
+  .dropdownMenu {
+    max-width: 400px;
+  }
+
+  .dropdownLink {
+    font-size: 1.75rem;
+  }
+} */
+
+/* @media screen and (min-width: 1280px) {
+  .dropdownButton {
+    width: 480px;
+    height: 116px;
+    font-size: 2rem;
+  }
+  .dropdownMenu {
+    max-width: 480px;
+  }
+
+  .dropdownLink {
+    font-size: 2rem;
+  }
+} */

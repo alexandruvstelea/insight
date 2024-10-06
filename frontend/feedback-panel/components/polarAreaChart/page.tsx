@@ -27,6 +27,15 @@ export default function PolarAreaChart({
   comprehension,
   title,
 }: PolarAreaChart) {
+  const getFontSize = () => {
+    if (window.innerWidth <= 600) {
+      return 14;
+    } else if (window.innerWidth <= 768) {
+      return 18;
+    }
+    return 22;
+  };
+
   const chartData = {
     labels: ["Claritate", "Relevanta", "Interactivitate", "Intelegere"],
     datasets: [
@@ -60,6 +69,9 @@ export default function PolarAreaChart({
         align: "center" as const,
         labels: {
           color: "black",
+          font: {
+            size: getFontSize(),
+          },
         },
       },
     },
