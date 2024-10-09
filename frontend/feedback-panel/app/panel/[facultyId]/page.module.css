@@ -73,6 +73,10 @@
 }
 
 @media screen and (min-width: 1280px) {
+  .statistics {
+    margin: 48px 8px 48px 8px;
+  }
+
   .professorsList {
     max-width: 1920px;
   }

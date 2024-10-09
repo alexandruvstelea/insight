@@ -1,6 +1,7 @@
 "use client";
 import styles from "./page.module.css";
 import { PolarArea } from "react-chartjs-2";
+import { useState, useEffect } from "react";
 import {
   Chart as ChartJS,
   RadialLinearScale,
@@ -27,14 +28,27 @@ export default function PolarAreaChart({
   comprehension,
   title,
 }: PolarAreaChart) {
-  const getFontSize = () => {
-    if (window.innerWidth <= 600) {
-      return 14;
-    } else if (window.innerWidth <= 768) {
-      return 18;
-    }
-    return 22;
-  };
+  const [fontSize, setFontSize] = useState(22);
+
+  useEffect(() => {
+    const updateFontSize = () => {
+      if (window.innerWidth <= 600) {
+        setFontSize(14);
+      } else if (window.innerWidth <= 768) {
+        setFontSize(18);
+      } else {
+        setFontSize(22);
+      }
+    };
+
+    updateFontSize();
+
+    window.addEventListener("resize", updateFontSize);
+
+    return () => {
+      window.removeEventListener("resize", updateFontSize);
+    };
+  }, []);
 
   const chartData = {
     labels: ["Claritate", "Relevanta", "Interactivitate", "Intelegere"],
@@ -70,7 +84,7 @@ export default function PolarAreaChart({
         labels: {
           color: "black",
           font: {
-            size: getFontSize(),
+            size: fontSize,
           },
         },
       },

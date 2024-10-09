@@ -37,10 +37,12 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
           <h1 className={styles.professorName}>
             {professor.last_name} {professor.first_name}
           </h1>
-          <StarRating
-            rating={professorAverageRating.rating_overall_average}
-            ratingName=""
-          />
+          {professorAverageRating.rating_overall_average && (
+            <StarRating
+              rating={professorAverageRating.rating_overall_average}
+              ratingName=""
+            />
+          )}
           <PolarAreaChart
             clarity={professorAverageRating.rating_clarity_average}
             relevance={professorAverageRating.rating_relevance_average}
