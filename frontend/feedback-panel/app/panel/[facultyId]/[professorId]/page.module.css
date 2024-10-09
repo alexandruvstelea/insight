@@ -96,7 +96,7 @@
 
   .statistics {
     width: 50%;
-    max-height: 100vh;
+    max-height: calc(100vh - 67px - 40px);
   }
 
   .professorClasses {

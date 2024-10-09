@@ -1,0 +1,9 @@
+.pageContainer {
+  background-color: white;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}

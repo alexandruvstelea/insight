@@ -1,7 +1,6 @@
 .polarChartContainer {
   width: 100%;
   max-width: 400px;
-  height: fit-content;
   display: flex;
   justify-content: center;
   align-items: center;

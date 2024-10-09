@@ -31,7 +31,7 @@ export default function SubjectDropdown({
         {subject.isCourse && (
           <Link
             href={{
-              pathname: `/panel/${facultyId}/${professorId}/courses/${subject.id}`,
+              pathname: `/panel/${facultyId}/${professorId}/course/${subject.id}`,
             }}
             className={styles.dropdownLink}
           >
@@ -41,7 +41,7 @@ export default function SubjectDropdown({
         {subject.isLaboratory && (
           <Link
             href={{
-              pathname: `/panel/${facultyId}/${professorId}/laboratories/${subject.id}`,
+              pathname: `/panel/${facultyId}/${professorId}/laboratory/${subject.id}`,
             }}
             className={styles.dropdownLink}
           >
@@ -51,7 +51,7 @@ export default function SubjectDropdown({
         {subject.isSeminar && (
           <Link
             href={{
-              pathname: `/panel/${facultyId}/${professorId}/seminars/${subject.id}`,
+              pathname: `/panel/${facultyId}/${professorId}/seminar/${subject.id}`,
             }}
             className={styles.dropdownLink}
           >
@@ -61,7 +61,7 @@ export default function SubjectDropdown({
         {subject.isProject && (
           <Link
             href={{
-              pathname: `/panel/${facultyId}/${professorId}/projects/${subject.id}`,
+              pathname: `/panel/${facultyId}/${professorId}/project/${subject.id}`,
             }}
             className={styles.dropdownLink}
           >
