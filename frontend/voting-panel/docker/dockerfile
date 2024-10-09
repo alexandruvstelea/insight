@@ -1,0 +1,21 @@
+FROM node:18 as builder
+
+WORKDIR /app
+
+COPY . .
+
+RUN npm install http-server
+
+FROM alpine:latest
+
+RUN apk --no-cache add nodejs npm
+
+WORKDIR /app
+
+COPY --from=builder /app ./ 
+
+ENV PATH /app/node_modules/.bin:$PATH
+
+EXPOSE 8080
+
+CMD ["http-server", "-p", "8080"]
