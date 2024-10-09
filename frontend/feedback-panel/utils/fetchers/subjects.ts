@@ -21,6 +21,20 @@ export interface SubjectWithAssociation {
   isProject: boolean;
 }
 
+export const fetchSubject = async (subjectId: number) => {
+  const response = await fetch(`${API_URL}/subjects/${subjectId.toString()}`, {
+    method: "GET",
+    cache: "no-store",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) return false;
+  const subject = await response.json();
+  return subject;
+};
+
 export const fetchSubjectsByProfessor = async (professorId: number) => {
   const response = await fetch(
     `${API_URL}/subjects/?` +
@@ -108,6 +122,6 @@ export const fetchSubjectGraphData = async (
   );
 
   if (!response.ok) return false;
-  const result = await response.json();
-  return result;
+  const graphData = await response.json();
+  return graphData;
 };

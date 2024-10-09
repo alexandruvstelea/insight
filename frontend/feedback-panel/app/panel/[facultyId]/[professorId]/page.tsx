@@ -41,6 +41,7 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
             <StarRating
               rating={professorAverageRating.rating_overall_average}
               ratingName=""
+              size="default"
             />
           )}
           <PolarAreaChart
@@ -64,36 +65,6 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
                   />
                 </div>
               ))}
-            {subjects &&
-              subjects.map((subject: any) => (
-                <div key={subject.id}>
-                  <SubjectDropdown
-                    subject={subject}
-                    facultyId={facultyId}
-                    professorId={professorId}
-                  />
-                </div>
-              ))}
-            {subjects &&
-              subjects.map((subject: any) => (
-                <div key={subject.id}>
-                  <SubjectDropdown
-                    subject={subject}
-                    facultyId={facultyId}
-                    professorId={professorId}
-                  />
-                </div>
-              ))}
-            {subjects &&
-              subjects.map((subject: any) => (
-                <div key={subject.id}>
-                  <SubjectDropdown
-                    subject={subject}
-                    facultyId={facultyId}
-                    professorId={professorId}
-                  />
-                </div>
-              ))}{" "}
             {subjects &&
               subjects.map((subject: any) => (
                 <div key={subject.id}>

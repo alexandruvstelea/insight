@@ -57,16 +57,16 @@ export default function PolarAreaChart({
         label: "Recenzii profesor",
         data: [clarity, relevance, interactivity, comprehension],
         backgroundColor: [
-          "rgba(0, 255, 255, 0.5)", // Claritate
-          "rgba(31, 81, 255, 0.5)", //Relevanta
-          "rgba(64, 224, 208,0.5)", //Interactivitate
-          "rgba(63, 0, 255, 0.5)", //Intelegere
+          "rgba(5, 145, 248, 0.75)", // Claritate
+          "rgba(0, 169, 165, 0.75)", //Relevanta
+          "rgba(117, 220, 159, 0.75)", //Interactivitate
+          "rgba(39, 223, 243, 0.75)", //Intelegere
         ],
         borderColor: [
-          "rgba(0, 255, 255, 0.8)",
-          "rgba(31, 81, 255, 0.8)",
-          "rgba(64, 224, 208,0.8)",
-          "rgba(63, 0, 255, 0.8)",
+          "rgba(5, 145, 248, 0.9)", // Claritate
+          "rgba(0, 169, 165, 0.9)", //Relevanta
+          "rgba(117, 220, 159, 0.9)", //Interactivitate
+          "rgba(39, 223, 243, 0.9)", //Intelegere
         ],
         borderWidth: 1,
       },

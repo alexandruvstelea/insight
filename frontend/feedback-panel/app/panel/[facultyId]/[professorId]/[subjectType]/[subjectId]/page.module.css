@@ -5,5 +5,98 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 16px;
+  gap: 32px;
+  width: 100%;
+}
+
+.subjectInfo {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  margin: 16px 0 0 0;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.subjectName {
+  text-align: center;
+  color: black;
+  font-size: 1.5rem;
+  margin: 0;
+  flex-basis: 100%;
+}
+
+.subjectType {
+  text-align: center;
+  color: black;
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.chartsContainer {
+  height: fit-content;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+}
+
+.barChartContainer {
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.polarAreaChartContainer {
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media screen and (min-width: 400px) {
+  .subjectType {
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (min-width: 760px) {
+}
+
+@media screen and (min-width: 1024px) {
+  .pageContainer {
+    gap: 40px;
+  }
+
+  .subjectName {
+    font-size: 2.5rem;
+  }
+
+  .subjectType {
+    font-size: 2rem;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .pageContainer {
+    gap: 64px;
+  }
+
+  .chartsContainer {
+    flex-direction: row;
+  }
+
+  .barChartContainer {
+    width: 65%;
+  }
+
+  .polarAreaChartContainer {
+    width: 35%;
+  }
 }

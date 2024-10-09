@@ -32,20 +32,20 @@ interface RatingsData {
 }
 
 interface BarChartProps {
-  ratings_data: RatingsData;
-  rating_type: keyof RatingsData[keyof RatingsData];
+  ratingsData: RatingsData;
+  ratingType: keyof RatingsData[keyof RatingsData];
   label: string;
 }
 
 export default function BarChart({
-  ratings_data,
-  rating_type,
+  ratingsData,
+  ratingType,
   label,
 }: BarChartProps) {
-  const labels = Object.keys(ratings_data).map(
+  const labels = Object.keys(ratingsData).map(
     (key) => `Sapt. ${key.slice(-2).replace("_", "")}`
   );
-  const data = Object.values(ratings_data).map((item) => item[rating_type]);
+  const data = Object.values(ratingsData).map((item) => item[ratingType]);
 
   const [fontSize, setFontSize] = useState(22);
 
@@ -69,14 +69,39 @@ export default function BarChart({
     };
   }, []);
 
+  const colorMapping = {
+    overall: {
+      background: "rgba(0, 91, 234, 0.75)",
+      border: "rgba(0, 91, 234, 1)",
+    },
+    interactivity: {
+      background: "rgba(117, 220, 159, 0.75)",
+      border: "rgba(117, 220, 159, 1)",
+    },
+    relevance: {
+      background: "rgba(0, 169, 165, 0.75)",
+      border: "rgba(0, 169, 165, 1)",
+    },
+    comprehension: {
+      background: "rgba(39, 223, 243, 0.75)",
+      border: "rgba(39, 223, 243, 1)",
+    },
+    clarity: {
+      background: "rgba(5, 145, 248, 0.75)",
+      border: "rgba(5, 145, 248, 1)",
+    },
+  };
+
+  const { background, border } = colorMapping[ratingType];
+
   const chartData = {
     labels,
     datasets: [
       {
         label: label,
         data,
-        backgroundColor: "rgba(0, 91, 234, 0.75)",
-        borderColor: "rgba(0, 91, 234, 1)",
+        backgroundColor: background,
+        borderColor: border,
         borderWidth: 2,
         borderRadius: 4,
       },
@@ -85,6 +110,7 @@ export default function BarChart({
 
   const chartOptions = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         display: true,
