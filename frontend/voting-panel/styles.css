@@ -64,7 +64,6 @@ body {
   -webkit-font-smoothing: antialiased;
   position: absolute;
   content: "\f006";
-
   color: var(--main-blue-dark);
   top: 0;
   left: 0;
@@ -77,6 +76,7 @@ body {
 .rating label:hover:after {
   color: var(--main-blue-light);
 }
+
 .rating input {
   display: none;
 }
@@ -87,6 +87,7 @@ body {
   color: var(--main-blue-light);
   text-shadow: 2px 2px 2px rgb(0, 0, 0, 0.6);
 }
+
 .programme-select-container {
   display: flex;
   flex-direction: column;

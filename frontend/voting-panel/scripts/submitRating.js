@@ -21,10 +21,16 @@ async function submitRating(form) {
     relevance: formData.get("rating_relevance"),
     comprehension: formData.get("rating_comprehension"),
   };
+  const ratingNames = {
+    clarity: "claritate",
+    interactivity: "interactivitate",
+    relevance: "relevanță",
+    comprehension: "înțelegere",
+  };
 
   for (const [key, value] of Object.entries(ratings)) {
     if (!value) {
-      alert(`Te rugăm să selectezi un rating pentru: ${key}`);
+      alert(`Te rugăm să selectezi un rating pentru ${ratingNames[key]}`);
       return;
     }
   }
