@@ -33,23 +33,25 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
     <>
       <NavigationBar facultyAbbreviation={faculty.abbreviation} />
       <div className={styles.pageContainer}>
-        <div className={styles.statistics}>
+        <div className={styles.professorInfo}>
           <h1 className={styles.professorName}>
             {professor.last_name} {professor.first_name}
           </h1>
           {professorAverageRating.rating_overall_average && (
             <StarRating
               rating={professorAverageRating.rating_overall_average}
-              ratingName=""
               size="default"
             />
           )}
+        </div>
+
+        <div className={styles.chartsContainer}>
           <PolarAreaChart
             clarity={professorAverageRating.rating_clarity_average}
             relevance={professorAverageRating.rating_relevance_average}
             interactivity={professorAverageRating.rating_interactivity_average}
             comprehension={professorAverageRating.rating_comprehension_average}
-            title=""
+            title="Medie Recenzii"
           />
         </div>
         <div className={styles.professorClasses}>

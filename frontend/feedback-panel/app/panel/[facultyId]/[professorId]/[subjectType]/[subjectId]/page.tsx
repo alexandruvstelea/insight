@@ -63,7 +63,6 @@ export default async function ClassPage({ params }: ClassPageProps) {
           <h2 className={styles.subjectType}>{getSubjectType(subjectType)}</h2>
           <StarRating
             rating={subjectAverage.rating_overall_average}
-            ratingName=""
             size="small"
           />
         </div>
