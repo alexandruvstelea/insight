@@ -28,28 +28,11 @@ export default function Form() {
   const [showPopup, setShowPopup] = useState(false);
   const [redirectCountdown, setRedirectCountdown] = useState(5);
   const [error, setError] = useState<string | null>(null);
-  const [userLocation, setUserLocation] = useState<{
-    lat: number;
-    lng: number;
-  } | null>(null);
   const router = useRouter();
-
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setUserLocation({ lat: latitude, lng: longitude });
-          console.log(userLocation);
-        },
-        (error) => {
-          console.error("Error getting location:", error);
-        }
-      );
-    } else {
-      console.error("Geolocation is not supported by this browser.");
-    }
-  }, []);
+  const [location, setLocation] = useState<{
+    latitude: number | null;
+    longitude: number | null;
+  }>({ latitude: null, longitude: null });
 
   useEffect(() => {
     async function loadProgrammes() {
@@ -110,7 +93,6 @@ export default function Form() {
       timestamp: "2023-10-02T10:35:59.961Z",
       room_id: 1,
     };
-    console.log(ratingData);
     try {
       const response = await fetch("http://localhost:80/api/ratings/", {
         method: "POST",
@@ -120,6 +102,9 @@ export default function Form() {
         body: JSON.stringify(ratingData),
       });
 
+      if (!response.ok) {
+        throw new Error(`Error submitting ratings: ${response.statusText}`);
+      }
       if (response.status === 201) {
         form.reset();
         setShowPopup(true);

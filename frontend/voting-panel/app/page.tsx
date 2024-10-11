@@ -1,14 +1,14 @@
 "use server";
 import Footer from "@/components/Footer";
 import NavigationBar from "@/components/NavigationBar";
-import Form from "@/components/Form";
+import LocationTransit from "@/components/LocationTransit";
 
 export default async function Home() {
   return (
     <>
-      <div className="flex flex-col min-h-screen">
+      <div className="flex flex-col min-h-screen justify-between">
         <NavigationBar />
-        <Form />
+        <LocationTransit />
         <Footer />
       </div>
     </>
