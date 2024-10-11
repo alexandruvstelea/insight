@@ -35,8 +35,6 @@ export default async function PanelPage({
       ]
     : professors;
 
-  console.log(searchText);
-
   return (
     <>
       <NavigationBar facultyAbbreviation={faculty.abbreviation} />
@@ -50,16 +48,6 @@ export default async function PanelPage({
           <SearchBar facultyId={Number(facultyId)} />
           {filteredProfessors && filteredProfessors.length > 0 ? (
             <>
-              {filteredProfessors.map((professor: any) => (
-                <ProfessorCard
-                  key={professor.id}
-                  professorID={professor.id}
-                  firstName={professor.first_name}
-                  lastName={professor.last_name}
-                  gender={professor.gender}
-                  facultyId={facultyId}
-                />
-              ))}
               {filteredProfessors.map((professor: any) => (
                 <ProfessorCard
                   key={professor.id}

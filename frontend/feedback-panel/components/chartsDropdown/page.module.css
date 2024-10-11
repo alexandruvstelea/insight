@@ -1,0 +1,43 @@
+.dropdownContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  gap: 16px;
+}
+
+.dropdown {
+  padding: 4px;
+  text-align: center;
+  width: 90%;
+  max-width: 600px;
+  font-weight: 500;
+  border-radius: 4px;
+  background-color: white;
+  font-size: 1rem;
+}
+
+.dropdown:focus {
+  outline: none;
+  border-color: var(--main-blue-dark);
+}
+
+@media screen and (min-width: 400px) {
+}
+
+@media screen and (min-width: 760px) {
+  .dropdownContainer {
+    gap: 24px;
+  }
+
+  .dropdown {
+    font-size: 1.25rem;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .dropdown {
+    font-size: 1.75rem;
+  }
+}

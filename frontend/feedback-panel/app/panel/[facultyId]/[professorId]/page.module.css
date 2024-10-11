@@ -6,18 +6,27 @@
   align-items: center;
   justify-content: flex-start;
   flex: 1;
-  background-color: white;
-  gap: 16px;
+  background-color: #f1f1f1;
+  gap: 32px;
 }
 
-.statistics {
+.professorInfo {
   width: 100%;
   height: fit-content;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  background-color: white;
+  gap: 4px;
+}
+
+.chartsContainer {
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
   gap: 16px;
 }
 
@@ -48,23 +57,30 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  gap: 16px;
+  gap: 24px;
   width: 100%;
   padding: 0;
 }
 
 @media screen and (min-width: 400px) {
+  .pageContainer {
+    gap: 48px;
+  }
+
+  .chartsContainer {
+    gap: 24px;
+  }
+
   .professorClasses {
     gap: 24px;
     margin-bottom: 24px;
   }
-}
-
-@media screen and (min-width: 760px) {
   .professorName {
     font-size: 2rem;
   }
+}
 
+@media screen and (min-width: 760px) {
   .professorClasses h1 {
     font-size: 2.75rem;
   }
@@ -96,7 +112,7 @@
 
   .statistics {
     width: 50%;
-    max-height: 100vh;
+    max-height: calc(100vh - 67px - 40px);
   }
 
   .professorClasses {
