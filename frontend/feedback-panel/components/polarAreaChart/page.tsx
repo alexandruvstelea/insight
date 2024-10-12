@@ -34,10 +34,8 @@ export default function PolarAreaChart({
     const updateFontSize = () => {
       if (window.innerWidth <= 600) {
         setFontSize(14);
-      } else if (window.innerWidth <= 768) {
-        setFontSize(18);
       } else {
-        setFontSize(22);
+        setFontSize(16);
       }
     };
 
@@ -75,6 +73,7 @@ export default function PolarAreaChart({
 
   const chartOptions = {
     responsive: true,
+    maintainAspectRatio: true,
     plugins: {
       legend: {
         display: true,

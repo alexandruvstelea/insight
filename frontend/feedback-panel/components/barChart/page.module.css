@@ -1,26 +1,24 @@
 .barChartContainer {
   width: 95%;
-  height: 248px;
+  height: fit-content;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 }
 
-.polarChart {
+.barChart {
   width: 100% !important;
-  height: 100% !important;
+  aspect-ratio: 1 / 1;
+  height: auto !important;
 }
 
 @media screen and (min-width: 400px) {
-  .barChartContainer {
-    height: 328px;
-  }
 }
 
 @media screen and (min-width: 760px) {
   .barChartContainer {
-    height: 424px;
+    max-width: 500px;
   }
 }
 
@@ -28,7 +26,4 @@
 }
 
 @media screen and (min-width: 1280px) {
-  .barChartContainer {
-    height: 574px;
-  }
 }

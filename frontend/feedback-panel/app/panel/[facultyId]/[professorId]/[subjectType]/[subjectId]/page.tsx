@@ -10,6 +10,7 @@ import {
 import PolarAreaChart from "@/components/polarAreaChart/page";
 import ChartsDropdown from "@/components/chartsDropdown/page";
 import StarRating from "@/components/starRating/page";
+import { EntityRating } from "@/components/entityRating/page";
 
 interface ClassPageProps {
   params: {
@@ -39,7 +40,7 @@ export default async function ClassPage({ params }: ClassPageProps) {
     subjectType
   );
 
-  const getSubjectType = (subjectType: string) => {
+  const getSubjectType = (subjectType: string): string => {
     switch (subjectType) {
       case "course":
         return "Curs";
@@ -58,27 +59,20 @@ export default async function ClassPage({ params }: ClassPageProps) {
     <>
       <NavigationBar facultyAbbreviation={faculty.abbreviation} />
       <div className={styles.pageContainer}>
-        <div className={styles.subjectInfo}>
-          <h1 className={styles.subjectName}>{subject.name}</h1>
-          <h2 className={styles.subjectType}>{getSubjectType(subjectType)}</h2>
-          <StarRating
-            rating={subjectAverage.rating_overall_average}
-            size="small"
-          />
-        </div>
+        <EntityRating
+          entityName={`${subject.name}`}
+          entityType={getSubjectType(subjectType)}
+          rating={subjectAverage.rating_overall_average}
+        />
         <div className={styles.chartsContainer}>
-          <div className={styles.barChartContainer}>
-            <ChartsDropdown subjectGraphData={subjectGraphData} />
-          </div>
-          <div className={styles.polarAreaChartContainer}>
-            <PolarAreaChart
-              clarity={subjectAverage.rating_clarity_average}
-              relevance={subjectAverage.rating_relevance_average}
-              interactivity={subjectAverage.rating_interactivity_average}
-              comprehension={subjectAverage.rating_comprehension_average}
-              title="Medie pe Categorii"
-            />
-          </div>
+          <ChartsDropdown subjectGraphData={subjectGraphData} />
+          <PolarAreaChart
+            clarity={subjectAverage.rating_clarity_average}
+            relevance={subjectAverage.rating_relevance_average}
+            interactivity={subjectAverage.rating_interactivity_average}
+            comprehension={subjectAverage.rating_comprehension_average}
+            title="Medie pe Categorii"
+          />
         </div>
       </div>
     </>

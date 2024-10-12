@@ -31,3 +31,23 @@ export const fetchProfessorAvgRating = async (professorId: number) => {
   const avgRating = await response.json();
   return avgRating;
 };
+
+export const fetchProfessorRatingsHistory = async (professorId: number) => {
+  const response = await fetch(
+    `${API_URL}/ratings/graph?` +
+      new URLSearchParams({
+        professor_id: professorId.toString(),
+      }),
+    {
+      method: "GET",
+      cache: "no-store",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  if (!response.ok) return false;
+  const graphData = await response.json();
+  return graphData;
+};

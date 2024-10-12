@@ -53,10 +53,8 @@ export default function BarChart({
     const updateFontSize = () => {
       if (window.innerWidth <= 600) {
         setFontSize(14);
-      } else if (window.innerWidth <= 768) {
-        setFontSize(18);
       } else {
-        setFontSize(22);
+        setFontSize(16);
       }
     };
 
@@ -132,7 +130,11 @@ export default function BarChart({
 
   return (
     <div className={styles.barChartContainer}>
-      <Bar data={chartData} options={chartOptions} />
+      <Bar
+        data={chartData}
+        options={chartOptions}
+        className={styles.barChart}
+      />
     </div>
   );
 }

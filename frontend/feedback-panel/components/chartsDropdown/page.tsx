@@ -31,11 +31,13 @@ export default function ChartsDropdown({
           onChange={handleChartChange}
           className={styles.dropdown}
         >
-          <option value="overall">Medie Recenzii</option>
-          <option value="interactivity">Recenzii Interactivitate</option>
-          <option value="relevance">Recenzii Relevanta</option>
-          <option value="comprehension">Recenzii Intelegere</option>
-          <option value="clarity">Recenzii Claritate</option>
+          <option value="overall">Istoric Medie Recenzii</option>
+          <option value="interactivity">
+            Istoric Recenzii Interactivitate
+          </option>
+          <option value="relevance">Istoric Recenzii Relevanta</option>
+          <option value="comprehension">Istoric Recenzii Intelegere</option>
+          <option value="clarity">Istoric Recenzii Claritate</option>
         </select>
         <BarChart
           ratingsData={subjectGraphData}
@@ -44,12 +46,12 @@ export default function ChartsDropdown({
             selectedChart === "overall"
               ? "Medie Recenzii"
               : selectedChart === "interactivity"
-              ? "Recenzii Interactivitate"
+              ? "Medie Interactivitate"
               : selectedChart === "relevance"
-              ? "Recenzii Relevanta"
+              ? "Medie Relevanta"
               : selectedChart === "comprehension"
-              ? "Recenzii Intelegere"
-              : "Recenzii Claritate"
+              ? "Medie Intelegere"
+              : "Medie Claritate"
           }
         />
       </div>

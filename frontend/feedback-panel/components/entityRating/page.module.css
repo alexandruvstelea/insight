@@ -1,0 +1,46 @@
+.container {
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background-color: #f0f0f0;
+  flex-wrap: wrap;
+  flex-basis: 100%;
+}
+
+.entity {
+  color: black;
+  margin: 0;
+  font-size: 1.5rem;
+  margin: 16px 0 0 0;
+  flex-basis: 100%;
+  text-align: center;
+}
+
+.entityType {
+  text-align: center;
+  color: black;
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+@media screen and (min-width: 400px) {
+  .entity {
+    font-size: 2rem;
+  }
+}
+
+@media screen and (min-width: 760px) {
+}
+
+@media screen and (min-width: 1024px) {
+  .entity {
+    font-size: 2.5rem;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+}

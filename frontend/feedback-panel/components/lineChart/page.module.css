@@ -1,4 +1,4 @@
-.polarChartContainer {
+.lineChartContainer {
   width: 95%;
   height: fit-content;
   display: flex;
@@ -11,13 +11,13 @@
   box-shadow: 0px 4px 4px #00000030, 0px 12px 12px #00000015;
 }
 
-.polarChartContainer h1 {
+.lineChartContainer h1 {
   margin: 0;
   font-size: 1.25rem;
   padding: 8px;
 }
 
-.polarChart {
+.lineChart {
   width: 100% !important;
   aspect-ratio: 1 / 1;
   height: auto !important;
@@ -27,11 +27,11 @@
 }
 
 @media screen and (min-width: 760px) {
-  .polarChartContainer h1 {
+  .lineChartContainer h1 {
     font-size: 1.5rem;
   }
 
-  .polarChartContainer {
+  .lineChartContainer {
     max-width: 500px;
   }
 }
