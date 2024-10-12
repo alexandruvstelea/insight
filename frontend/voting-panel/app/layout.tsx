@@ -15,8 +15,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${montserrat.className} antialiased`}>{children}</body>
+    <html className="bg-black" lang="en">
+      <body className={`${montserrat.className} antialiased bg-white`}>
+        {children}
+      </body>
     </html>
   );
 }

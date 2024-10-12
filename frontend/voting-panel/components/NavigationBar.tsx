@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default async function NavigationBar() {
   return (
-    <div className="text-center w-full py-2 h-fit bg-gradient text-white">
+    <div className="text-center w-full h-fit bg-gradient text-white">
       <Link
         href={{
           pathname: "/",

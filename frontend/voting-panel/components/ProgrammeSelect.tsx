@@ -15,7 +15,7 @@ const ProgrammeSelect: React.FC<ProgrammeSelectProps> = ({
     <select
       id="programme-select"
       name="programme-select"
-      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  focus:ring-gray-400 focus:border-gray-400 block w-full p-2.5"
+      className="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg  focus:ring-gray-400 focus:border-gray-400 block w-full  p-2.5"
       value={selectedProgramme}
       onChange={handleProgrammeChange}
       required

@@ -12,8 +12,8 @@ const StarRating: React.FC<StarRatingProps> = ({ title, name }) => {
 
   return (
     <div>
-      <h2 className="text-lg leading-tight font-semibold py-2">{title}</h2>
-      <div className="rating flex flex-row gap-4 max-w-md ">
+      <h2 className="text-base leading-tight font-semibold py-2">{title}</h2>
+      <div className="rating flex flex-row justify-around gap-1 max-w-md ">
         {[...Array(5)].map((_, index) => {
           const currentRating: number = index + 1;
 
@@ -41,9 +41,9 @@ const StarRating: React.FC<StarRatingProps> = ({ title, name }) => {
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   height="54"
-                  width="auto"
+                  width="60"
                   viewBox="0 0 576 512"
-                  className="transition-all duration-500 "
+                  className="transition-all duration-500 max-w-full"
                   filter={filter}
                 >
                   <path

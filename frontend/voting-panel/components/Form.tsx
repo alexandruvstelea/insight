@@ -29,6 +29,17 @@ export default function Form() {
   const [redirectCountdown, setRedirectCountdown] = useState(5);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  // const [roomId, setRoomId] = useState<number | null>(null);
+
+  // useEffect(() => {
+  //   const roomIdFromUrl = URLSearchParams.get("room_id");
+  //   if (roomIdFromUrl) {
+  //     const parsedRoomId = parseInt(roomIdFromUrl);
+  //     if (!isNaN(parsedRoomId)) {
+  //       setRoomId(parsedRoomId); // Set roomId if it's a valid number
+  //     }
+  //   }
+  // }, [URLSearchParams]);
 
   useEffect(() => {
     async function loadProgrammes() {
@@ -155,7 +166,7 @@ export default function Form() {
     <div className="max-w-md w-full mx-auto">
       <form
         onSubmit={handleSubmit}
-        className="w-full p-4 flex flex-col jus gap-10"
+        className="w-full p-3 flex flex-col jus gap-10"
       >
         <div className="flex flex-col gap-6 ">
           <StarRating
@@ -178,7 +189,7 @@ export default function Form() {
         <div>
           <label
             htmlFor="comment"
-            className="block mb-2 text-sm font-medium text-gray-900"
+            className="block mb-2 text-base font-medium text-gray-900"
           >
             Lasă un comentariu (optional):
           </label>
@@ -187,7 +198,7 @@ export default function Form() {
             name="comment"
             rows={4}
             minLength={20}
-            className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+            className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 resize-none"
             placeholder="Scrie părerea ta aici..."
           ></textarea>
         </div>
