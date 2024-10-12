@@ -1,4 +1,4 @@
-from sqlalchemy import select, func
+from sqlalchemy import select, func, and_
 from sqlalchemy.orm import joinedload
 from ...database.models.professor import Professor
 from .schemas import ProfessorOut, ProfessorIn
@@ -76,8 +76,10 @@ class ProfessorOperations:
             )
             result = await self.session.execute(
                 select(Professor).where(
-                    Professor.first_name == first_name
-                    and Professor.last_name == last_name
+                    and_(
+                    Professor.first_name == first_name,
+                    Professor.last_name == last_name
+                )
                 )
             )
             professor = result.scalars().unique().one_or_none()
