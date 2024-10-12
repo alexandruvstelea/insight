@@ -13,7 +13,7 @@ class Building(AlchemyAsyncBase):
     __tablename__: str = "buildings"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    name: Mapped[str] = mapped_column(unique=True, index=True)
+    name: Mapped[str] = mapped_column(unique=True, index=True, nullable=False)
     faculties_ids: Mapped[List[int]] = mapped_column(ARRAY(Integer))
     latitude: Mapped[float] = mapped_column(Float, nullable=False)
     longitude: Mapped[float] = mapped_column(Float, nullable=False)

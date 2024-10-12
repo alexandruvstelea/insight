@@ -100,7 +100,7 @@ async def update_faculty(
     client_ip: str = Header(None, alias="X-Real-IP"),
 ) -> FacultyOut:
     logger.info(
-        f"Received PUT request on endpoint /api/faculties/id from IP {client_ip}."
+        f"Received PUT request on endpoint /api/faculties/{id} from IP {client_ip}."
     )
     response = await FacultyOperations(session).update_faculty(id, new_faculty_data)
     return response
@@ -119,7 +119,7 @@ async def delete_faculty(
     client_ip: str = Header(None, alias="X-Real-IP"),
 ) -> str:
     logger.info(
-        f"Received DELETE request on endpoint /api/faculties/id from IP {client_ip}."
+        f"Received DELETE request on endpoint /api/faculties/{id} from IP {client_ip}."
     )
     response = await FacultyOperations(session).delete_faculty(id)
     return response

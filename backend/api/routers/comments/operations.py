@@ -54,6 +54,22 @@ class CommentOperations:
     async def add_comment(self, comment_data: CommentIn) -> CommentOut:
         try:
             logger.info(f"Adding to database comment {comment_data}.")
+            if len(comment_data.text) > 500:
+                logger.error(
+                    f"Comment text is too long (lenght {len(comment_data.text)}). Maximum text lenght is 500."
+                )
+                raise HTTPException(
+                    status_code=422,
+                    detail=f"Comment text is too long (lenght {len(comment_data.text)}). Maximum text lenght is 500.",
+                )
+            if len(comment_data.text) < 10:
+                logger.error(
+                    f"Comment text is too short (lenght {len(comment_data.text)}). Minimum text lenght is 10."
+                )
+                raise HTTPException(
+                    status_code=422,
+                    detail=f"Comment text is too short (lenght {len(comment_data.text)}). Minimum text lenght is 10.",
+                )
             comment_session: Session = await get_session_from_timestamp(
                 self.session, comment_data.timestamp, comment_data.room_id
             )

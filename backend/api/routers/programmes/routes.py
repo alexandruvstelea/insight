@@ -47,7 +47,7 @@ async def get_programme_by_id(
     session: AsyncSession = Depends(get_session),
 ) -> ProgrammeOut:
     logger.info(
-        f"Received GET request on endpoint /api/programmes/id from IP {client_ip}."
+        f"Received GET request on endpoint /api/programmes/{id} from IP {client_ip}."
     )
     programme = await ProgrammeOperations(session).get_programme_by_id(id)
     return programme
@@ -88,7 +88,7 @@ async def update_programme(
     session: AsyncSession = Depends(get_session),
 ) -> ProgrammeOut:
     logger.info(
-        f"Received PUT request on endpoint /api/programmes/id from IP {client_ip}."
+        f"Received PUT request on endpoint /api/programmes/{id} from IP {client_ip}."
     )
     response = await ProgrammeOperations(session).update_programme(
         id, new_programme_data
@@ -109,7 +109,7 @@ async def delete_programme(
     session: AsyncSession = Depends(get_session),
 ) -> str:
     logger.info(
-        f"Received DELETE request on endpoint /api/programmes/id from IP {client_ip}."
+        f"Received DELETE request on endpoint /api/programmes/{id} from IP {client_ip}."
     )
     response = await ProgrammeOperations(session).delete_programme(id)
     return response

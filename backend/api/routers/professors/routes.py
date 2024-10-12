@@ -44,7 +44,7 @@ async def get_professor_by_id(
     session: AsyncSession = Depends(get_session),
 ) -> ProfessorOut:
     logger.info(
-        f"Received GET request on endpoint /api/professors/id from IP {client_ip}."
+        f"Received GET request on endpoint /api/professors/{id}from IP {client_ip}."
     )
     professor = await ProfessorOperations(session).get_professor_by_id(id)
     return professor
@@ -63,7 +63,7 @@ async def get_professor_by_full_name(
     session: AsyncSession = Depends(get_session),
 ) -> ProfessorOut:
     logger.info(
-        f"Received GET request on endpoint /api/professors/id from IP {client_ip}."
+        f"Received GET request on endpoint /api/professors/name/filter from IP {client_ip}."
     )
     professor = await ProfessorOperations(session).get_professor_by_full_name(
         first_name, last_name
@@ -106,7 +106,7 @@ async def update_professor(
     session: AsyncSession = Depends(get_session),
 ) -> ProfessorOut:
     logger.info(
-        f"Received PUT request on endpoint /api/professors/id from IP {client_ip}."
+        f"Received PUT request on endpoint /api/professors/{id} from IP {client_ip}."
     )
     response = await ProfessorOperations(session).update_professor(
         id, new_professor_data
@@ -127,7 +127,25 @@ async def delete_professor(
     session: AsyncSession = Depends(get_session),
 ) -> str:
     logger.info(
-        f"Received DELETE request on endpoint /api/professors/id from IP {client_ip}."
+        f"Received DELETE request on endpoint /api/professors/{id} from IP {client_ip}."
     )
     response = await ProfessorOperations(session).delete_professor(id)
     return response
+
+
+@professors_router.get(
+    "/count/entities",
+    response_model=int,
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
+async def get_professors_count(
+    faculty_id: int,
+    client_ip: str = Header(None, alias="X-Real-IP"),
+    session: AsyncSession = Depends(get_session),
+) -> int:
+    logger.info(
+        f"Received GET request on endpoint /api/professors/count/entities from IP {client_ip}."
+    )
+    count = await ProfessorOperations(session).get_entities_count(faculty_id)
+    return count

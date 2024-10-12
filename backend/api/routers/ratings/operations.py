@@ -235,15 +235,18 @@ class RatingOperations:
         try:
             logger.info(f"Adding to database rating {rating_data}.")
 
-            if (
-                rating_data.rating_clarity < 1
-                or rating_data.rating_comprehension < 1
-                or rating_data.rating_interactivity < 1
-                or rating_data.rating_relevance < 1
+            if any(
+                rating < 1 or rating > 5
+                for rating in [
+                    rating_data.rating_clarity,
+                    rating_data.rating_comprehension,
+                    rating_data.rating_interactivity,
+                    rating_data.rating_relevance,
+                ]
             ):
                 raise HTTPException(
                     status_code=422,
-                    detail=f"Rating data is not valid.",
+                    detail="Rating data is not valid. All ratings must be between 1 and 5.",
                 )
 
             query = select(Room).where(Room.unique_code == rating_data.room_code)
@@ -327,3 +330,21 @@ class RatingOperations:
                 f"An unexpected error has occured while adding rating to databse:\n{e}"
             )
             raise e
+
+    async def get_entities_count(self, faculty_id: int) -> int:
+        try:
+            logger.info(f"Counting ratings for faculty with ID {faculty_id}.")
+            count_query = (
+                select(func.count())
+                .select_from(Rating)
+                .where(Rating.faculty_id == faculty_id)
+            )
+            result = await self.session.execute(count_query)
+            count = result.scalar()
+            logger.info(f"There are {count} ratings for faculty with ID {faculty_id}.")
+            return count
+        except Exception as e:
+            logger.error(f"An error occurred while counting ratings:\n{e}")
+            raise HTTPException(
+                status_code=500, detail="Could not retrieve ratings count."
+            )

@@ -8,9 +8,9 @@ class Comment(AlchemyAsyncBase):
     __tablename__: str = "comments"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    text: Mapped[str] = mapped_column()
-    subject_id: Mapped[int] = mapped_column(ForeignKey("subjects.id"))
-    timestamp: Mapped[DateTime] = mapped_column(DateTime)
+    text: Mapped[str] = mapped_column(nullable=False)
+    subject_id: Mapped[int] = mapped_column(ForeignKey("subjects.id"), nullable=True)
+    timestamp: Mapped[DateTime] = mapped_column(DateTime, nullable=False)
     programme_id: Mapped[int] = mapped_column(
         ForeignKey("programmes.id"), nullable=True
     )

@@ -13,9 +13,9 @@ class Professor(AlchemyAsyncBase):
     __tablename__: str = "professors"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    first_name: Mapped[str] = mapped_column()
-    last_name: Mapped[str] = mapped_column()
-    gender: Mapped[str] = mapped_column()
+    first_name: Mapped[str] = mapped_column(nullable=False)
+    last_name: Mapped[str] = mapped_column(nullable=False)
+    gender: Mapped[str] = mapped_column(nullable=False)
     faculties_ids: Mapped[List[int]] = mapped_column(ARRAY(Integer))
     faculties: Mapped[List["Faculty"]] = relationship(
         "Faculty",

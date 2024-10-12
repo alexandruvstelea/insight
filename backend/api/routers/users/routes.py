@@ -117,7 +117,7 @@ async def delete_user(
     session: AsyncSession = Depends(get_session),
 ) -> str:
     logger.info(
-        f"Received DELETE request on endpoint /api/users/id from IP {client_ip}."
+        f"Received DELETE request on endpoint /api/users/{id} from IP {client_ip}."
     )
     result = await UserOperations(session).delete_user(id)
     return result

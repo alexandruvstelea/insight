@@ -47,7 +47,7 @@ async def get_building_by_id(
     session: AsyncSession = Depends(get_session),
 ) -> BuildingOut:
     logger.info(
-        f"Received GET request on endpoint /api/buildings/id from IP {client_ip}."
+        f"Received GET request on endpoint /api/buildings/{id} from IP {client_ip}."
     )
     building = await BuildingsOperations(session).get_building_by_id(id)
     return building
@@ -88,7 +88,7 @@ async def update_building(
     session: AsyncSession = Depends(get_session),
 ) -> BuildingOut:
     logger.info(
-        f"Received PUT request on endpoint /api/buildings/id from IP {client_ip}."
+        f"Received PUT request on endpoint /api/buildings/{id} from IP {client_ip}."
     )
     response = await BuildingsOperations(session).update_building(id, new_building_data)
     return response
@@ -107,7 +107,25 @@ async def delete_building(
     session: AsyncSession = Depends(get_session),
 ) -> str:
     logger.info(
-        f"Received DELETE request on endpoint /api/buildings/id from IP {client_ip}."
+        f"Received DELETE request on endpoint /api/buildings/{id} from IP {client_ip}."
     )
     response = await BuildingsOperations(session).delete_building(id)
     return response
+
+
+@buildings_router.get(
+    "/count/entities",
+    response_model=int,
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
+async def get_buildings_count(
+    faculty_id: int,
+    client_ip: str = Header(None, alias="X-Real-IP"),
+    session: AsyncSession = Depends(get_session),
+) -> int:
+    logger.info(
+        f"Received GET request on endpoint /api/buildings/count/entities from IP {client_ip}."
+    )
+    count = await BuildingsOperations(session).get_entities_count(faculty_id)
+    return count

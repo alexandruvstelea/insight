@@ -55,7 +55,7 @@ async def get_average_ratings(
 
 
 @ratings_routes.get(
-    "/graph",
+    "/history",
     response_model=dict[str, WeekRatings],
     dependencies=[Depends(RateLimiter(times=50, minutes=1))],
     status_code=HTTPStatus.OK,
@@ -68,7 +68,7 @@ async def get_graph_ratings(
     session: AsyncSession = Depends(get_session),
 ) -> dict[str, WeekRatings]:
     logger.info(
-        f"Received GET request on endpoint /api/ratings/graph from IP {client_ip}."
+        f"Received GET request on endpoint /api/ratings/history from IP {client_ip}."
     )
     ratings = await RatingOperations(session).get_ratings_graph(
         professor_id, subject_id, session_type
@@ -90,3 +90,21 @@ async def add_rating(
     logger.info(f"Received POST request on endpoint /api/ratings from IP {client_ip}.")
     response = await RatingOperations(session).add_rating(rating_data)
     return response
+
+
+@ratings_routes.get(
+    "/count/entities",
+    response_model=int,
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
+async def get_ratings_count(
+    faculty_id: int,
+    client_ip: str = Header(None, alias="X-Real-IP"),
+    session: AsyncSession = Depends(get_session),
+) -> int:
+    logger.info(
+        f"Received GET request on endpoint /api/ratings/count/entities from IP {client_ip}."
+    )
+    count = await RatingOperations(session).get_entities_count(faculty_id)
+    return count

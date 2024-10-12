@@ -13,15 +13,15 @@ class Session(AlchemyAsyncBase):
     __tablename__: str = "sessions"
 
     id: Mapped[int] = mapped_column(primary_key=True, unique=True)
-    type: Mapped[str] = mapped_column()
-    semester: Mapped[int] = mapped_column()
-    week_type: Mapped[int] = mapped_column()
-    start: Mapped[Time] = mapped_column(Time)
-    end: Mapped[Time] = mapped_column(Time)
-    day: Mapped[int] = mapped_column()
-    room_id: Mapped[int] = mapped_column(ForeignKey("rooms.id"),nullable=True)
-    subject_id: Mapped[int] = mapped_column(ForeignKey("subjects.id"),nullable=True)
-    faculty_id: Mapped[int] = mapped_column()
+    type: Mapped[str] = mapped_column(nullable=False)
+    semester: Mapped[int] = mapped_column(nullable=False)
+    week_type: Mapped[int] = mapped_column(nullable=False)
+    start: Mapped[Time] = mapped_column(Time, nullable=False)
+    end: Mapped[Time] = mapped_column(Time, nullable=False)
+    day: Mapped[int] = mapped_column(nullable=False)
+    room_id: Mapped[int] = mapped_column(ForeignKey("rooms.id"), nullable=True)
+    subject_id: Mapped[int] = mapped_column(ForeignKey("subjects.id"), nullable=True)
+    faculty_id: Mapped[int] = mapped_column(nullable=True)
     subject: Mapped["Subject"] = relationship(
         "Subject", lazy="subquery", back_populates="sessions"
     )

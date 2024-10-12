@@ -1,4 +1,4 @@
-from sqlalchemy import select
+from sqlalchemy import select, func
 from sqlalchemy.orm import joinedload
 from ...database.models.building import Building
 from .schemas import BuildingOut, BuildingIn
@@ -168,3 +168,23 @@ class BuildingsOperations:
                 f"An unexpected error has occured while deleting building with ID {id}:\n{e}"
             )
             raise e
+
+    async def get_entities_count(self, faculty_id: int) -> int:
+        try:
+            logger.info(f"Counting buildings for faculty with ID {faculty_id}.")
+            count_query = (
+                select(func.count())
+                .select_from(Building)
+                .where(Building.faculties_ids.contains([faculty_id]))
+            )
+            result = await self.session.execute(count_query)
+            count = result.scalar()
+            logger.info(
+                f"There are {count} buildings for faculty with ID {faculty_id}."
+            )
+            return count
+        except Exception as e:
+            logger.error(f"An error occurred while counting buildings:\n{e}")
+            raise HTTPException(
+                status_code=500, detail="Could not retrieve buildings count."
+            )

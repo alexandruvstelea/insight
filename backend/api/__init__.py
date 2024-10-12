@@ -11,6 +11,7 @@ from api.routers.weeks.routes import weeks_routes
 from api.routers.ratings.routes import ratings_routes
 from api.routers.comments.routes import comments_routes
 from api.routers.users.routes import users_router
+from api.routers.reports.routes import reports_router
 from contextlib import asynccontextmanager
 from fastapi_limiter import FastAPILimiter
 import redis.asyncio as redis
@@ -43,6 +44,7 @@ async def lifespan(app: FastAPI):
     yield
     await FastAPILimiter.close()
 
+
 app = FastAPI(title="feedback-unitbv-api", lifespan=lifespan)
 
 origins = ["*"]
@@ -66,3 +68,4 @@ app.include_router(weeks_routes)
 app.include_router(ratings_routes)
 app.include_router(comments_routes)
 app.include_router(users_router)
+app.include_router(reports_router)

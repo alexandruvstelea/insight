@@ -14,9 +14,9 @@ class Subject(AlchemyAsyncBase):
     __tablename__: str = "subjects"
 
     id: Mapped[int] = mapped_column(primary_key=True, unique=True)
-    name: Mapped[str] = mapped_column(unique=True, index=True)
-    abbreviation: Mapped[str] = mapped_column(unique=True)
-    semester: Mapped[int] = mapped_column()
+    name: Mapped[str] = mapped_column(unique=True, index=True, nullable=False)
+    abbreviation: Mapped[str] = mapped_column(unique=True, nullable=False)
+    semester: Mapped[int] = mapped_column(nullable=False)
     course_professor_id: Mapped[Optional[int]] = mapped_column(
         ForeignKey("professors.id"), nullable=True
     )

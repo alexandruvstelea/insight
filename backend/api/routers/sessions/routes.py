@@ -32,7 +32,7 @@ async def get_sessions(
 
 
 @sessions_router.get(
-    "/id/{id}",
+    "/{id}",
     response_model=SessionOut,
     dependencies=[Depends(RateLimiter(times=50, minutes=1))],
     status_code=HTTPStatus.OK,
@@ -43,14 +43,14 @@ async def get_session_by_id(
     db_session: AsyncSession = Depends(get_session),
 ) -> SessionOut:
     logger.info(
-        f"Received GET request on endpoint /api/sessions/id from IP {client_ip}."
+        f"Received GET request on endpoint /api/sessions/{id} from IP {client_ip}."
     )
     session = await SessionOperations(db_session).get_session_by_id(id)
     return session
 
 
 @sessions_router.get(
-    "/current",
+    "/filter/current",
     response_model=SessionOut,
     dependencies=[Depends(RateLimiter(times=50, minutes=1))],
     status_code=HTTPStatus.OK,
@@ -62,7 +62,7 @@ async def get_current_session(
     db_session: AsyncSession = Depends(get_session),
 ) -> SessionOut:
     logger.info(
-        f"Received GET request on endpoint /api/sessions/current from IP {client_ip}."
+        f"Received GET request on endpoint /api/sessions/filter/current from IP {client_ip}."
     )
     session = await SessionOperations(db_session).get_current_session(
         timestamp, room_code
@@ -103,7 +103,7 @@ async def update_session(
     session: AsyncSession = Depends(get_session),
 ) -> SessionOut:
     logger.info(
-        f"Received PUT request on endpoint /api/sessions/id from IP {client_ip}."
+        f"Received PUT request on endpoint /api/sessions/{id} from IP {client_ip}."
     )
     response = await SessionOperations(session).update_session(id, new_session_data)
     return response
@@ -122,7 +122,7 @@ async def delete_session(
     session: AsyncSession = Depends(get_session),
 ) -> str:
     logger.info(
-        f"Received DELETE request on endpoint /api/sessions/id from IP {client_ip}."
+        f"Received DELETE request on endpoint /api/sessions/{id} from IP {client_ip}."
     )
     response = await SessionOperations(session).delete_session(id)
     return response

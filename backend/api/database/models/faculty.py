@@ -12,8 +12,8 @@ class Faculty(AlchemyAsyncBase):
     __tablename__: str = "faculties"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    name: Mapped[str] = mapped_column(unique=True, index=True)
-    abbreviation: Mapped[str] = mapped_column(unique=True)
+    name: Mapped[str] = mapped_column(unique=True, index=True, nullable=False)
+    abbreviation: Mapped[str] = mapped_column(unique=True, nullable=False)
     programmes: Mapped[List["Programme"]] = relationship(
         "Programme", lazy="subquery", back_populates="faculty"
     )

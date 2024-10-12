@@ -100,7 +100,7 @@ async def update_subject(
     session: AsyncSession = Depends(get_session),
 ) -> SubjectOut:
     logger.info(
-        f"Received PUT request on endpoint /api/subjects/id from IP {client_ip}."
+        f"Received PUT request on endpoint /api/subjects/{id} from IP {client_ip}."
     )
     response = await SubjectOperations(session).update_subject(id, new_subject_data)
     return response
@@ -119,7 +119,7 @@ async def delete_subject(
     session: AsyncSession = Depends(get_session),
 ) -> str:
     logger.info(
-        f"Received DELETE request on endpoint /api/subjects/id from IP {client_ip}."
+        f"Received DELETE request on endpoint /api/subjects/{id} from IP {client_ip}."
     )
     response = await SubjectOperations(session).delete_subject(id)
     return response

@@ -45,7 +45,9 @@ async def get_room_by_id(
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> RoomOut:
-    logger.info(f"Received GET request on endpoint /api/rooms/ip from IP {client_ip}.")
+    logger.info(
+        f"Received GET request on endpoint /api/rooms/{id} from IP {client_ip}."
+    )
     room = await RoomOperations(session).get_room_by_id(id)
     return room
 
@@ -82,7 +84,9 @@ async def update_room(
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> RoomOut:
-    logger.info(f"Received PUT request on endpoint /api/rooms/id from IP {client_ip}.")
+    logger.info(
+        f"Received PUT request on endpoint /api/rooms/{id} from IP {client_ip}."
+    )
     response = await RoomOperations(session).update_room(id, new_room_data)
     return response
 
@@ -100,7 +104,7 @@ async def delete_room(
     session: AsyncSession = Depends(get_session),
 ) -> str:
     logger.info(
-        f"Received DELETE request on endpoint /api/rooms/id from IP {client_ip}."
+        f"Received DELETE request on endpoint /api/rooms/{id} from IP {client_ip}."
     )
     response = await RoomOperations(session).delete_room(id)
     return response
