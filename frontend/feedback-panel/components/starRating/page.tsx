@@ -18,7 +18,7 @@ export default function StarRating({
     size === "small" ? styles.smallRating : styles.defaultRating;
 
   const fullStars = Math.floor(rating);
-  const hasHalfStar = rating % 1 >= 0.1 && rating % 1 <= 0.9;
+  const hasHalfStar = rating % 1 >= 0.1 && rating % 1 <= 1;
   const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 
   return (
