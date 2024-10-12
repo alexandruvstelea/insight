@@ -42,6 +42,36 @@ export default function Form() {
   // }, [URLSearchParams]);
 
   useEffect(() => {
+    const fetchSession = async () => {
+      const room_code = "NII1ABC==";
+      // timestamp: new Date().toISOString(),
+      const timestamp = "2023-10-02T10:35:59.961Z";
+
+      const queryParams = new URLSearchParams({
+        room_code: room_code.toString(),
+        timestamp: timestamp,
+      });
+
+      try {
+        const response = await fetch(
+          `http://localhost:80/api/sessions/current?${queryParams}`
+        );
+
+        if (!response.ok) {
+          throw new Error(`Error fetching session: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        console.log("Session data received:", data);
+      } catch (error) {
+        console.error("Error fetching session:", error);
+      }
+    };
+
+    fetchSession();
+  }, []);
+
+  useEffect(() => {
     async function loadProgrammes() {
       try {
         const data = await fetchProgrammes();
@@ -62,6 +92,7 @@ export default function Form() {
     );
     return cleanup;
   }, [showPopup]);
+
   const handleProgrammeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = e.target.value;
     setSelectedProgramme(selectedValue);
