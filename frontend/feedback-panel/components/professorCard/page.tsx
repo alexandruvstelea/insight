@@ -3,13 +3,14 @@ import { useState } from "react";
 import styles from "./page.module.css";
 import Image from "next/image";
 import Link from "next/link";
+import { transformProfessorName } from "@/utils/fetchers/professors";
 
 interface ProfessorCardProps {
   professorID: number;
   firstName: string;
   lastName: string;
   gender: "male" | "female";
-  facultyId: number;
+  facultyAbbreviation: string;
 }
 
 export default function ProfessorCard({
@@ -17,7 +18,7 @@ export default function ProfessorCard({
   firstName,
   lastName,
   gender,
-  facultyId,
+  facultyAbbreviation,
 }: ProfessorCardProps) {
   const defaultImageSrc =
     gender === "male"
@@ -27,6 +28,8 @@ export default function ProfessorCard({
   const [imageSrc, setImageSrc] = useState(
     `/svg/professors/${lastName.toLowerCase()}.svg`
   );
+
+  const professorName: string = transformProfessorName(lastName, firstName);
 
   return (
     <>
@@ -47,7 +50,7 @@ export default function ProfessorCard({
           </h1>
           <Link
             href={{
-              pathname: `/panel/${facultyId}/${professorID}`,
+              pathname: `/panel/${facultyAbbreviation}/${professorName}`,
             }}
             className={styles.arrowLink}
           >

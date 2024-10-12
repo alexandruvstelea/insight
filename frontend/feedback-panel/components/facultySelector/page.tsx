@@ -3,13 +3,13 @@ import Image from "next/image";
 import Link from "next/link";
 
 interface FacultySelector {
-  facultyID: number;
+  facultyAbbreviation: string;
   facultyName: string;
   svgPath: string;
 }
 
 export default function FacultySelector({
-  facultyID,
+  facultyAbbreviation,
   facultyName,
   svgPath,
 }: FacultySelector) {
@@ -18,7 +18,7 @@ export default function FacultySelector({
       <div className={styles.facultySelector}>
         <Link
           href={{
-            pathname: `/panel/${facultyID}`,
+            pathname: `/panel/${facultyAbbreviation}`,
           }}
           className={styles.selectorLink}
         >

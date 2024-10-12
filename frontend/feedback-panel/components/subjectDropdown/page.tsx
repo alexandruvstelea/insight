@@ -6,14 +6,14 @@ import Link from "next/link";
 
 interface SubjectDropdownProps {
   subject: SubjectWithAssociation;
-  facultyId: number;
-  professorId: number;
+  facultyAbbreviation: string;
+  transformedProfessorName: string;
 }
 
 export default function SubjectDropdown({
   subject,
-  facultyId,
-  professorId,
+  facultyAbbreviation,
+  transformedProfessorName,
 }: SubjectDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -31,7 +31,7 @@ export default function SubjectDropdown({
         {subject.isCourse && (
           <Link
             href={{
-              pathname: `/panel/${facultyId}/${professorId}/course/${subject.id}`,
+              pathname: `/panel/${facultyAbbreviation.toLowerCase()}/${transformedProfessorName}/course/${subject.abbreviation.toLowerCase()}`,
             }}
             className={styles.dropdownLink}
           >
@@ -41,7 +41,7 @@ export default function SubjectDropdown({
         {subject.isLaboratory && (
           <Link
             href={{
-              pathname: `/panel/${facultyId}/${professorId}/laboratory/${subject.id}`,
+              pathname: `/panel/${facultyAbbreviation.toLowerCase()}/${transformedProfessorName}/laboratory/${subject.abbreviation.toLowerCase()}`,
             }}
             className={styles.dropdownLink}
           >
@@ -51,7 +51,7 @@ export default function SubjectDropdown({
         {subject.isSeminar && (
           <Link
             href={{
-              pathname: `/panel/${facultyId}/${professorId}/seminar/${subject.id}`,
+              pathname: `/panel/${facultyAbbreviation.toLowerCase()}/${transformedProfessorName}/seminar/${subject.abbreviation.toLowerCase()}`,
             }}
             className={styles.dropdownLink}
           >
@@ -61,7 +61,7 @@ export default function SubjectDropdown({
         {subject.isProject && (
           <Link
             href={{
-              pathname: `/panel/${facultyId}/${professorId}/project/${subject.id}`,
+              pathname: `/panel/${facultyAbbreviation.toLowerCase()}/${transformedProfessorName}/project/${subject.abbreviation.toLowerCase()}`,
             }}
             className={styles.dropdownLink}
           >

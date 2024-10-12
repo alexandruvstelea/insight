@@ -4,18 +4,18 @@ import { useRouter } from "next/navigation";
 import styles from "./page.module.css";
 
 interface SearchBar {
-  facultyId: number;
+  facultyAbbreviation: string;
 }
 
-export default function SearchBar({ facultyId }: SearchBar) {
+export default function SearchBar({ facultyAbbreviation }: SearchBar) {
   const router = useRouter();
   const [text, setText] = useState("");
 
   useEffect(() => {
     if (!text) {
-      router.push(`/panel/${facultyId}`);
+      router.push(`/panel/${facultyAbbreviation}`);
     } else {
-      router.push(`/panel/${facultyId}?search=${text}`);
+      router.push(`/panel/${facultyAbbreviation}?search=${text}`);
     }
   }, [text, router]);
 

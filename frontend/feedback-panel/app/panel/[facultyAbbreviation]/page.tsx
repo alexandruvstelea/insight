@@ -8,7 +8,7 @@ import styles from "./page.module.css";
 
 interface PanelPageProps {
   params: {
-    facultyId: number;
+    facultyAbbreviation: string;
   };
   searchParams: {
     search?: string;
@@ -19,9 +19,9 @@ export default async function PanelPage({
   params,
   searchParams,
 }: PanelPageProps) {
-  const facultyId: number = params.facultyId;
+  const facultyAbbreviation: string = params.facultyAbbreviation;
   const searchText: string = searchParams.search || "";
-  const faculty = await fetchFaculty(facultyId);
+  const faculty = await fetchFaculty(facultyAbbreviation);
   const professors = faculty.professors;
   const filteredProfessors = searchText
     ? [
@@ -45,7 +45,7 @@ export default async function PanelPage({
           <FacultyStatistics statistic={3760} name="Recenzii" />
         </div>
         <div className={styles.professorsList}>
-          <SearchBar facultyId={Number(facultyId)} />
+          <SearchBar facultyAbbreviation={facultyAbbreviation} />
           {filteredProfessors && filteredProfessors.length > 0 ? (
             <>
               {filteredProfessors.map((professor: any) => (
@@ -55,7 +55,7 @@ export default async function PanelPage({
                   firstName={professor.first_name}
                   lastName={professor.last_name}
                   gender={professor.gender}
-                  facultyId={facultyId}
+                  facultyAbbreviation={facultyAbbreviation}
                 />
               ))}
             </>

@@ -21,14 +21,17 @@ export interface SubjectWithAssociation {
   isProject: boolean;
 }
 
-export const fetchSubject = async (subjectId: number) => {
-  const response = await fetch(`${API_URL}/subjects/${subjectId.toString()}`, {
-    method: "GET",
-    cache: "no-store",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+export const fetchSubject = async (subjectAbbreviation: string) => {
+  const response = await fetch(
+    `${API_URL}/subjects/abbreviation/${subjectAbbreviation}`,
+    {
+      method: "GET",
+      cache: "no-store",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
 
   if (!response.ok) return false;
   const subject = await response.json();

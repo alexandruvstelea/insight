@@ -14,25 +14,31 @@ import PolarAreaChart from "@/components/polarAreaChart/page";
 import SubjectDropdown from "@/components/subjectDropdown/page";
 import LineChart from "@/components/lineChart/page";
 import { EntityRating } from "@/components/entityRating/page";
+import { reverseTransformName } from "@/utils/fetchers/professors";
 
 interface ProfessorPageProps {
   params: {
-    facultyId: number;
-    professorId: number;
+    facultyAbbreviation: string;
+    professorName: string;
   };
 }
 
 export default async function ProfessorPage({ params }: ProfessorPageProps) {
-  const facultyId: number = params.facultyId;
-  const professorId: number = params.professorId;
-  const faculty = await fetchFaculty(facultyId);
-  const professor = await fetchProfessor(professorId);
-  const professorAverageRating = await fetchProfessorAvgRating(professorId);
+  const facultyAbbreviation: string = params.facultyAbbreviation;
+  const transformedProfessorName: string = params.professorName;
+  const professorName: { firstName: string; lastName: string } =
+    reverseTransformName(transformedProfessorName);
+  const faculty = await fetchFaculty(facultyAbbreviation);
+  const professor = await fetchProfessor(
+    professorName.firstName,
+    professorName.lastName
+  );
+  const professorAverageRating = await fetchProfessorAvgRating(professor.id);
   const professorRatingsHistory = await fetchProfessorRatingsHistory(
-    professorId
+    professor.id
   );
   const subjects: SubjectWithAssociation[] | false =
-    await fetchSubjectsByProfessor(professorId);
+    await fetchSubjectsByProfessor(professor.id);
 
   return (
     <>
@@ -62,8 +68,8 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
                   <div key={subject.id}>
                     <SubjectDropdown
                       subject={subject}
-                      facultyId={facultyId}
-                      professorId={professorId}
+                      facultyAbbreviation={faculty.abbreviation}
+                      transformedProfessorName={transformedProfessorName}
                     />
                   </div>
                 ))}
@@ -72,8 +78,8 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
                   <div key={subject.id}>
                     <SubjectDropdown
                       subject={subject}
-                      facultyId={facultyId}
-                      professorId={professorId}
+                      facultyAbbreviation={faculty.abbreviation}
+                      transformedProfessorName={transformedProfessorName}
                     />
                   </div>
                 ))}
@@ -82,8 +88,8 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
                   <div key={subject.id}>
                     <SubjectDropdown
                       subject={subject}
-                      facultyId={facultyId}
-                      professorId={professorId}
+                      facultyAbbreviation={faculty.abbreviation}
+                      transformedProfessorName={transformedProfessorName}
                     />
                   </div>
                 ))}
@@ -92,8 +98,8 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
                   <div key={subject.id}>
                     <SubjectDropdown
                       subject={subject}
-                      facultyId={facultyId}
-                      professorId={professorId}
+                      facultyAbbreviation={faculty.abbreviation}
+                      transformedProfessorName={transformedProfessorName}
                     />
                   </div>
                 ))}
@@ -102,8 +108,8 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
                   <div key={subject.id}>
                     <SubjectDropdown
                       subject={subject}
-                      facultyId={facultyId}
-                      professorId={professorId}
+                      facultyAbbreviation={faculty.abbreviation}
+                      transformedProfessorName={transformedProfessorName}
                     />
                   </div>
                 ))}

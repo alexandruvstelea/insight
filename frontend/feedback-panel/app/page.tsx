@@ -94,7 +94,7 @@ export default async function Home() {
             faculties.map((faculty: any) => (
               <FacultySelector
                 key={faculty.id}
-                facultyID={faculty.id}
+                facultyAbbreviation={faculty.abbreviation.toLowerCase()}
                 facultyName={faculty.name}
                 svgPath={`/svg/${faculty.abbreviation.toLowerCase()}.svg`}
               />

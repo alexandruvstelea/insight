@@ -9,33 +9,38 @@ import {
 } from "@/utils/fetchers/subjects";
 import PolarAreaChart from "@/components/polarAreaChart/page";
 import ChartsDropdown from "@/components/chartsDropdown/page";
-import StarRating from "@/components/starRating/page";
 import { EntityRating } from "@/components/entityRating/page";
+import { reverseTransformName } from "@/utils/fetchers/professors";
 
 interface ClassPageProps {
   params: {
-    facultyId: number;
-    professorId: number;
+    facultyAbbreviation: string;
+    professorName: string;
     subjectType: string;
-    subjectId: number;
+    subjectAbbreviation: string;
   };
 }
 
 export default async function ClassPage({ params }: ClassPageProps) {
-  const facultyId: number = params.facultyId;
-  const professorId: number = params.professorId;
+  const facultyAbbreviation: string = params.facultyAbbreviation;
+  const transformedProfessorName: string = params.professorName;
+  const professorName: { firstName: string; lastName: string } =
+    reverseTransformName(transformedProfessorName);
   const subjectType: string = params.subjectType;
-  const subjectId: number = params.subjectId;
-  const subject = await fetchSubject(subjectId);
-  const professor = await fetchProfessor(professorId);
-  const faculty = await fetchFaculty(facultyId);
+  const subjectAbbreviation: string = params.subjectAbbreviation;
+  const subject = await fetchSubject(subjectAbbreviation);
+  const professor = await fetchProfessor(
+    professorName.firstName,
+    professorName.lastName
+  );
+  const faculty = await fetchFaculty(facultyAbbreviation);
   const subjectAverage = await fetchSubjectAverage(
-    professorId,
-    subjectId,
+    professor.id,
+    subject.id,
     subjectType
   );
   const subjectGraphData = await fetchSubjectGraphData(
-    professorId,
+    professor.id,
     subject.id,
     subjectType
   );
