@@ -9,6 +9,7 @@ from ...utility.authorizations import authorize
 from ..users.utils import get_current_user
 from typing import List
 import logging
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
 sessions_router = APIRouter(prefix="/api/sessions")
@@ -31,7 +32,7 @@ async def get_sessions(
 
 
 @sessions_router.get(
-    "/{id}",
+    "/id/{id}",
     response_model=SessionOut,
     dependencies=[Depends(RateLimiter(times=50, minutes=1))],
     status_code=HTTPStatus.OK,
@@ -45,6 +46,27 @@ async def get_session_by_id(
         f"Received GET request on endpoint /api/sessions/id from IP {client_ip}."
     )
     session = await SessionOperations(db_session).get_session_by_id(id)
+    return session
+
+
+@sessions_router.get(
+    "/current",
+    response_model=SessionOut,
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
+async def get_current_session(
+    timestamp: datetime,
+    room_code: str,
+    client_ip: str = Header(None, alias="X-Real-IP"),
+    db_session: AsyncSession = Depends(get_session),
+) -> SessionOut:
+    logger.info(
+        f"Received GET request on endpoint /api/sessions/current from IP {client_ip}."
+    )
+    session = await SessionOperations(db_session).get_current_session(
+        timestamp, room_code
+    )
     return session
 
 

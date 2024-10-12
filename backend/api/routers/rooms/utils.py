@@ -5,6 +5,8 @@ from fastapi import HTTPException
 from typing import List
 from sqlalchemy import select
 import logging
+import random
+import string
 
 logger = logging.getLogger(__name__)
 
@@ -12,11 +14,13 @@ logger = logging.getLogger(__name__)
 def room_to_out(room: Room) -> RoomOut:
     from ..buildings.utils import building_to_minimal
     from ..sessions.utils import session_to_minimal
+
     if room:
         logger.info(f"Converting room {room.name} to RoomOut format.")
         return RoomOut(
             id=room.id,
             name=room.name,
+            unique_code=room.unique_code,
             building_id=room.building_id,
             building=building_to_minimal(room.building),
             sessions=(
@@ -27,11 +31,13 @@ def room_to_out(room: Room) -> RoomOut:
         )
     return None
 
+
 def room_to_minimal(room: Room) -> RoomOutMinimal:
     if room:
         logger.info(f"Converting room {room.name} to RoomOutMinimal format.")
         return RoomOutMinimal(id=room.id, name=room.name, building_id=room.building_id)
     return None
+
 
 async def id_to_room(session: AsyncSession, room_id: int) -> Room:
     try:
@@ -71,3 +77,18 @@ async def ids_to_rooms(session: AsyncSession, room_ids: List[int]) -> List[Room]
             f"An unexpected error has occured while retrieving rooms with IDs {room_ids}:\n{e}"
         )
         raise e
+
+
+def generate_room_unique_code() -> str:
+    random_part = "".join(random.choices(string.ascii_letters + string.digits, k=6))
+    return random_part + "=="
+
+
+def validate_room_unique_code(code: str) -> bool:
+    if len(code) != 8:
+        return False
+    if code[-2:] != "==":
+        return False
+    if not code[:6].isalnum():
+        return False
+    return True

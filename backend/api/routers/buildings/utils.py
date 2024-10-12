@@ -12,13 +12,18 @@ logger = logging.getLogger(__name__)
 
 async def building_to_out(building: Building) -> BuildingOut | None:
     from ..faculties.utils import faculty_to_minimal
+
     if building:
         logger.info(f"Converting building {building.name} to BuildingOut format.")
         return BuildingOut(
             id=building.id,
             name=building.name,
+            latitude=building.latitude,
+            longitude=building.longitude,
             rooms=(
-                [room_to_minimal(room) for room in building.rooms] if building.rooms else []
+                [room_to_minimal(room) for room in building.rooms]
+                if building.rooms
+                else []
             ),
             faculties=(
                 [faculty_to_minimal(faculty) for faculty in building.faculties]
@@ -31,9 +36,17 @@ async def building_to_out(building: Building) -> BuildingOut | None:
 
 def building_to_minimal(building: Building) -> BuildingOutMinimal:
     if building:
-        logger.info(f"Converting building {building.name} to BuildingOutMinimal format.")
-        return BuildingOutMinimal(id=building.id, name=building.name)
+        logger.info(
+            f"Converting building {building.name} to BuildingOutMinimal format."
+        )
+        return BuildingOutMinimal(
+            id=building.id,
+            name=building.name,
+            latitude=building.latitude,
+            longitude=building.longitude,
+        )
     return None
+
 
 async def id_to_building(session: AsyncSession, building_id: int) -> Building:
     try:

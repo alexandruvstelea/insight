@@ -9,6 +9,7 @@ class RoomBase(BaseModel):
 
 class RoomIn(RoomBase):
     building_id: int
+    unique_code: Optional[str]
     sessions: Optional[List[int]]
 
 
@@ -18,6 +19,7 @@ class RoomOutMinimal(RoomBase):
 
 class RoomOut(RoomBase):
     id: int
+    unique_code: str
     building: Optional["BuildingOutMinimal"]
     sessions: Optional[List["SessionOutMinimal"]]
 

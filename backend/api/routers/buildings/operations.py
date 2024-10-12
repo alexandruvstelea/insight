@@ -72,7 +72,12 @@ class BuildingsOperations:
         try:
             logger.info(f"Adding to database buildind {building_data}")
             new_building = Building(
-                name=building_data.name, rooms=[], faculties_ids=[], faculties=[]
+                name=building_data.name,
+                latitude=building_data.latitude,
+                longitude=building_data.longitude,
+                rooms=[],
+                faculties_ids=[],
+                faculties=[],
             )
             if building_data.faculties:
                 new_building.faculties = await ids_to_faculties(
@@ -112,6 +117,8 @@ class BuildingsOperations:
             building = await self.session.get(Building, id)
             if building:
                 building.name = new_building_data.name
+                building.latitude = new_building_data.latitude
+                building.longitude = new_building_data.longitude
                 if new_building_data.faculties:
                     building.faculties = await ids_to_faculties(
                         self.session, new_building_data.faculties

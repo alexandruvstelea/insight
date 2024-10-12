@@ -169,7 +169,7 @@ async def get_session_from_timestamp(
         )
         raise HTTPException(
             status_code=404,
-            detail=f"Could not find current session for timestamp {timestamp} and room_id {room_id}.",
+            detail=f"Could not find current session for timestamp {timestamp}.",
         )
     except Exception as e:
         logger.error(

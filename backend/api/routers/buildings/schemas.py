@@ -5,6 +5,8 @@ from typing import List, Optional
 
 class BuildingBase(BaseModel):
     name: str
+    latitude: float
+    longitude: float
 
 
 class BuildingIn(BuildingBase):
@@ -18,6 +20,8 @@ class BuildingOutMinimal(BuildingBase):
 
 class BuildingOut(BuildingBase):
     id: int
+    latitude: float
+    longitude: float
     rooms: Optional[List["RoomOutMinimal"]]
     faculties: Optional[List["FacultyOutMinimal"]]
 

@@ -8,7 +8,7 @@ from fastapi import HTTPException
 from fastapi.responses import JSONResponse
 from typing import List
 from ...utility.error_parsing import format_integrity_error
-from .utils import room_to_out
+from .utils import room_to_out, generate_room_unique_code, validate_room_unique_code
 from ..buildings.utils import id_to_building
 from ..sessions.utils import ids_to_sessions
 import logging
@@ -73,6 +73,10 @@ class RoomOperations:
                 name=room_data.name.upper(),
                 building_id=room_data.building_id,
             )
+            if room_data.unique_code:
+                new_room.unique_code = room_data.unique_code
+            else:
+                new_room.unique_code = generate_room_unique_code()
             new_room.building = await id_to_building(
                 self.session, room_data.building_id
             )
@@ -108,6 +112,14 @@ class RoomOperations:
             room = await self.session.get(Room, id)
             if room:
                 room.name = new_room_data.name.upper()
+                if new_room_data.unique_code:
+                    if validate_room_unique_code(new_room_data.unique_code):
+                        room.unique_code = new_room_data.unique_code
+                    else:
+                        raise HTTPException(
+                            status_code=409,
+                            detail="Invalid room unique code provided.",
+                        )
                 if new_room_data.building_id:
                     room.building_id = new_room_data.building_id
                     room.building = await id_to_building(

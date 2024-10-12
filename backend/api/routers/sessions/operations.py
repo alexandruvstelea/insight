@@ -1,6 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import joinedload
 from ...database.models.session import Session
+from ...database.models.room import Room
 from .schemas import SessionOut, SessionIn
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
@@ -8,10 +9,11 @@ from fastapi import HTTPException
 from fastapi.responses import JSONResponse
 from typing import List
 from ...utility.error_parsing import format_integrity_error
-from .utils import session_to_out, is_session_overlap
+from .utils import session_to_out, is_session_overlap, get_session_from_timestamp
 from ..rooms.utils import id_to_room
 from ..subjects.utils import id_to_subject, get_subject_semester
 import logging
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
@@ -129,6 +131,29 @@ class SessionOperations:
         except Exception as e:
             logger.error(
                 f"An unexpected error has occured while adding session to databse:\n{e}"
+            )
+            raise e
+
+    async def get_current_session(
+        self, timestamp: datetime, room_code: str
+    ) -> SessionOut:
+        try:
+            logger.info(
+                f"Retrieving current session for timestamp {timestamp} and room code {room_code}."
+            )
+            query = select(Room).where(Room.unique_code == room_code)
+            result = await self.session.execute(query)
+            room = result.scalars().unique().one_or_none()
+            if not room:
+                raise HTTPException(
+                    status_code=404,
+                    detail=f"No room was found with the unique code {room_code}.",
+                )
+            session = await get_session_from_timestamp(self.session, timestamp, room.id)
+            return session_to_out(session)
+        except Exception as e:
+            logger.error(
+                f"An unexpected error has occurred while retrieving the session:\n{e}"
             )
             raise e
 
