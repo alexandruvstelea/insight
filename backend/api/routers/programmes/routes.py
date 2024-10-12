@@ -22,13 +22,16 @@ programmes_router = APIRouter(prefix="/api/programmes")
 )
 async def get_programmes(
     faculty_id: int = None,
+    subject_id: int = None,
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> List[ProgrammeOut]:
     logger.info(
         f"Received GET request on endpoint /api/programmes from IP {client_ip}."
     )
-    programmes = await ProgrammeOperations(session).get_programmes(faculty_id)
+    programmes = await ProgrammeOperations(session).get_programmes(
+        faculty_id, subject_id
+    )
     return programmes
 
 

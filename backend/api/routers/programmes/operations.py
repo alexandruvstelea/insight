@@ -21,7 +21,9 @@ class ProgrammeOperations:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def get_programmes(self, faculty_id: int) -> List[ProgrammeOut]:
+    async def get_programmes(
+        self, faculty_id: int, subject_id: int
+    ) -> List[ProgrammeOut]:
         try:
             if faculty_id:
                 logger.info(
@@ -41,6 +43,13 @@ class ProgrammeOperations:
                 )
             result = await self.session.execute(query)
             programmes = result.scalars().unique().all()
+            if subject_id:
+                logger.info(f"Filtering programmes by subject id {subject_id}.")
+                programmes = [
+                    programme
+                    for programme in programmes
+                    if any(subject.id == subject_id for subject in programme.subjects)
+                ]
             if programmes:
                 logger.info("Succesfully retrieved all programmes from database.")
                 return [
@@ -124,7 +133,7 @@ class ProgrammeOperations:
                 )
                 if new_programme_data.subjects:
                     programme.subjects = [
-                        await id_to_subject(self.session,subject)
+                        await id_to_subject(self.session, subject)
                         for subject in new_programme_data.subjects
                     ]
                 else:
