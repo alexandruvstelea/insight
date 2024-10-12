@@ -42,7 +42,7 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
           entityName={`${professor.last_name} ${professor.first_name}`}
           rating={professorAverageRating.rating_overall_average}
         />
-        <div className={styles.chartsContainer}>
+        <div className={styles.contentContainer}>
           <PolarAreaChart
             clarity={professorAverageRating.rating_clarity_average}
             relevance={professorAverageRating.rating_relevance_average}
@@ -54,60 +54,60 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
             ratingsData={professorRatingsHistory}
             title="Istoric Recenzii"
           />
-        </div>
-        <div className={styles.professorClasses}>
-          <h1>Materii</h1>
-          <div className={styles.classesList}>
-            {subjects &&
-              subjects.map((subject: any) => (
-                <div key={subject.id}>
-                  <SubjectDropdown
-                    subject={subject}
-                    facultyId={facultyId}
-                    professorId={professorId}
-                  />
-                </div>
-              ))}
-            {subjects &&
-              subjects.map((subject: any) => (
-                <div key={subject.id}>
-                  <SubjectDropdown
-                    subject={subject}
-                    facultyId={facultyId}
-                    professorId={professorId}
-                  />
-                </div>
-              ))}
-            {subjects &&
-              subjects.map((subject: any) => (
-                <div key={subject.id}>
-                  <SubjectDropdown
-                    subject={subject}
-                    facultyId={facultyId}
-                    professorId={professorId}
-                  />
-                </div>
-              ))}
-            {subjects &&
-              subjects.map((subject: any) => (
-                <div key={subject.id}>
-                  <SubjectDropdown
-                    subject={subject}
-                    facultyId={facultyId}
-                    professorId={professorId}
-                  />
-                </div>
-              ))}
-            {subjects &&
-              subjects.map((subject: any) => (
-                <div key={subject.id}>
-                  <SubjectDropdown
-                    subject={subject}
-                    facultyId={facultyId}
-                    professorId={professorId}
-                  />
-                </div>
-              ))}
+          <div className={styles.professorClasses}>
+            <h1>Materii</h1>
+            <div className={styles.classesList}>
+              {subjects &&
+                subjects.map((subject: any) => (
+                  <div key={subject.id}>
+                    <SubjectDropdown
+                      subject={subject}
+                      facultyId={facultyId}
+                      professorId={professorId}
+                    />
+                  </div>
+                ))}
+              {subjects &&
+                subjects.map((subject: any) => (
+                  <div key={subject.id}>
+                    <SubjectDropdown
+                      subject={subject}
+                      facultyId={facultyId}
+                      professorId={professorId}
+                    />
+                  </div>
+                ))}
+              {subjects &&
+                subjects.map((subject: any) => (
+                  <div key={subject.id}>
+                    <SubjectDropdown
+                      subject={subject}
+                      facultyId={facultyId}
+                      professorId={professorId}
+                    />
+                  </div>
+                ))}
+              {subjects &&
+                subjects.map((subject: any) => (
+                  <div key={subject.id}>
+                    <SubjectDropdown
+                      subject={subject}
+                      facultyId={facultyId}
+                      professorId={professorId}
+                    />
+                  </div>
+                ))}
+              {subjects &&
+                subjects.map((subject: any) => (
+                  <div key={subject.id}>
+                    <SubjectDropdown
+                      subject={subject}
+                      facultyId={facultyId}
+                      professorId={professorId}
+                    />
+                  </div>
+                ))}
+            </div>
           </div>
         </div>
       </div>
