@@ -29,7 +29,7 @@
 ::-webkit-scrollbar-thumb:hover {
   background-color: #616977;
 }
-
+/* 
 .rating label:after {
   transition: all 0.4s ease-out;
   -webkit-font-smoothing: antialiased;
@@ -53,4 +53,4 @@
   content: "\2605";
   color: var(--main-blue-light);
   text-shadow: 2px 2px 2px rgb(0, 0, 0, 0.6);
-}
+} */

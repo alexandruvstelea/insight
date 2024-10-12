@@ -29,10 +29,6 @@ export default function Form() {
   const [redirectCountdown, setRedirectCountdown] = useState(5);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const [location, setLocation] = useState<{
-    latitude: number | null;
-    longitude: number | null;
-  }>({ latitude: null, longitude: null });
 
   useEffect(() => {
     async function loadProgrammes() {
@@ -161,17 +157,23 @@ export default function Form() {
         onSubmit={handleSubmit}
         className="w-full p-4 flex flex-col jus gap-10"
       >
-        <div className="flex flex-col gap-2 ">
-          <StarRating title="Cursul a fost clar" name="rating_clarity" />
+        <div className="flex flex-col gap-6 ">
           <StarRating
-            title="Cursul a fost interactiv"
+            title="Cursul a fost ușor de înțeles"
+            name="rating_clarity"
+          />
+          <StarRating
+            title="Cursul mi-a captat atenția și a fost implicativ"
             name="rating_interactivity"
           />
           <StarRating
-            title="Informația prezentată are o relevanță"
+            title="Informațiile prezentate sunt utile și aplicabile"
             name="rating_relevance"
           />
-          <StarRating title="Am înteles cursul" name="rating_comprehension" />
+          <StarRating
+            title="Am înțeles pe deplin conceptele prezentate"
+            name="rating_comprehension"
+          />
         </div>
         <div>
           <label
