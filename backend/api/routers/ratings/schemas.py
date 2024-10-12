@@ -20,7 +20,9 @@ class RatingIn(BaseModel):
     rating_comprehension: int
     timestamp: datetime
     programme_id: int
-    room_id: int
+    room_code: str
+    latitude: float
+    longitude: float
 
 
 class RatingOut(RatingBase):

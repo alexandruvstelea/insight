@@ -50,6 +50,27 @@ async def get_professor_by_id(
     return professor
 
 
+@professors_router.get(
+    "/name/filter",
+    response_model=ProfessorOut,
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
+async def get_professor_by_full_name(
+    first_name: str,
+    last_name: str,
+    client_ip: str = Header(None, alias="X-Real-IP"),
+    session: AsyncSession = Depends(get_session),
+) -> ProfessorOut:
+    logger.info(
+        f"Received GET request on endpoint /api/professors/id from IP {client_ip}."
+    )
+    professor = await ProfessorOperations(session).get_professor_by_full_name(
+        first_name, last_name
+    )
+    return professor
+
+
 @authorize(role=["admin"])
 @professors_router.post(
     "/",

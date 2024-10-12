@@ -106,6 +106,32 @@ class SubjectOperations:
             )
             raise e
 
+    async def get_subject_by_abbreviation(self, abbreviation: str) -> SubjectOut:
+        try:
+            logger.info(
+                f"Retrieving subject with abbreviation {abbreviation} from database."
+            )
+            result = await self.session.execute(
+                select(Subject).where(Subject.abbreviation == abbreviation.upper())
+            )
+            subject = result.scalars().unique().one_or_none()
+            if subject:
+                logger.info(
+                    f"Succesfully retrieved subject with abbreviation {abbreviation} from database."
+                )
+                return subject_to_out(subject)
+            logger.error(
+                f"No subject with abbreviation {abbreviation} found in database."
+            )
+            raise HTTPException(
+                status_code=404, detail=f"No subject with abbreviation {abbreviation}."
+            )
+        except Exception as e:
+            logger.error(
+                f"An unexpected error has occured while retrieving subject with abbreviation {abbreviation}:\n{e}"
+            )
+            raise e
+
     async def add_subject(self, subject_data: SubjectIn) -> SubjectOut:
         try:
             logger.info(f"Adding to database subject {subject_data}.")

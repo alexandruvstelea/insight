@@ -59,6 +59,32 @@ class FacultyOperations:
             )
             raise e
 
+    async def get_faculty_by_abbreviation(self, abbreviation: str) -> FacultyOut:
+        try:
+            logger.info(
+                f"Retrieving from database faculty with abbreviation {abbreviation}."
+            )
+            result = await self.session.execute(
+                select(Faculty).where(Faculty.abbreviation == abbreviation.upper())
+            )
+            faculty = result.scalars().unique().one_or_none()
+            if faculty:
+                logger.info(
+                    f"Succesfully retrieved faculty with with abbreviation {abbreviation}."
+                )
+                return faculty_to_out(faculty)
+            logger.error(
+                f"No faculty with abbreviation {abbreviation} found in database."
+            )
+            raise HTTPException(
+                status_code=404, detail=f"No faculty with abbreviation {abbreviation}."
+            )
+        except Exception as e:
+            logger.error(
+                f"An unexpected error has occured while retrieving faculty with abbreviation {abbreviation}:\n{e}"
+            )
+            raise e
+
     async def add_faculty(self, faculty_data: FacultyIn) -> FacultyOut:
         try:
             logger.info(f"Adding to database faculty {faculty_data}.")

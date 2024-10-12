@@ -67,6 +67,37 @@ class ProfessorOperations:
             )
             raise e
 
+    async def get_professor_by_full_name(
+        self, first_name: str, last_name: str
+    ) -> ProfessorOut:
+        try:
+            logger.info(
+                f"Retrieving professor with name {last_name} {first_name} from database."
+            )
+            result = await self.session.execute(
+                select(Professor).where(
+                    Professor.first_name == first_name
+                    and Professor.last_name == last_name
+                )
+            )
+            professor = result.scalars().unique().one_or_none()
+            if professor:
+                logger.info(
+                    f"Succesfully retrieved professor name {last_name} {first_name} from database."
+                )
+                return professor_to_out(professor)
+            logger.error(
+                f"No professor name {last_name} {first_name} found in database."
+            )
+            raise HTTPException(
+                status_code=404, detail=f"No professorname {last_name} {first_name}."
+            )
+        except Exception as e:
+            logger.error(
+                f"An unexpected error has occured while retrieving professor name {last_name} {first_name}:\n{e}"
+            )
+            raise e
+
     async def add_professor(self, professor_data: ProfessorIn) -> ProfessorOut:
         try:
             logger.info(f"Adding to database professor {professor_data}.")

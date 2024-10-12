@@ -41,9 +41,27 @@ async def get_faculty_by_id(
     client_ip: str = Header(None, alias="X-Real-IP"),
 ) -> FacultyOut:
     logger.info(
-        f"Received GET request on endpoint /api/faculties/id from IP {client_ip}."
+        f"Received GET request on endpoint /api/faculties/{id} from IP {client_ip}."
     )
     faculty = await FacultyOperations(session).get_faculty_by_id(id)
+    return faculty
+
+
+@faculties_router.get(
+    "/abbreviation/{abbreviation}",
+    response_model=FacultyOut,
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
+async def get_faculty_by_abbreviation(
+    abbreviation: str,
+    session: AsyncSession = Depends(get_session),
+    client_ip: str = Header(None, alias="X-Real-IP"),
+) -> FacultyOut:
+    logger.info(
+        f"Received GET request on endpoint /api/faculties/abbreviation/{abbreviation} from IP {client_ip}."
+    )
+    faculty = await FacultyOperations(session).get_faculty_by_abbreviation(abbreviation)
     return faculty
 
 

@@ -43,9 +43,27 @@ async def get_subject_by_id(
     session: AsyncSession = Depends(get_session),
 ) -> SubjectOut:
     logger.info(
-        f"Received GET request on endpoint /api/subjects/id from IP {client_ip}."
+        f"Received GET request on endpoint /api/subjects/{id} from IP {client_ip}."
     )
     subject = await SubjectOperations(session).get_subject_by_id(id)
+    return subject
+
+
+@subjects_router.get(
+    "/abbreviation/{abbreviation}",
+    response_model=SubjectOut,
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
+async def get_subject_by_abbreviation(
+    abbreviation: str,
+    client_ip: str = Header(None, alias="X-Real-IP"),
+    session: AsyncSession = Depends(get_session),
+) -> SubjectOut:
+    logger.info(
+        f"Received GET request on endpoint /api/subjects/abbreviation/{abbreviation} from IP {client_ip}."
+    )
+    subject = await SubjectOperations(session).get_subject_by_abbreviation(abbreviation)
     return subject
 
 

@@ -3,12 +3,13 @@ from ...database.models.ratings import Rating
 from ...database.models.session import Session
 from ...database.models.subject import Subject
 from ...database.models.weeks import Week
+from ...database.models.room import Room
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
 from fastapi import HTTPException
 from typing import List
 from ...utility.error_parsing import format_integrity_error
-from .utils import rating_to_out
+from .utils import rating_to_out, check_location_distance
 from ..sessions.utils import get_session_from_timestamp
 from ..subjects.utils import get_session_professor
 import logging
@@ -233,8 +234,28 @@ class RatingOperations:
     async def add_rating(self, rating_data: RatingIn) -> RatingOut:
         try:
             logger.info(f"Adding to database rating {rating_data}.")
+
+            if (
+                rating_data.rating_clarity < 1
+                or rating_data.rating_comprehension < 1
+                or rating_data.rating_interactivity < 1
+                or rating_data.rating_relevance < 1
+            ):
+                raise HTTPException(
+                    status_code=422,
+                    detail=f"Rating data is not valid.",
+                )
+
+            query = select(Room).where(Room.unique_code == rating_data.room_code)
+            result = await self.session.execute(query)
+            room = result.scalars().unique().one_or_none()
+            if not room:
+                raise HTTPException(
+                    status_code=404,
+                    detail=f"No room was found with the unique code {rating_data.room_code}.",
+                )
             rating_session: Session = await get_session_from_timestamp(
-                self.session, rating_data.timestamp, rating_data.room_id
+                self.session, rating_data.timestamp, room.id
             )
             if not rating_data.programme_id in [
                 programme.id for programme in rating_session.subject.programmes
@@ -246,7 +267,7 @@ class RatingOperations:
                     status_code=422,
                     detail=f"Programme ID {rating_data.programme_id} is not valid for current session.",
                 )
-            if rating_data.room_id != rating_session.room_id:
+            if room.id != rating_session.room_id:
                 logger.error(
                     f"Room ID {rating_data.programme_id} is not valid for current session."
                 )
@@ -254,7 +275,16 @@ class RatingOperations:
                     status_code=422,
                     detail=f"Room ID {rating_data.programme_id} is not valid for current session.",
                 )
-            
+
+            if not check_location_distance(
+                (rating_data.latitude, rating_data.longitude),
+                (room.building.latitude, room.building.longitude),
+            ):
+                raise HTTPException(
+                    status_code=404,
+                    detail=f"No building was found at users location.",
+                )
+
             naive_timestamp = rating_data.timestamp.replace(tzinfo=None)
 
             new_rating = Rating(
