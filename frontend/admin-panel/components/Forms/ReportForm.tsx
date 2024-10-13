@@ -28,7 +28,6 @@ export default function ReportForm() {
 
       const data = await response.json();
       console.log("Report submitted successfully:", data);
-      // Optionally reset form or give feedback
       setText("");
     } catch (error) {
       console.error("Failed to submit report:", error);
