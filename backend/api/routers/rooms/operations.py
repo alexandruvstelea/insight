@@ -1,4 +1,4 @@
-from sqlalchemy import select
+from sqlalchemy import select, func
 from sqlalchemy.orm import joinedload
 from ...database.models.room import Room
 from .schemas import RoomOut, RoomIn
@@ -169,3 +169,21 @@ class RoomOperations:
                 f"An unexpected error has occured while deleting room with ID {id}:\n{e}"
             )
             raise e
+
+    async def get_entities_count(self, faculty_id: int) -> int:
+        try:
+            logger.info(f"Counting rooms for faculty with ID {faculty_id}.")
+            count_query = (
+                select(func.count())
+                .select_from(Room)
+                .where(Room.faculties_ids.contains([faculty_id]))
+            )
+            result = await self.session.execute(count_query)
+            count = result.scalar()
+            logger.info(f"There are {count} rooms for faculty with ID {faculty_id}.")
+            return count
+        except Exception as e:
+            logger.error(f"An error occurred while counting rooms:\n{e}")
+            raise HTTPException(
+                status_code=500, detail="Could not retrieve rooms count."
+            )

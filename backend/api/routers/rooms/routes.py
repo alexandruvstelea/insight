@@ -108,3 +108,21 @@ async def delete_room(
     )
     response = await RoomOperations(session).delete_room(id)
     return response
+
+
+@rooms_router.get(
+    "/count/entities",
+    response_model=int,
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
+async def get_rooms_count(
+    faculty_id: int,
+    client_ip: str = Header(None, alias="X-Real-IP"),
+    session: AsyncSession = Depends(get_session),
+) -> int:
+    logger.info(
+        f"Received GET request on endpoint /api/rooms/count/entities from IP {client_ip}."
+    )
+    count = await RoomOperations(session).get_entities_count(faculty_id)
+    return count
