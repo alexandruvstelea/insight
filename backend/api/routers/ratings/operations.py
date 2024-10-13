@@ -306,7 +306,7 @@ class RatingOperations:
                 session_type=rating_session.type,
                 subject_id=rating_session.subject_id,
                 programme_id=rating_data.programme_id,
-                room_id=rating_data.room_id,
+                room_id=room.id,
                 professor_id=await get_session_professor(
                     self.session, rating_session.subject_id, rating_session.type
                 ),
