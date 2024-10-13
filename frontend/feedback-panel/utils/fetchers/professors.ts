@@ -64,23 +64,16 @@ export const transformProfessorName = (
   lastName: string,
   firstName: string
 ): string => {
-  const removeSpecialChars = (str: string): string => {
-    return str
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "") // Remove diacritics
-      .replace(/[^a-zA-Z0-9\s-]/g, ""); // Remove special characters
-  };
-
   const fullName = `${lastName} ${firstName}`;
-  const sanitizedFullName = removeSpecialChars(fullName);
-
-  return sanitizedFullName.toLowerCase().replace(/\s+/g, "-");
+  return fullName.toLowerCase().replace(/\s+/g, "-");
 };
 
 export const reverseTransformName = (
   transformedName: string
 ): { firstName: string; lastName: string } => {
-  const parts = transformedName.split("-");
+  const decodedName = decodeURIComponent(transformedName);
+
+  const parts = decodedName.split("-");
 
   const capitalizedParts = parts.map(
     (word) => word.charAt(0).toUpperCase() + word.slice(1)
