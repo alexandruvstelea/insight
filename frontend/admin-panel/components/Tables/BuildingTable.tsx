@@ -83,6 +83,12 @@ const BuildingTable: FC<BuildingTableProps> = ({
                 Nume
               </th>
               <th scope="col" className="px-6 py-3">
+                Latitudine
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Longitudine
+              </th>
+              <th scope="col" className="px-6 py-3">
                 Săli
               </th>
               <th scope="col" className="px-6 py-3">
@@ -108,6 +114,18 @@ const BuildingTable: FC<BuildingTableProps> = ({
                     className="px-6 py-4 font-medium   text-white"
                   >
                     {building.name}
+                  </td>
+                  <td
+                    scope="row"
+                    className="px-6 py-4 font-medium   text-white"
+                  >
+                    {building.latitude}
+                  </td>
+                  <td
+                    scope="row"
+                    className="px-6 py-4 font-medium   text-white"
+                  >
+                    {building.longitude}
                   </td>
 
                   <td scope="row" className="px-6 py-4  ">

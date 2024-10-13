@@ -13,6 +13,8 @@ const BuildingForm: React.FC<{
   onSubmit: () => void;
 }> = ({ isEditMode, building, rooms, faculties, onClose, onSubmit }) => {
   const [name, setName] = useState(building?.name || "");
+  const [latitude, setLatitude] = useState(building?.latitude || "");
+  const [longitude, setLongitude] = useState(building?.longitude || "");
 
   const [selectedRooms, setSelectedRooms] = useState<number[]>([]);
   const [selectedFaculties, setSelectedFaculties] = useState<number[]>([]);
@@ -30,6 +32,8 @@ const BuildingForm: React.FC<{
 
     const payload = {
       name,
+      latitude,
+      longitude,
       rooms: selectedRooms,
       faculties: selectedFaculties,
     };
@@ -91,6 +95,32 @@ const BuildingForm: React.FC<{
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              className="input"
+              required
+            />
+          </div>
+          <div className="mb-5">
+            <label htmlFor="latitude" className="label">
+              Latitudine *
+            </label>
+            <input
+              id="latitude"
+              type="number"
+              value={latitude}
+              onChange={(e) => setLatitude(e.target.value)}
+              className="input"
+              required
+            />
+          </div>
+          <div className="mb-5">
+            <label htmlFor="longitude" className="label">
+              Longitudine *
+            </label>
+            <input
+              id="longitude"
+              type="number"
+              value={longitude}
+              onChange={(e) => setLongitude(e.target.value)}
               className="input"
               required
             />

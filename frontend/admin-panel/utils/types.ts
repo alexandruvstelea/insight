@@ -10,6 +10,8 @@ export type Faculty = {
 export type Building = {
   id: number;
   name: string;
+  latitude: number;
+  longitude: number;
   rooms: Room[];
   faculties: Faculty[];
 };
