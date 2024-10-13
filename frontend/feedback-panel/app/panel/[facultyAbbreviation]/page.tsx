@@ -5,6 +5,11 @@ import ProfessorCard from "@/components/professorCard/page";
 import FacultyStatistics from "@/components/facultyStatistics/page";
 import SearchBar from "@/components/searchBar/page";
 import styles from "./page.module.css";
+import {
+  fetchProfessorsCount,
+  fetchRoomsCount,
+  fetchRatingsCount,
+} from "@/utils/fetchers/counters";
 
 interface PanelPageProps {
   params: {
@@ -22,6 +27,9 @@ export default async function PanelPage({
   const facultyAbbreviation: string = params.facultyAbbreviation;
   const searchText: string = searchParams.search || "";
   const faculty = await fetchFaculty(facultyAbbreviation);
+  const professorsCount: number = await fetchProfessorsCount(faculty.id);
+  const roomsCount: number = await fetchRoomsCount(faculty.id);
+  const ratingsCount: number = await fetchRatingsCount(faculty.id);
   const professors = faculty.professors;
   const filteredProfessors = searchText
     ? [
@@ -40,9 +48,9 @@ export default async function PanelPage({
       <NavigationBar facultyAbbreviation={faculty.abbreviation} />
       <div className={styles.pageContainer}>
         <div className={styles.statistics}>
-          <FacultyStatistics statistic={6} name="Profesori" />
-          <FacultyStatistics statistic={2} name="Săli" />
-          <FacultyStatistics statistic={3760} name="Recenzii" />
+          <FacultyStatistics statistic={professorsCount} name="Profesori" />
+          <FacultyStatistics statistic={roomsCount} name="Săli" />
+          <FacultyStatistics statistic={ratingsCount} name="Recenzii" />
         </div>
         <div className={styles.professorsList}>
           <SearchBar facultyAbbreviation={facultyAbbreviation} />
