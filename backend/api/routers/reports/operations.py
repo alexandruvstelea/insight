@@ -54,7 +54,8 @@ class ReportsOperations:
     async def add_report(self, report_data: ReportIn) -> ReportOut:
         try:
             logger.info(f"Adding to database report {report_data}.")
-            new_report = Report(text=report_data.text, timestamp=report_data.timestamp)
+            naive_timestamp = report_data.timestamp.replace(tzinfo=None)
+            new_report = Report(text=report_data.text, timestamp=naive_timestamp)
 
             self.session.add(new_report)
             await self.session.commit()
