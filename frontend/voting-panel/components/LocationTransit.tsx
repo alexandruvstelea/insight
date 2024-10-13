@@ -2,7 +2,22 @@
 import React, { useEffect, useState } from "react";
 import Form from "@/components/Form";
 
-const LocationTransit = () => {
+export type Programme = {
+  id: number;
+  name: string;
+};
+
+interface LocationTransitProps {
+  programmes: Programme[];
+  roomCode: string;
+  timestamp: string;
+}
+
+const LocationTransit: React.FC<LocationTransitProps> = ({
+  programmes,
+  roomCode,
+  timestamp,
+}) => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [prompting, setPrompting] = useState(false);
@@ -143,7 +158,15 @@ const LocationTransit = () => {
     );
   }
 
-  return <Form latitude={latitude} longitude={longitude} />;
+  return (
+    <Form
+      latitude={latitude}
+      longitude={longitude}
+      programmes={programmes}
+      roomCode={roomCode}
+      timestamp={timestamp}
+    />
+  );
 };
 
 export default LocationTransit;

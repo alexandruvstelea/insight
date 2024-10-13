@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
 
   const roomCode = request.nextUrl.searchParams.get('roomCode');
   // const userAgent = request.headers.get('user-agent') || '';
@@ -16,7 +16,7 @@ export function middleware(request: NextRequest) {
   if (!roomCode) {
     return NextResponse.redirect('https://www.google.com');
   }
-  
+
   return NextResponse.next();
 }
 

@@ -1,84 +1,32 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import StarRating from "@/components/StarRating";
 import ProgrammeSelect from "@/components/ProgrammeSelect";
 import SuccessPopup from "@/components/SuccessPopup";
 import { handlePopupRedirect } from "@/utils/popupRedirect";
+import { Programme } from "@/components/LocationTransit";
 
-export interface Programme {
-  id: number;
-  name: string;
-}
-
-const Form = ({
-  latitude,
-  longitude,
-}: {
+interface FormProps {
   latitude: number | null;
   longitude: number | null;
+  programmes: Programme[];
+  roomCode: string;
+  timestamp: string;
+}
+
+const Form: React.FC<FormProps> = ({
+  latitude,
+  longitude,
+  programmes,
+  roomCode,
+  timestamp,
 }) => {
-  const [programmes, setProgrammes] = useState<Programme[]>([]);
   const [selectedProgramme, setSelectedProgramme] = useState<string>("");
   const [showPopup, setShowPopup] = useState(false);
   const [redirectCountdown, setRedirectCountdown] = useState(5);
   const [ratingError, setRatingError] = useState<string | null>(null);
   const router = useRouter();
-
-  const searchParams = useSearchParams();
-  const roomCode = searchParams.get("roomCode");
-  console.log(latitude, longitude);
-  useEffect(() => {
-    const fetchSessionAndProgrammes = async () => {
-      const timestamp = "2023-10-02T10:35:59.961Z";
-
-      const queryParams = new URLSearchParams({
-        room_code: roomCode || "",
-        timestamp: timestamp,
-      });
-
-      try {
-        const sessionResponse = await fetch(
-          `${process.env.API_URL}/sessions/filter/current?${queryParams}`
-        );
-
-        if (!sessionResponse.ok) {
-          throw new Error(
-            `Error fetching session: ${sessionResponse.statusText}`
-          );
-        }
-
-        const sessionData = await sessionResponse.json();
-
-        const fetchedSubjectId = sessionData.subject.id;
-
-        const programmeResponse = await fetch(
-          `${process.env.API_URL}/programmes?subject_id=${fetchedSubjectId}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        if (!programmeResponse.ok) {
-          throw new Error(
-            `Error fetching programmes: ${programmeResponse.statusText}`
-          );
-        }
-
-        const programmesData = await programmeResponse.json();
-
-        setProgrammes(programmesData);
-      } catch (error) {
-        console.error("Error:", error);
-        throw error;
-      }
-    };
-
-    fetchSessionAndProgrammes();
-  }, []);
 
   useEffect(() => {
     const cleanup = handlePopupRedirect(
@@ -123,9 +71,10 @@ const Form = ({
       rating_interactivity: parseInt(ratingInteractivity as string),
       rating_relevance: parseInt(ratingRelevance as string),
       rating_comprehension: parseInt(ratingComprehension as string),
-      // timestamp: new Date().toISOString(),
-      timestamp: "2023-10-02T10:35:59.961Z",
-      room_id: 1,
+      timestamp: timestamp,
+      room_code: roomCode,
+      latitude: latitude,
+      longitude: longitude,
     };
     try {
       const response = await fetch(`${process.env.API_URL}/ratings/`, {
@@ -145,11 +94,7 @@ const Form = ({
 
         const comments = formData.get("comment");
         if (comments) {
-          await submitComments(
-            comments as string,
-            ratingData.programme_id,
-            ratingData.room_id
-          );
+          await submitComments(comments as string, ratingData.programme_id);
         }
       } else {
         throw new Error(`Error submitting rating: ${response.statusText}`);
@@ -159,16 +104,11 @@ const Form = ({
     }
   };
 
-  async function submitComments(
-    comments: string,
-    programme_id: number,
-    room_id: number
-  ) {
+  async function submitComments(comments: string, programme_id: number) {
     const commentData = {
       text: comments,
-      // timestamp: new Date().toISOString(),
-      timestamp: "2023-10-02T10:35:59.961Z",
-      room_id: room_id,
+      timestamp: timestamp,
+      room_id: 1,
       programme_id: programme_id,
     };
 
@@ -191,6 +131,9 @@ const Form = ({
 
   return (
     <div className="max-w-md w-full mx-auto">
+      <h1>
+        {latitude} {longitude}
+      </h1>
       <form
         onSubmit={handleSubmit}
         className="w-full p-3 flex flex-col jus gap-10"
