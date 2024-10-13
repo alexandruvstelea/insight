@@ -10,6 +10,7 @@ import SubjectTable from "@/components/Tables/SubjectTable";
 import WeekTable from "@/components/Tables/WeekTable";
 import CommentTable from "@/components/Tables/CommentTable";
 import UserTable from "@/components/Tables/UserTabel";
+import BugReportTable from "@/components/Tables/BugRaportTable";
 
 import { useEffect, useState } from "react";
 import {
@@ -23,6 +24,7 @@ import {
   Week,
   Comment,
   User,
+  BugReport,
 } from "@/utils/types";
 import MenuItem from "./MenuItem";
 import ReportForm from "./Forms/ReportForm";
@@ -39,6 +41,7 @@ export default function Desboard(): JSX.Element {
   const [weeks, setWeeks] = useState<Week[]>([]);
   const [comments, setComments] = useState<Comment[]>([]);
   const [users, setUsers] = useState<User[]>([]);
+  const [bugReports, setBugReports] = useState<BugReport[]>([]);
 
   const [isOpen, setIsOpen] = useState(true);
   const [showList, setShowList] = useState(true);
@@ -109,6 +112,7 @@ export default function Desboard(): JSX.Element {
         fetchData(`${process.env.API_URL}/sessions`, setSessions),
         fetchData(`${process.env.API_URL}/comments`, setComments),
         fetchData(`${process.env.API_URL}/users`, setUsers),
+        fetchData(`${process.env.API_URL}/reports`, setBugReports),
       ]);
     };
     fetchInitialData();
@@ -135,6 +139,8 @@ export default function Desboard(): JSX.Element {
       fetchData(`${process.env.API_URL}/comments`, setComments);
     if (openTable === "users")
       fetchData(`${process.env.API_URL}/users`, setUsers);
+    if (openTable === "reports")
+      fetchData(`${process.env.API_URL}/reports`, setBugReports);
   }, [openTable]);
 
   return (
@@ -210,6 +216,11 @@ export default function Desboard(): JSX.Element {
               label="Users"
               isActive={activeTable === "users"}
               onClick={() => handleTableToggle("users")}
+            />
+            <MenuItem
+              label="Rapoarte"
+              isActive={activeTable === "reports"}
+              onClick={() => handleTableToggle("reports")}
             />
           </ul>
           <button
@@ -338,6 +349,14 @@ export default function Desboard(): JSX.Element {
             users={users}
             fetchUsers={() =>
               fetchData(`${process.env.API_URL}/users`, setUsers)
+            }
+          />
+        )}
+        {openTable === "reports" && (
+          <BugReportTable
+            bugReports={bugReports}
+            fetchBugReports={() =>
+              fetchData(`${process.env.API_URL}/reports`, setBugReports)
             }
           />
         )}

@@ -1,4 +1,4 @@
-import { Faculty, Building, Room, Session, Comment, Professor, Programme, Week, Subject, User } from "@/utils/types";
+import { Faculty, Building, Room, Session, Comment, Professor, Programme, Week, Subject, User,BugReport } from "@/utils/types";
 
 export interface FacultyTableProps {
   faculties: Faculty[] | null | undefined;
@@ -62,7 +62,10 @@ export interface UserTableProps {
   fetchUsers: () => void;
 }
 
-
+export interface BugReportTableProps {
+  bugReports: BugReport[] | null | undefined;
+  fetchBugReports: () => void;
+}
 
 export interface HeaderSectionProps {
   title: string;
@@ -94,3 +97,4 @@ export interface MenuItemProps {
   isActive: boolean;
   onClick: () => void;
 }
+

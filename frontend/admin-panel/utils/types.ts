@@ -129,3 +129,9 @@ export type User = {
   email: string;
   role: "admin" | "tablet";
 };
+
+export type BugReport = {
+  id: number;
+  text: string;
+  timestamp: string;
+};
