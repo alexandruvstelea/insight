@@ -1,12 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import StarRating from "@/components/StarRating";
 import ProgrammeSelect from "@/components/ProgrammeSelect";
 import SuccessPopup from "@/components/SuccessPopup";
-import { detectPlatform } from "@/utils/detectPlatform";
-import { fetchProgrammes } from "@/utils/fetchProgrammes";
 import { handlePopupRedirect } from "@/utils/popupRedirect";
 
 export interface Programme {
@@ -14,74 +11,73 @@ export interface Programme {
   name: string;
 }
 
-export default function Form() {
-  // useEffect(() => {
-  //   const { isAndroid, isIOS } = detectPlatform();
-
-  //   if (!isAndroid && !isIOS) {
-  //     window.location.href = "https://www.google.com";
-  //   }
-  // }, []);
-
+const Form = ({
+  latitude,
+  longitude,
+}: {
+  latitude: number | null;
+  longitude: number | null;
+}) => {
   const [programmes, setProgrammes] = useState<Programme[]>([]);
   const [selectedProgramme, setSelectedProgramme] = useState<string>("");
   const [showPopup, setShowPopup] = useState(false);
   const [redirectCountdown, setRedirectCountdown] = useState(5);
-  const [error, setError] = useState<string | null>(null);
+  const [ratingError, setRatingError] = useState<string | null>(null);
   const router = useRouter();
-  // const [roomId, setRoomId] = useState<number | null>(null);
 
-  // useEffect(() => {
-  //   const roomIdFromUrl = URLSearchParams.get("room_id");
-  //   if (roomIdFromUrl) {
-  //     const parsedRoomId = parseInt(roomIdFromUrl);
-  //     if (!isNaN(parsedRoomId)) {
-  //       setRoomId(parsedRoomId); // Set roomId if it's a valid number
-  //     }
-  //   }
-  // }, [URLSearchParams]);
-
+  const searchParams = useSearchParams();
+  const roomCode = searchParams.get("roomCode");
+  console.log(latitude, longitude);
   useEffect(() => {
-    const fetchSession = async () => {
-      const room_code = "NII1ABC==";
-      // timestamp: new Date().toISOString(),
+    const fetchSessionAndProgrammes = async () => {
       const timestamp = "2023-10-02T10:35:59.961Z";
 
       const queryParams = new URLSearchParams({
-        room_code: room_code.toString(),
+        room_code: roomCode || "",
         timestamp: timestamp,
       });
 
       try {
-        const response = await fetch(
-          `http://localhost:80/api/sessions/current?${queryParams}`
+        const sessionResponse = await fetch(
+          `${process.env.API_URL}/sessions/filter/current?${queryParams}`
         );
 
-        if (!response.ok) {
-          throw new Error(`Error fetching session: ${response.statusText}`);
+        if (!sessionResponse.ok) {
+          throw new Error(
+            `Error fetching session: ${sessionResponse.statusText}`
+          );
         }
 
-        const data = await response.json();
-        console.log("Session data received:", data);
+        const sessionData = await sessionResponse.json();
+
+        const fetchedSubjectId = sessionData.subject.id;
+
+        const programmeResponse = await fetch(
+          `${process.env.API_URL}/programmes?subject_id=${fetchedSubjectId}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!programmeResponse.ok) {
+          throw new Error(
+            `Error fetching programmes: ${programmeResponse.statusText}`
+          );
+        }
+
+        const programmesData = await programmeResponse.json();
+
+        setProgrammes(programmesData);
       } catch (error) {
-        console.error("Error fetching session:", error);
+        console.error("Error:", error);
+        throw error;
       }
     };
 
-    fetchSession();
-  }, []);
-
-  useEffect(() => {
-    async function loadProgrammes() {
-      try {
-        const data = await fetchProgrammes();
-        setProgrammes(data);
-      } catch (error) {
-        console.error("Failed to load programmes:", error);
-      }
-    }
-
-    loadProgrammes();
+    fetchSessionAndProgrammes();
   }, []);
 
   useEffect(() => {
@@ -115,10 +111,10 @@ export default function Form() {
       !ratingRelevance ||
       !ratingComprehension
     ) {
-      setError("Toate evaluările trebuie completate.");
+      setRatingError("Toate evaluările trebuie completate.");
       return;
     } else {
-      setError(null);
+      setRatingError(null);
     }
 
     const ratingData = {
@@ -132,7 +128,7 @@ export default function Form() {
       room_id: 1,
     };
     try {
-      const response = await fetch("http://localhost:80/api/ratings/", {
+      const response = await fetch(`${process.env.API_URL}/ratings/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -177,7 +173,7 @@ export default function Form() {
     };
 
     try {
-      const response = await fetch("http://localhost:80/api/comments", {
+      const response = await fetch(`${process.env.API_URL}/comments`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -241,9 +237,9 @@ export default function Form() {
         />
 
         <div className="w-full relative">
-          {error && (
+          {ratingError && (
             <div className=" text-red-500 absolute top-[-20px] left-0 text-sm font-bold mb-1">
-              {error}
+              {ratingError}
             </div>
           )}
           <button
@@ -258,4 +254,6 @@ export default function Form() {
       {showPopup && <SuccessPopup redirectCountdown={redirectCountdown} />}
     </div>
   );
-}
+};
+
+export default Form;
