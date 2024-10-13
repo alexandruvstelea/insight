@@ -77,26 +77,26 @@ class ProfessorOperations:
             result = await self.session.execute(
                 select(Professor).where(
                     and_(
-                    Professor.first_name == first_name,
-                    Professor.last_name == last_name
-                )
+                        Professor.first_name == first_name,
+                        Professor.last_name == last_name,
+                    )
                 )
             )
             professor = result.scalars().unique().one_or_none()
             if professor:
                 logger.info(
-                    f"Succesfully retrieved professor name {last_name} {first_name} from database."
+                    f"Succesfully retrieved professor named {last_name} {first_name} from database."
                 )
                 return professor_to_out(professor)
             logger.error(
-                f"No professor name {last_name} {first_name} found in database."
+                f"No professor named {last_name} {first_name} found in database."
             )
             raise HTTPException(
-                status_code=404, detail=f"No professorname {last_name} {first_name}."
+                status_code=404, detail=f"No professor named {last_name} {first_name}."
             )
         except Exception as e:
             logger.error(
-                f"An unexpected error has occured while retrieving professor name {last_name} {first_name}:\n{e}"
+                f"An unexpected error has occured while retrieving professor named {last_name} {first_name}:\n{e}"
             )
             raise e
 
