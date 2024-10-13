@@ -33,27 +33,28 @@ export default function ProfessorCard({
 
   return (
     <>
-      <div className={styles.cardContainer}>
-        <div className={styles.avatarContainer}>
-          <Image
-            width={80}
-            height={80}
-            src={imageSrc}
-            alt="Professor Avatar"
-            className={styles.professorAvatar}
-            onError={() => setImageSrc(defaultImageSrc)}
-          />
-        </div>
-        <div className={styles.infoContainer}>
-          <h1>
-            {lastName} {firstName}
-          </h1>
-          <Link
-            href={{
-              pathname: `/panel/${facultyAbbreviation}/${professorName}`,
-            }}
-            className={styles.arrowLink}
-          >
+      <Link
+        href={{
+          pathname: `/panel/${facultyAbbreviation}/${professorName}`,
+        }}
+        className={styles.cardLink}
+      >
+        <div className={styles.cardContainer}>
+          <div className={styles.avatarContainer}>
+            <Image
+              width={80}
+              height={80}
+              src={imageSrc}
+              alt="Professor Avatar"
+              className={styles.professorAvatar}
+              onError={() => setImageSrc(defaultImageSrc)}
+            />
+          </div>
+          <div className={styles.infoContainer}>
+            <h1>
+              {lastName} {firstName}
+            </h1>
+
             <Image
               height={40}
               width={40}
@@ -61,9 +62,9 @@ export default function ProfessorCard({
               src={"/svg/arrow-forward.svg"}
               className={styles.arrowButton}
             />
-          </Link>
+          </div>
         </div>
-      </div>
+      </Link>
     </>
   );
 }

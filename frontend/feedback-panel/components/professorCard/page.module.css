@@ -1,4 +1,9 @@
-.cardContainer {
+.cardLink {
+  text-decoration: none;
+  color: black;
+}
+
+.cardLink .cardContainer {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -42,7 +47,7 @@
 }
 
 @media screen and (min-width: 400px) {
-  .cardContainer {
+  .cardLink .cardContainer {
     width: 380px;
     height: 120px;
   }
@@ -58,7 +63,7 @@
 }
 
 @media screen and (min-width: 1024px) {
-  .cardContainer {
+  .cardLink .cardContainer {
     width: 464px;
     height: 144px;
   }
@@ -75,7 +80,7 @@
 }
 
 @media screen and (min-width: 1280px) {
-  .cardContainer:hover {
+  .cardLink .cardContainer:hover {
     box-shadow: 0px 4px 4px var(--main-blue-dark),
       0px 12px 12px var(--main-blue-light);
     transform: scale(1.001);

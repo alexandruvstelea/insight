@@ -42,7 +42,7 @@ export const fetchProfessorAvgRating = async (professorId: number) => {
 
 export const fetchProfessorRatingsHistory = async (professorId: number) => {
   const response = await fetch(
-    `${API_URL}/ratings/graph?` +
+    `${API_URL}/ratings/history?` +
       new URLSearchParams({
         professor_id: professorId.toString(),
       }),

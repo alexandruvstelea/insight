@@ -109,7 +109,7 @@ export const fetchSubjectGraphData = async (
   subjectType: string
 ) => {
   const response = await fetch(
-    `${API_URL}/ratings/graph?` +
+    `${API_URL}/ratings/history?` +
       new URLSearchParams({
         professor_id: professorId.toString(),
         subject_id: subjectId.toString(),

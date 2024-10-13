@@ -31,17 +31,45 @@ export default async function PanelPage({
   const roomsCount: number = await fetchRoomsCount(faculty.id);
   const ratingsCount: number = await fetchRatingsCount(faculty.id);
   const professors = faculty.professors;
-  const filteredProfessors = searchText
-    ? [
-        ...professors.filter(
-          (professor: any) =>
-            professor.first_name
-              .toLowerCase()
-              .includes(searchText.toLowerCase()) ||
-            professor.last_name.toLowerCase().includes(searchText.toLowerCase())
-        ),
-      ]
-    : professors;
+
+  const removeDiacritics = (str: string): string => {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  };
+
+  const filteredProfessors: any[] = searchText
+    ? professors
+        .filter((professor: any) => {
+          const normalizedFirstName = removeDiacritics(
+            professor.first_name.toLowerCase()
+          );
+          const normalizedLastName = removeDiacritics(
+            professor.last_name.toLowerCase()
+          );
+          const normalizedSearchText = removeDiacritics(
+            searchText.toLowerCase()
+          );
+
+          return (
+            normalizedFirstName.includes(normalizedSearchText) ||
+            normalizedLastName.includes(normalizedSearchText)
+          );
+        })
+        .sort((a: any, b: any) => {
+          const lastNameA = a.last_name.toLowerCase();
+          const lastNameB = b.last_name.toLowerCase();
+
+          if (lastNameA < lastNameB) return -1;
+          if (lastNameA > lastNameB) return 1;
+          return 0;
+        })
+    : professors.sort((a: any, b: any) => {
+        const lastNameA = a.last_name.toLowerCase();
+        const lastNameB = b.last_name.toLowerCase();
+
+        if (lastNameA < lastNameB) return -1;
+        if (lastNameA > lastNameB) return 1;
+        return 0;
+      });
 
   return (
     <>

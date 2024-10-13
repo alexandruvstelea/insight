@@ -76,7 +76,7 @@
 @media screen and (min-width: 1024px) {
   .professorClasses {
     width: 525px;
-    max-height: 584px;
+    height: 584px;
   }
 
   .contentContainer {

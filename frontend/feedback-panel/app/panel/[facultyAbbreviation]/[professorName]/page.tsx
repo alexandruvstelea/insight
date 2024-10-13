@@ -12,7 +12,7 @@ import {
 import { NavigationBar } from "@/components/navigationBar/page";
 import PolarAreaChart from "@/components/polarAreaChart/page";
 import SubjectDropdown from "@/components/subjectDropdown/page";
-import LineChart from "@/components/lineChart/page";
+import ChartsDropdown from "@/components/chartsDropdown/page";
 import { EntityRating } from "@/components/entityRating/page";
 import { reverseTransformName } from "@/utils/fetchers/professors";
 
@@ -40,6 +40,16 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
   const subjects: SubjectWithAssociation[] | false =
     await fetchSubjectsByProfessor(professor.id);
 
+  const sortedSubjects = subjects
+    ? subjects.sort((a, b) => {
+        const nameA = a.name.toLowerCase();
+        const nameB = b.name.toLowerCase();
+        if (nameA < nameB) return -1;
+        if (nameA > nameB) return 1;
+        return 0;
+      })
+    : [];
+
   return (
     <>
       <NavigationBar facultyAbbreviation={faculty.abbreviation} />
@@ -56,15 +66,12 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
             comprehension={professorAverageRating.rating_comprehension_average}
             title="Medie Recenzii"
           />
-          <LineChart
-            ratingsData={professorRatingsHistory}
-            title="Istoric Recenzii"
-          />
+          <ChartsDropdown subjectGraphData={professorRatingsHistory} />
           <div className={styles.professorClasses}>
             <h1>Materii</h1>
             <div className={styles.classesList}>
-              {subjects &&
-                subjects.map((subject: any) => (
+              {sortedSubjects &&
+                sortedSubjects.map((subject: any) => (
                   <div key={subject.id}>
                     <SubjectDropdown
                       subject={subject}
@@ -73,8 +80,8 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
                     />
                   </div>
                 ))}
-              {subjects &&
-                subjects.map((subject: any) => (
+              {sortedSubjects &&
+                sortedSubjects.map((subject: any) => (
                   <div key={subject.id}>
                     <SubjectDropdown
                       subject={subject}
@@ -83,8 +90,8 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
                     />
                   </div>
                 ))}
-              {subjects &&
-                subjects.map((subject: any) => (
+              {sortedSubjects &&
+                sortedSubjects.map((subject: any) => (
                   <div key={subject.id}>
                     <SubjectDropdown
                       subject={subject}
@@ -93,8 +100,8 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
                     />
                   </div>
                 ))}
-              {subjects &&
-                subjects.map((subject: any) => (
+              {sortedSubjects &&
+                sortedSubjects.map((subject: any) => (
                   <div key={subject.id}>
                     <SubjectDropdown
                       subject={subject}
@@ -103,8 +110,8 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
                     />
                   </div>
                 ))}
-              {subjects &&
-                subjects.map((subject: any) => (
+              {sortedSubjects &&
+                sortedSubjects.map((subject: any) => (
                   <div key={subject.id}>
                     <SubjectDropdown
                       subject={subject}
