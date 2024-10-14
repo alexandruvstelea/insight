@@ -9,8 +9,8 @@ export default async function Home({
 }: {
   searchParams?: { roomCode?: string };
 }) {
-  if (!searchParams || !searchParams.roomCode) {
-    return redirect("https://www.google.com");
+  if (!searchParams?.roomCode) {
+    return redirect("/incorrectURL");
   }
 
   const roomCode = searchParams.roomCode;
@@ -23,11 +23,12 @@ export default async function Home({
 
     if (!sessionResponse.ok) {
       if (sessionResponse.status === 404) {
-        redirect("https://www.google.com");
+        redirect("/timestampOrRoomCodeInvalid");
+      }
+      if (sessionResponse.status === 500) {
+        redirect("/error500");
       } else {
-        throw new Error(
-          `Error fetching session: ${sessionResponse.statusText}`
-        );
+        redirect("/generalError");
       }
     }
     const sessionData = await sessionResponse.json();
@@ -38,9 +39,7 @@ export default async function Home({
     );
 
     if (!programmeResponse.ok) {
-      throw new Error(
-        `Error fetching programmes: ${programmeResponse.statusText}`
-      );
+      redirect("/generalError");
     }
 
     const programmesData = await programmeResponse.json();
@@ -63,7 +62,6 @@ export default async function Home({
       </>
     );
   } catch (error) {
-    console.error("Error:", error);
-    return redirect("https://www.google.com");
+    return redirect("/generalError");
   }
 }

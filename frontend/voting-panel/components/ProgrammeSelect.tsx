@@ -1,4 +1,4 @@
-import { Programme } from "@/components/Form";
+import { Programme } from "@/components/LocationTransit";
 
 interface ProgrammeSelectProps {
   programmes: Programme[];

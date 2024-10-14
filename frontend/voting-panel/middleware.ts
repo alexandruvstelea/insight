@@ -10,11 +10,11 @@ export async function middleware(request: NextRequest) {
   // const isIOS = /iPad|iPhone|iPod/.test(userAgent);
 
   // if (!isAndroid && !isIOS) {
-  //   return NextResponse.redirect('https://www.google.com');
+  //   return NextResponse.redirect(new URL('/wrongDevice', request.url));
   // }
 
   if (!roomCode) {
-    return NextResponse.redirect('https://www.google.com');
+    return NextResponse.redirect(new URL('/incorrectURL', request.url));
   }
 
   return NextResponse.next();

@@ -27,6 +27,23 @@ const Form: React.FC<FormProps> = ({
   const [redirectCountdown, setRedirectCountdown] = useState(5);
   const [ratingError, setRatingError] = useState<string | null>(null);
   const router = useRouter();
+  const [timeLeft, setTimeLeft] = useState(180);
+
+  useEffect(() => {
+    if (timeLeft === 0) {
+      router.push("/sessionExpired");
+      return;
+    }
+
+    const timerInterval = setInterval(() => {
+      setTimeLeft((prevTime) => prevTime - 1);
+    }, 1000);
+
+    return () => clearInterval(timerInterval);
+  }, [timeLeft, router]);
+
+  const minutes = Math.floor(timeLeft / 60);
+  const seconds = timeLeft % 60;
 
   useEffect(() => {
     const cleanup = handlePopupRedirect(
@@ -131,9 +148,13 @@ const Form: React.FC<FormProps> = ({
 
   return (
     <div className="max-w-md w-full mx-auto">
-      <h1>
-        {latitude} {longitude}
-      </h1>
+      <p
+        className={`text-center ${
+          timeLeft <= 60 ? "text-red-500" : "text-black"
+        }`}
+      >
+        {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+      </p>
       <form
         onSubmit={handleSubmit}
         className="w-full p-3 flex flex-col jus gap-10"
