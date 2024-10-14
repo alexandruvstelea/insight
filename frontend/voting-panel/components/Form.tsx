@@ -96,6 +96,7 @@ const Form: React.FC<FormProps> = ({
     try {
       const response = await fetch(`${process.env.API_URL}/ratings/`, {
         method: "POST",
+        cache: "no-store",
         headers: {
           "Content-Type": "application/json",
         },
@@ -132,6 +133,7 @@ const Form: React.FC<FormProps> = ({
     try {
       const response = await fetch(`${process.env.API_URL}/comments`, {
         method: "POST",
+        cache: "no-store",
         headers: {
           "Content-Type": "application/json",
         },

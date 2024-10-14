@@ -18,7 +18,8 @@ export default async function Home({
 
   try {
     const sessionResponse = await fetch(
-      `${process.env.API_URL}/sessions/filter/current?room_code=${roomCode}&timestamp=${timestamp}`
+      `${process.env.API_URL}/sessions/filter/current?room_code=${roomCode}&timestamp=${timestamp}`,
+      { cache: "no-store" }
     );
 
     if (!sessionResponse.ok) {
@@ -35,7 +36,8 @@ export default async function Home({
     const fetchedSubjectId = sessionData.subject.id;
 
     const programmeResponse = await fetch(
-      `${process.env.API_URL}/programmes?subject_id=${fetchedSubjectId}`
+      `${process.env.API_URL}/programmes?subject_id=${fetchedSubjectId}`,
+      { cache: "no-store" }
     );
 
     if (!programmeResponse.ok) {
