@@ -19,3 +19,4 @@ class Comment(AlchemyAsyncBase):
         ForeignKey("professors.id"), nullable=True
     )
     faculty_id: Mapped[int] = mapped_column(ForeignKey("faculties.id"), nullable=True)
+    session_type: Mapped[str] = mapped_column(nullable=False)

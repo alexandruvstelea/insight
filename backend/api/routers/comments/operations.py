@@ -2,8 +2,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from .schemas import CommentOut, CommentIn
 from ...database.models.comments import Comment
 from ...database.models.room import Room
-from sqlalchemy import select, and_
-from typing import List
+from sqlalchemy import select, and_, desc
+from typing import List, Optional
 from fastapi import HTTPException
 from .utils import comment_to_out
 import logging
@@ -24,7 +24,12 @@ class CommentOperations:
         self.session = session
 
     async def get_comments(
-        self, professor_id: int, subject_id: int, session_type: str
+        self,
+        professor_id: int,
+        subject_id: int,
+        session_type: str,
+        limit: Optional[int] = None,
+        offset: Optional[int] = None,
     ) -> List[CommentOut]:
         try:
             filters = []
@@ -34,12 +39,22 @@ class CommentOperations:
                 filters.append(Comment.subject_id == subject_id)
             if session_type:
                 filters.append(Comment.session_type == session_type)
+
+            query = select(Comment)
+
             if filters:
                 logger.info(f"Retrieving comments from database with provided filters.")
-                query = select(Comment).where(and_(*filters))
-            else:
-                logger.info(f"Retrieving all comments from database.")
-                query = select(Comment)
+                query = query.where(and_(*filters))
+
+            query = query.order_by(desc(Comment.timestamp))
+
+            if limit:
+                logger.info(f"Comments query limit is {limit}.")
+                query = query.limit(limit)
+            if offset:
+                logger.info(f"Comments query offset is {offset}.")
+                query = query.offset(offset)
+
             result = await self.session.execute(query)
             comments = result.scalars().unique().all()
             if comments:
@@ -120,11 +135,12 @@ class CommentOperations:
                 subject_id=comment_session.subject_id,
                 timestamp=naive_timestamp,
                 programme_id=comment_data.programme_id,
-                room_id=comment_data.room_id,
+                room_id=room.id,
                 professor_id=await get_session_professor(
                     self.session, comment_session.subject_id, comment_session.type
                 ),
                 faculty_id=comment_session.faculty_id,
+                session_type=comment_session.type,
             )
             self.session.add(new_comment)
             await self.session.commit()

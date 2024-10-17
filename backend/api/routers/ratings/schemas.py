@@ -1,7 +1,7 @@
 from __future__ import annotations
 from pydantic import BaseModel
 from datetime import datetime
-from typing import Dict, Optional
+from typing import Dict, Optional, Literal
 
 
 class RatingBase(BaseModel):
@@ -10,7 +10,7 @@ class RatingBase(BaseModel):
     rating_relevance: int
     rating_comprehension: int
     timestamp: datetime
-    session_type: str
+    session_type: Literal["course", "laboratory", "project", "seminar"]
 
 
 class RatingIn(BaseModel):

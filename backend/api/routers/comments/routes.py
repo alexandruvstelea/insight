@@ -7,14 +7,13 @@ from http import HTTPStatus
 from fastapi_limiter.depends import RateLimiter
 from ...utility.authorizations import authorize
 from ..users.utils import get_current_user
-from typing import List
+from typing import List, Optional
 import logging
 
 logger = logging.getLogger(__name__)
 comments_routes = APIRouter(prefix="/api/comments")
 
 
-@authorize(role=["admin", "professor"])
 @comments_routes.get(
     "/",
     response_model=List[CommentOut],
@@ -25,13 +24,14 @@ async def get_comments(
     professor_id: int = None,
     subject_id: int = None,
     session_type: str = None,
-    current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
+    limit: Optional[int] = None,
+    offset: Optional[int] = None,
 ) -> List[CommentOut]:
     logger.info(f"Received GET request on endpoint /api/comments from IP {client_ip}.")
     comments = await CommentOperations(session).get_comments(
-        professor_id, subject_id, session_type
+        professor_id, subject_id, session_type, limit, offset
     )
     return comments
 

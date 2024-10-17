@@ -1,15 +1,18 @@
 from __future__ import annotations
 from pydantic import BaseModel
 from datetime import datetime
-from typing import Dict, List, Optional
+from typing import Literal
 
 
 class CommentBase(BaseModel):
     text: str
     timestamp: datetime
+    session_type: Literal["course", "laboratory", "project", "seminar"]
 
 
-class CommentIn(CommentBase):
+class CommentIn(BaseModel):
+    text: str
+    timestamp: datetime
     room_code: str
     programme_id: int
     latitude: float

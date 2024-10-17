@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 
 def comment_to_out(comment: Comment) -> CommentOut:
     if comment:
-        logger.info(f"Converting comment {comment} to CommentOut format.")
+        logger.info(f"Converting comment with ID {comment.id} to CommentOut format.")
         return CommentOut(
             id=comment.id,
             text=comment.text,
@@ -17,5 +17,6 @@ def comment_to_out(comment: Comment) -> CommentOut:
             professor_id=comment.professor_id,
             faculty_id=comment.faculty_id,
             subject_id=comment.subject_id,
+            session_type=comment.session_type,
         )
     return None
