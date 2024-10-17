@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, func
 from ..main import AlchemyAsyncBase
 from sqlalchemy.sql.sqltypes import DateTime
 
@@ -10,7 +10,9 @@ class Comment(AlchemyAsyncBase):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     text: Mapped[str] = mapped_column(nullable=False)
     subject_id: Mapped[int] = mapped_column(ForeignKey("subjects.id"), nullable=True)
-    timestamp: Mapped[DateTime] = mapped_column(DateTime, nullable=False)
+    timestamp: Mapped[DateTime] = mapped_column(
+        DateTime(timezone=False), nullable=False, server_default=func.now()
+    )
     programme_id: Mapped[int] = mapped_column(
         ForeignKey("programmes.id"), nullable=True
     )

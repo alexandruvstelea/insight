@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Mapped, mapped_column
 from ..main import AlchemyAsyncBase
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, func
 from sqlalchemy.sql.sqltypes import DateTime
 
 
@@ -13,7 +13,9 @@ class Rating(AlchemyAsyncBase):
     rating_relevance: Mapped[int] = mapped_column(nullable=False)
     rating_comprehension: Mapped[int] = mapped_column(nullable=False)
     rating_overall: Mapped[float] = mapped_column(nullable=False)
-    timestamp: Mapped[DateTime] = mapped_column(DateTime, nullable=False)
+    timestamp: Mapped[DateTime] = mapped_column(
+        DateTime(timezone=False), nullable=False, server_default=func.now()
+    )
     session_type: Mapped[str] = mapped_column(nullable=False)
     subject_id: Mapped[int] = mapped_column(ForeignKey("subjects.id"), nullable=False)
     programme_id: Mapped[int] = mapped_column(
