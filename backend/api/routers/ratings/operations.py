@@ -9,7 +9,8 @@ from sqlalchemy.exc import IntegrityError
 from fastapi import HTTPException
 from typing import List
 from ...utility.error_parsing import format_integrity_error
-from .utils import rating_to_out, check_location_distance
+from .utils import rating_to_out
+from ..buildings.utils import check_location_distance
 from ..sessions.utils import get_session_from_timestamp
 from ..subjects.utils import get_session_professor
 import logging
@@ -272,11 +273,11 @@ class RatingOperations:
                 )
             if room.id != rating_session.room_id:
                 logger.error(
-                    f"Room ID {rating_data.programme_id} is not valid for current session."
+                    f"Room unique code {room.id} is not valid for current session."
                 )
                 raise HTTPException(
                     status_code=422,
-                    detail=f"Room ID {rating_data.programme_id} is not valid for current session.",
+                    detail=f"Room unique code {room.id} is not valid for current session.",
                 )
 
             if not check_location_distance(

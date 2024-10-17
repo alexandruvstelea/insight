@@ -1,7 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from .schemas import CommentOut, CommentIn
 from ...database.models.comments import Comment
-from sqlalchemy import select, and_, func
+from ...database.models.room import Room
+from sqlalchemy import select, and_
 from typing import List
 from fastapi import HTTPException
 from .utils import comment_to_out
@@ -12,6 +13,7 @@ from ..subjects.utils import get_session_professor
 from ...utility.error_parsing import format_integrity_error
 from sqlalchemy.exc import IntegrityError
 from fastapi.responses import JSONResponse
+from ..buildings.utils import check_location_distance
 
 logger = logging.getLogger(__name__)
 
@@ -70,8 +72,18 @@ class CommentOperations:
                     status_code=422,
                     detail=f"Comment text is too short (lenght {len(comment_data.text)}). Minimum text lenght is 10.",
                 )
+
+            query = select(Room).where(Room.unique_code == comment_data.room_code)
+            result = await self.session.execute(query)
+            room = result.scalars().unique().one_or_none()
+            if not room:
+                raise HTTPException(
+                    status_code=404,
+                    detail=f"No room was found with the unique code {comment_data.room_code}.",
+                )
+
             comment_session: Session = await get_session_from_timestamp(
-                self.session, comment_data.timestamp, comment_data.room_id
+                self.session, comment_data.timestamp, room.id
             )
             if not comment_data.programme_id in [
                 programme.id for programme in comment_session.subject.programmes
@@ -83,14 +95,24 @@ class CommentOperations:
                     status_code=422,
                     detail=f"Programme ID {comment_data.programme_id} is not valid for current session.",
                 )
-            if comment_data.room_id != comment_session.room_id:
+            if room.id != comment_session.room_id:
                 logger.error(
-                    f"Room ID {comment_data.programme_id} is not valid for current session."
+                    f"Room unique code {room.id} is not valid for current session."
                 )
                 raise HTTPException(
                     status_code=422,
-                    detail=f"Room ID {comment_data.programme_id} is not valid for current session.",
+                    detail=f"Room unique code {room.id} is not valid for current session.",
                 )
+
+            if not check_location_distance(
+                (comment_data.latitude, comment_data.longitude),
+                (room.building.latitude, room.building.longitude),
+            ):
+                raise HTTPException(
+                    status_code=404,
+                    detail=f"No building was found at users location.",
+                )
+
             naive_timestamp = comment_data.timestamp.replace(tzinfo=None)
 
             new_comment = Comment(

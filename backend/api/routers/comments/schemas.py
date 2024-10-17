@@ -10,8 +10,10 @@ class CommentBase(BaseModel):
 
 
 class CommentIn(CommentBase):
-    room_id: int
+    room_code: str
     programme_id: int
+    latitude: float
+    longitude: float
 
 
 class CommentOut(CommentBase):
