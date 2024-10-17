@@ -69,3 +69,24 @@ async def delete_comment(
     )
     response = await CommentOperations(session).delete_comment(id)
     return response
+
+
+@comments_routes.get(
+    "/count/entities",
+    response_model=int,
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
+async def get_buildings_count(
+    subject_id: int,
+    session_type: str,
+    client_ip: str = Header(None, alias="X-Real-IP"),
+    session: AsyncSession = Depends(get_session),
+) -> int:
+    logger.info(
+        f"Received GET request on endpoint /api/buildings/count/entities from IP {client_ip}."
+    )
+    count = await CommentOperations(session).get_entities_count(
+        subject_id, session_type
+    )
+    return count

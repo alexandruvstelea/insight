@@ -2,7 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from .schemas import CommentOut, CommentIn
 from ...database.models.comments import Comment
 from ...database.models.room import Room
-from sqlalchemy import select, and_, desc
+from sqlalchemy import select, and_, desc, func
 from typing import List, Optional
 from fastapi import HTTPException
 from .utils import comment_to_out
@@ -177,3 +177,31 @@ class CommentOperations:
                 f"An unexpected error has occured while deleting comment with ID {id}:\n{e}"
             )
             raise e
+
+    async def get_entities_count(self, subject_id: int, session_type: str) -> int:
+        try:
+            logger.info(
+                f"Counting comments for subject with ID {subject_id} with session type {session_type}."
+            )
+            count_query = (
+                select(func.count())
+                .select_from(Comment)
+                .where(
+                    and_(
+                        Comment.subject_id == subject_id,
+                        Comment.session_type == session_type,
+                    )
+                )
+            )
+
+            result = await self.session.execute(count_query)
+            count = result.scalar()
+            logger.info(
+                f"There are {count} comments for fsubject with ID {subject_id} with session type {session_type}."
+            )
+            return count
+        except Exception as e:
+            logger.error(f"An error occurred while counting comments:\n{e}")
+            raise HTTPException(
+                status_code=500, detail="Could not retrieve comments count."
+            )
