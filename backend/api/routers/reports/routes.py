@@ -59,7 +59,8 @@ async def get_report_by_id(
 )
 async def add_report(
     report_data: ReportIn,
-    current_user: dict = Depends(get_current_user),
+    #! Check if this is needed
+    # current_user: dict = Depends(get_current_user),
     client_ip: str = Header(None, alias="X-Real-IP"),
     session: AsyncSession = Depends(get_session),
 ) -> ReportOut:

@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Feedback UnitBV Admin Panel",
+  title: "inSight",
   description:
     "This is the Feedback Unitbv admin panel used to perform operations on the database",
 };
