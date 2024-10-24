@@ -21,79 +21,20 @@
   gap: 24px;
 }
 
-.professorClasses {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 8px;
-  margin-bottom: 16px;
-  background-color: white;
-  border-radius: 16px;
-  box-shadow: 0px 4px 4px #00000030, 0px 12px 12px #00000015;
-  width: 95%;
-  max-width: 525px;
-  height: fit-content;
-}
-
-.professorClasses h1 {
-  margin: 0;
-  text-align: center;
-  font-size: 1.5rem;
-  padding: 8px;
-}
-
-.classesList {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 24px;
-  width: 100%;
-  padding: 0;
-  padding: 8px 0;
-}
-
 @media screen and (min-width: 400px) {
   .pageContainer {
     gap: 48px;
   }
-
-  .professorClasses {
-    margin-bottom: 24px;
-  }
 }
 
 @media screen and (min-width: 760px) {
-  .classesList {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: flex-start;
-  }
 }
 
 @media screen and (min-width: 1024px) {
-  .professorClasses {
-    width: 525px;
-    height: 584px;
-  }
-
   .contentContainer {
     flex-direction: row;
     justify-content: center;
     flex-wrap: wrap;
-  }
-
-  .classesList {
-    overflow-y: auto;
-    width: 370px;
-  }
-
-  .classesList::-webkit-scrollbar-thumb {
-    background-color: lightgray;
-    height: 32px;
-    transition: all 1s ease;
   }
 }
 
@@ -101,9 +42,5 @@
   .pageContainer {
     align-items: flex-start;
     gap: 0px;
-  }
-
-  .professorClasses {
-    margin: 0;
   }
 }

@@ -16,7 +16,8 @@
 .polarChartContainer h1 {
   margin: 0;
   font-size: 1.25rem;
-  padding: 8px;
+  padding: 12px;
+  height: 31px;
 }
 
 .polarChart {
@@ -35,4 +36,8 @@
 }
 
 @media screen and (min-width: 1024px) {
+  .polarChartContainer {
+    width: 525px;
+    height: 600px;
+  }
 }

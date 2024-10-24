@@ -15,6 +15,7 @@ import SubjectDropdown from "@/components/subjectDropdown/page";
 import ChartsDropdown from "@/components/chartsDropdown/page";
 import { EntityRating } from "@/components/entityRating/page";
 import { reverseTransformName } from "@/utils/fetchers/professors";
+import SubjectList from "@/components/subjectList/page";
 
 interface ProfessorPageProps {
   params: {
@@ -67,61 +68,11 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
             title="Medie Recenzii"
           />
           <ChartsDropdown subjectGraphData={professorRatingsHistory} />
-          <div className={styles.professorClasses}>
-            <h1>Materii</h1>
-            <div className={styles.classesList}>
-              {sortedSubjects &&
-                sortedSubjects.map((subject: any) => (
-                  <div key={subject.id}>
-                    <SubjectDropdown
-                      subject={subject}
-                      facultyAbbreviation={faculty.abbreviation}
-                      transformedProfessorName={transformedProfessorName}
-                    />
-                  </div>
-                ))}
-              {sortedSubjects &&
-                sortedSubjects.map((subject: any) => (
-                  <div key={subject.id}>
-                    <SubjectDropdown
-                      subject={subject}
-                      facultyAbbreviation={faculty.abbreviation}
-                      transformedProfessorName={transformedProfessorName}
-                    />
-                  </div>
-                ))}
-              {sortedSubjects &&
-                sortedSubjects.map((subject: any) => (
-                  <div key={subject.id}>
-                    <SubjectDropdown
-                      subject={subject}
-                      facultyAbbreviation={faculty.abbreviation}
-                      transformedProfessorName={transformedProfessorName}
-                    />
-                  </div>
-                ))}
-              {sortedSubjects &&
-                sortedSubjects.map((subject: any) => (
-                  <div key={subject.id}>
-                    <SubjectDropdown
-                      subject={subject}
-                      facultyAbbreviation={faculty.abbreviation}
-                      transformedProfessorName={transformedProfessorName}
-                    />
-                  </div>
-                ))}
-              {sortedSubjects &&
-                sortedSubjects.map((subject: any) => (
-                  <div key={subject.id}>
-                    <SubjectDropdown
-                      subject={subject}
-                      facultyAbbreviation={faculty.abbreviation}
-                      transformedProfessorName={transformedProfessorName}
-                    />
-                  </div>
-                ))}
-            </div>
-          </div>
+          <SubjectList
+            subjectsList={sortedSubjects}
+            facultyAbbreviation={faculty.abbreviation}
+            transformedProfessorName={transformedProfessorName}
+          />
         </div>
       </div>
     </>
