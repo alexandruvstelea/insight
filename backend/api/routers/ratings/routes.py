@@ -55,6 +55,28 @@ async def get_average_ratings(
 
 
 @ratings_routes.get(
+    "/average/programmes",
+    response_model=dict[str, float],
+    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
+    status_code=HTTPStatus.OK,
+)
+async def get_average_ratings(
+    professor_id: int = None,
+    subject_id: int = None,
+    session_type: str = None,
+    client_ip: str = Header(None, alias="X-Real-IP"),
+    session: AsyncSession = Depends(get_session),
+) -> dict[str, float]:
+    logger.info(
+        f"Received GET request on endpoint /api/ratings/average/programmes from IP {client_ip}."
+    )
+    ratings = await RatingOperations(session).get_ratings_average_per_programme(
+        professor_id, subject_id, session_type
+    )
+    return ratings
+
+
+@ratings_routes.get(
     "/history",
     response_model=dict[str, WeekRatings],
     dependencies=[Depends(RateLimiter(times=50, minutes=1))],

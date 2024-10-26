@@ -4,8 +4,10 @@ from ...database.models.session import Session
 from ...database.models.subject import Subject
 from ...database.models.weeks import Week
 from ...database.models.room import Room
+from ...database.models.programme import Programme
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import aliased
 from fastapi import HTTPException
 from typing import List
 from ...utility.error_parsing import format_integrity_error
@@ -108,6 +110,51 @@ class RatingOperations:
             logger.error(
                 f"An unexpected error has occured while retrieving average ratings:\n{e}"
             )
+            raise e
+
+    async def get_ratings_average_per_programme(
+        self, professor_id: int, subject_id: int, session_type: str
+    ) -> dict[str, float]:
+        try:
+            if professor_id and subject_id and session_type:
+                logger.info(
+                    f"Retrieving overall average ratings per programme with filters."
+                )
+
+                programme_alias = aliased(Programme)
+
+                query = (
+                    select(
+                        programme_alias.name.label("programme_name"),
+                        func.avg(Rating.rating_overall).label("avg_overall"),
+                    )
+                    .join(programme_alias, Rating.programme_id == programme_alias.id)
+                    .where(
+                        Rating.professor_id == professor_id,
+                        Rating.subject_id == subject_id,
+                        Rating.session_type == session_type,
+                    )
+                    .group_by(programme_alias.name)
+                )
+
+                result = await self.session.execute(query)
+                programme_averages = result.fetchall()
+
+                programme_average_dict = {
+                    row.programme_name: round(row.avg_overall, 2)
+                    for row in programme_averages
+                    if row.avg_overall is not None
+                }
+
+                if programme_average_dict:
+                    logger.info("Successfully retrieved average ratings per programme.")
+                    return programme_average_dict
+
+                logger.error("No ratings found.")
+                raise HTTPException(status_code=404, detail="No ratings found.")
+
+        except Exception as e:
+            logger.error(f"An unexpected error occurred while retrieving ratings:\n{e}")
             raise e
 
     async def get_ratings_graph(
