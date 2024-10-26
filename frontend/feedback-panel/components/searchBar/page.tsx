@@ -13,9 +13,9 @@ export default function SearchBar({ facultyAbbreviation }: SearchBar) {
 
   useEffect(() => {
     if (!text) {
-      router.push(`/panel/${facultyAbbreviation}`);
+      router.push(`/feedback/${facultyAbbreviation}`);
     } else {
-      router.push(`/panel/${facultyAbbreviation}?search=${text}`);
+      router.push(`/feedback/${facultyAbbreviation}?search=${text}`);
     }
   }, [text, router]);
 

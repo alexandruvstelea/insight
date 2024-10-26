@@ -18,7 +18,7 @@ export default function FacultySelector({
       <div className={styles.facultySelector}>
         <Link
           href={{
-            pathname: `/panel/${facultyAbbreviation}`,
+            pathname: `/feedback/${facultyAbbreviation}`,
           }}
           className={styles.selectorLink}
         >

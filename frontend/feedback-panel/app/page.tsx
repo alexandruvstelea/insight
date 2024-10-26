@@ -14,9 +14,9 @@ export default async function Home() {
           <h1 className={styles.landingTitle}>inSight</h1>
           <div className={styles.landingText}>
             <h2>
-              Progresul incepe cu feedback-ul
+              Progresul începe cu feedback-ul
               <br />
-              pe care nu vrei să-l auzi
+              pe care nu vrei să îl auzi
             </h2>
             <h3>
               Ajută-ne să le oferim profesorilor acel feedback valoros care
@@ -71,7 +71,7 @@ export default async function Home() {
         <div className={styles.tutorialBoxes}>
           <TutorialBox
             step="1"
-            content="Participi la cursuri într-o sală în care este prezent un poster dedicat platoformei inSight. Îl vei recunoaste cand îl vei vedea."
+            content="Participi la cursuri într-o sală în care este prezent un poster dedicat platoformei inSight. Îl vei recunoaște când îl vei vedea."
           />
           <TutorialBox
             step="2"

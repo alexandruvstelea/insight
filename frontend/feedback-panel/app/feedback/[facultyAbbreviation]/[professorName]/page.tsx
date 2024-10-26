@@ -1,10 +1,10 @@
 import styles from "./page.module.css";
 import { fetchFaculty } from "@/utils/fetchers/faculties";
+import { fetchProfessor } from "@/utils/fetchers/professors";
 import {
-  fetchProfessor,
   fetchProfessorAvgRating,
   fetchProfessorRatingsHistory,
-} from "@/utils/fetchers/professors";
+} from "@/utils/fetchers/ratings";
 import {
   SubjectWithAssociation,
   fetchSubjectsByProfessor,
@@ -16,6 +16,7 @@ import ChartsDropdown from "@/components/chartsDropdown/page";
 import { EntityRating } from "@/components/entityRating/page";
 import { reverseTransformName } from "@/utils/fetchers/professors";
 import SubjectList from "@/components/subjectList/page";
+import { NoData } from "@/components/noData/page";
 
 interface ProfessorPageProps {
   params: {
@@ -54,27 +55,35 @@ export default async function ProfessorPage({ params }: ProfessorPageProps) {
   return (
     <>
       <NavigationBar facultyAbbreviation={faculty.abbreviation} />
-      <div className={styles.pageContainer}>
-        <EntityRating
-          entityName={`${professor.last_name} ${professor.first_name}`}
-          rating={professorAverageRating.rating_overall_average}
-        />
-        <div className={styles.contentContainer}>
-          <PolarAreaChart
-            clarity={professorAverageRating.rating_clarity_average}
-            relevance={professorAverageRating.rating_relevance_average}
-            interactivity={professorAverageRating.rating_interactivity_average}
-            comprehension={professorAverageRating.rating_comprehension_average}
-            title="Medie Recenzii"
+      {professor && professorAverageRating && sortedSubjects ? (
+        <div className={styles.pageContainer}>
+          <EntityRating
+            entityName={`${professor.last_name} ${professor.first_name}`}
+            rating={professorAverageRating.rating_overall_average}
           />
-          <ChartsDropdown subjectGraphData={professorRatingsHistory} />
-          <SubjectList
-            subjectsList={sortedSubjects}
-            facultyAbbreviation={faculty.abbreviation}
-            transformedProfessorName={transformedProfessorName}
-          />
+          <div className={styles.contentContainer}>
+            <PolarAreaChart
+              clarity={professorAverageRating.rating_clarity_average}
+              relevance={professorAverageRating.rating_relevance_average}
+              interactivity={
+                professorAverageRating.rating_interactivity_average
+              }
+              comprehension={
+                professorAverageRating.rating_comprehension_average
+              }
+              title="Medie Recenzii"
+            />
+            <ChartsDropdown subjectGraphData={professorRatingsHistory} />
+            <SubjectList
+              subjectsList={sortedSubjects}
+              facultyAbbreviation={faculty.abbreviation}
+              transformedProfessorName={transformedProfessorName}
+            />
+          </div>
         </div>
-      </div>
+      ) : (
+        <NoData />
+      )}
     </>
   );
 }

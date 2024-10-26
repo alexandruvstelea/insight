@@ -35,7 +35,7 @@ export default function ProfessorCard({
     <>
       <Link
         href={{
-          pathname: `/panel/${facultyAbbreviation}/${professorName}`,
+          pathname: `/feedback/${facultyAbbreviation}/${professorName}`,
         }}
         className={styles.cardLink}
       >

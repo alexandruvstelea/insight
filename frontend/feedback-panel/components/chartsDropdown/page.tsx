@@ -1,7 +1,7 @@
 "use client";
 import styles from "./page.module.css";
 import { useState } from "react";
-import BarChart from "../barChart/page";
+import BarChartWeeks from "../barChartWeeks/page";
 
 type ChartType =
   | "overall"
@@ -31,15 +31,13 @@ export default function ChartsDropdown({
           onChange={handleChartChange}
           className={styles.dropdown}
         >
-          <option value="overall">Istoric Medie Recenzii</option>
-          <option value="interactivity">
-            Istoric Recenzii Interactivitate
-          </option>
-          <option value="relevance">Istoric Recenzii Relevanta</option>
-          <option value="comprehension">Istoric Recenzii Intelegere</option>
-          <option value="clarity">Istoric Recenzii Claritate</option>
+          <option value="overall">Medie Recenzii</option>
+          <option value="interactivity">Recenzii Interactivitate</option>
+          <option value="relevance">Recenzii Relevanță</option>
+          <option value="comprehension">Recenzii Ințelegere</option>
+          <option value="clarity">Recenzii Claritate</option>
         </select>
-        <BarChart
+        <BarChartWeeks
           ratingsData={subjectGraphData}
           ratingType={selectedChart}
           label={
@@ -48,9 +46,9 @@ export default function ChartsDropdown({
               : selectedChart === "interactivity"
               ? "Medie Interactivitate"
               : selectedChart === "relevance"
-              ? "Medie Relevanta"
+              ? "Medie Relevanță"
               : selectedChart === "comprehension"
-              ? "Medie Intelegere"
+              ? "Medie Ințelegere"
               : "Medie Claritate"
           }
         />

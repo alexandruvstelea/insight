@@ -37,13 +37,13 @@ interface BarChartProps {
   label: string;
 }
 
-export default function BarChart({
+export default function BarChartWeeks({
   ratingsData,
   ratingType,
   label,
 }: BarChartProps) {
   const labels = Object.keys(ratingsData).map(
-    (key) => `Sapt. ${key.slice(-2).replace("_", "")}`
+    (key) => `Săpt. ${key.slice(-2).replace("_", "")}`
   );
   const data = Object.values(ratingsData).map((item) => item[ratingType]);
 
@@ -121,7 +121,24 @@ export default function BarChart({
       },
     },
     scales: {
+      x: {
+        ticks: {
+          color: "black",
+          font: {
+            size: fontSize - 3,
+          },
+        },
+        title: {
+          color: "black",
+        },
+      },
       y: {
+        ticks: {
+          color: "black",
+        },
+        title: {
+          color: "black",
+        },
         beginAtZero: true,
         max: 5,
       },

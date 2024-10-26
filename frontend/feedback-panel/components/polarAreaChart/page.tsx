@@ -49,7 +49,7 @@ export default function PolarAreaChart({
   }, []);
 
   const chartData = {
-    labels: ["Claritate", "Relevanta", "Interactivitate", "Intelegere"],
+    labels: ["Claritate", "Relevanță", "Interactivitate", "Ințelegere"],
     datasets: [
       {
         label: "Recenzii profesor",
@@ -77,13 +77,12 @@ export default function PolarAreaChart({
     plugins: {
       legend: {
         display: true,
-        fontColor: "black",
         position: "bottom" as const,
         align: "center" as const,
         labels: {
           color: "black",
           font: {
-            size: fontSize,
+            size: fontSize + 2, // Increase font size slightly for the legend
           },
         },
       },
@@ -92,6 +91,15 @@ export default function PolarAreaChart({
       r: {
         min: 0,
         max: 5,
+        ticks: {
+          color: "black",
+          font: {
+            size: fontSize + 2,
+          },
+        },
+        grid: {
+          color: "rgba(0, 0, 0, 0.3)",
+        },
       },
     },
   };

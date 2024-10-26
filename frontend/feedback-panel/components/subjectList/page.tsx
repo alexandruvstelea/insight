@@ -28,46 +28,6 @@ export default function SubjectList({
                 />
               </div>
             ))}
-          {subjectsList &&
-            subjectsList.map((subject: any) => (
-              <div key={subject.id}>
-                <SubjectDropdown
-                  subject={subject}
-                  facultyAbbreviation={facultyAbbreviation}
-                  transformedProfessorName={transformedProfessorName}
-                />
-              </div>
-            ))}
-          {subjectsList &&
-            subjectsList.map((subject: any) => (
-              <div key={subject.id}>
-                <SubjectDropdown
-                  subject={subject}
-                  facultyAbbreviation={facultyAbbreviation}
-                  transformedProfessorName={transformedProfessorName}
-                />
-              </div>
-            ))}
-          {subjectsList &&
-            subjectsList.map((subject: any) => (
-              <div key={subject.id}>
-                <SubjectDropdown
-                  subject={subject}
-                  facultyAbbreviation={facultyAbbreviation}
-                  transformedProfessorName={transformedProfessorName}
-                />
-              </div>
-            ))}
-          {subjectsList &&
-            subjectsList.map((subject: any) => (
-              <div key={subject.id}>
-                <SubjectDropdown
-                  subject={subject}
-                  facultyAbbreviation={facultyAbbreviation}
-                  transformedProfessorName={transformedProfessorName}
-                />
-              </div>
-            ))}
         </div>
       </div>
     </>

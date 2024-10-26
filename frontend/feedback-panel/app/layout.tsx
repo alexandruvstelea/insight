@@ -8,7 +8,7 @@ const montserrat = Montserrat({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "inSight",
   description:
-    "This is the feedback panel of the Feedback UnitBV project. Here you can see the ratings that each professors has received from their students.",
+    "InSight este un proiect creat cu scopul de a facilita comunicarea dintre studenți și profesori in cadrul Universitatii Transilvania din Brasov, pentru a le oferi profesorilor un feedback constructiv asupra cursurilor lor.",
 };
 
 export default function RootLayout({

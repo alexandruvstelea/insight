@@ -31,7 +31,7 @@ export default function SubjectDropdown({
         {subject.isCourse && (
           <Link
             href={{
-              pathname: `/panel/${facultyAbbreviation.toLowerCase()}/${transformedProfessorName}/course/${subject.abbreviation.toLowerCase()}`,
+              pathname: `/feedback/${facultyAbbreviation.toLowerCase()}/${transformedProfessorName}/course/${subject.abbreviation.toLowerCase()}`,
             }}
             className={styles.dropdownLink}
           >
@@ -41,7 +41,7 @@ export default function SubjectDropdown({
         {subject.isLaboratory && (
           <Link
             href={{
-              pathname: `/panel/${facultyAbbreviation.toLowerCase()}/${transformedProfessorName}/laboratory/${subject.abbreviation.toLowerCase()}`,
+              pathname: `/feedback/${facultyAbbreviation.toLowerCase()}/${transformedProfessorName}/laboratory/${subject.abbreviation.toLowerCase()}`,
             }}
             className={styles.dropdownLink}
           >
@@ -51,7 +51,7 @@ export default function SubjectDropdown({
         {subject.isSeminar && (
           <Link
             href={{
-              pathname: `/panel/${facultyAbbreviation.toLowerCase()}/${transformedProfessorName}/seminar/${subject.abbreviation.toLowerCase()}`,
+              pathname: `/feedback/${facultyAbbreviation.toLowerCase()}/${transformedProfessorName}/seminar/${subject.abbreviation.toLowerCase()}`,
             }}
             className={styles.dropdownLink}
           >
@@ -61,7 +61,7 @@ export default function SubjectDropdown({
         {subject.isProject && (
           <Link
             href={{
-              pathname: `/panel/${facultyAbbreviation.toLowerCase()}/${transformedProfessorName}/project/${subject.abbreviation.toLowerCase()}`,
+              pathname: `/feedback/${facultyAbbreviation.toLowerCase()}/${transformedProfessorName}/project/${subject.abbreviation.toLowerCase()}`,
             }}
             className={styles.dropdownLink}
           >
