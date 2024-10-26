@@ -75,7 +75,7 @@ export default async function PanelPage({
   return (
     <>
       <NavigationBar facultyAbbreviation={faculty.abbreviation} />
-      {professorsCount && roomsCount && ratingsCount && filteredProfessors ? (
+      {professorsCount && roomsCount && filteredProfessors ? (
         <div className={styles.pageContainer}>
           <div className={styles.statistics}>
             <FacultyStatistics statistic={professorsCount} name="Profesori" />
