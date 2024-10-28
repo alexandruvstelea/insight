@@ -12,6 +12,7 @@
   padding-bottom: 8px;
   max-width: 525px;
   margin-bottom: 16px;
+  transition: all 0.3s ease-in-out;
 }
 
 .professorClasses h1 {
@@ -65,6 +66,14 @@
     background-color: lightgray;
     height: 32px;
     transition: all 1s ease;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .professorClasses:hover {
+    box-shadow: 0px 4px 4px var(--main-blue-dark),
+      0px 12px 12px var(--main-blue-light);
+    transform: scale(1.001);
   }
 }
 

@@ -4,6 +4,7 @@ import { InfoBox } from "@/components/infoBox/page";
 import { TutorialBox } from "@/components/tutorialBox/page";
 import FacultySelector from "@/components/facultySelector/page";
 import { fetchFaculties } from "@/utils/fetchers/faculties";
+import { ScrollButton } from "@/components/scrollButton/page";
 
 export default async function Home() {
   const faculties = await fetchFaculties();
@@ -24,9 +25,7 @@ export default async function Home() {
               cursurile tale.
             </h3>
           </div>
-          <a className={styles.facultiesButton} href="#faculties">
-            Explorează
-          </a>
+          <ScrollButton text="Explorează" scrollId="faculties" />
         </div>
         <div className={styles.landingImageContainer}>
           <Image

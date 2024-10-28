@@ -11,12 +11,12 @@ import {
 } from "@/utils/fetchers/subjects";
 import { NavigationBar } from "@/components/navigationBar/page";
 import PolarAreaChart from "@/components/polarAreaChart/page";
-import SubjectDropdown from "@/components/subjectDropdown/page";
 import ChartsDropdown from "@/components/chartsDropdown/page";
 import { EntityRating } from "@/components/entityRating/page";
 import { reverseTransformName } from "@/utils/fetchers/professors";
 import SubjectList from "@/components/subjectList/page";
 import { NoData } from "@/components/noData/page";
+import { ScrollButton } from "@/components/scrollButton/page";
 
 interface ProfessorPageProps {
   params: {

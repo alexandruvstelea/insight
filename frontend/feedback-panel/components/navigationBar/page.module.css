@@ -25,3 +25,7 @@
 .navBar h1 span {
   font-size: 1rem;
 }
+
+.navBar h1:hover {
+  cursor: pointer;
+}

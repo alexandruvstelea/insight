@@ -87,27 +87,6 @@
   width: auto;
 }
 
-.facultiesButton {
-  text-decoration: none;
-  background: var(--main-blue-dark);
-  color: white;
-  padding: 12px;
-  font-size: 1.5rem;
-  font-weight: bold;
-  border-radius: 8px;
-  animation: pulse-shadow 2s infinite alternate-reverse ease-in-out;
-  transition: transform 0.2s ease-in-out;
-}
-
-@keyframes pulse-shadow {
-  0% {
-    box-shadow: 0;
-  }
-  100% {
-    box-shadow: 0 0 16px var(--main-blue-dark);
-  }
-}
-
 .about {
   width: 100%;
   height: fit-content;
