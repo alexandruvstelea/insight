@@ -1,6 +1,6 @@
 .landing {
   width: 100%;
-  height: fit-content;
+  height: auto;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -22,7 +22,8 @@
 
 @media screen and (min-height: 580px) {
   .landing {
-    min-height: 85svh;
+    min-height: 85vh;
+    height: auto;
   }
   .landingTextContainer {
     gap: 48px;
@@ -31,7 +32,8 @@
 
 @media screen and (min-height: 700px) {
   .landing {
-    min-height: 90svh;
+    min-height: 90vh;
+    height: auto;
   }
 }
 
