@@ -11,7 +11,6 @@ export function ScrollButton({ text, scrollId }: ScrollButton) {
       <a className={styles.scrollButton} href={`#${scrollId}`}>
         {text}
       </a>
-      ;
     </>
   );
 }
