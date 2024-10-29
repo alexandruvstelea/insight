@@ -22,7 +22,7 @@
 
 @media screen and (min-height: 580px) {
   .landing {
-    min-height: 85dvh;
+    min-height: 85svh;
   }
   .landingTextContainer {
     gap: 48px;
@@ -31,7 +31,7 @@
 
 @media screen and (min-height: 700px) {
   .landing {
-    min-height: 90dvh;
+    min-height: 90svh;
   }
 }
 
