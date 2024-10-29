@@ -2,12 +2,9 @@ import styles from "./page.module.css";
 import Image from "next/image";
 import { InfoBox } from "@/components/infoBox/page";
 import { TutorialBox } from "@/components/tutorialBox/page";
-import FacultySelector from "@/components/facultySelector/page";
-import { fetchFaculties } from "@/utils/fetchers/faculties";
 import { ScrollButton } from "@/components/scrollButton/page";
 
 export default async function Home() {
-  const faculties = await fetchFaculties();
   return (
     <>
       <div className={styles.landing}>
@@ -89,18 +86,7 @@ export default async function Home() {
             Universitatea <br />
             Transilvania
           </h1>
-          {faculties && faculties.length > 0 ? (
-            faculties.map((faculty: any) => (
-              <FacultySelector
-                key={faculty.id}
-                facultyAbbreviation={faculty.abbreviation.toLowerCase()}
-                facultyName={faculty.name}
-                svgPath={`/svg/${faculty.abbreviation.toLowerCase()}.svg`}
-              />
-            ))
-          ) : (
-            <h1>Nu s-au găsit facultăți.</h1>
-          )}
+          <h1>În curând</h1>
         </div>
       </div>
     </>
