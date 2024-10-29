@@ -9,6 +9,8 @@
   gap: 32px;
   border-radius: 0 0 12px 12px;
   background-color: white;
+  min-height: 80vh;
+  max-height: 90vh;
 }
 
 .landingTextContainer {
@@ -22,7 +24,7 @@
 
 @media screen and (min-height: 580px) {
   .landing {
-    min-height: 85svh;
+    min-height: 85vh;
   }
   .landingTextContainer {
     gap: 48px;
@@ -31,7 +33,7 @@
 
 @media screen and (min-height: 700px) {
   .landing {
-    min-height: 90svh;
+    min-height: 90vh;
   }
 }
 
