@@ -25,13 +25,13 @@ export default async function Home() {
           <ScrollButton text="Explorează" scrollId="faculties" />
         </div>
         <div className={styles.landingImageContainer}>
-          <Image
+          {/* <Image
             width={80}
             height={80}
             src={"/svg/feedback.svg"}
             alt="Landing Page Image"
             className={styles.landingImage}
-          />
+          /> */}
         </div>
       </div>
       <div className={styles.about}>
