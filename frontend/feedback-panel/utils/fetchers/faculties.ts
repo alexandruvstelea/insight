@@ -1,22 +1,17 @@
-import { NextApiRequest } from "next";
-
 const API_URL = process.env.API_URL;
 
-export const fetchFaculties = async (req: NextApiRequest) => {
-  let clientIp = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+export const fetchFaculties = async (headers: HeadersInit) => {
+  let clientIp =
+    (headers as Record<string, string | undefined>)["x-forwarded-for"] ||
+    (headers as Record<string, string | undefined>)["remoteAddress"];
+  if (Array.isArray(clientIp)) clientIp = clientIp[0];
 
-  if (Array.isArray(clientIp)) {
-    clientIp = clientIp.join(", ");
-  } else if (clientIp === undefined) {
-    clientIp = "";
-  }
-
-  const response = await fetch(`${process.env.API_URL}/faculties`, {
+  const response = await fetch(`${API_URL}/faculties`, {
     method: "GET",
     cache: "no-store",
     headers: {
       "Content-Type": "application/json",
-      "X-Forwarded-For": clientIp,
+      "X-Forwarded-For": clientIp || "",
     },
   });
 
