@@ -33,7 +33,7 @@ export default function Login(): JSX.Element {
         throw new Error(data.message);
       } else if (response.status == 200) {
         setError("");
-        router.push("https://admin.insightbv.ro");
+        router.push("/");
       }
     } catch (err) {
       console.log("Login failed. Please try again.");
