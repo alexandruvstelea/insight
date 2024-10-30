@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <>
-      <html lang="en">
+      <html lang="en" interactive-widget="resizes-content">
         <body className={`${montserrat.className} layoutBody`}>
           <div className="layoutContainer">
             {children}
