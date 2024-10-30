@@ -8,8 +8,8 @@ import NavigationBar from "@/components/NavigationBar";
 const montserrat = Montserrat({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "inSight",
-  description: "This is the voting panel of the Feedback UnitBV project.",
+  title: "inSight Voting Panel",
+  description: "This is the voting panel of the inSight project.",
 };
 
 export default function RootLayout({

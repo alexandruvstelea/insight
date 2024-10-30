@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler())
 
 logger.info(
-    "Starting FastAPI RESTful API for Transylvania University of Brasov feedback system.\n© Alexandru-Vasile Stelea, Andrei Cristian Sava"
+    "Starting FastAPI RESTful API for the inSight project.\n© Alexandru-Vasile Stelea, Andrei Cristian Sava"
 )
 
 
@@ -45,7 +45,7 @@ async def lifespan(app: FastAPI):
     await FastAPILimiter.close()
 
 
-app = FastAPI(title="feedback-unitbv-api", lifespan=lifespan)
+app = FastAPI(title="insight-api", lifespan=lifespan)
 
 origins = ["*"]
 

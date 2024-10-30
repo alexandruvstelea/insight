@@ -1,6 +1,3 @@
 .vscode
-archive-system/.env
-archive-system/archive_venv
-feedback-unitbv-build/.env
-gmailSecret.txt
+insight-docker-build/.env
 nginx/nginx.conf
