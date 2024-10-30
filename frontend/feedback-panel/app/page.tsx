@@ -5,9 +5,10 @@ import { TutorialBox } from "@/components/tutorialBox/page";
 import FacultySelector from "@/components/facultySelector/page";
 import { fetchFaculties } from "@/utils/fetchers/faculties";
 import { ScrollButton } from "@/components/scrollButton/page";
+import { NextApiRequest } from "next";
 
-export default async function Home() {
-  const faculties = await fetchFaculties();
+export default async function Home(req: NextApiRequest) {
+  const faculties = await fetchFaculties(req);
   return (
     <>
       <div className={styles.landing}>
