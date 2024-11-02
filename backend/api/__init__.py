@@ -47,16 +47,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="insight-api", lifespan=lifespan)
 
-origins = [
-    "http://insightbv.ro",
-    "https://insightbv.ro",
-    "http://www.insightbv.ro",
-    "https://www.insightbv.ro",
-    "http://admin.insightbv.ro",
-    "https://admin.insightbv.ro",
-    "http://voting.insightbv.ro",
-    "https://voting.insightbv.ro"
-]
+origins = ["*"]
 
 
 app.add_middleware(
