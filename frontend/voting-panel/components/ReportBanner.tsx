@@ -1,18 +1,22 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import IssuePopup from "@/components/IssuePopup";
 
 export default function ReportBanner() {
   const [isVisible, setIsVisible] = useState(true);
-  const router = useRouter();
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
 
   const handleDismiss = () => {
     setIsVisible(false);
   };
 
-  const goToReportPage = () => {
-    router.push("/report");
+  const openPopup = () => {
+    setIsPopupVisible(true);
+  };
+
+  const closePopup = () => {
+    setIsPopupVisible(false);
   };
 
   return (
@@ -21,7 +25,7 @@ export default function ReportBanner() {
         <div
           id="sticky-banner"
           tabIndex={-1}
-          className="flex justify-between w-full p-2 border-b border-gray-200 bg-white "
+          className="flex justify-between w-full p-2 border-b border-gray-200 bg-gray-200 "
         >
           <div className="flex items-center mx-auto">
             <p className="flex items-center text-sm font-normal text-gray-500">
@@ -39,7 +43,7 @@ export default function ReportBanner() {
               <span>
                 Ai găsit o eroare?
                 <button
-                  onClick={goToReportPage}
+                  onClick={openPopup}
                   className="ml-4 inline-flex items-center px-2 py-1 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-300"
                 >
                   Raportează
@@ -72,16 +76,15 @@ export default function ReportBanner() {
           </div>
         </div>
       )}
-
       {!isVisible && (
         <div
-          className=" absolute top-3 left-3 p-2 bg-blue-500 text-white rounded-full cursor-pointer"
-          onClick={goToReportPage}
+          className=" absolute top-1 left-1 p-2 bg-gray-700 text-white rounded-full cursor-pointer"
+          onClick={openPopup}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 448 512"
-            className="w-5 h-5 text-gray-500"
+            className="w-3 h-3"
             aria-hidden="true"
             fill="#fff"
           >
@@ -89,6 +92,7 @@ export default function ReportBanner() {
           </svg>
         </div>
       )}
+      {isPopupVisible && <IssuePopup onClose={closePopup} />}
     </>
   );
 }

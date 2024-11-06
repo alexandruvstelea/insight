@@ -21,12 +21,13 @@ export default function RootLayout({
     <html className="bg-black" lang="en">
       <body className={`${montserrat.className} antialiased bg-white`}>
         <div className="flex flex-col min-h-screen justify-between ">
+          <NavigationBar />
+
+          {children}
           <div className="relative">
             <ReportBanner />
-            <NavigationBar />
+            <Footer />
           </div>
-          {children}
-          <Footer />
         </div>
       </body>
     </html>

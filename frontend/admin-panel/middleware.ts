@@ -7,7 +7,7 @@ export async function middleware(req: NextRequest) {
   
   const token = req.cookies.get("access_token"); 
   const loginPage = new URL("/login", req.url);
-  
+
   if (req.nextUrl.pathname === "/login") {
     if (token) {
       const user = await fetchCurrentUser(); 
@@ -26,9 +26,8 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(loginPage);
     } else {
       const user = await fetchCurrentUser(); 
-      
-      if (user && user.current_user?.role !== "admin") {
-        
+      console.log(user)
+      if (user.current_user?.role !== "admin") {
         return NextResponse.redirect(loginPage);
       }
     }
