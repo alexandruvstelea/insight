@@ -25,8 +25,12 @@ export default function ProfessorCard({
       ? `/svg/professors/npc-male.svg`
       : `/svg/professors/npc-female.svg`;
 
+  const removeDiacritics = (str: string) => {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  };
+
   const [imageSrc, setImageSrc] = useState(
-    `/svg/professors/${lastName.toLowerCase()}.svg`
+    `/svg/professors/${removeDiacritics(lastName.toLowerCase())}.svg`
   );
 
   const professorName: string = transformProfessorName(lastName, firstName);

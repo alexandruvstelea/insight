@@ -1,13 +1,20 @@
 .reportFlag {
   position: fixed;
-  bottom: 12px;
-  background-color: transparent;
-  left: 12px;
+  bottom: 6px;
+  left: 6px;
   border: none;
   cursor: pointer;
   z-index: 2000;
-  height: 32px;
+  height: 24px;
   width: auto;
+  background-image: var(--main-gradient);
+  padding: 6px;
+  border-radius: 50%;
+  transition: all 0.3s ease-in-out;
+}
+
+.reportFlag:hover {
+  transform: scale(1.1);
 }
 
 .popUp {
@@ -15,11 +22,12 @@
   bottom: 64px;
   left: 12px;
   padding: 16px;
-  background-color: white;
+  background-color: #f0f0f0;
   box-shadow: 0px 4px 4px #00000030, 0px 12px 12px #00000015;
   border-radius: 8px;
   z-index: 1001;
-  width: 256px;
+  width: 80%;
+  max-width: 400px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -35,9 +43,16 @@
   width: 95%;
   height: 128px;
   border-radius: 8px;
-  border: 1px solid #ccc;
-  padding: 4px;
+  border: 2px solid #ccc;
+  padding: 6px;
   resize: none;
+  background-color: #f0f0f0;
+  transition: all 0.15s ease-in-out;
+}
+
+.textArea:focus {
+  outline: none;
+  border-color: var(--main-blue-dark);
 }
 
 .submitButton {
@@ -48,6 +63,12 @@
   border: none;
   cursor: pointer;
   width: 95%;
+  font-weight: bold;
+  transition: all 0.3s ease-in-out;
+}
+
+.submitButton:hover {
+  background-color: var(--main-blue-light);
 }
 
 .closeButton {
@@ -55,4 +76,10 @@
   background: transparent;
   border: none;
   cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease-in-out;
+}
+
+.closeButton:hover {
+  font-weight: 700;
 }
