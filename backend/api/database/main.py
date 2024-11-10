@@ -36,6 +36,7 @@ async def init_db():
         from .models.ratings import Rating
         from .models.comments import Comment
         from .models.user import User
+        from .models.vote_limiter import VoteLimiter
 
         await conn.run_sync(AlchemyAsyncBase.metadata.create_all)
         logger.info("Database initialization complete.")

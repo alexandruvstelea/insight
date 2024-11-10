@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 def rating_to_out(rating: Rating):
     if rating:
-        logger.info(f"Converting rating {rating} to RatingOut format.")
+        logger.info(f"Converting rating to RatingOut format.")
         ro_timezone = pytz.timezone("Europe/Bucharest")
         if rating.timestamp.tzinfo is None:
             rating.timestamp = pytz.utc.localize(rating.timestamp)

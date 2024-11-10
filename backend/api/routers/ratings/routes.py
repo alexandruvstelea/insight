@@ -7,6 +7,7 @@ from fastapi_limiter.depends import RateLimiter
 from http import HTTPStatus
 from typing import List
 import logging
+from ...utility.vote_limiter import vote_limiter
 
 logger = logging.getLogger(__name__)
 ratings_routes = APIRouter(prefix="/api/ratings")
@@ -101,7 +102,6 @@ async def get_graph_ratings(
 @ratings_routes.post(
     "/",
     response_model=RatingOut,
-    dependencies=[Depends(RateLimiter(times=50, minutes=1))],
     status_code=HTTPStatus.CREATED,
 )
 async def add_rating(
@@ -110,6 +110,8 @@ async def add_rating(
     session: AsyncSession = Depends(get_session),
 ) -> RatingOut:
     logger.info(f"Received POST request on endpoint /api/ratings from IP {client_ip}.")
+    if client_ip:
+        await vote_limiter(client_ip, session)
     response = await RatingOperations(session).add_rating(rating_data)
     return response
 
