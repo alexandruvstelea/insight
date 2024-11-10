@@ -41,7 +41,7 @@ const SessionForm: React.FC<{
 
         try {
           const response = await fetch(
-            `${process.env.API_URL}/subjects?faculty_id=${selectedFaculty}`
+            `${process.env.API_URL}/subjects/?faculty_id=${selectedFaculty}`
           );
 
           if (response.status === 404) {
@@ -116,7 +116,7 @@ const SessionForm: React.FC<{
     try {
       const url = isEditMode
         ? `${process.env.API_URL}/sessions/${session?.id}`
-        : `${process.env.API_URL}/sessions`;
+        : `${process.env.API_URL}/sessions/`;
       const method = isEditMode ? "PUT" : "POST";
 
       const response = await fetch(url, {

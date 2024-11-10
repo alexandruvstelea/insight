@@ -1,8 +1,4 @@
-import { cookies } from 'next/headers'; 
-
-export const fetchCurrentUser = async () => {
-  const cookieStore = cookies();
-  const token = cookieStore.get('access_token')?.value; 
+export const fetchCurrentUser = async (token: string) => {
 
   if (!token) {
     console.error("No token found");
@@ -14,7 +10,7 @@ export const fetchCurrentUser = async () => {
     cache: "no-store",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`, 
+      Authorization: `Bearer ${token}`,
     },
   });
 

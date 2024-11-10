@@ -35,7 +35,7 @@ const ProfessorForm: React.FC<{
     try {
       const url = isEditMode
         ? `${process.env.API_URL}/professors/${professor?.id}`
-        : `${process.env.API_URL}/professors`;
+        : `${process.env.API_URL}/professors/`;
       const method = isEditMode ? "PUT" : "POST";
 
       const response = await fetch(url, {

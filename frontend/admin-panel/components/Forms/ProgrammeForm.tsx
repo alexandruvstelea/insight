@@ -46,7 +46,7 @@ const ProgrammeForm: React.FC<{
     try {
       const url = isEditMode
         ? `${process.env.API_URL}/programmes/${programme?.id}`
-        : `${process.env.API_URL}/programmes`;
+        : `${process.env.API_URL}/programmes/`;
       const method = isEditMode ? "PUT" : "POST";
 
       const response = await fetch(url, {

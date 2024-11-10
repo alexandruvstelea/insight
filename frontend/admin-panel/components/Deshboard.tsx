@@ -57,8 +57,10 @@ export default function Desboard(): JSX.Element {
       const response = await fetch(url, {
         cache: "no-store",
         credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
-
       if (!response.ok) {
         if (response.status === 404) {
           setState([]);
@@ -102,17 +104,17 @@ export default function Desboard(): JSX.Element {
   useEffect(() => {
     const fetchInitialData = async () => {
       await Promise.all([
-        fetchData(`${process.env.API_URL}/weeks`, setWeeks),
-        fetchData(`${process.env.API_URL}/faculties`, setFaculties),
-        fetchData(`${process.env.API_URL}/buildings`, setBuildings),
-        fetchData(`${process.env.API_URL}/rooms`, setRooms),
-        fetchData(`${process.env.API_URL}/programmes`, setProgrammes),
-        fetchData(`${process.env.API_URL}/professors`, setProfessors),
-        fetchData(`${process.env.API_URL}/subjects`, setSubjects),
-        fetchData(`${process.env.API_URL}/sessions`, setSessions),
-        fetchData(`${process.env.API_URL}/comments`, setComments),
-        fetchData(`${process.env.API_URL}/users`, setUsers),
-        fetchData(`${process.env.API_URL}/reports`, setBugReports),
+        fetchData(`${process.env.API_URL}/weeks/`, setWeeks),
+        fetchData(`${process.env.API_URL}/faculties/`, setFaculties),
+        fetchData(`${process.env.API_URL}/buildings/`, setBuildings),
+        fetchData(`${process.env.API_URL}/rooms/`, setRooms),
+        fetchData(`${process.env.API_URL}/programmes/`, setProgrammes),
+        fetchData(`${process.env.API_URL}/professors/`, setProfessors),
+        fetchData(`${process.env.API_URL}/subjects/`, setSubjects),
+        fetchData(`${process.env.API_URL}/sessions/`, setSessions),
+        fetchData(`${process.env.API_URL}/comments/`, setComments),
+        fetchData(`${process.env.API_URL}/users/`, setUsers),
+        fetchData(`${process.env.API_URL}/reports/`, setBugReports),
       ]);
     };
     fetchInitialData();
@@ -120,27 +122,27 @@ export default function Desboard(): JSX.Element {
 
   useEffect(() => {
     if (openTable === "faculties")
-      fetchData(`${process.env.API_URL}/faculties`, setFaculties);
+      fetchData(`${process.env.API_URL}/faculties/`, setFaculties);
     if (openTable === "buildings")
-      fetchData(`${process.env.API_URL}/buildings`, setBuildings);
+      fetchData(`${process.env.API_URL}/buildings/`, setBuildings);
     if (openTable === "professors")
-      fetchData(`${process.env.API_URL}/professors`, setProfessors);
+      fetchData(`${process.env.API_URL}/professors/`, setProfessors);
     if (openTable === "programmes")
-      fetchData(`${process.env.API_URL}/programmes`, setProgrammes);
+      fetchData(`${process.env.API_URL}/programmes/`, setProgrammes);
     if (openTable === "rooms")
-      fetchData(`${process.env.API_URL}/rooms`, setRooms);
+      fetchData(`${process.env.API_URL}/rooms/`, setRooms);
     if (openTable === "sessions")
-      fetchData(`${process.env.API_URL}/sessions`, setSessions);
+      fetchData(`${process.env.API_URL}/sessions/`, setSessions);
     if (openTable === "subjects")
-      fetchData(`${process.env.API_URL}/subjects`, setSubjects);
+      fetchData(`${process.env.API_URL}/subjects/`, setSubjects);
     if (openTable === "weeks")
-      fetchData(`${process.env.API_URL}/weeks`, setWeeks);
+      fetchData(`${process.env.API_URL}/weeks/`, setWeeks);
     if (openTable === "comments")
-      fetchData(`${process.env.API_URL}/comments`, setComments);
+      fetchData(`${process.env.API_URL}/comments/`, setComments);
     if (openTable === "users")
-      fetchData(`${process.env.API_URL}/users`, setUsers);
+      fetchData(`${process.env.API_URL}/users/`, setUsers);
     if (openTable === "reports")
-      fetchData(`${process.env.API_URL}/reports`, setBugReports);
+      fetchData(`${process.env.API_URL}/reports/`, setBugReports);
   }, [openTable]);
 
   return (
@@ -259,7 +261,7 @@ export default function Desboard(): JSX.Element {
           <WeekTable
             weeks={weeks}
             fetchWeeks={() =>
-              fetchData(`${process.env.API_URL}/weeks`, setWeeks)
+              fetchData(`${process.env.API_URL}/weeks/`, setWeeks)
             }
           />
         )}
@@ -271,7 +273,7 @@ export default function Desboard(): JSX.Element {
             professors={professors}
             programmes={programmes}
             fetchFaculties={() =>
-              fetchData(`${process.env.API_URL}/faculties`, setFaculties)
+              fetchData(`${process.env.API_URL}/faculties/`, setFaculties)
             }
           />
         )}
@@ -281,7 +283,7 @@ export default function Desboard(): JSX.Element {
             rooms={rooms}
             faculties={faculties}
             fetchBuildings={() =>
-              fetchData(`${process.env.API_URL}/buildings`, setBuildings)
+              fetchData(`${process.env.API_URL}/buildings/`, setBuildings)
             }
           />
         )}
@@ -291,7 +293,7 @@ export default function Desboard(): JSX.Element {
             sessions={sessions}
             buildings={buildings}
             fetchRooms={() =>
-              fetchData(`${process.env.API_URL}/rooms`, setRooms)
+              fetchData(`${process.env.API_URL}/rooms/`, setRooms)
             }
           />
         )}
@@ -301,7 +303,7 @@ export default function Desboard(): JSX.Element {
             faculties={faculties}
             subjects={subjects}
             fetchProgrammes={() =>
-              fetchData(`${process.env.API_URL}/programmes`, setProgrammes)
+              fetchData(`${process.env.API_URL}/programmes/`, setProgrammes)
             }
           />
         )}
@@ -310,7 +312,7 @@ export default function Desboard(): JSX.Element {
             professors={professors}
             faculties={faculties}
             fetchProfessors={() =>
-              fetchData(`${process.env.API_URL}/professors`, setProfessors)
+              fetchData(`${process.env.API_URL}/professors/`, setProfessors)
             }
           />
         )}
@@ -321,7 +323,7 @@ export default function Desboard(): JSX.Element {
             sessions={sessions}
             professors={professors}
             fetchSubjects={() =>
-              fetchData(`${process.env.API_URL}/subjects`, setSubjects)
+              fetchData(`${process.env.API_URL}/subjects/`, setSubjects)
             }
           />
         )}
@@ -332,7 +334,7 @@ export default function Desboard(): JSX.Element {
             faculties={faculties}
             subjects={subjects}
             fetchSessions={() =>
-              fetchData(`${process.env.API_URL}/sessions`, setSessions)
+              fetchData(`${process.env.API_URL}/sessions/`, setSessions)
             }
           />
         )}
@@ -340,7 +342,7 @@ export default function Desboard(): JSX.Element {
           <CommentTable
             comments={comments}
             fetchComments={() =>
-              fetchData(`${process.env.API_URL}/comments`, setComments)
+              fetchData(`${process.env.API_URL}/comments/`, setComments)
             }
           />
         )}
@@ -348,7 +350,7 @@ export default function Desboard(): JSX.Element {
           <UserTable
             users={users}
             fetchUsers={() =>
-              fetchData(`${process.env.API_URL}/users`, setUsers)
+              fetchData(`${process.env.API_URL}/users/`, setUsers)
             }
           />
         )}
@@ -356,7 +358,7 @@ export default function Desboard(): JSX.Element {
           <BugReportTable
             bugReports={bugReports}
             fetchBugReports={() =>
-              fetchData(`${process.env.API_URL}/reports`, setBugReports)
+              fetchData(`${process.env.API_URL}/reports/`, setBugReports)
             }
           />
         )}

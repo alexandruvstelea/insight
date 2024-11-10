@@ -13,11 +13,11 @@ export default async function Home({
   }
 
   const roomCode = searchParams.roomCode;
-  const timestamp = "2023-10-02T10:35:59.961Z";
+  const timestamp = new Date().toISOString();
 
   try {
     const sessionResponse = await fetch(
-      `${process.env.API_URL}/sessions/filter/current?room_code=${roomCode}&timestamp=${timestamp}`,
+      `${process.env.API_URL}/sessions/filter/current/?room_code=${roomCode}&timestamp=${timestamp}`,
       { cache: "no-store" }
     );
 
@@ -35,9 +35,10 @@ export default async function Home({
 
     const sessionData = await sessionResponse.json();
     const fetchedSubjectId = sessionData.subject.id;
+    const fetchedSubjectName = sessionData.subject.name;
 
     const programmeResponse = await fetch(
-      `${process.env.API_URL}/programmes?subject_id=${fetchedSubjectId}`,
+      `${process.env.API_URL}/programmes/?subject_id=${fetchedSubjectId}`,
       { cache: "no-store" }
     );
 
@@ -59,6 +60,7 @@ export default async function Home({
           programmes={programmes}
           roomCode={roomCode}
           timestamp={timestamp}
+          subjectName={fetchedSubjectName}
         />
       </>
     );

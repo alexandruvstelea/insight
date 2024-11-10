@@ -17,7 +17,7 @@ const IssuePopup: React.FC<IssuePopupProps> = ({ onClose }) => {
     const timestamp = new Date().toISOString();
 
     try {
-      const response = await fetch(`${process.env.API_URL}/reports`, {
+      const response = await fetch(`${process.env.API_URL}/reports/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

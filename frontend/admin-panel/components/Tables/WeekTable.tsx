@@ -16,7 +16,7 @@ const WeekTable: FC<WeekTableProps> = ({ weeks = [], fetchWeeks }) => {
   const handleDeleteAll = async () => {
     if (confirm("Sigur doriți să ștergeți toate săptămânile?")) {
       try {
-        const response = await fetch(`${process.env.API_URL}/weeks`, {
+        const response = await fetch(`${process.env.API_URL}/weeks/`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",

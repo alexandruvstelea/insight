@@ -8,7 +8,7 @@ export const sendIssueReport = async (issueText: string) => {
   const now = new Date();
   const timestamp = now.toISOString().split(".")[0];
 
-  const response = await fetch(`${API_URL}/reports`, {
+  const response = await fetch(`${API_URL}/reports/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

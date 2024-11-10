@@ -23,7 +23,7 @@ const WeekForm: React.FC<{
     };
 
     try {
-      const response = await fetch(`${process.env.API_URL}/weeks`, {
+      const response = await fetch(`${process.env.API_URL}/weeks/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

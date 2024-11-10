@@ -13,14 +13,16 @@ interface FormProps {
   programmes: Programme[];
   roomCode: string;
   timestamp: string;
+  subjectName: string;
 }
 
 const Form: React.FC<FormProps> = ({
-  // latitude,
-  // longitude,
+  latitude,
+  longitude,
   programmes,
   roomCode,
   timestamp,
+  subjectName,
 }) => {
   const [selectedProgramme, setSelectedProgramme] = useState<string>("");
   const [showPopup, setShowPopup] = useState(false);
@@ -36,8 +38,8 @@ const Form: React.FC<FormProps> = ({
   const router = useRouter();
 
   const startTime = useRef<number | null>(null);
-  const latitude = 45.644123;
-  const longitude = 25.595302;
+  // const latitude = 45.644123;
+  // const longitude = 25.595302;
 
   useEffect(() => {
     const calculateTimeLeftToEvenHour = () => {
@@ -170,8 +172,8 @@ const Form: React.FC<FormProps> = ({
     comments: string,
     programme_id: number,
     roomCode: string,
-    latitude: number,
-    longitude: number
+    latitude: number | null,
+    longitude: number | null
   ) {
     const commentData = {
       text: comments,
@@ -183,7 +185,7 @@ const Form: React.FC<FormProps> = ({
     };
 
     try {
-      const response = await fetch(`${process.env.API_URL}/comments`, {
+      const response = await fetch(`${process.env.API_URL}/comments/`, {
         method: "POST",
         cache: "no-store",
         headers: {
@@ -202,6 +204,7 @@ const Form: React.FC<FormProps> = ({
 
   return (
     <div className="max-w-md w-full mx-auto">
+      <h2 className="text-center text-xl font-bold">- {subjectName} -</h2>
       <p
         className={`text-center ${
           timeLeft <= 60 ? "text-red-500" : "text-black"

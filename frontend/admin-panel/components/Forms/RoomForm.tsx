@@ -39,7 +39,7 @@ const RoomForm: React.FC<{
     try {
       const url = isEditMode
         ? `${process.env.API_URL}/rooms/${room?.id}`
-        : `${process.env.API_URL}/rooms`;
+        : `${process.env.API_URL}/rooms/`;
       const method = isEditMode ? "PUT" : "POST";
 
       const response = await fetch(url, {

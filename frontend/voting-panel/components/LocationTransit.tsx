@@ -11,12 +11,14 @@ interface LocationTransitProps {
   programmes: Programme[];
   roomCode: string;
   timestamp: string;
+  subjectName: string;
 }
 
 const LocationTransit: React.FC<LocationTransitProps> = ({
   programmes,
   roomCode,
   timestamp,
+  subjectName,
 }) => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -32,17 +34,27 @@ const LocationTransit: React.FC<LocationTransitProps> = ({
         .query({ name: "geolocation" })
         .then((permissionStatus) => {
           if (permissionStatus.state === "granted") {
-            setError(null);
-            setLoading(false);
+            navigator.geolocation.getCurrentPosition(
+              (position) => {
+                setError(null);
+                setLatitude(position.coords.latitude);
+                setLongitude(position.coords.longitude);
+                setLoading(false);
+              },
+              (err) => {
+                handleGeolocationError(err);
+                setLoading(false);
+              }
+            );
           } else {
             setPrompting(true);
             navigator.geolocation.getCurrentPosition(
               (position) => {
                 setError(null);
-                setLoading(false);
-                setPrompting(false);
                 setLatitude(position.coords.latitude);
                 setLongitude(position.coords.longitude);
+                setPrompting(false);
+                setLoading(false);
               },
               (err) => {
                 setPrompting(false);
@@ -57,10 +69,10 @@ const LocationTransit: React.FC<LocationTransitProps> = ({
           navigator.geolocation.getCurrentPosition(
             (position) => {
               setError(null);
-              setLoading(false);
-              setPrompting(false);
               setLatitude(position.coords.latitude);
               setLongitude(position.coords.longitude);
+              setPrompting(false);
+              setLoading(false);
             },
             (err) => {
               setPrompting(false);
@@ -159,14 +171,18 @@ const LocationTransit: React.FC<LocationTransitProps> = ({
   }
 
   return (
-    <Form
-      latitude={latitude}
-      longitude={longitude}
-      programmes={programmes}
-      roomCode={roomCode}
-      timestamp={timestamp}
-    />
+    <>
+      {latitude && longitude && (
+        <Form
+          latitude={latitude as number}
+          longitude={longitude as number}
+          programmes={programmes}
+          roomCode={roomCode}
+          timestamp={timestamp}
+          subjectName={subjectName}
+        />
+      )}
+    </>
   );
 };
-
 export default LocationTransit;

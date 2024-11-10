@@ -72,7 +72,7 @@ const SubjectForm: React.FC<{
     try {
       const url = isEditMode
         ? `${process.env.API_URL}/subjects/${subject?.id}`
-        : `${process.env.API_URL}/subjects`;
+        : `${process.env.API_URL}/subjects/`;
       const method = isEditMode ? "PUT" : "POST";
 
       const response = await fetch(url, {

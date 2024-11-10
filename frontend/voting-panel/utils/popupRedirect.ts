@@ -4,7 +4,7 @@ import { Router } from "next/router";
 export function handlePopupRedirect(
   showPopup: boolean,
   setRedirectCountdown: React.Dispatch<React.SetStateAction<number>>,
-  router: AppRouterInstance 
+  router: AppRouterInstance
 ) {
   if (showPopup) {
     const countdownInterval = setInterval(() => {
@@ -12,7 +12,7 @@ export function handlePopupRedirect(
     }, 1000);
 
     const redirectTimeout = setTimeout(() => {
-      router.push("https://www.google.com");
+      router.push("https://www.insightbv.ro");
     }, 5000);
 
     return () => {
