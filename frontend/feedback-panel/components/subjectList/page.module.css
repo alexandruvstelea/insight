@@ -70,11 +70,6 @@
 }
 
 @media screen and (min-width: 1280px) {
-  .professorClasses:hover {
-    box-shadow: 0px 4px 4px var(--main-blue-dark),
-      0px 12px 12px var(--main-blue-light);
-    transform: scale(1.001);
-  }
 }
 
 @media screen and (min-width: 1600px) {
