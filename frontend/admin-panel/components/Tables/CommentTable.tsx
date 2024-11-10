@@ -3,13 +3,13 @@ import { Comment } from "@/utils/types";
 import { CommentTableProps } from "@/utils/interfaces";
 import TableActions from "@/components/TableActions";
 import HeaderSection from "@/components/HeaderSection";
-import SuccessToast from "@/components/SuccessToast";
-import ErrorToast from "@/components/ErrorToast";
+import { useNotification } from "@/context/NotificationContext";
 
 const CommentTable: FC<CommentTableProps> = ({
   comments = [],
   fetchComments,
 }) => {
+  const { notify } = useNotification();
   const [showSuccessToast, setShowSuccessToast] = useState(false);
   const [showErrorToast, setShowErrorToast] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -27,11 +27,10 @@ const CommentTable: FC<CommentTableProps> = ({
         if (!response.ok) {
           throw new Error(`Eroare ${response.status}: ${response.statusText}`);
         }
-        setShowSuccessToast(true);
+        notify("Comentariul a fost ștears cu succes.", "success");
         fetchComments();
       } catch (error: any) {
-        setErrorMessage(error.message);
-        setShowErrorToast(true);
+        notify(error.message, "error");
       }
     }
   };
@@ -187,19 +186,6 @@ const CommentTable: FC<CommentTableProps> = ({
                 Nu există comentarii
               </td>
             </tr>
-          )}
-          {showSuccessToast && (
-            <SuccessToast
-              message="Comentariul a fost ștears cu succes."
-              onClose={() => setShowSuccessToast(false)}
-            />
-          )}
-
-          {showErrorToast && (
-            <ErrorToast
-              message={errorMessage}
-              onClose={() => setShowErrorToast(false)}
-            />
           )}
         </tbody>
       </table>

@@ -4,13 +4,10 @@ import { useState, FC } from "react";
 import { UserTableProps } from "@/utils/interfaces";
 import HeaderSection from "@/components/HeaderSection";
 import TableActions from "@/components/TableActions";
-import SuccessToast from "@/components/SuccessToast";
-import ErrorToast from "@/components/ErrorToast";
+import { useNotification } from "@/context/NotificationContext";
 
 const UserTable: FC<UserTableProps> = ({ users = [], fetchUsers }) => {
-  const [showSuccessToast, setShowSuccessToast] = useState(false);
-  const [showErrorToast, setShowErrorToast] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const { notify } = useNotification();
 
   const handleDelete = async (id: number) => {
     if (confirm("Sigur doriți să ștergeți acest user?")) {
@@ -25,11 +22,11 @@ const UserTable: FC<UserTableProps> = ({ users = [], fetchUsers }) => {
         if (!response.ok) {
           throw new Error(`Eroare ${response.status}: ${response.statusText}`);
         }
-        setShowSuccessToast(true);
+
+        notify("User-ul a fost sters cu succes.", "success");
         fetchUsers();
       } catch (error: any) {
-        setErrorMessage(error.message);
-        setShowErrorToast(true);
+        notify(error.message, "error");
       }
     }
   };
@@ -90,19 +87,6 @@ const UserTable: FC<UserTableProps> = ({ users = [], fetchUsers }) => {
           </tbody>
         </table>
       </div>
-      {showSuccessToast && (
-        <SuccessToast
-          message="User-ul a fost ștearsă cu succes."
-          onClose={() => setShowSuccessToast(false)}
-        />
-      )}
-
-      {showErrorToast && (
-        <ErrorToast
-          message={errorMessage}
-          onClose={() => setShowErrorToast(false)}
-        />
-      )}
     </>
   );
 };

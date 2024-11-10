@@ -22,15 +22,7 @@ export default async function Home({
     );
 
     if (!sessionResponse.ok) {
-      if (sessionResponse.status === 404) {
-        redirect("/timestampOrRoomCodeInvalid");
-      } else if (sessionResponse.status === 500) {
-        redirect("/error500");
-      } else if (sessionResponse.status === 429) {
-        redirect("/toManyRequests");
-      } else {
-        redirect("/generalError");
-      }
+      throw new Error(`Session Error: ${sessionResponse.status}`);
     }
 
     const sessionData = await sessionResponse.json();
@@ -65,6 +57,23 @@ export default async function Home({
       </>
     );
   } catch (error) {
-    return redirect("/generalError");
+    if (error instanceof Error) {
+      const errorMessage = error.message;
+
+      const statusMatch = errorMessage.match(/(\d{3})/);
+      const status = statusMatch ? statusMatch[0] : "generalError";
+
+      if (status === "404") {
+        return redirect("/timestampOrRoomCodeInvalid");
+      } else if (status === "500") {
+        return redirect("/error500");
+      } else if (status === "429") {
+        return redirect("/toManyRequests");
+      } else {
+        return redirect("/generalError");
+      }
+    } else {
+      return redirect("/generalError");
+    }
   }
 }

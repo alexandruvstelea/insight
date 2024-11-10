@@ -7,8 +7,7 @@ import BuildingForm from "@/components/Forms/BuildingForm";
 import { BuildingTableProps } from "@/utils/interfaces";
 import TableActions from "@/components/TableActions";
 import HeaderSection from "@/components/HeaderSection";
-import SuccessToast from "@/components/SuccessToast";
-import ErrorToast from "@/components/ErrorToast";
+import { useNotification } from "@/context/NotificationContext";
 
 const BuildingTable: FC<BuildingTableProps> = ({
   buildings = [],
@@ -16,6 +15,7 @@ const BuildingTable: FC<BuildingTableProps> = ({
   faculties,
   fetchBuildings,
 }) => {
+  const { notify } = useNotification();
   const [isRoomsModalOpen, setIsRoomsModalOpen] = useState(false);
   const [isFacultiesModalOpen, setIsFacultiesModalOpen] = useState(false);
 
@@ -26,10 +26,6 @@ const BuildingTable: FC<BuildingTableProps> = ({
   const [isEditBuildingModalOpen, setIsEditBuildingModalOpen] = useState(false);
 
   const [buildingToEdit, setBuildingToEdit] = useState<Building | null>(null);
-
-  const [showSuccessToast, setShowSuccessToast] = useState(false);
-  const [showErrorToast, setShowErrorToast] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
 
   const handleEdit = (building: Building) => {
     setBuildingToEdit(building);
@@ -49,11 +45,11 @@ const BuildingTable: FC<BuildingTableProps> = ({
         if (!response.ok) {
           throw new Error(`Eroare ${response.status}: ${response.statusText}`);
         }
-        setShowSuccessToast(true);
+        notify("Clădirea a fost ștearsă cu succes.", "success");
+
         fetchBuildings();
       } catch (error: any) {
-        setErrorMessage(error.message);
-        setShowErrorToast(true);
+        notify(error.message, "error");
       }
     }
   };
@@ -211,19 +207,6 @@ const BuildingTable: FC<BuildingTableProps> = ({
           title="Facultăți"
           onClose={() => setIsFacultiesModalOpen(false)}
           renderItem={(faculty) => <>{faculty.name}</>}
-        />
-      )}
-      {showSuccessToast && (
-        <SuccessToast
-          message="Clădirea a fost ștearsă cu succes."
-          onClose={() => setShowSuccessToast(false)}
-        />
-      )}
-
-      {showErrorToast && (
-        <ErrorToast
-          message={errorMessage}
-          onClose={() => setShowErrorToast(false)}
         />
       )}
     </>

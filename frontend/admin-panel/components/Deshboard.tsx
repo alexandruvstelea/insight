@@ -1,5 +1,6 @@
 "use client";
 
+import { NotificationProvider } from "@/context/NotificationContext";
 import FacultyTable from "@/components/Tables/FacultyTable";
 import RoomTable from "@/components/Tables/RoomTable";
 import BuildingTable from "@/components/Tables/BuildingTable";
@@ -147,222 +148,228 @@ export default function Desboard(): JSX.Element {
 
   return (
     <>
-      <div
-        className={`fixed top-0 left-0 z-40 w-64 h-screen p-4 rounded-r-xl overflow-y-auto transition-transform duration-300  ${
-          isOpen ? "translate-x-0" : "-translate-x-[80%]"
-        }  bg-gray-800`}
-        tabIndex={-1}
-      >
-        <h5
-          className={`text-base font-semibold uppercase text-gray-400 ${
-            showList ? "block" : "hidden"
-          }`}
+      <NotificationProvider>
+        <div
+          className={`fixed top-0 left-0 z-40 w-64 h-screen p-4 rounded-r-xl overflow-y-auto transition-transform duration-300  ${
+            isOpen ? "translate-x-0" : "-translate-x-[80%]"
+          }  bg-gray-800`}
+          tabIndex={-1}
         >
-          Meniu
-        </h5>
-        <button
-          type="button"
-          onClick={toggleDrawer}
-          className="rounded-lg p-1.5 absolute top-2.5 end-2.5 transition duration-300 hover:bg-gray-600 "
-        >
-          <img src="/svgs/menu.svg" className="w-auto  h-6" alt="Menu" />
-        </button>
-        <div className="py-4 overflow-y-auto">
-          <ul className={`space-y-2 ${showList ? "block" : "hidden"}`}>
-            <MenuItem
-              label="Săptămâni"
-              isActive={activeTable === "weeks"}
-              onClick={() => handleTableToggle("weeks")}
-            />
-            <MenuItem
-              label="Facultăți"
-              isActive={activeTable === "faculties"}
-              onClick={() => handleTableToggle("faculties")}
-            />
-            <MenuItem
-              label="Clădiri"
-              isActive={activeTable === "buildings"}
-              onClick={() => handleTableToggle("buildings")}
-            />
-            <MenuItem
-              label="Săli"
-              isActive={activeTable === "rooms"}
-              onClick={() => handleTableToggle("rooms")}
-            />
-            <MenuItem
-              label="Specializări"
-              isActive={activeTable === "programmes"}
-              onClick={() => handleTableToggle("programmes")}
-            />
-            <MenuItem
-              label="Profesori"
-              isActive={activeTable === "professors"}
-              onClick={() => handleTableToggle("professors")}
-            />
-            <MenuItem
-              label="Materii"
-              isActive={activeTable === "subjects"}
-              onClick={() => handleTableToggle("subjects")}
-            />
-            <MenuItem
-              label="Ore"
-              isActive={activeTable === "sessions"}
-              onClick={() => handleTableToggle("sessions")}
-            />
-            <MenuItem
-              label="Comentarii"
-              isActive={activeTable === "comments"}
-              onClick={() => handleTableToggle("comments")}
-            />
-            <MenuItem
-              label="Users"
-              isActive={activeTable === "users"}
-              onClick={() => handleTableToggle("users")}
-            />
-            <MenuItem
-              label="Rapoarte"
-              isActive={activeTable === "reports"}
-              onClick={() => handleTableToggle("reports")}
-            />
-          </ul>
-          <button
-            type="button"
-            onClick={() => handleTableToggle("bugReport")}
-            className={`rounded-lg p-1.5 absolute bottom-2.5 start-2 transition duration-300 hover:bg-gray-600 ${
-              activeTable === "bugReport"
-                ? "bg-gray-600 text-white"
-                : "text-white"
+          <h5
+            className={`text-base font-semibold uppercase text-gray-400 ${
+              showList ? "block" : "hidden"
             }`}
           >
-            <img src="/svgs/flag.svg" className="w-auto h-6" alt="Bag report" />
+            Meniu
+          </h5>
+          <button
+            type="button"
+            onClick={toggleDrawer}
+            className="rounded-lg p-1.5 absolute top-2.5 end-2.5 transition duration-300 hover:bg-gray-600 "
+          >
+            <img src="/svgs/menu.svg" className="w-auto  h-6" alt="Menu" />
+          </button>
+          <div className="py-4 overflow-y-auto">
+            <ul className={`space-y-2 ${showList ? "block" : "hidden"}`}>
+              <MenuItem
+                label="Săptămâni"
+                isActive={activeTable === "weeks"}
+                onClick={() => handleTableToggle("weeks")}
+              />
+              <MenuItem
+                label="Facultăți"
+                isActive={activeTable === "faculties"}
+                onClick={() => handleTableToggle("faculties")}
+              />
+              <MenuItem
+                label="Clădiri"
+                isActive={activeTable === "buildings"}
+                onClick={() => handleTableToggle("buildings")}
+              />
+              <MenuItem
+                label="Săli"
+                isActive={activeTable === "rooms"}
+                onClick={() => handleTableToggle("rooms")}
+              />
+              <MenuItem
+                label="Specializări"
+                isActive={activeTable === "programmes"}
+                onClick={() => handleTableToggle("programmes")}
+              />
+              <MenuItem
+                label="Profesori"
+                isActive={activeTable === "professors"}
+                onClick={() => handleTableToggle("professors")}
+              />
+              <MenuItem
+                label="Materii"
+                isActive={activeTable === "subjects"}
+                onClick={() => handleTableToggle("subjects")}
+              />
+              <MenuItem
+                label="Ore"
+                isActive={activeTable === "sessions"}
+                onClick={() => handleTableToggle("sessions")}
+              />
+              <MenuItem
+                label="Comentarii"
+                isActive={activeTable === "comments"}
+                onClick={() => handleTableToggle("comments")}
+              />
+              <MenuItem
+                label="Users"
+                isActive={activeTable === "users"}
+                onClick={() => handleTableToggle("users")}
+              />
+              <MenuItem
+                label="Rapoarte"
+                isActive={activeTable === "reports"}
+                onClick={() => handleTableToggle("reports")}
+              />
+            </ul>
+            <button
+              type="button"
+              onClick={() => handleTableToggle("bugReport")}
+              className={`rounded-lg p-1.5 absolute bottom-2.5 start-2 transition duration-300 hover:bg-gray-600 ${
+                activeTable === "bugReport"
+                  ? "bg-gray-600 text-white"
+                  : "text-white"
+              }`}
+            >
+              <img
+                src="/svgs/flag.svg"
+                className="w-auto h-6"
+                alt="Bag report"
+              />
+            </button>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => handleTableToggle("info")}
+            className={
+              "rounded-lg p-1.5 absolute bottom-2.5 end-2 transition duration-300 hover:bg-gray-600 "
+            }
+          >
+            <img src="/svgs/info.svg" className="w-auto  h-6" alt="Info" />
           </button>
         </div>
 
-        <button
-          type="button"
-          onClick={() => handleTableToggle("info")}
-          className={
-            "rounded-lg p-1.5 absolute bottom-2.5 end-2 transition duration-300 hover:bg-gray-600 "
-          }
+        <div
+          className={`transition-all ease-in-out duration-300 ${
+            isOpen ? "ml-64" : "ml-12"
+          } p-4`}
         >
-          <img src="/svgs/info.svg" className="w-auto  h-6" alt="Info" />
-        </button>
-      </div>
+          {openTable === "info" && <InfoTab />}
+          {openTable === "bugReport" && <ReportForm />}
 
-      <div
-        className={`transition-all ease-in-out duration-300 ${
-          isOpen ? "ml-64" : "ml-12"
-        } p-4`}
-      >
-        {openTable === "info" && <InfoTab />}
-        {openTable === "bugReport" && <ReportForm />}
+          {openTable === "weeks" && (
+            <WeekTable
+              weeks={weeks}
+              fetchWeeks={() =>
+                fetchData(`${process.env.API_URL}/weeks/`, setWeeks)
+              }
+            />
+          )}
 
-        {openTable === "weeks" && (
-          <WeekTable
-            weeks={weeks}
-            fetchWeeks={() =>
-              fetchData(`${process.env.API_URL}/weeks/`, setWeeks)
-            }
-          />
-        )}
-
-        {openTable === "faculties" && (
-          <FacultyTable
-            faculties={faculties}
-            buildings={buildings}
-            professors={professors}
-            programmes={programmes}
-            fetchFaculties={() =>
-              fetchData(`${process.env.API_URL}/faculties/`, setFaculties)
-            }
-          />
-        )}
-        {openTable === "buildings" && (
-          <BuildingTable
-            buildings={buildings}
-            rooms={rooms}
-            faculties={faculties}
-            fetchBuildings={() =>
-              fetchData(`${process.env.API_URL}/buildings/`, setBuildings)
-            }
-          />
-        )}
-        {openTable === "rooms" && (
-          <RoomTable
-            rooms={rooms}
-            sessions={sessions}
-            buildings={buildings}
-            fetchRooms={() =>
-              fetchData(`${process.env.API_URL}/rooms/`, setRooms)
-            }
-          />
-        )}
-        {openTable === "programmes" && (
-          <ProgrammeTable
-            programmes={programmes}
-            faculties={faculties}
-            subjects={subjects}
-            fetchProgrammes={() =>
-              fetchData(`${process.env.API_URL}/programmes/`, setProgrammes)
-            }
-          />
-        )}
-        {openTable === "professors" && (
-          <ProfessorTable
-            professors={professors}
-            faculties={faculties}
-            fetchProfessors={() =>
-              fetchData(`${process.env.API_URL}/professors/`, setProfessors)
-            }
-          />
-        )}
-        {openTable === "subjects" && (
-          <SubjectTable
-            subjects={subjects}
-            programmes={programmes}
-            sessions={sessions}
-            professors={professors}
-            fetchSubjects={() =>
-              fetchData(`${process.env.API_URL}/subjects/`, setSubjects)
-            }
-          />
-        )}
-        {openTable === "sessions" && (
-          <SessionTable
-            sessions={sessions}
-            rooms={rooms}
-            faculties={faculties}
-            subjects={subjects}
-            fetchSessions={() =>
-              fetchData(`${process.env.API_URL}/sessions/`, setSessions)
-            }
-          />
-        )}
-        {openTable === "comments" && (
-          <CommentTable
-            comments={comments}
-            fetchComments={() =>
-              fetchData(`${process.env.API_URL}/comments/`, setComments)
-            }
-          />
-        )}
-        {openTable === "users" && (
-          <UserTable
-            users={users}
-            fetchUsers={() =>
-              fetchData(`${process.env.API_URL}/users/`, setUsers)
-            }
-          />
-        )}
-        {openTable === "reports" && (
-          <BugReportTable
-            bugReports={bugReports}
-            fetchBugReports={() =>
-              fetchData(`${process.env.API_URL}/reports/`, setBugReports)
-            }
-          />
-        )}
-      </div>
+          {openTable === "faculties" && (
+            <FacultyTable
+              faculties={faculties}
+              buildings={buildings}
+              professors={professors}
+              programmes={programmes}
+              fetchFaculties={() =>
+                fetchData(`${process.env.API_URL}/faculties/`, setFaculties)
+              }
+            />
+          )}
+          {openTable === "buildings" && (
+            <BuildingTable
+              buildings={buildings}
+              rooms={rooms}
+              faculties={faculties}
+              fetchBuildings={() =>
+                fetchData(`${process.env.API_URL}/buildings/`, setBuildings)
+              }
+            />
+          )}
+          {openTable === "rooms" && (
+            <RoomTable
+              rooms={rooms}
+              sessions={sessions}
+              buildings={buildings}
+              fetchRooms={() =>
+                fetchData(`${process.env.API_URL}/rooms/`, setRooms)
+              }
+            />
+          )}
+          {openTable === "programmes" && (
+            <ProgrammeTable
+              programmes={programmes}
+              faculties={faculties}
+              subjects={subjects}
+              fetchProgrammes={() =>
+                fetchData(`${process.env.API_URL}/programmes/`, setProgrammes)
+              }
+            />
+          )}
+          {openTable === "professors" && (
+            <ProfessorTable
+              professors={professors}
+              faculties={faculties}
+              fetchProfessors={() =>
+                fetchData(`${process.env.API_URL}/professors/`, setProfessors)
+              }
+            />
+          )}
+          {openTable === "subjects" && (
+            <SubjectTable
+              subjects={subjects}
+              programmes={programmes}
+              sessions={sessions}
+              professors={professors}
+              fetchSubjects={() =>
+                fetchData(`${process.env.API_URL}/subjects/`, setSubjects)
+              }
+            />
+          )}
+          {openTable === "sessions" && (
+            <SessionTable
+              sessions={sessions}
+              rooms={rooms}
+              faculties={faculties}
+              subjects={subjects}
+              fetchSessions={() =>
+                fetchData(`${process.env.API_URL}/sessions/`, setSessions)
+              }
+            />
+          )}
+          {openTable === "comments" && (
+            <CommentTable
+              comments={comments}
+              fetchComments={() =>
+                fetchData(`${process.env.API_URL}/comments/`, setComments)
+              }
+            />
+          )}
+          {openTable === "users" && (
+            <UserTable
+              users={users}
+              fetchUsers={() =>
+                fetchData(`${process.env.API_URL}/users/`, setUsers)
+              }
+            />
+          )}
+          {openTable === "reports" && (
+            <BugReportTable
+              bugReports={bugReports}
+              fetchBugReports={() =>
+                fetchData(`${process.env.API_URL}/reports/`, setBugReports)
+              }
+            />
+          )}
+        </div>
+      </NotificationProvider>
     </>
   );
 }

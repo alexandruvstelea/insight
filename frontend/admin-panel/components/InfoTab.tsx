@@ -22,7 +22,11 @@ export default function InfoTab() {
               Un interval se calculeaza in functie de numărul de săptămâni
             </li>
             <li>
-              Structura anului universitar poate fi gasită aici:{" "}
+              Exemplu: &quot;01.10 - 22.12.2024- activitate didactica&quot;
+              rezultă un interval de 12 săptămâni
+            </li>
+            <li>
+              Structura anului universitar poate fi gasită aici:
               <a
                 href="https://www.unitbv.ro/despre-unitbv/informatii-de-interes-public/structura-anului-universitar.html"
                 target="_blank"

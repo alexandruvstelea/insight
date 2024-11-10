@@ -9,6 +9,8 @@ import {
 } from "@/utils/functions";
 import ButtonGroup from "@/components/ButtonGroup";
 import { customSelectStyle } from "@/utils/customSelectStyle";
+import { useNotification } from "@/context/NotificationContext";
+
 const SubjectForm: React.FC<{
   isEditMode: boolean;
   subject?: Subject | null;
@@ -26,6 +28,7 @@ const SubjectForm: React.FC<{
   onClose,
   onSubmit,
 }) => {
+  const { notify } = useNotification();
   const [name, setName] = useState(subject?.name || "");
   const [abbreviation, setAbbreviation] = useState(subject?.abbreviation || "");
 
@@ -84,15 +87,20 @@ const SubjectForm: React.FC<{
         body: JSON.stringify(payload),
       });
 
-      if (!response.ok)
-        throw new Error(
-          isEditMode ? "Failed to edit subject" : "Failed to add subject"
-        );
+      if (!response.ok) {
+        throw new Error(`Eroare ${response.status}: ${response.statusText}`);
+      }
 
+      notify(
+        isEditMode
+          ? "Materia a fost editată cu succes."
+          : "Materia a fost adăugată cu succes.",
+        "success"
+      );
       onSubmit();
       onClose();
-    } catch (error) {
-      console.error("Error submitting subject:", error);
+    } catch (error: any) {
+      notify(error.message, "error");
     }
   };
 

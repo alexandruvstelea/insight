@@ -4,6 +4,8 @@ import { Professor, Faculty } from "@/utils/types";
 import { genderOptions } from "@/utils/functions";
 import ButtonGroup from "@/components/ButtonGroup";
 import { customSelectStyle } from "@/utils/customSelectStyle";
+import { useNotification } from "@/context/NotificationContext";
+
 const ProfessorForm: React.FC<{
   isEditMode: boolean;
   professor?: Professor | null;
@@ -11,6 +13,7 @@ const ProfessorForm: React.FC<{
   onClose: () => void;
   onSubmit: () => void;
 }> = ({ isEditMode, professor, faculties, onClose, onSubmit }) => {
+  const { notify } = useNotification();
   const [firstName, setFirstName] = useState(professor?.first_name || "");
   const [lastName, setLastName] = useState(professor?.last_name || "");
   const [gender, setGender] = useState(professor?.gender || "");
@@ -47,15 +50,21 @@ const ProfessorForm: React.FC<{
         body: JSON.stringify(payload),
       });
 
-      if (!response.ok)
-        throw new Error(
-          isEditMode ? "Failed to edit professor" : "Failed to add professor"
-        );
+      if (!response.ok) {
+        throw new Error(`Eroare ${response.status}: ${response.statusText}`);
+      }
+
+      notify(
+        isEditMode
+          ? "Profesorul a fost editat cu succes."
+          : "Profesorul a fost adăugat cu succes.",
+        "success"
+      );
 
       onSubmit();
       onClose();
-    } catch (error) {
-      console.error("Error submitting professor:", error);
+    } catch (error: any) {
+      notify(error.message, "error");
     }
   };
 

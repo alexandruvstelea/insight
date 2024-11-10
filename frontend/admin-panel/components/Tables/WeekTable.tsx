@@ -4,8 +4,7 @@ import { FC, useState } from "react";
 import { Week } from "@/utils/types";
 import WeekForm from "@/components/Forms/WeekForm";
 import HeaderSection from "@/components/HeaderSection";
-import SuccessToast from "@/components/SuccessToast";
-import ErrorToast from "@/components/ErrorToast";
+import { useNotification } from "@/context/NotificationContext";
 
 interface WeekTableProps {
   weeks: Week[];
@@ -13,11 +12,8 @@ interface WeekTableProps {
 }
 
 const WeekTable: FC<WeekTableProps> = ({ weeks = [], fetchWeeks }) => {
+  const { notify } = useNotification();
   const [isAddWeekModalOpen, setIsAddWeekModalOpen] = useState(false);
-
-  const [showSuccessToast, setShowSuccessToast] = useState(false);
-  const [showErrorToast, setShowErrorToast] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
 
   const handleDeleteAll = async () => {
     if (confirm("Sigur doriți să ștergeți toate săptămânile?")) {
@@ -32,11 +28,11 @@ const WeekTable: FC<WeekTableProps> = ({ weeks = [], fetchWeeks }) => {
         if (!response.ok) {
           throw new Error(`Eroare ${response.status}: ${response.statusText}`);
         }
-        setShowSuccessToast(true);
+
+        notify("Săptămânile au fost sterse cu succes.", "success");
         fetchWeeks();
       } catch (error: any) {
-        setErrorMessage(error.message);
-        setShowErrorToast(true);
+        notify(error.message, "error");
       }
     }
   };
@@ -115,19 +111,6 @@ const WeekTable: FC<WeekTableProps> = ({ weeks = [], fetchWeeks }) => {
         <WeekForm
           onClose={() => setIsAddWeekModalOpen(false)}
           onSubmit={fetchWeeks}
-        />
-      )}
-      {showSuccessToast && (
-        <SuccessToast
-          message="Săptămânile au fost ștearse cu succes."
-          onClose={() => setShowSuccessToast(false)}
-        />
-      )}
-
-      {showErrorToast && (
-        <ErrorToast
-          message={errorMessage}
-          onClose={() => setShowErrorToast(false)}
         />
       )}
     </>

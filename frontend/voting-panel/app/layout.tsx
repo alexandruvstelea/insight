@@ -8,8 +8,23 @@ import NavigationBar from "@/components/NavigationBar";
 const montserrat = Montserrat({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "inSight Voting Panel",
-  description: "This is the voting panel of the inSight project.",
+  metadataBase: new URL("https://voting.insightbv.ro"),
+  openGraph: {
+    title: "inSight Voting Panel",
+    description:
+      "Acesta este panoul de votare al platformei inSight, unde studenții își pot ajuta profesorii oferindu-le feedback constructiv legat de cursurile lor.",
+    url: "https://voting.insightbv.ro",
+    siteName: "voting.insightbv.ro",
+    images: [
+      {
+        url: "/pngs/social-share.png",
+        width: 800,
+        height: 600,
+      },
+    ],
+    locale: "ro_RO",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

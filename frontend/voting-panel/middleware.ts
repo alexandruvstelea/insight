@@ -5,13 +5,14 @@ import type { NextRequest } from 'next/server';
 export async function middleware(request: NextRequest) {
 
   const roomCode = request.nextUrl.searchParams.get('roomCode');
-  // const userAgent = request.headers.get('user-agent') || '';
-  // const isAndroid = /android/i.test(userAgent);
-  // const isIOS = /iPad|iPhone|iPod/.test(userAgent);
 
-  // if (!isAndroid && !isIOS) {
-  //   return NextResponse.redirect(new URL('/wrongDevice', request.url));
-  // }
+  const userAgent = request.headers.get('user-agent') || '';
+  const isAndroid = /android/i.test(userAgent);
+  const isIOS = /iPad|iPhone|iPod/.test(userAgent);
+
+  if (!isAndroid && !isIOS) {
+    return NextResponse.redirect(new URL('/wrongDevice', request.url));
+  }
 
   if (!roomCode) {
     return NextResponse.redirect(new URL('/incorrectURL', request.url));
@@ -21,5 +22,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/'], 
+  matcher: ['/'],
 };

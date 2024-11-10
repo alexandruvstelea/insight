@@ -44,7 +44,7 @@ export default function ReportBanner() {
                 Ai găsit o eroare?
                 <button
                   onClick={openPopup}
-                  className="ml-4 inline-flex items-center px-2 py-1 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-300"
+                  className="ml-4 inline-flex items-center px-2 py-1 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-800 transition-colors duration-300 ease-in-out"
                 >
                   Raportează
                 </button>

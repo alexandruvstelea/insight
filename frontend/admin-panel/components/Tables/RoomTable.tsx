@@ -14,6 +14,7 @@ import {
   dayMapping,
   sessionTypeMapping,
 } from "@/utils/functions";
+import { useNotification } from "@/context/NotificationContext";
 
 const RoomTable: FC<RoomTableProps> = ({
   rooms = [],
@@ -21,6 +22,7 @@ const RoomTable: FC<RoomTableProps> = ({
   sessions,
   fetchRooms,
 }) => {
+  const { notify } = useNotification();
   const [isSessionsModalOpen, setIsSessionsModalOpen] = useState(false);
   const [selectedSessions, setSelectedSessions] = useState<Session[]>([]);
 
@@ -28,10 +30,6 @@ const RoomTable: FC<RoomTableProps> = ({
 
   const [isEditRoomModalOpen, setIsEditRoomModalOpen] = useState(false);
   const [roomToEdit, setRoomToEdit] = useState<Room | null>(null);
-
-  const [showSuccessToast, setShowSuccessToast] = useState(false);
-  const [showErrorToast, setShowErrorToast] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
 
   const handleEdit = (room: Room) => {
     setRoomToEdit(room);
@@ -52,11 +50,11 @@ const RoomTable: FC<RoomTableProps> = ({
         if (!response.ok) {
           throw new Error(`Eroare ${response.status}: ${response.statusText}`);
         }
-        setShowSuccessToast(true);
+
+        notify("Sala a fost stersa cu succes.", "success");
         fetchRooms();
       } catch (error: any) {
-        setErrorMessage(error.message);
-        setShowErrorToast(true);
+        notify(error.message, "error");
       }
     }
   };
@@ -202,19 +200,6 @@ const RoomTable: FC<RoomTableProps> = ({
               </>
             );
           }}
-        />
-      )}
-      {showSuccessToast && (
-        <SuccessToast
-          message="Sala a fost ștearsă cu succes."
-          onClose={() => setShowSuccessToast(false)}
-        />
-      )}
-
-      {showErrorToast && (
-        <ErrorToast
-          message={errorMessage}
-          onClose={() => setShowErrorToast(false)}
         />
       )}
     </>

@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import ButtonGroup from "@/components/ButtonGroup";
+import { useNotification } from "@/context/NotificationContext";
 
 const WeekForm: React.FC<{
   onClose: () => void;
   onSubmit: () => void;
 }> = ({ onClose, onSubmit }) => {
+  const { notify } = useNotification();
   const [intervals, setIntervals] = useState<number[]>(new Array(8).fill(""));
   const [yearStart, setYearStart] = useState<string>("");
 
@@ -33,13 +35,14 @@ const WeekForm: React.FC<{
       });
 
       if (!response.ok) {
-        throw new Error("Failed to add weeks");
+        throw new Error(`Eroare ${response.status}: ${response.statusText}`);
       }
+      notify("Săptămânile au fost adăugate cu succes.", "success");
 
       onSubmit();
       onClose();
-    } catch (error) {
-      console.error("Error submitting weeks:", error);
+    } catch (error: any) {
+      notify(error.message, "error");
     }
   };
 

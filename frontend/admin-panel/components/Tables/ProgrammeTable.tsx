@@ -8,8 +8,7 @@ import { ProgrammeTableProps } from "@/utils/interfaces";
 import { programmeTypeMapping } from "@/utils/functions";
 import TableActions from "@/components/TableActions";
 import HeaderSection from "@/components/HeaderSection";
-import SuccessToast from "@/components/SuccessToast";
-import ErrorToast from "@/components/ErrorToast";
+import { useNotification } from "@/context/NotificationContext";
 
 const ProgrammeTable: FC<ProgrammeTableProps> = ({
   programmes = [],
@@ -17,6 +16,7 @@ const ProgrammeTable: FC<ProgrammeTableProps> = ({
   subjects,
   fetchProgrammes,
 }) => {
+  const { notify } = useNotification();
   const [isSubjectsModalOpen, setIsSubjectsModalOpen] = useState(false);
   const [selectedSubjects, setSelectedSubjects] = useState<Subject[]>([]);
 
@@ -27,10 +27,6 @@ const ProgrammeTable: FC<ProgrammeTableProps> = ({
   const [programmeToEdit, setProgrammeToEdit] = useState<Programme | null>(
     null
   );
-
-  const [showSuccessToast, setShowSuccessToast] = useState(false);
-  const [showErrorToast, setShowErrorToast] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
 
   const handleEdit = (programme: Programme) => {
     setProgrammeToEdit(programme);
@@ -54,11 +50,11 @@ const ProgrammeTable: FC<ProgrammeTableProps> = ({
         if (!response.ok) {
           throw new Error(`Eroare ${response.status}: ${response.statusText}`);
         }
-        setShowSuccessToast(true);
+        notify("Specializarea a fost stersa cu succes.", "success");
+
         fetchProgrammes();
       } catch (error: any) {
-        setErrorMessage(error.message);
-        setShowErrorToast(true);
+        notify(error.message, "error");
       }
     }
   };
@@ -196,19 +192,6 @@ const ProgrammeTable: FC<ProgrammeTableProps> = ({
               {subject.name} ({subject.abbreviation})
             </>
           )}
-        />
-      )}
-      {showSuccessToast && (
-        <SuccessToast
-          message="Specializarea a fost ștearsă cu succes."
-          onClose={() => setShowSuccessToast(false)}
-        />
-      )}
-
-      {showErrorToast && (
-        <ErrorToast
-          message={errorMessage}
-          onClose={() => setShowErrorToast(false)}
         />
       )}
     </>

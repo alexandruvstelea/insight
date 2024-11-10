@@ -1,7 +1,9 @@
 import { useState } from "react";
 import HeaderSection from "@/components/HeaderSection";
+import { useNotification } from "@/context/NotificationContext";
 
 export default function ReportForm() {
+  const { notify } = useNotification();
   const [text, setText] = useState("");
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -23,14 +25,12 @@ export default function ReportForm() {
       });
 
       if (!response.ok) {
-        throw new Error(`Error submitting report: ${response.statusText}`);
+        throw new Error(`Eroare ${response.status}: ${response.statusText}`);
       }
-
-      const data = await response.json();
-      console.log("Report submitted successfully:", data);
+      notify("Raportul a fost adăugat cu succes.", "success");
       setText("");
-    } catch (error) {
-      console.error("Failed to submit report:", error);
+    } catch (error: any) {
+      notify(error.message, "error");
     }
   };
 

@@ -15,7 +15,7 @@ const IssuePopup: React.FC<IssuePopupProps> = ({ onClose }) => {
     formData.append("bugText", bugDescription);
     const text = formData.get("bugText")?.toString() || "";
     const timestamp = new Date().toISOString();
-
+    console.log(timestamp);
     try {
       const response = await fetch(`${process.env.API_URL}/reports/`, {
         method: "POST",
@@ -27,17 +27,16 @@ const IssuePopup: React.FC<IssuePopupProps> = ({ onClose }) => {
           timestamp,
         }),
       });
-      console.log(response.status);
+
       if (response.status === 201) {
         onClose();
       } else if (response.status === 429) {
-        setErrorMessage("Se poate trimite doar un raport per curs.");
+        setErrorMessage("Se poate trimite doar un raport pe zi.");
       } else {
         setErrorMessage("A apărut o eroare la trimiterea raportului.");
       }
     } catch (error) {
-      console.error("Eroare la conectarea cu serverul:", error);
-      setErrorMessage("Eroare la conectarea cu serverul.");
+      setErrorMessage("Eroare.");
     }
   };
 

@@ -76,11 +76,11 @@ async def login_for_access_token(
         key="access_token",
         value=token["access_token"],
         httponly=True,
-        secure=False,
-        samesite="None",
-        # secure=True
-        # samesite="Strict",
-        # domain=".insightbv.ro",
+        # secure=False,
+        # samesite="None",
+        secure=True,
+        samesite="Strict",
+        domain=".insightbv.ro",
         max_age=60 * settings.AUTH_ACCESS_TOKEN_EXPIRE_MINUTES,
     )
 

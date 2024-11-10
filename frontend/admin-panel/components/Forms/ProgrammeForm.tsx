@@ -4,6 +4,7 @@ import { Programme, Subject, Faculty } from "@/utils/types";
 import { programmeTypeMapping } from "@/utils/functions";
 import ButtonGroup from "@/components/ButtonGroup";
 import { customSelectStyle } from "@/utils/customSelectStyle";
+import { useNotification } from "@/context/NotificationContext";
 
 const ProgrammeForm: React.FC<{
   isEditMode: boolean;
@@ -13,6 +14,7 @@ const ProgrammeForm: React.FC<{
   onClose: () => void;
   onSubmit: () => void;
 }> = ({ isEditMode, programme, faculties, subjects, onClose, onSubmit }) => {
+  const { notify } = useNotification();
   const [name, setName] = useState(programme?.name || "");
   const [abbreviation, setAbbreviation] = useState(
     programme?.abbreviation || ""
@@ -20,8 +22,6 @@ const ProgrammeForm: React.FC<{
   const [type, setType] = useState(programme?.type || "");
   const [selectedFaculty, setSelectedFaculty] = useState<number | null>(null);
   const [selectedSubjects, setSelectedSubjects] = useState<number[]>([]);
-
-  console.log(programme);
 
   useEffect(() => {
     if (programme) {
@@ -58,17 +58,21 @@ const ProgrammeForm: React.FC<{
         body: JSON.stringify(payload),
       });
 
-      if (!response.ok)
-        throw new Error(
-          isEditMode ? "Failed to edit programme" : "Failed to add programme"
-        );
+      if (!response.ok) {
+        throw new Error(`Eroare ${response.status}: ${response.statusText}`);
+      }
 
-      const data = await response.json();
+      notify(
+        isEditMode
+          ? "Specializarea a fost editată cu succes."
+          : "Specializarea a fost adăugată cu succes.",
+        "success"
+      );
 
       onSubmit();
       onClose();
-    } catch (error) {
-      console.error("Error submitting programme:", error);
+    } catch (error: any) {
+      notify(error.message, "error");
     }
   };
 

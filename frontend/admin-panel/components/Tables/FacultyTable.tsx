@@ -7,8 +7,7 @@ import Modal from "@/components/Modal";
 import FacultyForm from "@/components/Forms/FacultyForm";
 import TableActions from "@/components/TableActions";
 import HeaderSection from "@/components/HeaderSection";
-import SuccessToast from "@/components/SuccessToast";
-import ErrorToast from "@/components/ErrorToast";
+import { useNotification } from "@/context/NotificationContext";
 
 const FacultyTable: FC<FacultyTableProps> = ({
   faculties = [],
@@ -17,6 +16,7 @@ const FacultyTable: FC<FacultyTableProps> = ({
   programmes,
   fetchFaculties,
 }) => {
+  const { notify } = useNotification();
   const [isProfessorsModalOpen, setIsProfessorsModalOpen] = useState(false);
   const [isBuildingsModalOpen, setIsBuildingsModalOpen] = useState(false);
   const [isProgrammesModalOpen, setIsProgrammesModalOpen] = useState(false);
@@ -28,10 +28,6 @@ const FacultyTable: FC<FacultyTableProps> = ({
   const [isAddFacultyModalOpen, setIsAddFacultyModalOpen] = useState(false);
   const [isEditFacultyModalOpen, setIsEditFacultyModalOpen] = useState(false);
   const [facultyToEdit, setFacultyToEdit] = useState<Faculty | null>(null);
-
-  const [showSuccessToast, setShowSuccessToast] = useState(false);
-  const [showErrorToast, setShowErrorToast] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
 
   const handleEdit = (faculty: Faculty) => {
     setFacultyToEdit(faculty);
@@ -50,14 +46,13 @@ const FacultyTable: FC<FacultyTableProps> = ({
         });
 
         if (!response.ok) {
-          throw new Error("An error occurred while deleting the faculty");
+          throw new Error(`Eroare ${response.status}: ${response.statusText}`);
         }
 
-        setShowSuccessToast(true);
+        notify("Facultatea a fost stersa cu succes.", "success");
         fetchFaculties();
       } catch (error: any) {
-        setErrorMessage(error.message);
-        setShowErrorToast(true);
+        notify(error.message, "error");
       }
     }
   };
@@ -236,19 +231,6 @@ const FacultyTable: FC<FacultyTableProps> = ({
           title="Specializări"
           onClose={() => setIsProgrammesModalOpen(false)}
           renderItem={(programme) => <>{programme.name}</>}
-        />
-      )}
-      {showSuccessToast && (
-        <SuccessToast
-          message="Facultatea a fost ștearsă cu succes."
-          onClose={() => setShowSuccessToast(false)}
-        />
-      )}
-
-      {showErrorToast && (
-        <ErrorToast
-          message={errorMessage}
-          onClose={() => setShowErrorToast(false)}
         />
       )}
     </>

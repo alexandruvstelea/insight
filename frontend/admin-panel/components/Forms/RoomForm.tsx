@@ -8,6 +8,8 @@ import {
 } from "@/utils/functions";
 import ButtonGroup from "@/components/ButtonGroup";
 import { customSelectStyle } from "@/utils/customSelectStyle";
+import { useNotification } from "@/context/NotificationContext";
+
 const RoomForm: React.FC<{
   isEditMode: boolean;
   room?: Room | null;
@@ -16,6 +18,7 @@ const RoomForm: React.FC<{
   onClose: () => void;
   onSubmit: () => void;
 }> = ({ isEditMode, room, buildings, sessions, onClose, onSubmit }) => {
+  const { notify } = useNotification();
   const [name, setName] = useState(room?.name || "");
   const [uniqueCode, setUniqueCode] = useState(room?.unique_code || "");
 
@@ -59,15 +62,21 @@ const RoomForm: React.FC<{
         return;
       }
 
-      if (!response.ok)
-        throw new Error(
-          isEditMode ? "Failed to edit room" : "Failed to add room"
-        );
+      if (!response.ok) {
+        throw new Error(`Eroare ${response.status}: ${response.statusText}`);
+      }
+
+      notify(
+        isEditMode
+          ? "Sala a fost editată cu succes."
+          : "Sala a fost adăugată cu succes.",
+        "success"
+      );
 
       onSubmit();
       onClose();
-    } catch (error) {
-      console.error("Error submitting room:", error);
+    } catch (error: any) {
+      notify(error.message, "error");
     }
   };
 

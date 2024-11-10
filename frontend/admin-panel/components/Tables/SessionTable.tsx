@@ -11,8 +11,7 @@ import {
 } from "@/utils/functions";
 import HeaderSection from "@/components/HeaderSection";
 import TableActions from "@/components/TableActions";
-import SuccessToast from "@/components/SuccessToast";
-import ErrorToast from "@/components/ErrorToast";
+import { useNotification } from "@/context/NotificationContext";
 
 const SessionTable: FC<SessionTableProps> = ({
   sessions = [],
@@ -20,14 +19,11 @@ const SessionTable: FC<SessionTableProps> = ({
   faculties,
   fetchSessions,
 }) => {
+  const { notify } = useNotification();
   const [isAddSessionModalOpen, setIsAddSessionModalOpen] = useState(false);
 
   const [isEditSessionModalOpen, setIsEditSessionModalOpen] = useState(false);
   const [sessionToEdit, setSessionToEdit] = useState<Session | null>(null);
-
-  const [showSuccessToast, setShowSuccessToast] = useState(false);
-  const [showErrorToast, setShowErrorToast] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
 
   const handleEdit = (session: Session) => {
     setSessionToEdit(session);
@@ -48,11 +44,11 @@ const SessionTable: FC<SessionTableProps> = ({
         if (!response.ok) {
           throw new Error(`Eroare ${response.status}: ${response.statusText}`);
         }
-        setShowSuccessToast(true);
+
+        notify("Ora a fost stersa cu succes.", "success");
         fetchSessions();
       } catch (error: any) {
-        setErrorMessage(error.message);
-        setShowErrorToast(true);
+        notify(error.message, "error");
       }
     }
   };
@@ -77,7 +73,7 @@ const SessionTable: FC<SessionTableProps> = ({
                 Acțiuni
               </th>
               <th scope="col" className="px-6 py-3">
-                Curs
+                Materie
               </th>
               <th scope="col" className="px-6 py-3">
                 Tip
@@ -209,19 +205,6 @@ const SessionTable: FC<SessionTableProps> = ({
             setIsAddSessionModalOpen(false);
           }}
           onSubmit={fetchSessions}
-        />
-      )}
-      {showSuccessToast && (
-        <SuccessToast
-          message="Ora a fost ștearsă cu succes."
-          onClose={() => setShowSuccessToast(false)}
-        />
-      )}
-
-      {showErrorToast && (
-        <ErrorToast
-          message={errorMessage}
-          onClose={() => setShowErrorToast(false)}
         />
       )}
     </>

@@ -3,6 +3,8 @@ import Select from "react-select";
 import { Building, Professor, Programme, Faculty } from "@/utils/types";
 import { customSelectStyle } from "@/utils/customSelectStyle";
 import ButtonGroup from "@/components/ButtonGroup";
+import { useNotification } from "@/context/NotificationContext";
+
 const FacultyForm: React.FC<{
   isEditMode: boolean;
   faculty?: Faculty | null;
@@ -20,6 +22,7 @@ const FacultyForm: React.FC<{
   onClose,
   onSubmit,
 }) => {
+  const { notify } = useNotification();
   const [name, setName] = useState(faculty?.name || "");
   const [abbreviation, setAbbreviation] = useState(faculty?.abbreviation || "");
   const [selectedBuildings, setSelectedBuildings] = useState<number[]>([]);
@@ -65,15 +68,20 @@ const FacultyForm: React.FC<{
         body: JSON.stringify(payload),
       });
 
-      if (!response.ok)
-        throw new Error(
-          isEditMode ? "Failed to edit faculty" : "Failed to add faculty"
-        );
+      if (!response.ok) {
+        throw new Error(`Eroare ${response.status}: ${response.statusText}`);
+      }
+      notify(
+        isEditMode
+          ? "Facultatea a fost editată cu succes."
+          : "Facultatea a fost adăugată cu succes.",
+        "success"
+      );
 
       onSubmit();
       onClose();
-    } catch (error) {
-      console.error("Error submitting faculty:", error);
+    } catch (error: any) {
+      notify(error.message, "error");
     }
   };
 

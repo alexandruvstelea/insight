@@ -11,6 +11,8 @@ import {
 } from "@/utils/functions";
 import ButtonGroup from "@/components/ButtonGroup";
 import { customSelectStyle } from "@/utils/customSelectStyle";
+import { useNotification } from "@/context/NotificationContext";
+
 const SessionForm: React.FC<{
   isEditMode: boolean;
   session?: Session | null;
@@ -19,6 +21,7 @@ const SessionForm: React.FC<{
   onClose: () => void;
   onSubmit: () => void;
 }> = ({ isEditMode, session, rooms, faculties, onClose, onSubmit }) => {
+  const { notify } = useNotification();
   const [type, setType] = useState<string | null>(session?.type || null);
   const [selectedRoom, setSelectedRoom] = useState<number | null>(null);
   const [selectedFaculty, setSelectedFaculty] = useState<number | null>(null);
@@ -133,15 +136,21 @@ const SessionForm: React.FC<{
         return;
       }
 
-      if (!response.ok)
-        throw new Error(
-          isEditMode ? "Failed to edit session" : "Failed to add session"
-        );
+      if (!response.ok) {
+        throw new Error(`Eroare ${response.status}: ${response.statusText}`);
+      }
+
+      notify(
+        isEditMode
+          ? "Ora a fost editată cu succes."
+          : "Ora a fost adăugată cu succes.",
+        "success"
+      );
 
       onSubmit();
       onClose();
-    } catch (error) {
-      console.error("Error submitting session:", error);
+    } catch (error: any) {
+      notify(error.message, "error");
     }
   };
 
@@ -201,7 +210,7 @@ const SessionForm: React.FC<{
             />
           </div>
           <div className="mb-5">
-            <label className="label">Curs *</label>
+            <label className="label">Materie *</label>
             <Select
               options={subjectOptions}
               value={

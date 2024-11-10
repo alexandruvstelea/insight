@@ -1,19 +1,16 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC } from "react";
 import { BugReportTableProps } from "@/utils/interfaces";
 import TableActions from "@/components/TableActions";
 import HeaderSection from "@/components/HeaderSection";
-import SuccessToast from "@/components/SuccessToast";
-import ErrorToast from "@/components/ErrorToast";
+import { useNotification } from "@/context/NotificationContext";
 
 const BugReportTable: FC<BugReportTableProps> = ({
   bugReports = [],
   fetchBugReports,
 }) => {
-  const [showSuccessToast, setShowSuccessToast] = useState(false);
-  const [showErrorToast, setShowErrorToast] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const { notify } = useNotification();
 
   const handleDelete = async (id: number) => {
     if (confirm("Sigur doriți să ștergeți acest bug report?")) {
@@ -26,13 +23,14 @@ const BugReportTable: FC<BugReportTableProps> = ({
           credentials: "include",
         });
         if (!response.ok) {
-          throw new Error("A apărut o eroare la ștergerea bug report-ului");
+          throw new Error(`Eroare ${response.status}: ${response.statusText}`);
         }
-        setShowSuccessToast(true);
+
+        notify("Reportul a fost sters cu succes.", "success");
+
         fetchBugReports();
       } catch (error: any) {
-        setErrorMessage(error.message);
-        setShowErrorToast(true);
+        notify(error.message, "error");
       }
     }
   };
@@ -89,20 +87,6 @@ const BugReportTable: FC<BugReportTableProps> = ({
           )}
         </tbody>
       </table>
-
-      {showSuccessToast && (
-        <SuccessToast
-          message="Bug report-ul a fost șters cu succes."
-          onClose={() => setShowSuccessToast(false)}
-        />
-      )}
-
-      {showErrorToast && (
-        <ErrorToast
-          message={errorMessage}
-          onClose={() => setShowErrorToast(false)}
-        />
-      )}
     </div>
   );
 };

@@ -14,7 +14,7 @@ const ErrorToast: React.FC<ToastProps> = ({ message, onClose }) => {
   return (
     <div
       id="toast-error"
-      className="fixed bottom-4 right-4 flex items-center w-full max-w-xs p-4 mb-4 rounded-lg shadow text-gray-400 bg-gray-800"
+      className="fixed z-50 bottom-4 right-4 flex items-center w-full max-w-xs p-4 mb-4 rounded-lg shadow text-gray-400 bg-gray-800"
       role="alert"
     >
       <div className="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 rounded-lg bg-red-800 text-red-200">

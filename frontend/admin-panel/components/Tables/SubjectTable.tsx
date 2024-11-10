@@ -12,8 +12,8 @@ import {
 } from "@/utils/functions";
 import HeaderSection from "@/components/HeaderSection";
 import TableActions from "@/components/TableActions";
-import SuccessToast from "@/components/SuccessToast";
-import ErrorToast from "@/components/ErrorToast";
+import { useNotification } from "@/context/NotificationContext";
+
 const SubjectTable: FC<SubjectTableProps> = ({
   subjects = [],
   professors,
@@ -21,6 +21,7 @@ const SubjectTable: FC<SubjectTableProps> = ({
   sessions,
   fetchSubjects,
 }) => {
+  const { notify } = useNotification();
   const [isProgrammesModalOpen, setIsProgrammesModalOpen] = useState(false);
   const [selectedProgrammes, setSelectedProgrammes] = useState<Programme[]>([]);
 
@@ -31,10 +32,6 @@ const SubjectTable: FC<SubjectTableProps> = ({
 
   const [isEditSubjectModalOpen, setIsEditSubjectModalOpen] = useState(false);
   const [subjectToEdit, setSubjectToEdit] = useState<Subject | null>(null);
-
-  const [showSuccessToast, setShowSuccessToast] = useState(false);
-  const [showErrorToast, setShowErrorToast] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
 
   const handleEdit = (subject: Subject) => {
     setSubjectToEdit(subject);
@@ -55,11 +52,11 @@ const SubjectTable: FC<SubjectTableProps> = ({
         if (!response.ok) {
           throw new Error(`Eroare ${response.status}: ${response.statusText}`);
         }
-        setShowSuccessToast(true);
+
+        notify("Materia a fost stersa cu succes.", "success");
         fetchSubjects();
       } catch (error: any) {
-        setErrorMessage(error.message);
-        setShowErrorToast(true);
+        notify(error.message, "error");
       }
     }
   };
@@ -275,19 +272,6 @@ const SubjectTable: FC<SubjectTableProps> = ({
           renderItem={(programme) => (
             <>{`${programme.name} (${programme.abbreviation})`}</>
           )}
-        />
-      )}
-      {showSuccessToast && (
-        <SuccessToast
-          message="Materia a fost ștearsă cu succes."
-          onClose={() => setShowSuccessToast(false)}
-        />
-      )}
-
-      {showErrorToast && (
-        <ErrorToast
-          message={errorMessage}
-          onClose={() => setShowErrorToast(false)}
         />
       )}
     </>

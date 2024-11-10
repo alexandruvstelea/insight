@@ -8,14 +8,14 @@ import { genderTypeMapping } from "@/utils/functions";
 import ProfessorForm from "@/components/Forms/ProfessorForm";
 import TableActions from "@/components/TableActions";
 import HeaderSection from "@/components/HeaderSection";
-import SuccessToast from "@/components/SuccessToast";
-import ErrorToast from "@/components/ErrorToast";
+import { useNotification } from "@/context/NotificationContext";
 
 const ProfessorTable: FC<ProfessorTableProps> = ({
   professors = [],
   faculties,
   fetchProfessors,
 }) => {
+  const { notify } = useNotification();
   const [isFacultiesModalOpen, setIsFacultiesModalOpen] = useState(false);
   const [isCoursesModalOpen, setIsCoursesModalOpen] = useState(false);
   const [isLaboratoriesModalOpen, setIsLaboratoriesModalOpen] = useState(false);
@@ -37,10 +37,6 @@ const ProfessorTable: FC<ProfessorTableProps> = ({
     null
   );
 
-  const [showSuccessToast, setShowSuccessToast] = useState(false);
-  const [showErrorToast, setShowErrorToast] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-
   const handleEdit = (professor: Professor) => {
     setProfessorToEdit(professor);
     setIsEditProfessorModalOpen(true);
@@ -61,14 +57,13 @@ const ProfessorTable: FC<ProfessorTableProps> = ({
         );
 
         if (!response.ok) {
-          throw new Error("An error occurred while deleting the professor");
+          throw new Error(`Eroare ${response.status}: ${response.statusText}`);
         }
 
-        setShowSuccessToast(true);
+        notify("Profesorul a fost sters cu succes.", "success");
         fetchProfessors();
       } catch (error: any) {
-        setErrorMessage(error.message);
-        setShowErrorToast(true);
+        notify(error.message, "error");
       }
     }
   };
@@ -330,19 +325,6 @@ const ProfessorTable: FC<ProfessorTableProps> = ({
               {project.name} ({project.abbreviation})
             </>
           )}
-        />
-      )}
-
-      {showSuccessToast && (
-        <SuccessToast
-          message="Profesorul a fost șters cu succes!"
-          onClose={() => setShowSuccessToast(false)}
-        />
-      )}
-      {showErrorToast && (
-        <ErrorToast
-          message={errorMessage}
-          onClose={() => setShowErrorToast(false)}
         />
       )}
     </>
