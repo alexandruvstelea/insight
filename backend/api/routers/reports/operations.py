@@ -54,6 +54,23 @@ class ReportsOperations:
     async def add_report(self, report_data: ReportIn) -> ReportOut:
         try:
             logger.info(f"Adding to database report {report_data}.")
+            if len(report_data.text) > 500:
+                logger.error(
+                    f"Report text is too long (lenght {len(report_data.text)}). Maximum text lenght is 500."
+                )
+                raise HTTPException(
+                    status_code=422,
+                    detail=f"Report text is too long (lenght {len(report_data.text)}). Maximum text lenght is 500.",
+                )
+            if len(report_data.text) < 10:
+                logger.error(
+                    f"Report text is too short (lenght {len(report_data.text)}). Minimum text lenght is 10."
+                )
+                raise HTTPException(
+                    status_code=422,
+                    detail=f"Report text is too short (lenght {len(report_data.text)}). Minimum text lenght is 10.",
+                )
+
             naive_timestamp = report_data.timestamp.replace(tzinfo=None)
             new_report = Report(text=report_data.text, timestamp=naive_timestamp)
 
