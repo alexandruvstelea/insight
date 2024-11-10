@@ -3,7 +3,9 @@
 import { FC, useState } from "react";
 import { Week } from "@/utils/types";
 import WeekForm from "@/components/Forms/WeekForm";
-import HeaderSection from "../HeaderSection";
+import HeaderSection from "@/components/HeaderSection";
+import SuccessToast from "@/components/SuccessToast";
+import ErrorToast from "@/components/ErrorToast";
 
 interface WeekTableProps {
   weeks: Week[];
@@ -12,6 +14,10 @@ interface WeekTableProps {
 
 const WeekTable: FC<WeekTableProps> = ({ weeks = [], fetchWeeks }) => {
   const [isAddWeekModalOpen, setIsAddWeekModalOpen] = useState(false);
+
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [showErrorToast, setShowErrorToast] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleDeleteAll = async () => {
     if (confirm("Sigur doriți să ștergeți toate săptămânile?")) {
@@ -24,11 +30,13 @@ const WeekTable: FC<WeekTableProps> = ({ weeks = [], fetchWeeks }) => {
           credentials: "include",
         });
         if (!response.ok) {
-          throw new Error("An error occurred while deleting weeks");
+          throw new Error(`Eroare ${response.status}: ${response.statusText}`);
         }
+        setShowSuccessToast(true);
         fetchWeeks();
-      } catch (error) {
-        alert("A apărut o eroare la ștergerea săptămânilor");
+      } catch (error: any) {
+        setErrorMessage(error.message);
+        setShowErrorToast(true);
       }
     }
   };
@@ -107,6 +115,19 @@ const WeekTable: FC<WeekTableProps> = ({ weeks = [], fetchWeeks }) => {
         <WeekForm
           onClose={() => setIsAddWeekModalOpen(false)}
           onSubmit={fetchWeeks}
+        />
+      )}
+      {showSuccessToast && (
+        <SuccessToast
+          message="Săptămânile au fost ștearse cu succes."
+          onClose={() => setShowSuccessToast(false)}
+        />
+      )}
+
+      {showErrorToast && (
+        <ErrorToast
+          message={errorMessage}
+          onClose={() => setShowErrorToast(false)}
         />
       )}
     </>

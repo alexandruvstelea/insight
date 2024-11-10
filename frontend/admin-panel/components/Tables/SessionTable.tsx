@@ -9,8 +9,10 @@ import {
   dayMapping,
   sessionTypeMapping,
 } from "@/utils/functions";
-import HeaderSection from "../HeaderSection";
-import TableActions from "../TableActions";
+import HeaderSection from "@/components/HeaderSection";
+import TableActions from "@/components/TableActions";
+import SuccessToast from "@/components/SuccessToast";
+import ErrorToast from "@/components/ErrorToast";
 
 const SessionTable: FC<SessionTableProps> = ({
   sessions = [],
@@ -22,6 +24,10 @@ const SessionTable: FC<SessionTableProps> = ({
 
   const [isEditSessionModalOpen, setIsEditSessionModalOpen] = useState(false);
   const [sessionToEdit, setSessionToEdit] = useState<Session | null>(null);
+
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [showErrorToast, setShowErrorToast] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleEdit = (session: Session) => {
     setSessionToEdit(session);
@@ -40,12 +46,13 @@ const SessionTable: FC<SessionTableProps> = ({
         });
 
         if (!response.ok) {
-          throw new Error("An error occurred while deleting the session");
+          throw new Error(`Eroare ${response.status}: ${response.statusText}`);
         }
-
+        setShowSuccessToast(true);
         fetchSessions();
-      } catch (error) {
-        alert("A apărut o eroare la ștergerea orei");
+      } catch (error: any) {
+        setErrorMessage(error.message);
+        setShowErrorToast(true);
       }
     }
   };
@@ -202,6 +209,19 @@ const SessionTable: FC<SessionTableProps> = ({
             setIsAddSessionModalOpen(false);
           }}
           onSubmit={fetchSessions}
+        />
+      )}
+      {showSuccessToast && (
+        <SuccessToast
+          message="Ora a fost ștearsă cu succes."
+          onClose={() => setShowSuccessToast(false)}
+        />
+      )}
+
+      {showErrorToast && (
+        <ErrorToast
+          message={errorMessage}
+          onClose={() => setShowErrorToast(false)}
         />
       )}
     </>

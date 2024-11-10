@@ -6,8 +6,10 @@ import { ProfessorTableProps } from "@/utils/interfaces";
 import Modal from "@/components/Modal";
 import { genderTypeMapping } from "@/utils/functions";
 import ProfessorForm from "@/components/Forms/ProfessorForm";
-import HeaderSection from "../HeaderSection";
-import TableActions from "../TableActions";
+import TableActions from "@/components/TableActions";
+import HeaderSection from "@/components/HeaderSection";
+import SuccessToast from "@/components/SuccessToast";
+import ErrorToast from "@/components/ErrorToast";
 
 const ProfessorTable: FC<ProfessorTableProps> = ({
   professors = [],
@@ -29,12 +31,15 @@ const ProfessorTable: FC<ProfessorTableProps> = ({
   const [selectedProjects, setSelectedProjects] = useState<SessionType[]>([]);
 
   const [isAddProfessorModalOpen, setIsAddProfessorModalOpen] = useState(false);
-
   const [isEditProfessorModalOpen, setIsEditProfessorModalOpen] =
     useState(false);
   const [professorToEdit, setProfessorToEdit] = useState<Professor | null>(
     null
   );
+
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [showErrorToast, setShowErrorToast] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleEdit = (professor: Professor) => {
     setProfessorToEdit(professor);
@@ -42,7 +47,7 @@ const ProfessorTable: FC<ProfessorTableProps> = ({
   };
 
   const handleDelete = async (id: number) => {
-    if (confirm("Sigur doriți să ștergeți aceast profesor?")) {
+    if (confirm("Sigur doriți să ștergeți acest profesor?")) {
       try {
         const response = await fetch(
           `${process.env.API_URL}/professors/${id}`,
@@ -59,9 +64,11 @@ const ProfessorTable: FC<ProfessorTableProps> = ({
           throw new Error("An error occurred while deleting the professor");
         }
 
+        setShowSuccessToast(true);
         fetchProfessors();
-      } catch (error) {
-        alert("A apărut o eroare la ștergerea profesorului");
+      } catch (error: any) {
+        setErrorMessage(error.message);
+        setShowErrorToast(true);
       }
     }
   };
@@ -93,7 +100,7 @@ const ProfessorTable: FC<ProfessorTableProps> = ({
 
   return (
     <>
-      <div className=" p-4 flex flex-col items-center justify-center glass-background">
+      <div className="p-4 flex flex-col items-center justify-center glass-background">
         <HeaderSection
           title="PROFESORI"
           buttons={[
@@ -105,7 +112,7 @@ const ProfessorTable: FC<ProfessorTableProps> = ({
           count={professors?.length || 0}
         />
         <table className="w-full text-base text-left text-gray-400">
-          <thead className="text-lg  uppercase  bg-gray-700 text-gray-400">
+          <thead className="text-lg uppercase bg-gray-700 text-gray-400">
             <tr>
               <th scope="col" className="px-6 py-3">
                 Acțiuni
@@ -148,29 +155,20 @@ const ProfessorTable: FC<ProfessorTableProps> = ({
                     onEdit={() => handleEdit(professor)}
                     showEdit={true}
                   />
-                  <td
-                    scope="row"
-                    className="px-6 py-4 font-medium   text-white"
-                  >
+                  <td className="px-6 py-4 font-medium text-white">
                     {professor.first_name}
                   </td>
-                  <td
-                    scope="row"
-                    className="px-6 py-4 font-medium   text-white"
-                  >
+                  <td className="px-6 py-4 font-medium text-white">
                     {professor.last_name}
                   </td>
-                  <td
-                    scope="row"
-                    className="px-6 py-4 font-medium   text-white"
-                  >
+                  <td className="px-6 py-4 font-medium text-white">
                     {genderTypeMapping[professor.gender]}
                   </td>
-                  <td scope="row" className="px-6 py-4">
+                  <td className="px-6 py-4">
                     <button
                       className={`${
                         professor.faculties.length === 0
-                          ? "text-gray-300 "
+                          ? "text-gray-300"
                           : "text-blue-400 underline hover:text-blue-500 transition-colors duration-300"
                       }`}
                       onClick={() =>
@@ -182,11 +180,11 @@ const ProfessorTable: FC<ProfessorTableProps> = ({
                       Facultăți
                     </button>
                   </td>
-                  <td scope="row" className="px-6 py-4">
+                  <td className="px-6 py-4">
                     <button
                       className={`${
                         professor.courses.length === 0
-                          ? "text-gray-300 "
+                          ? "text-gray-300"
                           : "text-blue-400 underline hover:text-blue-500 transition-colors duration-300"
                       }`}
                       onClick={() =>
@@ -198,11 +196,11 @@ const ProfessorTable: FC<ProfessorTableProps> = ({
                       Cursuri
                     </button>
                   </td>
-                  <td scope="row" className="px-6 py-4">
+                  <td className="px-6 py-4">
                     <button
                       className={`${
                         professor.laboratories.length === 0
-                          ? "text-gray-300 "
+                          ? "text-gray-300"
                           : "text-blue-400 underline hover:text-blue-500 transition-colors duration-300"
                       }`}
                       onClick={() =>
@@ -214,11 +212,11 @@ const ProfessorTable: FC<ProfessorTableProps> = ({
                       Laboratoare
                     </button>
                   </td>
-                  <td scope="row" className="px-6 py-4">
+                  <td className="px-6 py-4">
                     <button
                       className={`${
                         professor.seminars.length === 0
-                          ? "text-gray-300 "
+                          ? "text-gray-300"
                           : "text-blue-400 underline hover:text-blue-500 transition-colors duration-300"
                       }`}
                       onClick={() =>
@@ -230,11 +228,11 @@ const ProfessorTable: FC<ProfessorTableProps> = ({
                       Seminarii
                     </button>
                   </td>
-                  <td scope="row" className="px-6 py-4">
+                  <td className="px-6 py-4">
                     <button
                       className={`${
                         professor.projects.length === 0
-                          ? "text-gray-300 "
+                          ? "text-gray-300"
                           : "text-blue-400 underline hover:text-blue-500 transition-colors duration-300"
                       }`}
                       onClick={() =>
@@ -313,7 +311,7 @@ const ProfessorTable: FC<ProfessorTableProps> = ({
       {isSeminarsModalOpen && (
         <Modal
           items={selectedSeminars}
-          title="Laboratoare"
+          title="Seminarii"
           onClose={() => setIsSeminarsModalOpen(false)}
           renderItem={(seminar) => (
             <>
@@ -325,13 +323,26 @@ const ProfessorTable: FC<ProfessorTableProps> = ({
       {isProjectsModalOpen && (
         <Modal
           items={selectedProjects}
-          title="Laboratoare"
+          title="Proiecte"
           onClose={() => setIsProjectsModalOpen(false)}
           renderItem={(project) => (
             <>
               {project.name} ({project.abbreviation})
             </>
           )}
+        />
+      )}
+
+      {showSuccessToast && (
+        <SuccessToast
+          message="Profesorul a fost șters cu succes!"
+          onClose={() => setShowSuccessToast(false)}
+        />
+      )}
+      {showErrorToast && (
+        <ErrorToast
+          message={errorMessage}
+          onClose={() => setShowErrorToast(false)}
         />
       )}
     </>

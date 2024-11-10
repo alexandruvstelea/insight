@@ -5,14 +5,15 @@ import { useState, FC } from "react";
 import { Room, Session } from "@/utils/types";
 import Modal from "@/components/Modal";
 import { RoomTableProps } from "@/utils/interfaces";
-
+import SuccessToast from "@/components/SuccessToast";
+import ErrorToast from "@/components/ErrorToast";
+import TableActions from "@/components/TableActions";
+import HeaderSection from "@/components/HeaderSection";
 import {
   weekTypeMapping,
   dayMapping,
   sessionTypeMapping,
 } from "@/utils/functions";
-import HeaderSection from "../HeaderSection";
-import TableActions from "../TableActions";
 
 const RoomTable: FC<RoomTableProps> = ({
   rooms = [],
@@ -27,6 +28,10 @@ const RoomTable: FC<RoomTableProps> = ({
 
   const [isEditRoomModalOpen, setIsEditRoomModalOpen] = useState(false);
   const [roomToEdit, setRoomToEdit] = useState<Room | null>(null);
+
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [showErrorToast, setShowErrorToast] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleEdit = (room: Room) => {
     setRoomToEdit(room);
@@ -45,12 +50,13 @@ const RoomTable: FC<RoomTableProps> = ({
         });
 
         if (!response.ok) {
-          throw new Error("An error occurred while deleting the room");
+          throw new Error(`Eroare ${response.status}: ${response.statusText}`);
         }
-
+        setShowSuccessToast(true);
         fetchRooms();
-      } catch (error) {
-        alert("A apărut o eroare la ștergerea sălii");
+      } catch (error: any) {
+        setErrorMessage(error.message);
+        setShowErrorToast(true);
       }
     }
   };
@@ -83,6 +89,9 @@ const RoomTable: FC<RoomTableProps> = ({
                 Nume
               </th>
               <th scope="col" className="px-6 py-3">
+                Id unic
+              </th>
+              <th scope="col" className="px-6 py-3">
                 Clădire
               </th>
               <th scope="col" className="px-6 py-3">
@@ -108,6 +117,12 @@ const RoomTable: FC<RoomTableProps> = ({
                     className="px-6 py-4 font-medium   text-white"
                   >
                     {room.name}
+                  </td>
+                  <td
+                    scope="row"
+                    className="px-6 py-4 font-medium   text-white"
+                  >
+                    {room.unique_code}
                   </td>
 
                   <td
@@ -187,6 +202,19 @@ const RoomTable: FC<RoomTableProps> = ({
               </>
             );
           }}
+        />
+      )}
+      {showSuccessToast && (
+        <SuccessToast
+          message="Sala a fost ștearsă cu succes."
+          onClose={() => setShowSuccessToast(false)}
+        />
+      )}
+
+      {showErrorToast && (
+        <ErrorToast
+          message={errorMessage}
+          onClose={() => setShowErrorToast(false)}
         />
       )}
     </>

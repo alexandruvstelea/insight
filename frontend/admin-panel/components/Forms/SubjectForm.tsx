@@ -7,7 +7,7 @@ import {
   sessionTypeMapping,
   semesterOptions,
 } from "@/utils/functions";
-import ButtonGroup from "../ButtonGroup";
+import ButtonGroup from "@/components/ButtonGroup";
 import { customSelectStyle } from "@/utils/customSelectStyle";
 const SubjectForm: React.FC<{
   isEditMode: boolean;

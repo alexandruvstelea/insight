@@ -10,8 +10,10 @@ import {
   dayMapping,
   sessionTypeMapping,
 } from "@/utils/functions";
-import HeaderSection from "../HeaderSection";
-import TableActions from "../TableActions";
+import HeaderSection from "@/components/HeaderSection";
+import TableActions from "@/components/TableActions";
+import SuccessToast from "@/components/SuccessToast";
+import ErrorToast from "@/components/ErrorToast";
 const SubjectTable: FC<SubjectTableProps> = ({
   subjects = [],
   professors,
@@ -30,6 +32,10 @@ const SubjectTable: FC<SubjectTableProps> = ({
   const [isEditSubjectModalOpen, setIsEditSubjectModalOpen] = useState(false);
   const [subjectToEdit, setSubjectToEdit] = useState<Subject | null>(null);
 
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [showErrorToast, setShowErrorToast] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const handleEdit = (subject: Subject) => {
     setSubjectToEdit(subject);
     setIsEditSubjectModalOpen(true);
@@ -47,12 +53,13 @@ const SubjectTable: FC<SubjectTableProps> = ({
         });
 
         if (!response.ok) {
-          throw new Error("An error occurred while deleting the subject");
+          throw new Error(`Eroare ${response.status}: ${response.statusText}`);
         }
-
+        setShowSuccessToast(true);
         fetchSubjects();
-      } catch (error) {
-        alert("A apărut o eroare la ștergerea materiei");
+      } catch (error: any) {
+        setErrorMessage(error.message);
+        setShowErrorToast(true);
       }
     }
   };
@@ -268,6 +275,19 @@ const SubjectTable: FC<SubjectTableProps> = ({
           renderItem={(programme) => (
             <>{`${programme.name} (${programme.abbreviation})`}</>
           )}
+        />
+      )}
+      {showSuccessToast && (
+        <SuccessToast
+          message="Materia a fost ștearsă cu succes."
+          onClose={() => setShowSuccessToast(false)}
+        />
+      )}
+
+      {showErrorToast && (
+        <ErrorToast
+          message={errorMessage}
+          onClose={() => setShowErrorToast(false)}
         />
       )}
     </>

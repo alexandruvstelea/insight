@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import { Building, Professor, Programme, Faculty } from "@/utils/types";
 import { customSelectStyle } from "@/utils/customSelectStyle";
-import ButtonGroup from "../ButtonGroup";
+import ButtonGroup from "@/components/ButtonGroup";
 const FacultyForm: React.FC<{
   isEditMode: boolean;
   faculty?: Faculty | null;

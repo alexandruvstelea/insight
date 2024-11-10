@@ -58,7 +58,10 @@ const IssuePopup: React.FC<IssuePopupProps> = ({ onClose }) => {
               value={bugDescription}
               onChange={(e) => setBugDescription(e.target.value)}
               required
+              minLength={10}
+              maxLength={500}
             ></textarea>
+
             {errorMessage && (
               <p className="text-red-500 text-sm">{errorMessage}</p>
             )}

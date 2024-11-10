@@ -1,18 +1,21 @@
 import React, { FC, useState, useEffect } from "react";
 import { Comment } from "@/utils/types";
 import { CommentTableProps } from "@/utils/interfaces";
-import HeaderSection from "../HeaderSection";
-import TableActions from "../TableActions";
+import TableActions from "@/components/TableActions";
+import HeaderSection from "@/components/HeaderSection";
+import SuccessToast from "@/components/SuccessToast";
+import ErrorToast from "@/components/ErrorToast";
 
 const CommentTable: FC<CommentTableProps> = ({
   comments = [],
   fetchComments,
 }) => {
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [showErrorToast, setShowErrorToast] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleDelete = async (id: number) => {
     if (confirm("Sigur doriți să ștergeți acest comentariu?")) {
-      setIsDeleting(true);
       try {
         const response = await fetch(`${process.env.API_URL}/comments/${id}`, {
           method: "DELETE",
@@ -22,13 +25,13 @@ const CommentTable: FC<CommentTableProps> = ({
           credentials: "include",
         });
         if (!response.ok) {
-          throw new Error("A apărut o eroare la ștergerea comentariului");
+          throw new Error(`Eroare ${response.status}: ${response.statusText}`);
         }
+        setShowSuccessToast(true);
         fetchComments();
-      } catch (error) {
-        alert("A apărut o eroare la ștergerea comentariului");
-      } finally {
-        setIsDeleting(false);
+      } catch (error: any) {
+        setErrorMessage(error.message);
+        setShowErrorToast(true);
       }
     }
   };
@@ -46,27 +49,42 @@ const CommentTable: FC<CommentTableProps> = ({
         comments.map(async (comment) => {
           try {
             const roomResponse = await fetch(
-              `${process.env.API_URL}/rooms/${comment.room_id}`
+              `${process.env.API_URL}/rooms/${comment.room_id}`,
+              {
+                credentials: "include",
+              }
             );
             const room = await roomResponse.json();
 
             const programmeResponse = await fetch(
-              `${process.env.API_URL}/programmes/${comment.programme_id}`
+              `${process.env.API_URL}/programmes/${comment.programme_id}`,
+              {
+                credentials: "include",
+              }
             );
             const programme = await programmeResponse.json();
 
             const subjectResponse = await fetch(
-              `${process.env.API_URL}/subjects/${comment.subject_id}`
+              `${process.env.API_URL}/subjects/${comment.subject_id}`,
+              {
+                credentials: "include",
+              }
             );
             const subject = await subjectResponse.json();
 
             const professorResponse = await fetch(
-              `${process.env.API_URL}/professors/${comment.professor_id}`
+              `${process.env.API_URL}/professors/${comment.professor_id}`,
+              {
+                credentials: "include",
+              }
             );
             const professor = await professorResponse.json();
 
             const facultyResponse = await fetch(
-              `${process.env.API_URL}/faculties/${comment.faculty_id}`
+              `${process.env.API_URL}/faculties/${comment.faculty_id}`,
+              {
+                credentials: "include",
+              }
             );
             const faculty = await facultyResponse.json();
 
@@ -169,6 +187,19 @@ const CommentTable: FC<CommentTableProps> = ({
                 Nu există comentarii
               </td>
             </tr>
+          )}
+          {showSuccessToast && (
+            <SuccessToast
+              message="Comentariul a fost ștears cu succes."
+              onClose={() => setShowSuccessToast(false)}
+            />
+          )}
+
+          {showErrorToast && (
+            <ErrorToast
+              message={errorMessage}
+              onClose={() => setShowErrorToast(false)}
+            />
           )}
         </tbody>
       </table>

@@ -9,7 +9,7 @@ import {
   sessionTypeMapping,
   startEndTimeOptions,
 } from "@/utils/functions";
-import ButtonGroup from "../ButtonGroup";
+import ButtonGroup from "@/components/ButtonGroup";
 import { customSelectStyle } from "@/utils/customSelectStyle";
 const SessionForm: React.FC<{
   isEditMode: boolean;

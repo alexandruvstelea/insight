@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import { Programme, Subject, Faculty } from "@/utils/types";
 import { programmeTypeMapping } from "@/utils/functions";
-import ButtonGroup from "../ButtonGroup";
+import ButtonGroup from "@/components/ButtonGroup";
 import { customSelectStyle } from "@/utils/customSelectStyle";
 
 const ProgrammeForm: React.FC<{

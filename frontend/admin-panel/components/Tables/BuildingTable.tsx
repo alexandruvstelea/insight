@@ -1,12 +1,14 @@
 "use client";
 
-import HeaderSection from "@/components/HeaderSection";
 import { useState, FC } from "react";
 import { Faculty, Room, Building } from "@/utils/types";
 import Modal from "@/components/Modal";
 import BuildingForm from "@/components/Forms/BuildingForm";
 import { BuildingTableProps } from "@/utils/interfaces";
-import TableActions from "../TableActions";
+import TableActions from "@/components/TableActions";
+import HeaderSection from "@/components/HeaderSection";
+import SuccessToast from "@/components/SuccessToast";
+import ErrorToast from "@/components/ErrorToast";
 
 const BuildingTable: FC<BuildingTableProps> = ({
   buildings = [],
@@ -25,6 +27,10 @@ const BuildingTable: FC<BuildingTableProps> = ({
 
   const [buildingToEdit, setBuildingToEdit] = useState<Building | null>(null);
 
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [showErrorToast, setShowErrorToast] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const handleEdit = (building: Building) => {
     setBuildingToEdit(building);
     setIsEditBuildingModalOpen(true);
@@ -41,11 +47,13 @@ const BuildingTable: FC<BuildingTableProps> = ({
           credentials: "include",
         });
         if (!response.ok) {
-          throw new Error("An error occurred while deleting the building");
+          throw new Error(`Eroare ${response.status}: ${response.statusText}`);
         }
+        setShowSuccessToast(true);
         fetchBuildings();
-      } catch (error) {
-        alert("A apărut o eroare la ștergerea clădirii");
+      } catch (error: any) {
+        setErrorMessage(error.message);
+        setShowErrorToast(true);
       }
     }
   };
@@ -203,6 +211,19 @@ const BuildingTable: FC<BuildingTableProps> = ({
           title="Facultăți"
           onClose={() => setIsFacultiesModalOpen(false)}
           renderItem={(faculty) => <>{faculty.name}</>}
+        />
+      )}
+      {showSuccessToast && (
+        <SuccessToast
+          message="Clădirea a fost ștearsă cu succes."
+          onClose={() => setShowSuccessToast(false)}
+        />
+      )}
+
+      {showErrorToast && (
+        <ErrorToast
+          message={errorMessage}
+          onClose={() => setShowErrorToast(false)}
         />
       )}
     </>

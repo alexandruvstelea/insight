@@ -6,7 +6,7 @@ import {
   dayMapping,
   sessionTypeMapping,
 } from "@/utils/functions";
-import ButtonGroup from "../ButtonGroup";
+import ButtonGroup from "@/components/ButtonGroup";
 import { customSelectStyle } from "@/utils/customSelectStyle";
 const RoomForm: React.FC<{
   isEditMode: boolean;
@@ -17,6 +17,8 @@ const RoomForm: React.FC<{
   onSubmit: () => void;
 }> = ({ isEditMode, room, buildings, sessions, onClose, onSubmit }) => {
   const [name, setName] = useState(room?.name || "");
+  const [uniqueCode, setUniqueCode] = useState(room?.unique_code || "");
+
   const [selectedBuilding, setSelectedBuilding] = useState<number | null>(null);
   const [selectedSessions, setSelectedSessions] = useState<number[]>([]);
 
@@ -32,6 +34,7 @@ const RoomForm: React.FC<{
 
     const payload = {
       name,
+      unique_code: uniqueCode,
       building_id: selectedBuilding,
       sessions: selectedSessions,
     };
@@ -50,6 +53,11 @@ const RoomForm: React.FC<{
         credentials: "include",
         body: JSON.stringify(payload),
       });
+
+      if (response.status === 409) {
+        alert(`Codul exista deja`);
+        return;
+      }
 
       if (!response.ok)
         throw new Error(
@@ -99,6 +107,18 @@ const RoomForm: React.FC<{
               onChange={(e) => setName(e.target.value)}
               className="input"
               required
+            />
+          </div>
+          <div className="mb-5">
+            <label htmlFor="uniqueCode" className="label">
+              Id unic
+            </label>
+            <input
+              id="uniqueCode"
+              type="text"
+              value={uniqueCode}
+              onChange={(e) => setUniqueCode(e.target.value)}
+              className="input"
             />
           </div>
 

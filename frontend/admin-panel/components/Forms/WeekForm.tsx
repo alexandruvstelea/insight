@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ButtonGroup from "../ButtonGroup";
+import ButtonGroup from "@/components/ButtonGroup";
 
 const WeekForm: React.FC<{
   onClose: () => void;

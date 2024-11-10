@@ -1,14 +1,20 @@
 "use client";
 
-import { FC } from "react";
+import { FC, useState } from "react";
 import { BugReportTableProps } from "@/utils/interfaces";
-import HeaderSection from "../HeaderSection";
-import TableActions from "../TableActions";
+import TableActions from "@/components/TableActions";
+import HeaderSection from "@/components/HeaderSection";
+import SuccessToast from "@/components/SuccessToast";
+import ErrorToast from "@/components/ErrorToast";
 
 const BugReportTable: FC<BugReportTableProps> = ({
   bugReports = [],
   fetchBugReports,
 }) => {
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [showErrorToast, setShowErrorToast] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const handleDelete = async (id: number) => {
     if (confirm("Sigur doriți să ștergeți acest bug report?")) {
       try {
@@ -22,21 +28,24 @@ const BugReportTable: FC<BugReportTableProps> = ({
         if (!response.ok) {
           throw new Error("A apărut o eroare la ștergerea bug report-ului");
         }
+        setShowSuccessToast(true);
         fetchBugReports();
-      } catch (error) {
-        alert("A apărut o eroare la ștergerea bug report-ului");
+      } catch (error: any) {
+        setErrorMessage(error.message);
+        setShowErrorToast(true);
       }
     }
   };
+
   return (
-    <div className=" p-4 flex flex-col items-center justify-center glass-background ">
+    <div className="p-4 flex flex-col items-center justify-center glass-background">
       <HeaderSection
         title="Reporturi"
         count={bugReports?.length || 0}
         buttons={[]}
       />
       <table className="w-full text-base text-left text-gray-400">
-        <thead className="text-lg  uppercase  bg-gray-700 text-gray-400">
+        <thead className="text-lg uppercase bg-gray-700 text-gray-400">
           <tr>
             <th scope="col" className="px-6 py-3">
               Acțiuni
@@ -50,7 +59,7 @@ const BugReportTable: FC<BugReportTableProps> = ({
           </tr>
         </thead>
         <tbody>
-          {Array.isArray(bugReports) ? (
+          {Array.isArray(bugReports) && bugReports.length > 0 ? (
             bugReports.map((bugReport) => (
               <tr
                 key={bugReport.id}
@@ -60,10 +69,10 @@ const BugReportTable: FC<BugReportTableProps> = ({
                   onDelete={() => handleDelete(bugReport.id)}
                   showEdit={false}
                 />
-                <td scope="row" className="px-6 py-4 font-medium   text-white">
+                <td scope="row" className="px-6 py-4 font-medium text-white">
                   {bugReport.text}
                 </td>
-                <td scope="row" className="px-6 py-4 font-medium   text-white">
+                <td scope="row" className="px-6 py-4 font-medium text-white">
                   {bugReport.timestamp}
                 </td>
               </tr>
@@ -80,7 +89,22 @@ const BugReportTable: FC<BugReportTableProps> = ({
           )}
         </tbody>
       </table>
+
+      {showSuccessToast && (
+        <SuccessToast
+          message="Bug report-ul a fost șters cu succes."
+          onClose={() => setShowSuccessToast(false)}
+        />
+      )}
+
+      {showErrorToast && (
+        <ErrorToast
+          message={errorMessage}
+          onClose={() => setShowErrorToast(false)}
+        />
+      )}
     </div>
   );
 };
+
 export default BugReportTable;

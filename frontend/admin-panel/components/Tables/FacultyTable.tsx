@@ -5,8 +5,10 @@ import { Faculty, Building, Professor, Programme } from "@/utils/types";
 import { FacultyTableProps } from "@/utils/interfaces";
 import Modal from "@/components/Modal";
 import FacultyForm from "@/components/Forms/FacultyForm";
-import HeaderSection from "../HeaderSection";
-import TableActions from "../TableActions";
+import TableActions from "@/components/TableActions";
+import HeaderSection from "@/components/HeaderSection";
+import SuccessToast from "@/components/SuccessToast";
+import ErrorToast from "@/components/ErrorToast";
 
 const FacultyTable: FC<FacultyTableProps> = ({
   faculties = [],
@@ -24,9 +26,12 @@ const FacultyTable: FC<FacultyTableProps> = ({
   const [selectedProgrammes, setSelectedProgrammes] = useState<Programme[]>([]);
 
   const [isAddFacultyModalOpen, setIsAddFacultyModalOpen] = useState(false);
-
   const [isEditFacultyModalOpen, setIsEditFacultyModalOpen] = useState(false);
   const [facultyToEdit, setFacultyToEdit] = useState<Faculty | null>(null);
+
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [showErrorToast, setShowErrorToast] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleEdit = (faculty: Faculty) => {
     setFacultyToEdit(faculty);
@@ -47,13 +52,12 @@ const FacultyTable: FC<FacultyTableProps> = ({
         if (!response.ok) {
           throw new Error("An error occurred while deleting the faculty");
         }
-        if (response.status == 200) {
-          console.log("200");
-        }
 
+        setShowSuccessToast(true);
         fetchFaculties();
-      } catch (error) {
-        alert("A apărut o eroare la ștergerea facultății");
+      } catch (error: any) {
+        setErrorMessage(error.message);
+        setShowErrorToast(true);
       }
     }
   };
@@ -75,7 +79,7 @@ const FacultyTable: FC<FacultyTableProps> = ({
 
   return (
     <>
-      <div className="  p-4 flex flex-col items-center justify-center glass-background">
+      <div className="p-4 flex flex-col items-center justify-center glass-background">
         <HeaderSection
           title="FACULTĂȚI"
           buttons={[
@@ -88,7 +92,7 @@ const FacultyTable: FC<FacultyTableProps> = ({
         />
 
         <table className="w-full text-base text-left text-gray-400">
-          <thead className="text-lg  uppercase  bg-gray-700 text-gray-400">
+          <thead className="text-lg uppercase bg-gray-700 text-gray-400">
             <tr className="py-2">
               <th scope="col" className="px-6 py-3">
                 Acțiuni
@@ -122,23 +126,17 @@ const FacultyTable: FC<FacultyTableProps> = ({
                     onEdit={() => handleEdit(faculty)}
                     showEdit={true}
                   />
-                  <td
-                    scope="row"
-                    className="px-6 py-4 font-medium   text-white"
-                  >
+                  <td className="px-6 py-4 font-medium text-white">
                     {faculty.name}
                   </td>
-                  <td
-                    scope="row"
-                    className="px-6 py-4 font-medium   text-white"
-                  >
+                  <td className="px-6 py-4 font-medium text-white">
                     {faculty.abbreviation}
                   </td>
-                  <td scope="row" className="px-6 py-4 ">
+                  <td className="px-6 py-4">
                     <button
                       className={`${
                         faculty.buildings.length === 0
-                          ? "text-gray-300 "
+                          ? "text-gray-300"
                           : "text-blue-400 underline hover:text-blue-500 transition-colors duration-300"
                       }`}
                       onClick={() =>
@@ -150,11 +148,11 @@ const FacultyTable: FC<FacultyTableProps> = ({
                       Clădiri
                     </button>
                   </td>
-                  <td scope="row" className="px-6 py-4">
+                  <td className="px-6 py-4">
                     <button
                       className={`${
                         faculty.professors.length === 0
-                          ? "text-gray-300 "
+                          ? "text-gray-300"
                           : "text-blue-400 underline hover:text-blue-500 transition-colors duration-300"
                       }`}
                       onClick={() =>
@@ -166,11 +164,11 @@ const FacultyTable: FC<FacultyTableProps> = ({
                       Profesori
                     </button>
                   </td>
-                  <td scope="row" className="px-6 py-4 ">
+                  <td className="px-6 py-4">
                     <button
                       className={`${
                         faculty.programmes.length === 0
-                          ? "text-gray-300 "
+                          ? "text-gray-300"
                           : "text-blue-400 underline hover:text-blue-500 transition-colors duration-300"
                       }`}
                       onClick={() =>
@@ -238,6 +236,19 @@ const FacultyTable: FC<FacultyTableProps> = ({
           title="Specializări"
           onClose={() => setIsProgrammesModalOpen(false)}
           renderItem={(programme) => <>{programme.name}</>}
+        />
+      )}
+      {showSuccessToast && (
+        <SuccessToast
+          message="Facultatea a fost ștearsă cu succes."
+          onClose={() => setShowSuccessToast(false)}
+        />
+      )}
+
+      {showErrorToast && (
+        <ErrorToast
+          message={errorMessage}
+          onClose={() => setShowErrorToast(false)}
         />
       )}
     </>

@@ -19,6 +19,7 @@ export type Building = {
 export type Room = {
   id: number;
   name: string;
+  unique_code: string;
   building: Building;
   sessions: Session[];
 };
