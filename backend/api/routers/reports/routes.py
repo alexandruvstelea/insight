@@ -54,7 +54,7 @@ async def get_report_by_id(
 @reports_router.post(
     "/",
     response_model=ReportOut,
-    dependencies=[Depends(RateLimiter(times=1, minutes=1440))],
+    dependencies=[Depends(RateLimiter(times=50, minutes=1440))],
     status_code=HTTPStatus.CREATED,
 )
 async def add_report(

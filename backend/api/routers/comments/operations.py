@@ -14,6 +14,7 @@ from ...utility.error_parsing import format_integrity_error
 from sqlalchemy.exc import IntegrityError
 from fastapi.responses import JSONResponse
 from ..buildings.utils import check_location_distance
+import pytz
 
 logger = logging.getLogger(__name__)
 
@@ -128,12 +129,15 @@ class CommentOperations:
                     detail=f"No building was found at users location.",
                 )
 
-            naive_timestamp = comment_data.timestamp.replace(tzinfo=None)
+            ro_timezone = pytz.timezone("Europe/Bucharest")
+            if comment_data.timestamp.tzinfo is None:
+                comment_data.timestamp = ro_timezone.localize(comment_data.timestamp)
+            comment_data.timestamp = comment_data.timestamp.astimezone(pytz.utc)
 
             new_comment = Comment(
                 text=comment_data.text,
                 subject_id=comment_session.subject_id,
-                timestamp=naive_timestamp,
+                timestamp=comment_data.timestamp,
                 programme_id=comment_data.programme_id,
                 room_id=room.id,
                 professor_id=await get_session_professor(

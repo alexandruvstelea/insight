@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Mapped, mapped_column
 from ..main import AlchemyAsyncBase
-from sqlalchemy import ForeignKey, func
+from sqlalchemy import ForeignKey, text
 from sqlalchemy.sql.sqltypes import DateTime
 
 
@@ -14,7 +14,9 @@ class Rating(AlchemyAsyncBase):
     rating_comprehension: Mapped[int] = mapped_column(nullable=False)
     rating_overall: Mapped[float] = mapped_column(nullable=False)
     timestamp: Mapped[DateTime] = mapped_column(
-        DateTime(timezone=False), nullable=False, server_default=func.now()
+        DateTime(timezone=True),
+        nullable=False,
+        server_default=text("(now() at time zone 'utc')"),
     )
     session_type: Mapped[str] = mapped_column(nullable=False)
     subject_id: Mapped[int] = mapped_column(ForeignKey("subjects.id"), nullable=False)

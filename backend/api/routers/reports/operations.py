@@ -9,6 +9,8 @@ from typing import List
 from ...utility.error_parsing import format_integrity_error
 from .utils import report_to_out
 import logging
+import pytz
+
 
 logger = logging.getLogger(__name__)
 
@@ -71,8 +73,12 @@ class ReportsOperations:
                     detail=f"Report text is too short (lenght {len(report_data.text)}). Minimum text lenght is 10.",
                 )
 
-            naive_timestamp = report_data.timestamp.replace(tzinfo=None)
-            new_report = Report(text=report_data.text, timestamp=naive_timestamp)
+            ro_timezone = pytz.timezone("Europe/Bucharest")
+            if report_data.timestamp.tzinfo is None:
+                report_data.timestamp = ro_timezone.localize(report_data.timestamp)
+            report_data.timestamp = report_data.timestamp.astimezone(pytz.utc)
+
+            new_report = Report(text=report_data.text, timestamp=report_data.timestamp)
 
             self.session.add(new_report)
             await self.session.commit()

@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy import ForeignKey, func
+from sqlalchemy import ForeignKey
+from sqlalchemy import text as txt
 from ..main import AlchemyAsyncBase
 from sqlalchemy.sql.sqltypes import DateTime
 
@@ -11,7 +12,9 @@ class Comment(AlchemyAsyncBase):
     text: Mapped[str] = mapped_column(nullable=False)
     subject_id: Mapped[int] = mapped_column(ForeignKey("subjects.id"), nullable=True)
     timestamp: Mapped[DateTime] = mapped_column(
-        DateTime(timezone=False), nullable=False, server_default=func.now()
+        DateTime(timezone=True),
+        nullable=False,
+        server_default=txt("(now() at time zone 'utc')"),
     )
     programme_id: Mapped[int] = mapped_column(
         ForeignKey("programmes.id"), nullable=True

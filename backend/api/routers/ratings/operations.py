@@ -23,6 +23,7 @@ from .schemas import (
     WeekRatings,
     GraphDataRatings,
 )
+import pytz
 
 logger = logging.getLogger(__name__)
 
@@ -305,6 +306,12 @@ class RatingOperations:
                     status_code=404,
                     detail=f"No room was found with the unique code {rating_data.room_code}.",
                 )
+
+            ro_timezone = pytz.timezone("Europe/Bucharest")
+            if rating_data.timestamp.tzinfo is None:
+                rating_data.timestamp = ro_timezone.localize(rating_data.timestamp)
+            rating_data.timestamp = rating_data.timestamp.astimezone(pytz.utc)
+
             rating_session: Session = await get_session_from_timestamp(
                 self.session, rating_data.timestamp, room.id
             )
@@ -336,8 +343,6 @@ class RatingOperations:
                     detail=f"No building was found at users location.",
                 )
 
-            naive_timestamp = rating_data.timestamp.replace(tzinfo=None)
-
             new_rating = Rating(
                 rating_clarity=rating_data.rating_clarity,
                 rating_interactivity=rating_data.rating_interactivity,
@@ -350,7 +355,7 @@ class RatingOperations:
                     + rating_data.rating_comprehension
                 )
                 / 4,
-                timestamp=naive_timestamp,
+                timestamp=rating_data.timestamp,
                 session_type=rating_session.type,
                 subject_id=rating_session.subject_id,
                 programme_id=rating_data.programme_id,

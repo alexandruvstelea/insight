@@ -8,6 +8,7 @@ from sqlalchemy import select, and_, or_
 from datetime import datetime
 from ..weeks.utils import get_week_from_timestamp
 import logging
+import pytz
 
 logger = logging.getLogger(__name__)
 
@@ -147,16 +148,21 @@ async def get_session_from_timestamp(
     db_session: AsyncSession, timestamp: datetime, room_id: int
 ) -> Session:
     try:
+
+        ro_timezone = pytz.timezone("Europe/Bucharest")
+        timestamp_ro = timestamp.astimezone(ro_timezone)
+
         logger.info(
-            f"Retrieving session from timestamp {timestamp} and room_id {room_id}."
+            f"Retrieving session from timestamp {timestamp_ro} and room_id {room_id}."
         )
-        week: Week = await get_week_from_timestamp(db_session, timestamp)
+
+        week: Week = await get_week_from_timestamp(db_session, timestamp_ro)
         result = await db_session.execute(
             select(Session).where(
                 Session.semester == week.semester,
-                Session.day == timestamp.weekday(),
-                Session.start <= timestamp.time(),
-                Session.end >= timestamp.time(),
+                Session.day == timestamp_ro.weekday(),
+                Session.start <= timestamp_ro.time(),
+                Session.end >= timestamp_ro.time(),
                 Session.room_id == room_id,
                 or_(Session.week_type == 0, Session.week_type == week.id % 2),
             )
@@ -165,15 +171,15 @@ async def get_session_from_timestamp(
         if current_session:
             return current_session
         logger.error(
-            f"Could not find current session for timestamp {timestamp} and room_id {room_id}."
+            f"Could not find current session for timestamp {timestamp_ro} and room_id {room_id}."
         )
         raise HTTPException(
             status_code=404,
-            detail=f"Could not find current session for timestamp {timestamp}.",
+            detail=f"Could not find current session for timestamp {timestamp_ro}.",
         )
     except Exception as e:
         logger.error(
-            f"An unexpected error has occured while retrieving session from timestamp {timestamp} and room_id {room_id}:\n{e}"
+            f"An unexpected error has occured while retrieving session from timestamp {timestamp_ro} and room_id {room_id}:\n{e}"
         )
         raise e
 
