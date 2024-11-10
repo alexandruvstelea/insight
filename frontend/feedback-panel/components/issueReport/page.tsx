@@ -20,6 +20,10 @@ export default function IssueReport() {
   };
 
   const handleSubmit = async () => {
+    if (problemText.length < 10 || problemText.length > 200) {
+      alert("Textul trebuie să aibă între 10 și 500 de caractere.");
+      return;
+    }
     await sendIssueReport(problemText);
     setProblemText("");
     handleClose();
@@ -64,6 +68,8 @@ export default function IssueReport() {
             onChange={(e) => setProblemText(e.target.value)}
             rows={4}
             placeholder="Descrie problema întâlnită"
+            minLength={10}
+            maxLength={500}
           />
           <button onClick={handleSubmit} className={styles.submitButton}>
             Trimite
