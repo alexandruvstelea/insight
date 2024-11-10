@@ -8,3 +8,4 @@ fastapi-limiter==0.1.6
 redis==5.0.7
 passlib==1.7.4
 python-jose==3.3.0
+pytz
