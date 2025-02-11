@@ -1,3 +1,4 @@
 .vscode
 insight-docker-build/.env
 nginx/nginx.conf
+insight-backend-venv
