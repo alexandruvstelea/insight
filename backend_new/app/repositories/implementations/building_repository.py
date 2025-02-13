@@ -1,6 +1,6 @@
 from app.repositories.interfaces.i_building_repository import IBuildingRepository
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, and_
+from sqlalchemy import select, and_, func
 from sqlalchemy.orm import joinedload
 from app.models.building import Building
 from app.models.faculty import Faculty
@@ -37,13 +37,7 @@ class BuildingRepository(IBuildingRepository):
             )
 
             if filters:
-                conditions = []
-                if filters.name:
-                    conditions.append(Building.name == filters.name)
-                if filters.faculty_id:
-                    conditions.append(
-                        Building.faculties.any(Faculty.id == filters.faculty_id)
-                    )
+                conditions = self.__get_conditions(filters)
                 if conditions:
                     query = query.where(and_(*conditions))
 
@@ -106,3 +100,29 @@ class BuildingRepository(IBuildingRepository):
         except Exception as e:
             await self.session.rollback()
             raise RuntimeError("Database transaction failed.") from e
+
+    async def count(self, filters: Optional[BuildingFilter] = None) -> int:
+        try:
+            query = select(func.count()).select_from(Building)
+
+            if filters:
+                conditions = self.__get_conditions(filters)
+                if conditions:
+                    query = query.where(and_(*conditions))
+
+            result = await self.session.execute(query)
+            count = result.scalar()
+            return count if count else 0
+        except Exception as e:
+            await self.session.rollback()
+            raise RuntimeError("Database transaction failed.") from e
+
+    def __get_conditions(filters: BuildingFilter) -> Optional[list]:
+        conditions = []
+
+        if filters.name:
+            conditions.append(Building.name == filters.name)
+        if filters.faculty_id:
+            conditions.append(Building.faculties.any(Faculty.id == filters.faculty_id))
+
+        return conditions if conditions else None

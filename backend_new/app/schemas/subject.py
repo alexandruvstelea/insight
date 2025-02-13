@@ -15,8 +15,8 @@ class SubjectBase(BaseModel):
 
 
 class SubjectIn(SubjectBase):
-    programmes: Optional[List[int]]
-    sessions: Optional[List[int]]
+    programmes_ids: Optional[List[int]] = []
+    sessions_ids: Optional[List[int]] = []
 
 
 class SubjectOutMinimal(SubjectBase):
@@ -25,8 +25,8 @@ class SubjectOutMinimal(SubjectBase):
 
 class SubjectOut(SubjectBase):
     id: int
-    programmes: Optional[List["ProgrammeOutMinimal"]]
-    sessions: Optional[List["SessionOutMinimal"]]
+    programmes: Optional[List["ProgrammeOutMinimal"]] = []
+    sessions: Optional[List["SessionOutMinimal"]] = []
     course_professor: Optional["ProfessorOutMinimal"]
     laboratory_professor: Optional["ProfessorOutMinimal"]
     seminar_professor: Optional["ProfessorOutMinimal"]

@@ -25,8 +25,8 @@ class BuildingOut(BuildingBase):
     id: int
     latitude: float
     longitude: float
-    rooms: Optional[List["RoomOutMinimal"]]
-    faculties: Optional[List["FacultyOutMinimal"]]
+    rooms: Optional[List["RoomOutMinimal"]] = []
+    faculties: Optional[List["FacultyOutMinimal"]] = []
 
     class Config:
         from_attributes = True

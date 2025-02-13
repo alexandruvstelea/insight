@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.subject import Subject
+from app.schemas.subject import SubjectFilter
 from typing import Optional
 
 
@@ -27,4 +28,12 @@ class ISubjectRepository(ABC):
 
     @abstractmethod
     async def delete(self, id: int) -> bool:
+        pass
+
+    @abstractmethod
+    async def count(self) -> int:
+        pass
+
+    @abstractmethod
+    def __get_conditions(filters: SubjectFilter) -> Optional[list]:
         pass

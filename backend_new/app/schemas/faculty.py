@@ -9,9 +9,9 @@ class FacultyBase(BaseModel):
 
 
 class FacultyIn(FacultyBase):
-    buildings: Optional[List[int]]
-    professors: Optional[List[int]]
-    programmes: Optional[List[int]]
+    buildings_ids: Optional[List[int]] = []
+    professors_ids: Optional[List[int]] = []
+    programmes_ids: Optional[List[int]] = []
 
 
 class FacultyOutMinimal(FacultyBase):
@@ -23,9 +23,9 @@ class FacultyOutMinimal(FacultyBase):
 
 class FacultyOut(FacultyBase):
     id: int
-    buildings: Optional[List["BuildingOutMinimal"]]
-    professors: Optional[List["ProfessorOutMinimal"]]
-    programmes: Optional[List["ProgrammeOutMinimal"]]
+    buildings: Optional[List["BuildingOutMinimal"]] = []
+    professors: Optional[List["ProfessorOutMinimal"]] = []
+    programmes: Optional[List["ProgrammeOutMinimal"]] = []
 
     class Config:
         from_attributes = True

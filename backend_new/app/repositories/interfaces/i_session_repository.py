@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.session import Session
+from app.schemas.session import SessionFilter
 from typing import Optional
 
 
@@ -27,4 +28,12 @@ class ISessionRepository(ABC):
 
     @abstractmethod
     async def delete(self, id: int) -> bool:
+        pass
+
+    @abstractmethod
+    async def count(self) -> int:
+        pass
+
+    @abstractmethod
+    def __get_conditions(filters: SessionFilter) -> Optional[list]:
         pass

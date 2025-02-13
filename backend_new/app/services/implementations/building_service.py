@@ -121,13 +121,13 @@ class BuildingService(IBuildingService):
                 status_code=formatted_error.get("code", 500),
                 detail=formatted_error.get(
                     "detail",
-                    "An unexpected error occurred while updating building with ID={id}.",
+                    f"An unexpected error occurred while updating building with ID={id}.",
                 ),
             )
         except RuntimeError as e:
             raise HTTPException(
                 status_code=500,
-                detail="An unexpected error occurred while updating building with ID={id}.",
+                detail=f"An unexpected error occurred while updating building with ID={id}.",
             )
 
     async def delete(self, id: int) -> JSONResponse:
@@ -146,13 +146,8 @@ class BuildingService(IBuildingService):
 
     async def count(self, filters: Optional[BuildingFilter] = None) -> Optional[int]:
         try:
-            response = await self.repository.get_all(filters)
-
-            if not response:
-                raise HTTPException(status_code=404, detail="No buildings found.")
-
-            return len(response)
-
+            count = await self.repository.count(filters)
+            return count
         except RuntimeError as e:
             raise HTTPException(
                 status_code=500,

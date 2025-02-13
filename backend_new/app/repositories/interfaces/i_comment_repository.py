@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.comment import Comment
+from app.schemas.comment import CommentFilter
 from typing import Optional
 
 
@@ -27,4 +28,12 @@ class ICommentRepository(ABC):
 
     @abstractmethod
     async def delete(self, id: int) -> bool:
+        pass
+
+    @abstractmethod
+    async def count(self) -> int:
+        pass
+
+    @abstractmethod
+    def __get_conditions(filters: CommentFilter) -> Optional[list]:
         pass

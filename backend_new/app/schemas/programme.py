@@ -10,8 +10,8 @@ class ProgrammeBase(BaseModel):
 
 
 class ProgrammeIn(ProgrammeBase):
-    faculty_id: int
-    subjects: Optional[List[int]]
+    faculty_id: Optional[int] = None
+    subjects_ids: Optional[List[int]] = []
 
 
 class ProgrammeOutMinimal(ProgrammeBase):
@@ -20,8 +20,8 @@ class ProgrammeOutMinimal(ProgrammeBase):
 
 class ProgrammeOut(ProgrammeBase):
     id: int
-    faculty: Optional["FacultyOutMinimal"]
-    subjects: Optional[List["SubjectOutMinimal"]]
+    faculty: Optional["FacultyOutMinimal"] = None
+    subjects: Optional[List["SubjectOutMinimal"]] = []
 
 
 class ProgrammeFilter(BaseModel):

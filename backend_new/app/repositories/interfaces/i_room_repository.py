@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.room import Room
+from app.schemas.room import RoomFilter
 from typing import Optional
 
 
@@ -27,4 +28,12 @@ class IRoomRepository(ABC):
 
     @abstractmethod
     async def delete(self, id: int) -> bool:
+        pass
+
+    @abstractmethod
+    async def count(self) -> int:
+        pass
+
+    @abstractmethod
+    def __get_conditions(filters: RoomFilter) -> Optional[list]:
         pass

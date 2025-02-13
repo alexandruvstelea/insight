@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.repositories.implementations.building_repository import BuildingRepository
-from app.schemas.building import BuildingIn, BuildingOut
+from app.schemas.building import BuildingIn, BuildingOut, BuildingFilter
 from typing import Optional
 
 
@@ -16,11 +16,13 @@ class IBuildingService(ABC):
         pass
 
     @abstractmethod
-    async def get_all(self, **filters) -> Optional[list[BuildingOut]]:
+    async def get_all(
+        self, filters: Optional[BuildingFilter]
+    ) -> Optional[list[BuildingOut]]:
         pass
 
     @abstractmethod
-    async def get_by_id(self) -> Optional[BuildingOut]:
+    async def get_by_id(self, id: int) -> Optional[BuildingOut]:
         pass
 
     @abstractmethod
@@ -32,5 +34,5 @@ class IBuildingService(ABC):
         pass
 
     @abstractmethod
-    async def count(self, faculty_id: Optional[int]):
+    async def count(self, filters: Optional[BuildingFilter]):
         pass

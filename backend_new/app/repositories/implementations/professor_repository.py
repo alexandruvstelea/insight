@@ -1,7 +1,8 @@
 from app.repositories.interfaces.i_professor_repository import IProfessorRepository
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, and_, true
+from sqlalchemy import select, and_, func
 from sqlalchemy.orm import joinedload
+from sqlalchemy.exc import IntegrityError
 from app.models.professor import Professor
 from app.models.faculty import Faculty
 from app.models.subject import Subject
@@ -16,26 +17,103 @@ class ProfessorRepository(IProfessorRepository):
         super().__init__(session)
 
     async def create(self, professor: Professor) -> Optional[Professor]:
-        new_professor = Professor(
-            first_name=professor.first_name,
-            last_name=professor.last_name,
-            gender=professor.gender,
-            faculties=professor.faculties,
-            courses=professor.courses,
-            laboratories=professor.laboratories,
-            seminars=professor.seminars,
-            projects=professor.projects,
-        )
-
-        self.session.add(new_professor)
-        await self.session.commit()
-        await self.session.refresh(new_professor)
-
-        return new_professor
+        try:
+            self.session.add(professor)
+            await self.session.commit()
+            await self.session.refresh(professor)
+            return professor
+        except IntegrityError as e:
+            await self.session.rollback()
+            raise e
+        except Exception as e:
+            await self.session.rollback()
+            raise RuntimeError("Database transaction failed.") from e
 
     async def get_all(
         self, filters: Optional[ProfessorFilter]
     ) -> Optional[list[Professor]]:
+        try:
+            query = select(Professor).options(joinedload(Professor.faculties))
+
+            if filters:
+                conditions = self.__get_conditions(filters)
+                if conditions:
+                    query = query.where(and_(*conditions))
+
+            result = await self.session.execute(query)
+            professors = result.scalars().all()
+
+            return professors if professors else None
+        except Exception as e:
+            await self.session.rollback()
+            raise RuntimeError("Database transaction failed.") from e
+
+    async def get_by_id(self, id: int) -> Optional[Professor]:
+        try:
+            professor = await self.session.get(Professor, id)
+            return professor if professor else None
+        except Exception as e:
+            await self.session.rollback()
+            raise RuntimeError("Database transaction failed.") from e
+
+    async def update(self, id: int, new_professor: Professor) -> Optional[Professor]:
+        try:
+            professor = await self.session.get(Professor, id)
+
+            if not professor:
+                return None
+
+            professor.first_name = new_professor.first_name
+            professor.last_name = new_professor.last_name
+            professor.gender = new_professor.gender
+            professor.faculties = new_professor.faculties
+            professor.courses = new_professor.courses
+            professor.laboratories = new_professor.laboratories
+            professor.seminars = new_professor.seminars
+            professor.projects = new_professor.projects
+
+            await self.session.commit()
+
+            return professor
+        except IntegrityError as e:
+            await self.session.rollback()
+            raise e
+        except Exception as e:
+            await self.session.rollback()
+            raise RuntimeError("Database transaction failed.") from e
+
+    async def delete(self, id: int) -> bool:
+        try:
+            professor = await self.session.get(Professor, id)
+
+            if not professor:
+                return False
+
+            await self.session.delete(professor)
+            await self.session.commit()
+
+            return True
+        except Exception as e:
+            await self.session.rollback()
+            raise RuntimeError("Database transaction failed.") from e
+
+    async def count(self, filters: Optional[ProfessorFilter] = None) -> int:
+        try:
+            query = select(func.count()).select_from(Professor)
+
+            if filters:
+                conditions = self.__get_conditions(filters)
+                if conditions:
+                    query = query.where(and_(*conditions))
+
+            result = await self.session.execute(query)
+            count = result.scalar()
+            return count if count else 0
+        except Exception as e:
+            await self.session.rollback()
+            raise RuntimeError("Database transaction failed.") from e
+
+    def __get_conditions(filters: ProfessorFilter) -> Optional[list]:
         conditions = []
 
         if filters.first_name:
@@ -83,47 +161,15 @@ class ProfessorRepository(IProfessorRepository):
                 )
             )
 
-        query = select(Professor).options(joinedload(Professor.faculties))
-        if conditions:
-            query = query.where(and_(*conditions))
-        else:
-            query = query.where(true())
+        return conditions if conditions else None
 
-        result = await self.session.execute(query)
-        professors = result.scalars().all()
-
-        return professors if professors else None
-
-    async def get_by_id(self, id: int) -> Optional[Professor]:
-        professor = await self.session.get(Professor, id)
-        return professor if professor else None
-
-    async def update(self, id: int, new_professor: Professor) -> Optional[Professor]:
-        professor = await self.session.get(Professor, id)
-
-        if not professor:
-            return None
-
-        professor.first_name = new_professor.first_name
-        professor.last_name = new_professor.last_name
-        professor.gender = new_professor.gender
-        professor.faculties = new_professor.faculties
-        professor.courses = new_professor.courses
-        professor.laboratories = new_professor.laboratories
-        professor.seminars = new_professor.seminars
-        professor.projects = new_professor.projects
-
-        await self.session.commit()
-
-        return professor
-
-    async def delete(self, id: int) -> bool:
-        professor = await self.session.get(Professor, id)
-
-        if not professor:
-            return False
-
-        await self.session.delete(professor)
-        await self.session.commit()
-
-        return True
+        # new_professor = Professor(
+        #     first_name=professor.first_name,
+        #     last_name=professor.last_name,
+        #     gender=professor.gender,
+        #     faculties=professor.faculties,
+        #     courses=professor.courses,
+        #     laboratories=professor.laboratories,
+        #     seminars=professor.seminars,
+        #     projects=professor.projects,
+        # )

@@ -10,7 +10,7 @@ class ProfessorBase(BaseModel):
 
 
 class ProfessorIn(ProfessorBase):
-    faculties: Optional[List[int]]
+    faculties_ids: Optional[List[int]] = []
 
 
 class ProfessorOutMinimal(ProfessorBase):
@@ -22,11 +22,11 @@ class ProfessorOutMinimal(ProfessorBase):
 
 class ProfessorOut(ProfessorBase):
     id: int
-    faculties: Optional[List["FacultyOutMinimal"]]
-    courses: Optional[List["SubjectOutMinimal"]]
-    laboratories: Optional[List["SubjectOutMinimal"]]
-    seminars: Optional[List["SubjectOutMinimal"]]
-    projects: Optional[List["SubjectOutMinimal"]]
+    faculties: Optional[List["FacultyOutMinimal"]] = []
+    courses: Optional[List["SubjectOutMinimal"]] = []
+    laboratories: Optional[List["SubjectOutMinimal"]] = []
+    seminars: Optional[List["SubjectOutMinimal"]] = []
+    projects: Optional[List["SubjectOutMinimal"]] = []
 
     class Config:
         from_attributes = True

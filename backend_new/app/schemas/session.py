@@ -32,7 +32,7 @@ class SessionOut(SessionBase):
     id: int
     room: Optional["RoomOutMinimal"]
     subject: Optional["SubjectOutMinimal"]
-    faculty_ids: Optional[List[int]]
+    faculty_ids: Optional[List[int]] = []
 
 
 class SessionFilter(BaseModel):
@@ -42,6 +42,9 @@ class SessionFilter(BaseModel):
     start: Optional[time] = None
     end: Optional[time] = None
     day: Optional[Literal[0, 1, 2, 3, 4, 5, 6]] = None
+    room_id: Optional[int] = None
+    subject_id: Optional[int] = None
+    faculty_id: Optional[int] = None
 
 
 from app.schemas.room import RoomOutMinimal

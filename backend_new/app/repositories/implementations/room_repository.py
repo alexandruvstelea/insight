@@ -1,6 +1,7 @@
 from app.repositories.interfaces.i_room_repository import IRoomRepository
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, and_, true
+from sqlalchemy import select, and_, func
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import joinedload
 from app.models.room import Room
 from app.schemas.room import RoomFilter
@@ -14,22 +15,99 @@ class RoomRepository(IRoomRepository):
         super().__init__(session)
 
     async def create(self, room: Room) -> Optional[Room]:
-        new_room = Room(
-            name=room.name.upper(),
-            unique_code=room.unique_code,
-            building_id=room.building_id,
-            building=room.building,
-            faculties_ids=room.faculties_ids,
-            sessions=room.sessions,
-        )
-
-        self.session.add(new_room)
-        await self.session.commit()
-        await self.session.refresh(new_room)
-
-        return new_room
+        try:
+            self.session.add(room)
+            await self.session.commit()
+            await self.session.refresh(room)
+            return room
+        except IntegrityError as e:
+            await self.session.rollback()
+            raise e
+        except Exception as e:
+            await self.session.rollback()
+            raise RuntimeError("Database transaction failed.") from e
 
     async def get_all(self, filters: Optional[RoomFilter]) -> Optional[list[Room]]:
+        try:
+            query = select(Room).options(joinedload(Room.building))
+
+            if filters:
+                conditions = self.__get_conditions(filters)
+                if conditions:
+                    query = query.where(and_(*conditions))
+
+            result = await self.session.execute(query)
+            rooms = result.scalars().all()
+
+            return rooms if rooms else None
+        except Exception as e:
+            await self.session.rollback()
+            raise RuntimeError("Database transaction failed.") from e
+
+    async def get_by_id(self, id: int) -> Optional[Room]:
+        try:
+            room = await self.session.get(Room, id)
+            return room if room else None
+        except Exception as e:
+            await self.session.rollback()
+            raise RuntimeError("Database transaction failed.") from e
+
+    async def update(self, id: int, new_room: Room) -> Optional[Room]:
+        try:
+            room = await self.session.get(Room, id)
+
+            if not room:
+                return None
+
+            room.name = new_room.name.upper()
+            room.unique_code = new_room.unique_code
+            room.building_id = new_room.building_id
+            room.building = new_room.building
+            room.faculties_ids = new_room.faculties_ids
+            room.sessions = new_room.sessions
+
+            await self.session.commit()
+
+            return room
+        except IntegrityError as e:
+            await self.session.rollback()
+            raise e
+        except Exception as e:
+            await self.session.rollback()
+            raise RuntimeError("Database transaction failed.") from e
+
+    async def delete(self, id: int) -> bool:
+        try:
+            room = await self.session.get(Room, id)
+
+            if not room:
+                return False
+
+            await self.session.delete(room)
+            await self.session.commit()
+
+            return True
+        except Exception as e:
+            await self.session.rollback()
+            raise RuntimeError("Database transaction failed.") from e
+
+    async def count(self, filters: Optional[RoomFilter] = None) -> int:
+        try:
+            query = select(func.count()).select_from(Room)
+
+            if filters:
+                conditions = self.__get_conditions(filters)
+                if conditions:
+                    query = query.where(and_(*conditions))
+
+            result = await self.session.execute(query)
+            count = result.scalar()
+            return count if count else 0
+        except Exception as e:
+            await self.session.rollback()
+            raise RuntimeError("Database transaction failed.") from e
+
+    def __get_conditions(filters: RoomFilter) -> Optional[list]:
         conditions = []
 
         if filters.name:
@@ -37,45 +115,12 @@ class RoomRepository(IRoomRepository):
         if filters.unique_code:
             conditions.append(Room.unique_code == filters.unique_code)
 
-        query = select(Room).options(joinedload(Room.building))
-        if conditions:
-            query = query.where(and_(*conditions))
-        else:
-            query = query.where(true())
-
-        result = await self.session.execute(query)
-        rooms = result.scalars().all()
-
-        return rooms if rooms else None
-
-    async def get_by_id(self, id: int) -> Optional[Room]:
-        room = await self.session.get(Room, id)
-        return room if room else None
-
-    async def update(self, id: int, new_room: Room) -> Optional[Room]:
-        room = await self.session.get(Room, id)
-
-        if not room:
-            return None
-
-        room.name = new_room.name.upper()
-        room.unique_code = new_room.unique_code
-        room.building_id = new_room.building_id
-        room.building = new_room.building
-        room.faculties_ids = new_room.faculties_ids
-        room.sessions = new_room.sessions
-
-        await self.session.commit()
-
-        return room
-
-    async def delete(self, id: int) -> bool:
-        room = await self.session.get(Room, id)
-
-        if not room:
-            return False
-
-        await self.session.delete(room)
-        await self.session.commit()
-
-        return True
+        return conditions if conditions else None
+        # new_room = Room(
+        #     name=room.name.upper(),
+        #     unique_code=room.unique_code,
+        #     building_id=room.building_id,
+        #     building=room.building,
+        #     faculties_ids=room.faculties_ids,
+        #     sessions=room.sessions,
+        # )
