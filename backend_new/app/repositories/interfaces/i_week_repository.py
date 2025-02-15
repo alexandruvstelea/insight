@@ -35,5 +35,5 @@ class IWeekRepository(ABC):
         pass
 
     @abstractmethod
-    def __get_conditions(filters: WeekFilter) -> Optional[list]:
+    def _get_conditions(self, filters: WeekFilter) -> Optional[list]:
         pass

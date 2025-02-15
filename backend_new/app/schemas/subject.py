@@ -22,6 +22,9 @@ class SubjectIn(SubjectBase):
 class SubjectOutMinimal(SubjectBase):
     id: int
 
+    class Config:
+        from_attributes = True
+
 
 class SubjectOut(SubjectBase):
     id: int
@@ -31,6 +34,9 @@ class SubjectOut(SubjectBase):
     laboratory_professor: Optional["ProfessorOutMinimal"]
     seminar_professor: Optional["ProfessorOutMinimal"]
     project_professor: Optional["ProfessorOutMinimal"]
+
+    class Config:
+        from_attributes = True
 
 
 class SubjectFilter(BaseModel):

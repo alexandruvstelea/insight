@@ -35,5 +35,5 @@ class IReportRepository(ABC):
         pass
 
     @abstractmethod
-    def __get_conditions(filters: ReportFilter) -> Optional[list]:
+    def _get_conditions(self, filters: ReportFilter) -> Optional[list]:
         pass

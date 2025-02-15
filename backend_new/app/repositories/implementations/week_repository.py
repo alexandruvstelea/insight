@@ -31,7 +31,7 @@ class WeekRepository(IWeekRepository):
             query = select(Week)
 
             if filters:
-                conditions = self.__get_conditions(filters)
+                conditions = self._get_conditions(filters)
                 if conditions:
                     query = query.where(and_(*conditions))
 
@@ -92,7 +92,7 @@ class WeekRepository(IWeekRepository):
             query = select(func.count()).select_from(Week)
 
             if filters:
-                conditions = self.__get_conditions(filters)
+                conditions = self._get_conditions(filters)
                 if conditions:
                     query = query.where(and_(*conditions))
 
@@ -103,7 +103,7 @@ class WeekRepository(IWeekRepository):
             await self.session.rollback()
             raise RuntimeError("Database transaction failed.") from e
 
-    def __get_conditions(filters: WeekFilter) -> Optional[list]:
+    def _get_conditions(self, filters: WeekFilter) -> Optional[list]:
         conditions = []
 
         if filters.start:

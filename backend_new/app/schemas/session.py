@@ -27,12 +27,18 @@ class SessionIn(BaseModel):
 class SessionOutMinimal(SessionBase):
     id: int
 
+    class Config:
+        from_attributes = True
+
 
 class SessionOut(SessionBase):
     id: int
     room: Optional["RoomOutMinimal"]
     subject: Optional["SubjectOutMinimal"]
     faculty_ids: Optional[List[int]] = []
+
+    class Config:
+        from_attributes = True
 
 
 class SessionFilter(BaseModel):

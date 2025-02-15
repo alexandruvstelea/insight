@@ -34,7 +34,7 @@ class SessionRepository(ISessionRepository):
             query = select(Session).options(joinedload(Session.subject))
 
             if filters:
-                conditions = self.__get_conditions(filters)
+                conditions = self._get_conditions(filters)
                 if conditions:
                     query = query.where(and_(*conditions))
 
@@ -103,7 +103,7 @@ class SessionRepository(ISessionRepository):
             query = select(func.count()).select_from(Session)
 
             if filters:
-                conditions = self.__get_conditions(filters)
+                conditions = self._get_conditions(filters)
                 if conditions:
                     query = query.where(and_(*conditions))
 
@@ -114,7 +114,7 @@ class SessionRepository(ISessionRepository):
             await self.session.rollback()
             raise RuntimeError("Database transaction failed.") from e
 
-    def __get_conditions(filters: SessionFilter) -> Optional[list]:
+    def _get_conditions(self, filters: SessionFilter) -> Optional[list]:
         conditions = []
 
         if filters.type:

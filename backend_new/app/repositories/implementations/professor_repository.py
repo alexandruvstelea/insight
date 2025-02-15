@@ -36,12 +36,12 @@ class ProfessorRepository(IProfessorRepository):
             query = select(Professor).options(joinedload(Professor.faculties))
 
             if filters:
-                conditions = self.__get_conditions(filters)
+                conditions = self._get_conditions(filters)
                 if conditions:
                     query = query.where(and_(*conditions))
 
             result = await self.session.execute(query)
-            professors = result.scalars().all()
+            professors = result.scalars().unique().all()
 
             return professors if professors else None
         except Exception as e:
@@ -102,7 +102,7 @@ class ProfessorRepository(IProfessorRepository):
             query = select(func.count()).select_from(Professor)
 
             if filters:
-                conditions = self.__get_conditions(filters)
+                conditions = self._get_conditions(filters)
                 if conditions:
                     query = query.where(and_(*conditions))
 
@@ -113,7 +113,7 @@ class ProfessorRepository(IProfessorRepository):
             await self.session.rollback()
             raise RuntimeError("Database transaction failed.") from e
 
-    def __get_conditions(filters: ProfessorFilter) -> Optional[list]:
+    def _get_conditions(self, filters: ProfessorFilter) -> Optional[list]:
         conditions = []
 
         if filters.first_name:
@@ -162,14 +162,3 @@ class ProfessorRepository(IProfessorRepository):
             )
 
         return conditions if conditions else None
-
-        # new_professor = Professor(
-        #     first_name=professor.first_name,
-        #     last_name=professor.last_name,
-        #     gender=professor.gender,
-        #     faculties=professor.faculties,
-        #     courses=professor.courses,
-        #     laboratories=professor.laboratories,
-        #     seminars=professor.seminars,
-        #     projects=professor.projects,
-        # )

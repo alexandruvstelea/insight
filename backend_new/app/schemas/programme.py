@@ -17,11 +17,17 @@ class ProgrammeIn(ProgrammeBase):
 class ProgrammeOutMinimal(ProgrammeBase):
     id: int
 
+    class Config:
+        from_attributes = True
+
 
 class ProgrammeOut(ProgrammeBase):
     id: int
     faculty: Optional["FacultyOutMinimal"] = None
     subjects: Optional[List["SubjectOutMinimal"]] = []
+
+    class Config:
+        from_attributes = True
 
 
 class ProgrammeFilter(BaseModel):

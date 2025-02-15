@@ -36,7 +36,7 @@ class FacultyFilter(BaseModel):
     abbreviation: Optional[str] = None
     building_id: Optional[int] = None
     professor_id: Optional[int] = None
-    progamme_id: Optional[int] = None
+    programme_id: Optional[int] = None
 
 
 from app.schemas.building import BuildingOutMinimal

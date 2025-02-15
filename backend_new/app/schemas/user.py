@@ -20,6 +20,9 @@ class UserOut(BaseModel):
     role: Literal["admin", "professor", "student"]
     professor_id: Optional[int] = None
 
+    class Config:
+        from_attributes = True
+
 
 class UserFilter(BaseModel):
     email: Optional[str] = None

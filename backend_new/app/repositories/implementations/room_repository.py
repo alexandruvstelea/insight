@@ -32,17 +32,17 @@ class RoomRepository(IRoomRepository):
             query = select(Room).options(joinedload(Room.building))
 
             if filters:
-                conditions = self.__get_conditions(filters)
+                conditions = self._get_conditions(filters)
                 if conditions:
                     query = query.where(and_(*conditions))
 
             result = await self.session.execute(query)
-            rooms = result.scalars().all()
+            rooms = result.scalars().unique().all()
 
             return rooms if rooms else None
         except Exception as e:
             await self.session.rollback()
-            raise RuntimeError("Database transaction failed.") from e
+            raise RuntimeError(f"Database transaction failed.{e}") from e
 
     async def get_by_id(self, id: int) -> Optional[Room]:
         try:
@@ -96,7 +96,7 @@ class RoomRepository(IRoomRepository):
             query = select(func.count()).select_from(Room)
 
             if filters:
-                conditions = self.__get_conditions(filters)
+                conditions = self._get_conditions(filters)
                 if conditions:
                     query = query.where(and_(*conditions))
 
@@ -107,7 +107,7 @@ class RoomRepository(IRoomRepository):
             await self.session.rollback()
             raise RuntimeError("Database transaction failed.") from e
 
-    def __get_conditions(filters: RoomFilter) -> Optional[list]:
+    def _get_conditions(self, filters: RoomFilter) -> Optional[list]:
         conditions = []
 
         if filters.name:
@@ -116,11 +116,3 @@ class RoomRepository(IRoomRepository):
             conditions.append(Room.unique_code == filters.unique_code)
 
         return conditions if conditions else None
-        # new_room = Room(
-        #     name=room.name.upper(),
-        #     unique_code=room.unique_code,
-        #     building_id=room.building_id,
-        #     building=room.building,
-        #     faculties_ids=room.faculties_ids,
-        #     sessions=room.sessions,
-        # )

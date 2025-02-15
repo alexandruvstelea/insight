@@ -20,6 +20,9 @@ class ReportOutMinimal(ReportBase):
 class ReportOut(ReportBase):
     id: int
 
+    class Config:
+        from_attributes = True
+
 
 class ReportFilter(BaseModel):
     timestamp_after: Optional[datetime] = None

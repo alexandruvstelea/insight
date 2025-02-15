@@ -35,5 +35,5 @@ class ISessionRepository(ABC):
         pass
 
     @abstractmethod
-    def __get_conditions(filters: SessionFilter) -> Optional[list]:
+    def _get_conditions(self, filters: SessionFilter) -> Optional[list]:
         pass

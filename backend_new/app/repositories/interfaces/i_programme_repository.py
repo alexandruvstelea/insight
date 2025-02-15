@@ -35,5 +35,5 @@ class IProgrammeRepository(ABC):
         pass
 
     @abstractmethod
-    def __get_conditions(filters: ProgrammeFilter) -> Optional[list]:
+    def _get_conditions(self, filters: ProgrammeFilter) -> Optional[list]:
         pass

@@ -34,3 +34,11 @@ class IRoomService(ABC):
     @abstractmethod
     async def count(self, filters: Optional[RoomFilter]):
         pass
+
+    @abstractmethod
+    def _generate_unique_code(self) -> str:
+        pass
+
+    @abstractmethod
+    def _validate_unique_code(self, code: str) -> bool:
+        pass

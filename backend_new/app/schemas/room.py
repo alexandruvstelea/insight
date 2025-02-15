@@ -16,12 +16,18 @@ class RoomIn(RoomBase):
 class RoomOutMinimal(RoomBase):
     id: int
 
+    class Config:
+        from_attributes = True
+
 
 class RoomOut(RoomBase):
     id: int
     unique_code: str
     building: Optional["BuildingOutMinimal"]
     sessions: Optional[List["SessionOutMinimal"]] = []
+
+    class Config:
+        from_attributes = True
 
 
 class RoomFilter(BaseModel):

@@ -35,5 +35,5 @@ class IRoomRepository(ABC):
         pass
 
     @abstractmethod
-    def __get_conditions(filters: RoomFilter) -> Optional[list]:
+    def _get_conditions(self, filters: RoomFilter) -> Optional[list]:
         pass

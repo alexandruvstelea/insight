@@ -32,6 +32,9 @@ class WeekIn(BaseModel):
 class WeekOut(WeekBase):
     id: int
 
+    class Config:
+        from_attributes = True
+
 
 class WeekFilter(BaseModel):
     start: Optional[date] = None

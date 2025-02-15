@@ -34,6 +34,9 @@ class RatingOut(RatingBase):
     faculty_id: int
     room_id: int
 
+    class Config:
+        from_attributes = True
+
 
 class RatingAverageOut(BaseModel):
     rating_overall_average: float
@@ -42,6 +45,9 @@ class RatingAverageOut(BaseModel):
     rating_relevance_average: float
     rating_comprehension_average: float
 
+    class Config:
+        from_attributes = True
+
 
 class WeekRatings(BaseModel):
     clarity: Optional[float] = None
@@ -49,6 +55,9 @@ class WeekRatings(BaseModel):
     relevance: Optional[float] = None
     comprehension: Optional[float] = None
     overall: Optional[float] = None
+
+    class Config:
+        from_attributes = True
 
 
 class RatingFilter(BaseModel):

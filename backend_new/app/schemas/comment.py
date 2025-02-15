@@ -27,6 +27,9 @@ class CommentOut(CommentBase):
     professor_id: int
     faculty_id: int
 
+    class Config:
+        from_attributes = True
+
 
 class CommentFilter(BaseModel):
     timestamp_after: Optional[datetime] = None

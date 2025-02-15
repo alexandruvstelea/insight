@@ -37,17 +37,17 @@ class FacultyRepository(IFacultyRepository):
             query = select(Faculty).options(joinedload(Faculty.buildings))
 
             if filters:
-                conditions = self.__get_conditions(filters)
+                conditions = self._get_conditions(filters)
                 if conditions:
                     query = query.where(and_(*conditions))
 
             result = await self.session.execute(query)
-            faculties = result.scalars().all()
+            faculties = result.scalars().unique().all()
 
             return faculties if faculties else None
         except Exception as e:
             await self.session.rollback()
-            raise RuntimeError("Database transaction failed.") from e
+            raise RuntimeError(f"Database transaction failed.") from e
 
     async def get_by_id(self, id: int) -> Optional[Faculty]:
         try:
@@ -100,7 +100,7 @@ class FacultyRepository(IFacultyRepository):
             query = select(func.count()).select_from(Faculty)
 
             if filters:
-                conditions = self.__get_conditions(filters)
+                conditions = self._get_conditions(filters)
                 if conditions:
                     query = query.where(and_(*conditions))
 
@@ -111,7 +111,7 @@ class FacultyRepository(IFacultyRepository):
             await self.session.rollback()
             raise RuntimeError("Database transaction failed.") from e
 
-    def __get_conditions(filters: FacultyFilter) -> Optional[list]:
+    def _get_conditions(self, filters: FacultyFilter) -> Optional[list]:
         conditions = []
 
         if filters.name:
@@ -124,9 +124,9 @@ class FacultyRepository(IFacultyRepository):
             conditions.append(
                 Faculty.professors.any(Professor.id == filters.professor_id)
             )
-        if filters.progamme_id:
+        if filters.programme_id:
             conditions.append(
-                Faculty.programmes.any(Programme.id == filters.progamme_id)
+                Faculty.programmes.any(Programme.id == filters.programme_id)
             )
 
         return conditions if conditions else None

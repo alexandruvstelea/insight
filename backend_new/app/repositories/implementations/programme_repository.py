@@ -35,12 +35,12 @@ class ProgrammeRepository(IProgrammeRepository):
             query = select(Programme).options(joinedload(Programme.subjects))
 
             if filters:
-                conditions = self.__get_conditions(filters)
+                conditions = self._get_conditions(filters)
                 if conditions:
                     query = query.where(and_(*conditions))
 
             result = await self.session.execute(query)
-            programmes = result.scalars().all()
+            programmes = result.scalars().unique().all()
 
             return programmes if programmes else None
         except Exception as e:
@@ -99,7 +99,7 @@ class ProgrammeRepository(IProgrammeRepository):
             query = select(func.count()).select_from(Programme)
 
             if filters:
-                conditions = self.__get_conditions(filters)
+                conditions = self._get_conditions(filters)
                 if conditions:
                     query = query.where(and_(*conditions))
 
@@ -110,7 +110,7 @@ class ProgrammeRepository(IProgrammeRepository):
             await self.session.rollback()
             raise RuntimeError("Database transaction failed.") from e
 
-    def __get_conditions(filters: ProgrammeFilter) -> Optional[list]:
+    def _get_conditions(self, filters: ProgrammeFilter) -> Optional[list]:
         conditions = []
 
         if filters.name:
@@ -125,11 +125,3 @@ class ProgrammeRepository(IProgrammeRepository):
             conditions.append(Programme.subjects.any(Subject.id == filters.subject_id))
 
         return conditions if conditions else None
-        # new_programme = Programme(
-        #     name=programme.name,
-        #     abbreviation=programme.abbreviation.upper(),
-        #     type=programme.type,
-        #     faculty_id=programme.faculty_id,
-        #     faculty=programme.faculty,
-        #     subjects=programme.subjects,
-        # )
