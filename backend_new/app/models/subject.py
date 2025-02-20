@@ -29,7 +29,6 @@ class Subject(AlchemyAsyncBase):
     project_professor_id: Mapped[Optional[int]] = mapped_column(
         ForeignKey("professors.id"), nullable=True
     )
-    faculties_ids: Mapped[List[int]] = mapped_column(ARRAY(Integer), nullable=True)
 
     # Relationships
     programmes: Mapped[List["Programme"]] = relationship(

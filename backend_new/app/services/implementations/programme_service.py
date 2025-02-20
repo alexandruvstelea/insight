@@ -80,7 +80,7 @@ class ProgrammeService(IProgrammeService):
             if not response:
                 raise HTTPException(status_code=404, detail="No programmes found.")
 
-            return [ProgrammeOut.model_validate(professor) for professor in response]
+            return [ProgrammeOut.model_validate(programme) for programme in response]
 
         except RuntimeError as e:
             raise HTTPException(

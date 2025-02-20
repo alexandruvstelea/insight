@@ -41,7 +41,7 @@ class SubjectRepository(ISubjectRepository):
                     query = query.where(and_(*conditions))
 
             result = await self.session.execute(query)
-            subjects = result.scalars().all()
+            subjects = result.scalars().unique().all()
 
             return subjects if subjects else None
         except Exception as e:
@@ -80,7 +80,7 @@ class SubjectRepository(ISubjectRepository):
             raise e
         except Exception as e:
             await self.session.rollback()
-            raise RuntimeError("Database transaction failed.") from e
+            raise RuntimeError(f"Database transaction failed.{e}") from e
 
     async def delete(self, id: int) -> bool:
         try:
@@ -146,13 +146,3 @@ class SubjectRepository(ISubjectRepository):
             conditions.append(Subject.sessions.any(Session.id == filters.session_id))
 
         return conditions if conditions else None
-        # new_subject = Subject(
-        #     name=subject.name,
-        #     abbreviation=subject.abbreviation.upper(),
-        #     semester=subject.semester,
-        #     course_professor_id=subject.course_professor_id,
-        #     laboratory_professor_id=subject.laboratory_professor_id,
-        #     seminar_professor_id=subject.seminar_professor_id,
-        #     project_professor_id=subject.project_professor_id,
-        #     programmes=subject.programmes,
-        # )

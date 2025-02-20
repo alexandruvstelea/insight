@@ -91,7 +91,7 @@ class RoomService(IRoomService):
         except RuntimeError as e:
             raise HTTPException(
                 status_code=500,
-                detail=f"An unexpected error occurred while retrieving rooms.{e}",
+                detail=f"An unexpected error occurred while retrieving rooms.",
             )
 
     async def get_by_id(self, id: int) -> Optional[RoomOut]:

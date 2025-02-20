@@ -42,7 +42,7 @@ class RoomRepository(IRoomRepository):
             return rooms if rooms else None
         except Exception as e:
             await self.session.rollback()
-            raise RuntimeError(f"Database transaction failed.{e}") from e
+            raise RuntimeError(f"Database transaction failed.") from e
 
     async def get_by_id(self, id: int) -> Optional[Room]:
         try:
