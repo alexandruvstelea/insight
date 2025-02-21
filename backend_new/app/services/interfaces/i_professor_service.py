@@ -36,5 +36,5 @@ class IProfessorService(ABC):
         pass
 
     @abstractmethod
-    async def count(self, filters: Optional[ProfessorFilter]):
+    async def count(self, filters: Optional[ProfessorFilter]) -> int:
         pass

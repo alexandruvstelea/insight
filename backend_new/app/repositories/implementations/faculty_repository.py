@@ -37,7 +37,7 @@ class FacultyRepository(IFacultyRepository):
             query = select(Faculty).options(joinedload(Faculty.buildings))
 
             if filters:
-                conditions = self._get_conditions(filters)
+                conditions = self.__get_conditions(filters)
                 if conditions:
                     query = query.where(and_(*conditions))
 
@@ -100,7 +100,7 @@ class FacultyRepository(IFacultyRepository):
             query = select(func.count()).select_from(Faculty)
 
             if filters:
-                conditions = self._get_conditions(filters)
+                conditions = self.__get_conditions(filters)
                 if conditions:
                     query = query.where(and_(*conditions))
 
@@ -111,7 +111,7 @@ class FacultyRepository(IFacultyRepository):
             await self.session.rollback()
             raise RuntimeError("Database transaction failed.") from e
 
-    def _get_conditions(self, filters: FacultyFilter) -> Optional[list]:
+    def __get_conditions(self, filters: FacultyFilter) -> Optional[list]:
         conditions = []
 
         if filters.name:

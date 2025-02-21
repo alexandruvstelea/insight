@@ -35,5 +35,5 @@ class IBuildingRepository(ABC):
         pass
 
     @abstractmethod
-    def _get_conditions(self, filters: BuildingFilter) -> Optional[list]:
+    def __get_conditions(self, filters: BuildingFilter) -> Optional[list]:
         pass

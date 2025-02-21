@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.models.building import Building
 from app.repositories.implementations.building_repository import BuildingRepository
 from app.schemas.building import BuildingIn, BuildingOut, BuildingFilter
 from typing import Optional
@@ -34,5 +35,11 @@ class IBuildingService(ABC):
         pass
 
     @abstractmethod
-    async def count(self, filters: Optional[BuildingFilter]):
+    async def count(self, filters: Optional[BuildingFilter] = None) -> int:
+        pass
+
+    @abstractmethod
+    def get_distance(
+        self, rating_location: tuple, building: Building
+    ) -> Optional[float]:
         pass

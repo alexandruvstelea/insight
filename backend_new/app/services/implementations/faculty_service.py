@@ -4,8 +4,10 @@ from app.models.faculty import Faculty
 from app.schemas.faculty import FacultyIn, FacultyOut
 from typing import Optional
 from app.schemas.faculty import FacultyFilter
+from app.repositories.implementations.building_repository import BuildingRepository
+from app.repositories.implementations.programme_repository import ProgrammeRepository
 from sqlalchemy.exc import IntegrityError
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from app.utils.error_formatter import ErrorFormatter
 from fastapi.responses import JSONResponse
 from app.core.logging import logger
@@ -24,22 +26,32 @@ class FacultyService(IFacultyService):
             )
 
             if faculty_data.buildings_ids:
-                # TODO
-                pass
+                for bdg_id in faculty_data.buildings_ids:
+                    building = await BuildingRepository(self.session).get_by_id(bdg_id)
+                    if not building:
+                        raise HTTPException(
+                            status_code=status.HTTP_400_BAD_REQUEST,
+                            detail=f"No building found for ID={id}.",
+                        )
+                    new_faculty.buildings.append(building)
 
             if faculty_data.programmes_ids:
-                # TODO
-                pass
-
-            if faculty_data.programmes_ids:
-                # TODO
-                pass
+                for pgm_id in faculty_data.programmes_ids:
+                    programme = await ProgrammeRepository(self.session).get_by_id(
+                        pgm_id
+                    )
+                    if not programme:
+                        raise HTTPException(
+                            status_code=status.HTTP_400_BAD_REQUEST,
+                            detail=f"No programme found for ID={id}.",
+                        )
+                    new_faculty.programmes.append(programme)
 
             response = await self.repository.create(new_faculty)
 
             if not response:
                 raise HTTPException(
-                    status_code=500,
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                     detail="An unexpected error occurred while creating new faculty.",
                 )
 
@@ -47,15 +59,17 @@ class FacultyService(IFacultyService):
         except IntegrityError as e:
             formatted_error = ErrorFormatter.format_integrity_error(e)
             raise HTTPException(
-                status_code=formatted_error.get("code", 500),
+                status_code=formatted_error.get(
+                    "code", status.HTTP_500_INTERNAL_SERVER_ERROR
+                ),
                 detail=formatted_error.get(
                     "detail",
                     "An unexpected error occurred while creating new faculty.",
                 ),
             )
-        except RuntimeError as e:
+        except Exception as e:
             raise HTTPException(
-                status_code=500,
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="An unexpected error occurred while creating new faculty.",
             )
 
@@ -66,13 +80,15 @@ class FacultyService(IFacultyService):
             response = await self.repository.get_all(filters)
 
             if not response:
-                raise HTTPException(status_code=404, detail="No faculties found.")
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND, detail="No faculties found."
+                )
 
             return [FacultyOut.model_validate(faculty) for faculty in response]
 
-        except RuntimeError as e:
+        except Exception as e:
             raise HTTPException(
-                status_code=500,
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"An unexpected error occurred while retrieving faculties.",
             )
 
@@ -82,14 +98,15 @@ class FacultyService(IFacultyService):
 
             if not response:
                 raise HTTPException(
-                    status_code=404, detail=f"No faculty found for ID={id}."
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"No faculty found for ID={id}.",
                 )
 
             return FacultyOut.model_validate(response)
 
-        except RuntimeError as e:
+        except Exception as e:
             raise HTTPException(
-                status_code=500,
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"An unexpected error occurred while retrieving faculty with ID={id}.",
             )
 
@@ -101,22 +118,32 @@ class FacultyService(IFacultyService):
             )
 
             if faculty_data.buildings_ids:
-                # TODO
-                pass
+                for bdg_id in faculty_data.buildings_ids:
+                    building = await BuildingRepository(self.session).get_by_id(bdg_id)
+                    if not building:
+                        raise HTTPException(
+                            status_code=status.HTTP_400_BAD_REQUEST,
+                            detail=f"No building found for ID={id}.",
+                        )
+                    new_faculty.buildings.append(building)
 
             if faculty_data.programmes_ids:
-                # TODO
-                pass
-
-            if faculty_data.programmes_ids:
-                # TODO
-                pass
+                for pgm_id in faculty_data.programmes_ids:
+                    programme = await ProgrammeRepository(self.session).get_by_id(
+                        pgm_id
+                    )
+                    if not programme:
+                        raise HTTPException(
+                            status_code=status.HTTP_400_BAD_REQUEST,
+                            detail=f"No programme found for ID={id}.",
+                        )
+                    new_faculty.programmes.append(programme)
 
             response = await self.repository.update(id, new_faculty)
 
             if not response:
                 raise HTTPException(
-                    status_code=500,
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                     detail=f"An unexpected error occurred while updating faculty with ID={id}.",
                 )
 
@@ -124,15 +151,17 @@ class FacultyService(IFacultyService):
         except IntegrityError as e:
             formatted_error = ErrorFormatter.format_integrity_error(e)
             raise HTTPException(
-                status_code=formatted_error.get("code", 500),
+                status_code=formatted_error.get(
+                    "code", status.HTTP_500_INTERNAL_SERVER_ERROR
+                ),
                 detail=formatted_error.get(
                     "detail",
                     f"An unexpected error occurred while updating faculty with ID={id}.",
                 ),
             )
-        except RuntimeError as e:
+        except Exception as e:
             raise HTTPException(
-                status_code=500,
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"An unexpected error occurred while updating faculty with ID={id}.",
             )
 
@@ -141,21 +170,22 @@ class FacultyService(IFacultyService):
             response = await self.repository.delete(id)
             if not response:
                 raise HTTPException(
-                    status_code=404, detail=f"No faculty with ID={id} found."
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"No faculty with ID={id} found.",
                 )
             return JSONResponse(f"Faculty with ID {id} deleted.")
-        except RuntimeError as e:
+        except Exception as e:
             raise HTTPException(
-                status_code=500,
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"An unexpected error occurred while deleting faculty with ID={id}.",
             )
 
-    async def count(self, filters: Optional[FacultyFilter]):
+    async def count(self, filters: Optional[FacultyFilter]) -> int:
         try:
             count = await self.repository.count(filters)
             return count
-        except RuntimeError as e:
+        except Exception as e:
             raise HTTPException(
-                status_code=500,
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="An unexpected error occurred while counting faculties.",
             )

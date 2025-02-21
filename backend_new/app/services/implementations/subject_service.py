@@ -6,7 +6,7 @@ from app.repositories.implementations.programme_repository import ProgrammeRepos
 from typing import Optional
 from app.schemas.subject import SubjectFilter
 from sqlalchemy.exc import IntegrityError
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from app.utils.error_formatter import ErrorFormatter
 from fastapi.responses import JSONResponse
 from app.core.logging import logger
@@ -34,7 +34,7 @@ class SubjectService(ISubjectService):
                     programme = await ProgrammeRepository(self.session).get_by_id(id)
                     if not programme:
                         raise HTTPException(
-                            status_code=400,
+                            status_code=status.HTTP_400_BAD_REQUEST,
                             detail=f"No programme found for ID={id}.",
                         )
                     new_subject.programmes.append(programme)
@@ -43,7 +43,7 @@ class SubjectService(ISubjectService):
 
             if not response:
                 raise HTTPException(
-                    status_code=500,
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                     detail="An unexpected error occurred while creating new subject.",
                 )
 
@@ -51,15 +51,17 @@ class SubjectService(ISubjectService):
         except IntegrityError as e:
             formatted_error = ErrorFormatter.format_integrity_error(e)
             raise HTTPException(
-                status_code=formatted_error.get("code", 500),
+                status_code=formatted_error.get(
+                    "code", status.HTTP_500_INTERNAL_SERVER_ERROR
+                ),
                 detail=formatted_error.get(
                     "detail",
                     "An unexpected error occurred while creating new subject.",
                 ),
             )
-        except RuntimeError as e:
+        except Exception as e:
             raise HTTPException(
-                status_code=500,
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="An unexpected error occurred while creating new subject.",
             )
 
@@ -70,13 +72,15 @@ class SubjectService(ISubjectService):
             response = await self.repository.get_all(filters)
 
             if not response:
-                raise HTTPException(status_code=404, detail="No subjects found.")
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND, detail="No subjects found."
+                )
 
             return [SubjectOut.model_validate(subject) for subject in response]
 
-        except RuntimeError as e:
+        except Exception as e:
             raise HTTPException(
-                status_code=500,
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="An unexpected error occurred while retrieving subjects.",
             )
 
@@ -86,14 +90,15 @@ class SubjectService(ISubjectService):
 
             if not response:
                 raise HTTPException(
-                    status_code=404, detail=f"No subject found for ID={id}."
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"No subject found for ID={id}.",
                 )
 
             return SubjectOut.model_validate(response)
 
-        except RuntimeError as e:
+        except Exception as e:
             raise HTTPException(
-                status_code=500,
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"An unexpected error occurred while retrieving subject with ID={id}.",
             )
 
@@ -116,7 +121,7 @@ class SubjectService(ISubjectService):
                     )
                     if not programme:
                         raise HTTPException(
-                            status_code=400,
+                            status_code=status.HTTP_400_BAD_REQUEST,
                             detail=f"No programme found for ID={prog_id}.",
                         )
                     new_subject.programmes.append(programme)
@@ -125,7 +130,7 @@ class SubjectService(ISubjectService):
 
             if not response:
                 raise HTTPException(
-                    status_code=500,
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                     detail=f"An unexpected error occurred while updating subject with ID={id}.",
                 )
 
@@ -133,15 +138,17 @@ class SubjectService(ISubjectService):
         except IntegrityError as e:
             formatted_error = ErrorFormatter.format_integrity_error(e)
             raise HTTPException(
-                status_code=formatted_error.get("code", 500),
+                status_code=formatted_error.get(
+                    "code", status.HTTP_500_INTERNAL_SERVER_ERROR
+                ),
                 detail=formatted_error.get(
                     "detail",
                     f"An unexpected error occurred while updating subject with ID={id}.",
                 ),
             )
-        except RuntimeError as e:
+        except Exception as e:
             raise HTTPException(
-                status_code=500,
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"An unexpected error occurred while updating subject with ID={id}.{e}",
             )
 
@@ -150,12 +157,13 @@ class SubjectService(ISubjectService):
             response = await self.repository.delete(id)
             if not response:
                 raise HTTPException(
-                    status_code=404, detail=f"No subject with ID={id} found."
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"No subject with ID={id} found.",
                 )
             return JSONResponse(f"Subject with ID {id} deleted.")
-        except RuntimeError as e:
+        except Exception as e:
             raise HTTPException(
-                status_code=500,
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"An unexpected error occurred while deleting subject with ID={id}.",
             )
 
@@ -163,8 +171,8 @@ class SubjectService(ISubjectService):
         try:
             count = await self.repository.count(filters)
             return count
-        except RuntimeError as e:
+        except Exception as e:
             raise HTTPException(
-                status_code=500,
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="An unexpected error occurred while counting subjects.",
             )

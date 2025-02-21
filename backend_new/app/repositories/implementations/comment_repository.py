@@ -36,7 +36,7 @@ class CommentRepository(ICommentRepository):
             query = select(Comment)
 
             if filters:
-                conditions = self._get_conditions(filters)
+                conditions = self.__get_conditions(filters)
                 if conditions:
                     query = query.where(and_(*conditions))
 
@@ -106,7 +106,7 @@ class CommentRepository(ICommentRepository):
             query = select(func.count()).select_from(Comment)
 
             if filters:
-                conditions = self._get_conditions(filters)
+                conditions = self.__get_conditions(filters)
                 if conditions:
                     query = query.where(and_(*conditions))
 
@@ -117,7 +117,7 @@ class CommentRepository(ICommentRepository):
             await self.session.rollback()
             raise RuntimeError("Database transaction failed.") from e
 
-    def _get_conditions(self, filters: CommentFilter) -> Optional[list]:
+    def __get_conditions(self, filters: CommentFilter) -> Optional[list]:
         conditions = []
 
         if filters.timestamp_after:

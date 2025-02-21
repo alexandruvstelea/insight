@@ -32,7 +32,7 @@ class RoomRepository(IRoomRepository):
             query = select(Room).options(joinedload(Room.building))
 
             if filters:
-                conditions = self._get_conditions(filters)
+                conditions = self.__get_conditions(filters)
                 if conditions:
                     query = query.where(and_(*conditions))
 
@@ -96,7 +96,7 @@ class RoomRepository(IRoomRepository):
             query = select(func.count()).select_from(Room)
 
             if filters:
-                conditions = self._get_conditions(filters)
+                conditions = self.__get_conditions(filters)
                 if conditions:
                     query = query.where(and_(*conditions))
 
@@ -107,7 +107,7 @@ class RoomRepository(IRoomRepository):
             await self.session.rollback()
             raise RuntimeError("Database transaction failed.") from e
 
-    def _get_conditions(self, filters: RoomFilter) -> Optional[list]:
+    def __get_conditions(self, filters: RoomFilter) -> Optional[list]:
         conditions = []
 
         if filters.name:

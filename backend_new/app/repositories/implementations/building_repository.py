@@ -37,7 +37,7 @@ class BuildingRepository(IBuildingRepository):
             )
 
             if filters:
-                conditions = self._get_conditions(filters)
+                conditions = self.__get_conditions(filters)
                 if conditions:
                     query = query.where(and_(*conditions))
 
@@ -106,7 +106,7 @@ class BuildingRepository(IBuildingRepository):
             query = select(func.count()).select_from(Building)
 
             if filters:
-                conditions = self._get_conditions(filters)
+                conditions = self.__get_conditions(filters)
                 if conditions:
                     query = query.where(and_(*conditions))
 
@@ -117,7 +117,7 @@ class BuildingRepository(IBuildingRepository):
             await self.session.rollback()
             raise RuntimeError("Database transaction failed.") from e
 
-    def _get_conditions(self, filters: BuildingFilter) -> Optional[list]:
+    def __get_conditions(self, filters: BuildingFilter) -> Optional[list]:
         conditions = []
 
         if filters.name:

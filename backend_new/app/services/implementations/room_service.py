@@ -3,10 +3,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.room import Room
 from app.schemas.room import RoomIn, RoomOut
 from app.repositories.implementations.building_repository import BuildingRepository
+from app.repositories.implementations.session_repository import SessionRepository
 from typing import Optional
 from app.schemas.room import RoomFilter
 from sqlalchemy.exc import IntegrityError
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from app.utils.error_formatter import ErrorFormatter
 from fastapi.responses import JSONResponse
 from app.core.logging import logger
@@ -32,7 +33,7 @@ class RoomService(IRoomService):
 
             if not new_room.building:
                 raise HTTPException(
-                    status_code=400,
+                    status_code=status.HTTP_400_BAD_REQUEST,
                     detail=f"No building found for ID={new_room.building_id}.",
                 )
 
@@ -41,25 +42,31 @@ class RoomService(IRoomService):
             ]
 
             if room_data.unique_code:
-                if self._validate_unique_code(room_data.unique_code):
+                if self.__validate_unique_code(room_data.unique_code):
                     new_room.unique_code = room_data.unique_code
                 else:
                     raise HTTPException(
-                        status_code=400,
+                        status_code=status.HTTP_400_BAD_REQUEST,
                         detail="The provided unique room code is not valid.",
                     )
             else:
-                new_room.unique_code = self._generate_unique_code()
+                new_room.unique_code = self.__generate_unique_code()
 
             if room_data.sessions_ids:
-                # TODO
-                pass
+                for ssn_id in room_data.sessions_ids:
+                    session = await SessionRepository(self.session).get_by_id(ssn_id)
+                    if not session:
+                        raise HTTPException(
+                            status_code=status.HTTP_400_BAD_REQUEST,
+                            detail=f"No session found for ID={id}.",
+                        )
+                    new_room.sessions.append(session)
 
             response = await self.repository.create(new_room)
 
             if not response:
                 raise HTTPException(
-                    status_code=500,
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                     detail="An unexpected error occurred while creating new room.",
                 )
 
@@ -67,15 +74,17 @@ class RoomService(IRoomService):
         except IntegrityError as e:
             formatted_error = ErrorFormatter.format_integrity_error(e)
             raise HTTPException(
-                status_code=formatted_error.get("code", 500),
+                status_code=formatted_error.get(
+                    "code", status.HTTP_500_INTERNAL_SERVER_ERROR
+                ),
                 detail=formatted_error.get(
                     "detail",
                     "An unexpected error occurred while creating new room.",
                 ),
             )
-        except RuntimeError as e:
+        except Exception as e:
             raise HTTPException(
-                status_code=500,
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="An unexpected error occurred while creating new room.",
             )
 
@@ -84,13 +93,15 @@ class RoomService(IRoomService):
             response = await self.repository.get_all(filters)
 
             if not response:
-                raise HTTPException(status_code=404, detail="No rooms found.")
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND, detail="No rooms found."
+                )
 
             return [RoomOut.model_validate(professor) for professor in response]
 
-        except RuntimeError as e:
+        except Exception as e:
             raise HTTPException(
-                status_code=500,
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"An unexpected error occurred while retrieving rooms.",
             )
 
@@ -100,14 +111,15 @@ class RoomService(IRoomService):
 
             if not response:
                 raise HTTPException(
-                    status_code=404, detail=f"No room found for ID={id}."
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"No room found for ID={id}.",
                 )
 
             return RoomOut.model_validate(response)
 
-        except RuntimeError as e:
+        except Exception as e:
             raise HTTPException(
-                status_code=500,
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"An unexpected error occurred while retrieving room with ID={id}.",
             )
 
@@ -124,7 +136,7 @@ class RoomService(IRoomService):
 
             if not new_room.building:
                 raise HTTPException(
-                    status_code=400,
+                    status_code=status.HTTP_400_BAD_REQUEST,
                     detail=f"No building found for ID={new_room.building_id}.",
                 )
 
@@ -133,25 +145,31 @@ class RoomService(IRoomService):
             ]
 
             if room_data.unique_code:
-                if self._validate_unique_code(room_data.unique_code):
+                if self.__validate_unique_code(room_data.unique_code):
                     new_room.unique_code = room_data.unique_code
                 else:
                     raise HTTPException(
-                        status_code=400,
+                        status_code=status.HTTP_400_BAD_REQUEST,
                         detail="The provided unique room code is not valid.",
                     )
             else:
-                new_room.unique_code = self._generate_unique_code()
+                new_room.unique_code = self.__generate_unique_code()
 
             if room_data.sessions_ids:
-                # TODO
-                pass
+                for ssn_id in room_data.sessions_ids:
+                    session = await SessionRepository(self.session).get_by_id(ssn_id)
+                    if not session:
+                        raise HTTPException(
+                            status_code=status.HTTP_400_BAD_REQUEST,
+                            detail=f"No session found for ID={id}.",
+                        )
+                    new_room.sessions.append(session)
 
             response = await self.repository.update(id, new_room)
 
             if not response:
                 raise HTTPException(
-                    status_code=500,
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                     detail=f"An unexpected error occurred while updating room with ID={id}.",
                 )
 
@@ -159,15 +177,17 @@ class RoomService(IRoomService):
         except IntegrityError as e:
             formatted_error = ErrorFormatter.format_integrity_error(e)
             raise HTTPException(
-                status_code=formatted_error.get("code", 500),
+                status_code=formatted_error.get(
+                    "code", status.HTTP_500_INTERNAL_SERVER_ERROR
+                ),
                 detail=formatted_error.get(
                     "detail",
                     f"An unexpected error occurred while updating room with ID={id}.",
                 ),
             )
-        except RuntimeError as e:
+        except Exception as e:
             raise HTTPException(
-                status_code=500,
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"An unexpected error occurred while updating room with ID={id}.",
             )
 
@@ -176,12 +196,13 @@ class RoomService(IRoomService):
             response = await self.repository.delete(id)
             if not response:
                 raise HTTPException(
-                    status_code=404, detail=f"No room with ID={id} found."
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"No room with ID={id} found.",
                 )
             return JSONResponse(f"Room with ID {id} deleted.")
-        except RuntimeError as e:
+        except Exception as e:
             raise HTTPException(
-                status_code=500,
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"An unexpected error occurred while deleting room with ID={id}.",
             )
 
@@ -189,17 +210,17 @@ class RoomService(IRoomService):
         try:
             count = await self.repository.count(filters)
             return count
-        except RuntimeError as e:
+        except Exception as e:
             raise HTTPException(
-                status_code=500,
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="An unexpected error occurred while counting rooms.",
             )
 
-    def _generate_unique_code(self) -> str:
+    def __generate_unique_code(self) -> str:
         random_part = "".join(choices(ascii_letters + digits, k=6))
         return random_part + "=="
 
-    def _validate_unique_code(self, code: str) -> bool:
+    def __validate_unique_code(self, code: str) -> bool:
         if len(code) != 8:
             return False
         if code[-2:] != "==":

@@ -35,5 +35,9 @@ class ISessionRepository(ABC):
         pass
 
     @abstractmethod
-    def _get_conditions(self, filters: SessionFilter) -> Optional[list]:
+    def __get_conditions(self, filters: SessionFilter) -> Optional[list]:
+        pass
+
+    @abstractmethod
+    async def __is_session_overlap(self, session: Session):
         pass

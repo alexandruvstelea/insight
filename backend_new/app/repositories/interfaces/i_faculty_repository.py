@@ -35,5 +35,5 @@ class IFacultyRepository(ABC):
         pass
 
     @abstractmethod
-    def _get_conditions(self, filters: FacultyFilter) -> Optional[list]:
+    def __get_conditions(self, filters: FacultyFilter) -> Optional[list]:
         pass

@@ -35,5 +35,5 @@ class ISubjectRepository(ABC):
         pass
 
     @abstractmethod
-    def _get_conditions(self, filters: SubjectFilter) -> Optional[list]:
+    def __get_conditions(self, filters: SubjectFilter) -> Optional[list]:
         pass

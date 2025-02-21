@@ -4,8 +4,9 @@ from app.models.professor import Professor
 from app.schemas.professor import ProfessorIn, ProfessorOut
 from typing import Optional
 from app.schemas.professor import ProfessorFilter
+from app.repositories.implementations.faculty_repository import FacultyRepository
 from sqlalchemy.exc import IntegrityError
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from app.utils.error_formatter import ErrorFormatter
 from fastapi.responses import JSONResponse
 from app.core.logging import logger
@@ -25,14 +26,20 @@ class ProfessorService(IProfessorService):
             )
 
             if professor_data.faculties_ids:
-                # TODO
-                pass
+                for fac_id in professor_data.faculties_ids:
+                    faculty = await FacultyRepository(self.session).get_by_id(fac_id)
+                    if not faculty:
+                        raise HTTPException(
+                            status_code=status.HTTP_400_BAD_REQUEST,
+                            detail=f"No faculty found for ID={id}.",
+                        )
+                    new_professor.faculties.append(faculty)
 
             response = await self.repository.create(new_professor)
 
             if not response:
                 raise HTTPException(
-                    status_code=500,
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                     detail="An unexpected error occurred while creating new professor.",
                 )
 
@@ -40,15 +47,17 @@ class ProfessorService(IProfessorService):
         except IntegrityError as e:
             formatted_error = ErrorFormatter.format_integrity_error(e)
             raise HTTPException(
-                status_code=formatted_error.get("code", 500),
+                status_code=formatted_error.get(
+                    "code", status.HTTP_500_INTERNAL_SERVER_ERROR
+                ),
                 detail=formatted_error.get(
                     "detail",
                     "An unexpected error occurred while creating new professor.",
                 ),
             )
-        except RuntimeError as e:
+        except Exception as e:
             raise HTTPException(
-                status_code=500,
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="An unexpected error occurred while creating new professor.",
             )
 
@@ -59,13 +68,15 @@ class ProfessorService(IProfessorService):
             response = await self.repository.get_all(filters)
 
             if not response:
-                raise HTTPException(status_code=404, detail="No professors found.")
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND, detail="No professors found."
+                )
 
             return [ProfessorOut.model_validate(professor) for professor in response]
 
-        except RuntimeError as e:
+        except Exception as e:
             raise HTTPException(
-                status_code=500,
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="An unexpected error occurred while retrieving professors.",
             )
 
@@ -75,14 +86,15 @@ class ProfessorService(IProfessorService):
 
             if not response:
                 raise HTTPException(
-                    status_code=404, detail=f"No professor found for ID={id}."
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"No professor found for ID={id}.",
                 )
 
             return ProfessorOut.model_validate(response)
 
-        except RuntimeError as e:
+        except Exception as e:
             raise HTTPException(
-                status_code=500,
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"An unexpected error occurred while retrieving professor with ID={id}.",
             )
 
@@ -97,14 +109,20 @@ class ProfessorService(IProfessorService):
             )
 
             if professor_data.faculties_ids:
-                # TODO
-                pass
+                for fac_id in professor_data.faculties_ids:
+                    faculty = await FacultyRepository(self.session).get_by_id(fac_id)
+                    if not faculty:
+                        raise HTTPException(
+                            status_code=status.HTTP_400_BAD_REQUEST,
+                            detail=f"No faculty found for ID={id}.",
+                        )
+                    new_professor.faculties.append(faculty)
 
             response = await self.repository.update(id, new_professor)
 
             if not response:
                 raise HTTPException(
-                    status_code=500,
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                     detail=f"An unexpected error occurred while updating professor with ID={id}.",
                 )
 
@@ -112,15 +130,17 @@ class ProfessorService(IProfessorService):
         except IntegrityError as e:
             formatted_error = ErrorFormatter.format_integrity_error(e)
             raise HTTPException(
-                status_code=formatted_error.get("code", 500),
+                status_code=formatted_error.get(
+                    "code", status.HTTP_500_INTERNAL_SERVER_ERROR
+                ),
                 detail=formatted_error.get(
                     "detail",
                     f"An unexpected error occurred while updating professor with ID={id}.",
                 ),
             )
-        except RuntimeError as e:
+        except Exception as e:
             raise HTTPException(
-                status_code=500,
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"An unexpected error occurred while updating professor with ID={id}.",
             )
 
@@ -129,21 +149,22 @@ class ProfessorService(IProfessorService):
             response = await self.repository.delete(id)
             if not response:
                 raise HTTPException(
-                    status_code=404, detail=f"No professor with ID={id} found."
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"No professor with ID={id} found.",
                 )
             return JSONResponse(f"Professor with ID {id} deleted.")
-        except RuntimeError as e:
+        except Exception as e:
             raise HTTPException(
-                status_code=500,
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"An unexpected error occurred while deleting professor with ID={id}.",
             )
 
-    async def count(self, filters: Optional[ProfessorFilter]):
+    async def count(self, filters: Optional[ProfessorFilter]) -> int:
         try:
             count = await self.repository.count(filters)
             return count
-        except RuntimeError as e:
+        except Exception as e:
             raise HTTPException(
-                status_code=500,
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="An unexpected error occurred while counting professors.",
             )

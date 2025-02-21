@@ -1,6 +1,6 @@
 from app.repositories.interfaces.i_session_repository import ISessionRepository
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, and_, func
+from sqlalchemy import select, and_, func, or_
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import joinedload
 from app.models.session import Session
@@ -34,7 +34,7 @@ class SessionRepository(ISessionRepository):
             query = select(Session).options(joinedload(Session.subject))
 
             if filters:
-                conditions = self._get_conditions(filters)
+                conditions = self.__get_conditions(filters)
                 if conditions:
                     query = query.where(and_(*conditions))
 
@@ -103,7 +103,7 @@ class SessionRepository(ISessionRepository):
             query = select(func.count()).select_from(Session)
 
             if filters:
-                conditions = self._get_conditions(filters)
+                conditions = self.__get_conditions(filters)
                 if conditions:
                     query = query.where(and_(*conditions))
 
@@ -114,7 +114,7 @@ class SessionRepository(ISessionRepository):
             await self.session.rollback()
             raise RuntimeError("Database transaction failed.") from e
 
-    def _get_conditions(self, filters: SessionFilter) -> Optional[list]:
+    def __get_conditions(self, filters: SessionFilter) -> Optional[list]:
         conditions = []
 
         if filters.type:
@@ -133,16 +133,34 @@ class SessionRepository(ISessionRepository):
             conditions.append(Session.day == filters.day)
 
         return conditions if conditions else None
-        # new_session = Session(
-        #     type=session.type,
-        #     semester=session.semester,
-        #     week_type=session.week_type,
-        #     start=session.start,
-        #     end=session.end,
-        #     day=session.day,
-        #     room_id=session.room_id,
-        #     room=session.room,
-        #     subject_id=session.subject_id,
-        #     subject=session.subject,
-        #     faculty_id=session.faculty_id,
-        # )
+
+    async def __is_session_overlap(self, session: Session):
+        try:
+            query = select(Session).where(
+                and_(
+                    Session.id != session.id,
+                    Session.room_id == session.room_id,
+                    Session.day == session.day,
+                    Session.week_type == session.week_type,
+                    Session.semester == session.semester,
+                    or_(
+                        and_(
+                            Session.start <= session.start,
+                            Session.end > session.start,
+                        ),
+                        and_(
+                            Session.start < session.end,
+                            Session.end >= session.end,
+                        ),
+                        and_(
+                            Session.start >= session.start,
+                            Session.end <= session.end,
+                        ),
+                    ),
+                )
+            )
+            result = await self.session.execute(query)
+            existing_sessions = result.scalars().all()
+            return len(existing_sessions) > 0
+        except Exception as e:
+            raise RuntimeError("Database transaction failed.") from e

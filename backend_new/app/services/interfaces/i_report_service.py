@@ -26,10 +26,6 @@ class IReportService(ABC):
         pass
 
     @abstractmethod
-    async def update(self, id: int, report_data: ReportIn) -> Optional[ReportOut]:
-        pass
-
-    @abstractmethod
     async def delete(self, id: int) -> bool:
         pass
 

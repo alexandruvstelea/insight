@@ -36,9 +36,9 @@ class IRoomService(ABC):
         pass
 
     @abstractmethod
-    def _generate_unique_code(self) -> str:
+    def __generate_unique_code(self) -> str:
         pass
 
     @abstractmethod
-    def _validate_unique_code(self, code: str) -> bool:
+    def __validate_unique_code(self, code: str) -> bool:
         pass

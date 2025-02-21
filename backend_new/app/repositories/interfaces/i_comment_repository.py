@@ -35,5 +35,5 @@ class ICommentRepository(ABC):
         pass
 
     @abstractmethod
-    def _get_conditions(self, filters: CommentFilter) -> Optional[list]:
+    def __get_conditions(self, filters: CommentFilter) -> Optional[list]:
         pass

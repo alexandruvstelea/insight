@@ -35,5 +35,5 @@ class IRatingRepository(ABC):
         pass
 
     @abstractmethod
-    def _get_conditions(self, filters: RatingFilter) -> Optional[list]:
+    def __get_conditions(self, filters: RatingFilter) -> Optional[list]:
         pass
