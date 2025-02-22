@@ -21,6 +21,7 @@ class SessionService(ISessionService):
 
     async def create(self, session_data: SessionIn) -> Optional[SessionOut]:
         try:
+
             new_session = Session(
                 type=session_data.type,
                 week_type=session_data.week_type,
@@ -43,7 +44,7 @@ class SessionService(ISessionService):
                 )
                 new_session.semester = new_session.subject.semester
 
-            if not SessionRepository(self.session).__is_session_overlap(new_session):
+            if not SessionRepository(self.session)._is_session_overlap(new_session):
                 response = await self.repository.create(new_session)
             else:
                 raise HTTPException(
@@ -58,6 +59,7 @@ class SessionService(ISessionService):
                 )
 
             return SessionOut.model_validate(response)
+
         except IntegrityError as e:
             formatted_error = ErrorFormatter.format_integrity_error(e)
             raise HTTPException(
@@ -69,6 +71,8 @@ class SessionService(ISessionService):
                     "An unexpected error occurred while creating new session.",
                 ),
             )
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -79,6 +83,7 @@ class SessionService(ISessionService):
         self, filters: Optional[SessionFilter]
     ) -> Optional[list[SessionOut]]:
         try:
+
             response = await self.repository.get_all(filters)
 
             if not response:
@@ -88,31 +93,38 @@ class SessionService(ISessionService):
 
             return [SessionOut.model_validate(session) for session in response]
 
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
-                status_code=500,
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="An unexpected error occurred while retrieving sessions.",
             )
 
     async def get_by_id(self, id: int) -> Optional[SessionOut]:
         try:
+
             response = await self.repository.get_by_id(id)
 
             if not response:
                 raise HTTPException(
-                    status_code=404, detail=f"No session found for ID={id}."
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"No session found for ID={id}.",
                 )
 
             return SessionOut.model_validate(response)
 
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
-                status_code=500,
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"An unexpected error occurred while retrieving session with ID={id}.",
             )
 
     async def update(self, id: int, session_data: SessionIn) -> Optional[SessionOut]:
         try:
+
             new_session = Session(
                 type=session_data.type,
                 week_type=session_data.week_type,
@@ -135,7 +147,7 @@ class SessionService(ISessionService):
                 )
                 new_session.semester = new_session.subject.semester
 
-            if not SessionRepository(self.session).__is_session_overlap(new_session):
+            if not SessionRepository(self.session)._is_session_overlap(new_session):
                 response = await self.repository.update(id, new_session)
             else:
                 raise HTTPException(
@@ -150,6 +162,7 @@ class SessionService(ISessionService):
                 )
 
             return SessionOut.model_validate(response)
+
         except IntegrityError as e:
             formatted_error = ErrorFormatter.format_integrity_error(e)
             raise HTTPException(
@@ -161,6 +174,8 @@ class SessionService(ISessionService):
                     f"An unexpected error occurred while updating session with ID={id}.",
                 ),
             )
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -169,6 +184,7 @@ class SessionService(ISessionService):
 
     async def delete(self, id: int) -> bool:
         try:
+
             response = await self.repository.delete(id)
             if not response:
                 raise HTTPException(
@@ -176,6 +192,9 @@ class SessionService(ISessionService):
                     detail=f"No session with ID={id} found.",
                 )
             return JSONResponse(f"Session with ID {id} deleted.")
+
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -184,8 +203,12 @@ class SessionService(ISessionService):
 
     async def count(self, filters: Optional[SessionFilter]):
         try:
+
             count = await self.repository.count(filters)
             return count
+
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

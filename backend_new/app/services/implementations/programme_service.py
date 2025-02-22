@@ -20,6 +20,7 @@ class ProgrammeService(IProgrammeService):
 
     async def create(self, programme_data: ProgrammeIn) -> Optional[ProgrammeOut]:
         try:
+
             new_programme = Programme(
                 name=programme_data.name,
                 abbreviation=programme_data.abbreviation.upper(),
@@ -56,6 +57,7 @@ class ProgrammeService(IProgrammeService):
                 )
 
             return ProgrammeOut.model_validate(response)
+
         except IntegrityError as e:
             formatted_error = ErrorFormatter.format_integrity_error(e)
             raise HTTPException(
@@ -67,6 +69,8 @@ class ProgrammeService(IProgrammeService):
                     "An unexpected error occurred while creating new programme.",
                 ),
             )
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -77,6 +81,7 @@ class ProgrammeService(IProgrammeService):
         self, filters: Optional[ProgrammeFilter]
     ) -> Optional[list[ProgrammeOut]]:
         try:
+
             response = await self.repository.get_all(filters)
 
             if not response:
@@ -86,6 +91,8 @@ class ProgrammeService(IProgrammeService):
 
             return [ProgrammeOut.model_validate(programme) for programme in response]
 
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -94,6 +101,7 @@ class ProgrammeService(IProgrammeService):
 
     async def get_by_id(self, id: int) -> Optional[ProgrammeOut]:
         try:
+
             response = await self.repository.get_by_id(id)
 
             if not response:
@@ -104,6 +112,8 @@ class ProgrammeService(IProgrammeService):
 
             return ProgrammeOut.model_validate(response)
 
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -114,6 +124,7 @@ class ProgrammeService(IProgrammeService):
         self, id: int, programme_data: ProgrammeIn
     ) -> Optional[ProgrammeOut]:
         try:
+
             new_programme = Programme(
                 name=programme_data.name,
                 abbreviation=programme_data.abbreviation.upper(),
@@ -150,6 +161,7 @@ class ProgrammeService(IProgrammeService):
                 )
 
             return ProgrammeOut.model_validate(response)
+
         except IntegrityError as e:
             formatted_error = ErrorFormatter.format_integrity_error(e)
             raise HTTPException(
@@ -161,6 +173,8 @@ class ProgrammeService(IProgrammeService):
                     f"An unexpected error occurred while updating programme with ID={id}.",
                 ),
             )
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -169,6 +183,7 @@ class ProgrammeService(IProgrammeService):
 
     async def delete(self, id: int) -> bool:
         try:
+
             response = await self.repository.delete(id)
             if not response:
                 raise HTTPException(
@@ -176,6 +191,9 @@ class ProgrammeService(IProgrammeService):
                     detail=f"No programme with ID={id} found.",
                 )
             return JSONResponse(f"Programme with ID {id} deleted.")
+
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -184,8 +202,12 @@ class ProgrammeService(IProgrammeService):
 
     async def count(self, filters: Optional[ProgrammeFilter]):
         try:
+
             count = await self.repository.count(filters)
             return count
+
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

@@ -19,6 +19,7 @@ class ProfessorService(IProfessorService):
 
     async def create(self, professor_data: ProfessorIn) -> Optional[ProfessorOut]:
         try:
+
             new_professor = Professor(
                 first_name=professor_data.first_name,
                 last_name=professor_data.last_name,
@@ -44,6 +45,7 @@ class ProfessorService(IProfessorService):
                 )
 
             return ProfessorOut.model_validate(response)
+
         except IntegrityError as e:
             formatted_error = ErrorFormatter.format_integrity_error(e)
             raise HTTPException(
@@ -55,6 +57,8 @@ class ProfessorService(IProfessorService):
                     "An unexpected error occurred while creating new professor.",
                 ),
             )
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -82,6 +86,7 @@ class ProfessorService(IProfessorService):
 
     async def get_by_id(self, id: int) -> Optional[ProfessorOut]:
         try:
+
             response = await self.repository.get_by_id(id)
 
             if not response:
@@ -92,6 +97,8 @@ class ProfessorService(IProfessorService):
 
             return ProfessorOut.model_validate(response)
 
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -102,6 +109,7 @@ class ProfessorService(IProfessorService):
         self, id: int, professor_data: ProfessorIn
     ) -> Optional[ProfessorOut]:
         try:
+
             new_professor = Professor(
                 first_name=professor_data.first_name,
                 last_name=professor_data.last_name,
@@ -127,6 +135,7 @@ class ProfessorService(IProfessorService):
                 )
 
             return ProfessorOut.model_validate(response)
+
         except IntegrityError as e:
             formatted_error = ErrorFormatter.format_integrity_error(e)
             raise HTTPException(
@@ -138,6 +147,8 @@ class ProfessorService(IProfessorService):
                     f"An unexpected error occurred while updating professor with ID={id}.",
                 ),
             )
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -146,6 +157,7 @@ class ProfessorService(IProfessorService):
 
     async def delete(self, id: int) -> bool:
         try:
+
             response = await self.repository.delete(id)
             if not response:
                 raise HTTPException(
@@ -153,6 +165,9 @@ class ProfessorService(IProfessorService):
                     detail=f"No professor with ID={id} found.",
                 )
             return JSONResponse(f"Professor with ID {id} deleted.")
+
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -161,8 +176,12 @@ class ProfessorService(IProfessorService):
 
     async def count(self, filters: Optional[ProfessorFilter]) -> int:
         try:
+
             count = await self.repository.count(filters)
             return count
+
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

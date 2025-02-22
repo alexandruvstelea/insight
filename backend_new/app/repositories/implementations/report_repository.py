@@ -31,7 +31,7 @@ class ReportRepository(IReportRepository):
             query = select(Report)
 
             if filters:
-                conditions = self.__get_conditions(filters)
+                conditions = self._get_conditions(filters)
                 if conditions:
                     query = query.where(and_(*conditions))
 
@@ -91,7 +91,7 @@ class ReportRepository(IReportRepository):
             query = select(func.count()).select_from(Report)
 
             if filters:
-                conditions = self.__get_conditions(filters)
+                conditions = self._get_conditions(filters)
                 if conditions:
                     query = query.where(and_(*conditions))
 
@@ -102,7 +102,7 @@ class ReportRepository(IReportRepository):
             await self.session.rollback()
             raise RuntimeError("Database transaction failed.") from e
 
-    def __get_conditions(self, filters: ReportFilter) -> Optional[list]:
+    def _get_conditions(self, filters: ReportFilter) -> Optional[list]:
         conditions = []
 
         if filters.timestamp_before:

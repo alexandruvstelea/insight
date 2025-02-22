@@ -8,6 +8,8 @@ from app.api.routers.professor.routers import professor_router
 from app.api.routers.room.routers import room_router
 from app.api.routers.programme.routers import programme_router
 from app.api.routers.subject.routers import subject_router
+from app.api.routers.session.routers import session_router
+from app.api.routers.report.routers import report_router
 
 logger.info("Starting FastAPI REST API for the inSight project.")
 
@@ -27,3 +29,5 @@ app.include_router(professor_router)
 app.include_router(room_router)
 app.include_router(programme_router)
 app.include_router(subject_router)
+app.include_router(session_router)
+app.include_router(report_router)

@@ -19,6 +19,7 @@ class SubjectService(ISubjectService):
 
     async def create(self, subject_data: SubjectIn) -> Optional[SubjectOut]:
         try:
+
             new_subject = Subject(
                 name=subject_data.name,
                 abbreviation=subject_data.abbreviation.upper(),
@@ -48,6 +49,7 @@ class SubjectService(ISubjectService):
                 )
 
             return SubjectOut.model_validate(response)
+
         except IntegrityError as e:
             formatted_error = ErrorFormatter.format_integrity_error(e)
             raise HTTPException(
@@ -59,6 +61,8 @@ class SubjectService(ISubjectService):
                     "An unexpected error occurred while creating new subject.",
                 ),
             )
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -69,6 +73,7 @@ class SubjectService(ISubjectService):
         self, filters: Optional[SubjectFilter]
     ) -> Optional[list[SubjectOut]]:
         try:
+
             response = await self.repository.get_all(filters)
 
             if not response:
@@ -78,6 +83,8 @@ class SubjectService(ISubjectService):
 
             return [SubjectOut.model_validate(subject) for subject in response]
 
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -86,6 +93,7 @@ class SubjectService(ISubjectService):
 
     async def get_by_id(self, id: int) -> Optional[SubjectOut]:
         try:
+
             response = await self.repository.get_by_id(id)
 
             if not response:
@@ -96,6 +104,8 @@ class SubjectService(ISubjectService):
 
             return SubjectOut.model_validate(response)
 
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -104,6 +114,7 @@ class SubjectService(ISubjectService):
 
     async def update(self, id: int, subject_data: SubjectIn) -> Optional[SubjectOut]:
         try:
+
             new_subject = Subject(
                 name=subject_data.name,
                 abbreviation=subject_data.abbreviation.upper(),
@@ -135,6 +146,7 @@ class SubjectService(ISubjectService):
                 )
 
             return SubjectOut.model_validate(response)
+
         except IntegrityError as e:
             formatted_error = ErrorFormatter.format_integrity_error(e)
             raise HTTPException(
@@ -146,6 +158,8 @@ class SubjectService(ISubjectService):
                     f"An unexpected error occurred while updating subject with ID={id}.",
                 ),
             )
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -154,6 +168,7 @@ class SubjectService(ISubjectService):
 
     async def delete(self, id: int) -> bool:
         try:
+
             response = await self.repository.delete(id)
             if not response:
                 raise HTTPException(
@@ -161,6 +176,9 @@ class SubjectService(ISubjectService):
                     detail=f"No subject with ID={id} found.",
                 )
             return JSONResponse(f"Subject with ID {id} deleted.")
+
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -169,8 +187,12 @@ class SubjectService(ISubjectService):
 
     async def count(self, filters: Optional[SubjectFilter]):
         try:
+
             count = await self.repository.count(filters)
             return count
+
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

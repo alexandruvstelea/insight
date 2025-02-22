@@ -31,7 +31,7 @@ class RatingRepository(IRatingRepository):
             query = select(Rating)
 
             if filters:
-                conditions = self.__get_conditions(filters)
+                conditions = self._get_conditions(filters)
                 if conditions:
                     query = query.where(and_(*conditions))
 
@@ -70,7 +70,7 @@ class RatingRepository(IRatingRepository):
             query = select(func.count()).select_from(Rating)
 
             if filters:
-                conditions = self.__get_conditions(filters)
+                conditions = self._get_conditions(filters)
                 if conditions:
                     query = query.where(and_(*conditions))
 
@@ -81,7 +81,7 @@ class RatingRepository(IRatingRepository):
             await self.session.rollback()
             raise RuntimeError("Database transaction failed.") from e
 
-    def __get_conditions(self, filters: RatingFilter) -> Optional[list]:
+    def _get_conditions(self, filters: RatingFilter) -> Optional[list]:
         conditions = []
 
         if filters.timestamp_after:

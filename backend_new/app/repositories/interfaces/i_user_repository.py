@@ -35,5 +35,5 @@ class IUserRepository(ABC):
         pass
 
     @abstractmethod
-    def __get_conditions(self, filters: UserFilter) -> Optional[list]:
+    def _get_conditions(self, filters: UserFilter) -> Optional[list]:
         pass

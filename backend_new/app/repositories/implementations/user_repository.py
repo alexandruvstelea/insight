@@ -31,7 +31,7 @@ class UserRepository(IUserRepository):
             query = select(User)
 
             if filters:
-                conditions = self.__get_conditions(filters)
+                conditions = self._get_conditions(filters)
                 if conditions:
                     query = query.where(and_(*conditions))
 
@@ -92,7 +92,7 @@ class UserRepository(IUserRepository):
             query = select(func.count()).select_from(User)
 
             if filters:
-                conditions = self.__get_conditions(filters)
+                conditions = self._get_conditions(filters)
                 if conditions:
                     query = query.where(and_(*conditions))
 
@@ -103,7 +103,7 @@ class UserRepository(IUserRepository):
             await self.session.rollback()
             raise RuntimeError("Database transaction failed.") from e
 
-    def __get_conditions(filters: UserFilter) -> Optional[list]:
+    def _get_conditions(filters: UserFilter) -> Optional[list]:
         conditions = []
 
         if filters.email:

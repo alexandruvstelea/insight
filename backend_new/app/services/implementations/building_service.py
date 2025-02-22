@@ -21,6 +21,7 @@ class BuildingService(IBuildingService):
 
     async def create(self, building_data: BuildingIn) -> Optional[BuildingOut]:
         try:
+
             new_building = Building(
                 name=building_data.name,
                 latitude=building_data.latitude,
@@ -56,6 +57,7 @@ class BuildingService(IBuildingService):
                 )
 
             return BuildingOut.model_validate(response)
+
         except IntegrityError as e:
             formatted_error = ErrorFormatter.format_integrity_error(e)
             raise HTTPException(
@@ -67,6 +69,8 @@ class BuildingService(IBuildingService):
                     "An unexpected error occurred while creating new building.",
                 ),
             )
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -77,6 +81,7 @@ class BuildingService(IBuildingService):
         self, filters: Optional[BuildingFilter] = None
     ) -> Optional[list[BuildingOut]]:
         try:
+
             response = await self.repository.get_all(filters)
 
             if not response:
@@ -86,6 +91,8 @@ class BuildingService(IBuildingService):
 
             return [BuildingOut.model_validate(building) for building in response]
 
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -104,6 +111,8 @@ class BuildingService(IBuildingService):
 
             return BuildingOut.model_validate(response)
 
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -112,6 +121,7 @@ class BuildingService(IBuildingService):
 
     async def update(self, id: int, building_data: BuildingIn) -> Optional[Building]:
         try:
+
             new_building = Building(
                 name=building_data.name,
                 latitude=building_data.latitude,
@@ -147,6 +157,7 @@ class BuildingService(IBuildingService):
                 )
 
             return BuildingOut.model_validate(response)
+
         except IntegrityError as e:
             formatted_error = ErrorFormatter.format_integrity_error(e)
             raise HTTPException(
@@ -158,6 +169,8 @@ class BuildingService(IBuildingService):
                     f"An unexpected error occurred while updating building with ID={id}.",
                 ),
             )
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -166,6 +179,7 @@ class BuildingService(IBuildingService):
 
     async def delete(self, id: int) -> JSONResponse:
         try:
+
             response = await self.repository.delete(id)
             if not response:
                 raise HTTPException(
@@ -173,6 +187,9 @@ class BuildingService(IBuildingService):
                     detail=f"No building with ID={id} found.",
                 )
             return JSONResponse(f"Building with ID {id} deleted.")
+
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -181,8 +198,12 @@ class BuildingService(IBuildingService):
 
     async def count(self, filters: Optional[BuildingFilter] = None) -> int:
         try:
+
             count = await self.repository.count(filters)
             return count
+
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -193,6 +214,7 @@ class BuildingService(IBuildingService):
         self, rating_location: tuple, building: Building
     ) -> Optional[float]:
         try:
+
             logger.info("Calculating distance to building from rating distance.")
             R = 6371000
             lat1, lon1 = rating_location
@@ -208,6 +230,9 @@ class BuildingService(IBuildingService):
             c = 2 * atan2(sqrt(a), sqrt(1 - a))
             distance = R * c
             return distance
+
+        except HTTPException as e:
+            raise e
         except Exception as e:
             logger.error(
                 f"An unexpected error has occured while calculating distance:\n{e}"

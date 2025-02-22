@@ -20,6 +20,7 @@ class FacultyService(IFacultyService):
 
     async def create(self, faculty_data: FacultyIn) -> Optional[FacultyOut]:
         try:
+
             new_faculty = Faculty(
                 name=faculty_data.name,
                 abbreviation=faculty_data.abbreviation.upper(),
@@ -56,6 +57,7 @@ class FacultyService(IFacultyService):
                 )
 
             return FacultyOut.model_validate(response)
+
         except IntegrityError as e:
             formatted_error = ErrorFormatter.format_integrity_error(e)
             raise HTTPException(
@@ -67,6 +69,8 @@ class FacultyService(IFacultyService):
                     "An unexpected error occurred while creating new faculty.",
                 ),
             )
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -77,6 +81,7 @@ class FacultyService(IFacultyService):
         self, filters: Optional[FacultyFilter]
     ) -> Optional[list[FacultyOut]]:
         try:
+
             response = await self.repository.get_all(filters)
 
             if not response:
@@ -86,6 +91,8 @@ class FacultyService(IFacultyService):
 
             return [FacultyOut.model_validate(faculty) for faculty in response]
 
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -94,6 +101,7 @@ class FacultyService(IFacultyService):
 
     async def get_by_id(self, id: int) -> Optional[FacultyOut]:
         try:
+
             response = await self.repository.get_by_id(id)
 
             if not response:
@@ -104,6 +112,8 @@ class FacultyService(IFacultyService):
 
             return FacultyOut.model_validate(response)
 
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -112,6 +122,7 @@ class FacultyService(IFacultyService):
 
     async def update(self, id: int, faculty_data: FacultyIn) -> Optional[FacultyOut]:
         try:
+
             new_faculty = Faculty(
                 name=faculty_data.name,
                 abbreviation=faculty_data.abbreviation.upper(),
@@ -148,6 +159,7 @@ class FacultyService(IFacultyService):
                 )
 
             return FacultyOut.model_validate(response)
+
         except IntegrityError as e:
             formatted_error = ErrorFormatter.format_integrity_error(e)
             raise HTTPException(
@@ -159,6 +171,8 @@ class FacultyService(IFacultyService):
                     f"An unexpected error occurred while updating faculty with ID={id}.",
                 ),
             )
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -167,6 +181,7 @@ class FacultyService(IFacultyService):
 
     async def delete(self, id: int) -> bool:
         try:
+
             response = await self.repository.delete(id)
             if not response:
                 raise HTTPException(
@@ -174,6 +189,9 @@ class FacultyService(IFacultyService):
                     detail=f"No faculty with ID={id} found.",
                 )
             return JSONResponse(f"Faculty with ID {id} deleted.")
+
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -182,8 +200,12 @@ class FacultyService(IFacultyService):
 
     async def count(self, filters: Optional[FacultyFilter]) -> int:
         try:
+
             count = await self.repository.count(filters)
             return count
+
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

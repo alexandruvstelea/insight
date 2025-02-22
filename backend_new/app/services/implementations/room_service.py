@@ -22,6 +22,7 @@ class RoomService(IRoomService):
 
     async def create(self, room_data: RoomIn) -> Optional[RoomOut]:
         try:
+
             new_room = Room(
                 name=room_data.name.upper(),
                 building_id=room_data.building_id,
@@ -71,6 +72,7 @@ class RoomService(IRoomService):
                 )
 
             return RoomOut.model_validate(response)
+
         except IntegrityError as e:
             formatted_error = ErrorFormatter.format_integrity_error(e)
             raise HTTPException(
@@ -82,6 +84,8 @@ class RoomService(IRoomService):
                     "An unexpected error occurred while creating new room.",
                 ),
             )
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -90,6 +94,7 @@ class RoomService(IRoomService):
 
     async def get_all(self, filters: Optional[RoomFilter]) -> Optional[list[RoomOut]]:
         try:
+
             response = await self.repository.get_all(filters)
 
             if not response:
@@ -99,6 +104,8 @@ class RoomService(IRoomService):
 
             return [RoomOut.model_validate(professor) for professor in response]
 
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -107,6 +114,7 @@ class RoomService(IRoomService):
 
     async def get_by_id(self, id: int) -> Optional[RoomOut]:
         try:
+
             response = await self.repository.get_by_id(id)
 
             if not response:
@@ -117,6 +125,8 @@ class RoomService(IRoomService):
 
             return RoomOut.model_validate(response)
 
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -125,6 +135,7 @@ class RoomService(IRoomService):
 
     async def update(self, id: int, room_data: RoomIn) -> Optional[RoomOut]:
         try:
+
             new_room = Room(
                 name=room_data.name.upper(),
                 building_id=room_data.building_id,
@@ -174,6 +185,7 @@ class RoomService(IRoomService):
                 )
 
             return RoomOut.model_validate(response)
+
         except IntegrityError as e:
             formatted_error = ErrorFormatter.format_integrity_error(e)
             raise HTTPException(
@@ -185,6 +197,8 @@ class RoomService(IRoomService):
                     f"An unexpected error occurred while updating room with ID={id}.",
                 ),
             )
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -193,6 +207,7 @@ class RoomService(IRoomService):
 
     async def delete(self, id: int) -> bool:
         try:
+
             response = await self.repository.delete(id)
             if not response:
                 raise HTTPException(
@@ -200,6 +215,9 @@ class RoomService(IRoomService):
                     detail=f"No room with ID={id} found.",
                 )
             return JSONResponse(f"Room with ID {id} deleted.")
+
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -208,8 +226,12 @@ class RoomService(IRoomService):
 
     async def count(self, filters: Optional[RoomFilter]):
         try:
+
             count = await self.repository.count(filters)
             return count
+
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

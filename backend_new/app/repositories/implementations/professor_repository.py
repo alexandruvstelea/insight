@@ -36,7 +36,7 @@ class ProfessorRepository(IProfessorRepository):
             query = select(Professor).options(joinedload(Professor.faculties))
 
             if filters:
-                conditions = self.__get_conditions(filters)
+                conditions = self._get_conditions(filters)
                 if conditions:
                     query = query.where(and_(*conditions))
 
@@ -102,7 +102,7 @@ class ProfessorRepository(IProfessorRepository):
             query = select(func.count()).select_from(Professor)
 
             if filters:
-                conditions = self.__get_conditions(filters)
+                conditions = self._get_conditions(filters)
                 if conditions:
                     query = query.where(and_(*conditions))
 
@@ -113,7 +113,7 @@ class ProfessorRepository(IProfessorRepository):
             await self.session.rollback()
             raise RuntimeError("Database transaction failed.") from e
 
-    def __get_conditions(self, filters: ProfessorFilter) -> Optional[list]:
+    def _get_conditions(self, filters: ProfessorFilter) -> Optional[list]:
         conditions = []
 
         if filters.first_name:

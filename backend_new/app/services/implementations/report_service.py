@@ -19,6 +19,7 @@ class ReportService(IReportService):
 
     async def create(self, report_data: ReportIn) -> Optional[ReportOut]:
         try:
+
             new_report = Report(text=report_data.text, timestamp=report_data.timestamp)
 
             if len(new_report.text) > 500 or len(new_report.text) < 10:
@@ -44,6 +45,7 @@ class ReportService(IReportService):
                 )
 
             return ReportOut.model_validate(response)
+
         except IntegrityError as e:
             formatted_error = ErrorFormatter.format_integrity_error(e)
             raise HTTPException(
@@ -55,6 +57,8 @@ class ReportService(IReportService):
                     "An unexpected error occurred while creating new report.",
                 ),
             )
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -65,6 +69,7 @@ class ReportService(IReportService):
         self, filters: Optional[ReportFilter]
     ) -> Optional[list[ReportOut]]:
         try:
+
             response = await self.repository.get_all(filters)
 
             if not response:
@@ -74,6 +79,8 @@ class ReportService(IReportService):
 
             return [ReportOut.model_validate(subject) for subject in response]
 
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -82,6 +89,7 @@ class ReportService(IReportService):
 
     async def get_by_id(self, id: int) -> Optional[ReportOut]:
         try:
+
             response = await self.repository.get_by_id(id)
 
             if not response:
@@ -92,6 +100,8 @@ class ReportService(IReportService):
 
             return ReportOut.model_validate(response)
 
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -100,6 +110,7 @@ class ReportService(IReportService):
 
     async def update(self, id: int, report_data: ReportIn) -> Optional[ReportOut]:
         try:
+
             new_report = Report(text=report_data.text, timestamp=report_data.timestamp)
 
             if len(new_report.text) > 500 or len(new_report.text) < 10:
@@ -125,6 +136,7 @@ class ReportService(IReportService):
                 )
 
             return ReportOut.model_validate(response)
+
         except IntegrityError as e:
             formatted_error = ErrorFormatter.format_integrity_error(e)
             raise HTTPException(
@@ -136,6 +148,8 @@ class ReportService(IReportService):
                     f"An unexpected error occurred while updating report with ID={id}.",
                 ),
             )
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -144,6 +158,7 @@ class ReportService(IReportService):
 
     async def delete(self, id: int) -> bool:
         try:
+
             response = await self.repository.delete(id)
             if not response:
                 raise HTTPException(
@@ -151,6 +166,9 @@ class ReportService(IReportService):
                     detail=f"No report with ID={id} found.",
                 )
             return JSONResponse(f"Report with ID {id} deleted.")
+
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -159,8 +177,12 @@ class ReportService(IReportService):
 
     async def count(self, filters: Optional[ReportFilter]):
         try:
+
             count = await self.repository.count(filters)
             return count
+
+        except HTTPException as e:
+            raise e
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
